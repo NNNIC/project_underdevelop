@@ -1,3 +1,6 @@
-JAWA/JawaScript/JawaScript/obj
-JAWA/JawaScript/JawaScript/*.user
-JAWA/JawaScript/.vs
+SLAG/Project/slag/.vs
+SLAG/Project/slag/slag/obj
+SLAG/Project/slag/slaglangtool/obj
+SLAG/Project/slag/vt100art/obj
+*.user
+memo.txt
