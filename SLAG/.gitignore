@@ -1,6 +1,6 @@
-SLAG/Project/slag/.vs
-SLAG/Project/slag/slag/obj
-SLAG/Project/slag/slaglangtool/obj
-SLAG/Project/slag/vt100art/obj
+Project/slag/.vs
+Project/slag/slag/obj
+Project/slag/slaglangtool/obj
+Project/slag/vt100art/obj
 *.user
 memo.txt
