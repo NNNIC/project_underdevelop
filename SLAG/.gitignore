@@ -1,6 +1,6 @@
-Project/slag/.vs
+Project/slag/.vs/*
 Project/slag/slag/obj
 Project/slag/slaglangtool/obj
 Project/slag/vt100art/obj
+Project/slag/slag/memo.txt
 *.user
-memo.txt
