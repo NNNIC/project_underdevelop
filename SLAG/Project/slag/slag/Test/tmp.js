@@ -2,6 +2,6 @@
 // TMP
 //
 
-var io   = System.environment.newline;
+var io = System.environment.commandline;
 Print(io);
 

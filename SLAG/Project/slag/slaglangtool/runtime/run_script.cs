@@ -50,6 +50,7 @@ namespace slagtool.runtime
         public Hashtable    m_front_dic;          //フロント
         public Hashtable    m_func_dic;           //ファンクション格納
 
+        public object m_save;
         public object m_cur;
 
         public BREAKTYPE m_breakType;
@@ -218,14 +219,23 @@ namespace slagtool.runtime
             if (m_cur==null) return null;
             return m_cur.ToString();
         }
-        public LocationItem get_locationitem_cur()
+        public LocationItem get_locationitem_save()
         {
-            if (m_cur!=null && m_cur.GetType() == typeof(LocationItem))
+            if (m_save!=null && m_save.GetType() == typeof(LocationItem))
             {
-                return (LocationItem)m_cur;
+                return (LocationItem)m_save;
             }
             return null;
         }
+        public void set_locatioitem_save(LocationItem item)
+        {
+            m_save = item;
+        }
+        public void savenull()
+        {
+            m_save = null;
+        }
+
         #endregion
     }
 
@@ -836,7 +846,7 @@ namespace slagtool.runtime
             if (v.type == YDEF.get_type(YDEF.sx_func))
             {
 
-                var save_location_item = nsb.get_locationitem_cur();
+                var save_location_item = nsb.get_locationitem_save();
 
                 var name = v.list_at(0).GetString();
 
@@ -923,7 +933,7 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.NAME)
             {
-                if (nsb.get_locationitem_cur()!=null)
+                if (nsb.get_locationitem_save()!=null)
                 {
                     nsb = runsub_location_clause.run_name(v,nsb);
                     return nsb;
@@ -934,7 +944,7 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.NUM)
             {
-                if (nsb.get_locationitem_cur()!=null)
+                if (nsb.get_locationitem_save()!=null)
                 {
                     nsb = runsub_location_clause.run_num(v,nsb);
                     return nsb;
@@ -945,7 +955,7 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.QSTR)
             {
-                if (nsb.get_locationitem_cur()!=null)
+                if (nsb.get_locationitem_save()!=null)
                 {
                     nsb = runsub_location_clause.run_qstr(v,nsb);
                     return nsb;
