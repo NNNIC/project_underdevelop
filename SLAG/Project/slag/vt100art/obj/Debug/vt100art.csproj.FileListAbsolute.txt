@@ -1,0 +1,6 @@
+N:\Project\slag\vt100art\bin\Debug\vt100art.exe.config
+N:\Project\slag\vt100art\bin\Debug\vt100art.exe
+N:\Project\slag\vt100art\bin\Debug\vt100art.pdb
+N:\Project\slag\vt100art\obj\Debug\vt100art.exe
+N:\Project\slag\vt100art\obj\Debug\vt100art.pdb
+N:\Project\slag\vt100art\obj\Debug\vt100art.csprojResolveAssemblyReference.cache

@@ -1,0 +1,5 @@
+N:\Project\slag\slaglangtool\bin\Debug\slaglangtool.dll
+N:\Project\slag\slaglangtool\bin\Debug\slaglangtool.pdb
+N:\Project\slag\slaglangtool\obj\Debug\slagtool.csprojResolveAssemblyReference.cache
+N:\Project\slag\slaglangtool\obj\Debug\slaglangtool.dll
+N:\Project\slag\slaglangtool\obj\Debug\slaglangtool.pdb
