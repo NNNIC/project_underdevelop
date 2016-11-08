@@ -207,11 +207,10 @@ namespace slagtool.runtime
         private static LocationItem ExecuteFunc(object o, string cur, List<object> param, LocationItem item)
         {
             var name = cur.ToUpper();
-            Type type = null;
+            Type type = (Type)o;
             object obj  = null;
-            if (o.GetType()==typeof(Type))
+            if (type!=null)
             {
-                type = (Type)o;
                 obj  = null;
             }
             else
@@ -219,6 +218,9 @@ namespace slagtool.runtime
                 type = o.GetType();
                 obj  = o;
             }
+
+            var mts = type.GetMethods();
+
             var find_mi = Array.Find(type.GetMethods(),mi=>mi.Name.ToUpper()==name);
             if (find_mi!=null)
             {

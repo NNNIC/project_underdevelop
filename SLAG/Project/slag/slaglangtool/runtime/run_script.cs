@@ -845,8 +845,8 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.get_type(YDEF.sx_func))
             {
-
                 var save_location_item = nsb.get_locationitem_save();
+                nsb.savenull();
 
                 var name = v.list_at(0).GetString();
 
@@ -881,7 +881,7 @@ namespace slagtool.runtime
 
                 if (save_location_item!=null) //ロケーションアイテム
                 {
-                    nsb.m_cur = save_location_item;
+                    nsb.set_locatioitem_save(save_location_item);
                     nsb = runsub_location_clause.run_func(v,nsb,name,ol);
                     return nsb;
                 }

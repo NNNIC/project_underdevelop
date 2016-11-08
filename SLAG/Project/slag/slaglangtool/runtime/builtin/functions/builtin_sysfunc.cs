@@ -172,6 +172,24 @@ namespace slagtool.runtime.builtin
             }
             return 0;
         }
+        public static object F_CastFloat(bool bHelp,object[] ol, StateBuffer sb)
+        {
+            if (bHelp)
+            {
+                return "Cast number to float.";
+            }
+            var x = kit.get_double_at(ol,0);
+            return (float)x;
+        }
+        public static object F_CastInt32(bool bHelp,object[] ol, StateBuffer sb)
+        {
+            if (bHelp)
+            {
+                return "Cast numner to int32";
+            }
+            var x = kit.get_double_at(ol,0);
+            return (System.Int32)x;
+        }
         #endregion
 
         #region 文字列操作

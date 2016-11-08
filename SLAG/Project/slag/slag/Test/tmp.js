@@ -2,6 +2,6 @@
 // TMP
 //
 
-var io = System.environment.commandline;
-Print(io);
-
+var path = System.io.path;
+Print(path.getfilenamewithoutextension("abc.def"));
+//Print(System.io.path.getfilenamewithoutextension("abc.def"));
