@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slagUnityProject.CSharp", "slagUnityProject.CSharp.csproj", "{B5058A6B-7FA0-8649-BFD0-B0BFC12EAEFB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B5058A6B-7FA0-8649-BFD0-B0BFC12EAEFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5058A6B-7FA0-8649-BFD0-B0BFC12EAEFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5058A6B-7FA0-8649-BFD0-B0BFC12EAEFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5058A6B-7FA0-8649-BFD0-B0BFC12EAEFB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
