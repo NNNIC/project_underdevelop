@@ -34,19 +34,6 @@ namespace slagtool.runtime.builtin
 
         public static void Init()
         {
-            //m_hash = new Hashtable();
-            //m_categoryList = new List<string>();
-
-            //string ctg = "System";
-            //m_categoryList.Add(ctg);
-            //foreach(var m in typeof(builtin_sysfunc).GetMethods())
-            //{
-            //    var n = m.Name.ToUpper();
-            //    if (!n.StartsWith("F_")) continue;
-            //    n = n.Substring(2);
-            //    m_hash[n] = new item() {category = ctg, name = m.Name.Substring(2), mi = m };                                
-            //}
-
             RegisterFunctions(typeof(builtin_sysfunc),"System");
         }
 
@@ -102,26 +89,6 @@ namespace slagtool.runtime.builtin
             
             return s;
 
-            //string s = "== System Functions ==" + NL;
-            //foreach(var k in m_hash.Keys)
-            //{
-            //    var i = (item)m_hash[k];
-            //    if (i.bSysOrApp)
-            //    {
-            //        s+= helpFormat(i) + NL; 
-            //    }
-            //}
-            //s+= "== User Functions ==" + NL;
-            //foreach(var k in m_hash.Keys)
-            //{
-            //    var i = (item)m_hash[k];
-            //    if (!i.bSysOrApp)
-            //    {
-            //        s+= helpFormat(i) + NL;
-            //    }
-            //}
-
-            //return s;
         }
         private static string helpFormat(item i)
         {

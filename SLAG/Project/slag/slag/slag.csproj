@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="interactive_mode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -68,9 +67,13 @@
     <Content Include="Test\tmp.js" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\slaglangtool\slagtool.csproj">
+    <ProjectReference Include="..\slagInteractiveDll\slagInteractiveDll.csproj">
+      <Project>{8ca9e726-23e5-4195-b22d-da17556a84eb}</Project>
+      <Name>slagInteractiveDll</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\slaglangtool\slagDll.csproj">
       <Project>{b65c40e9-6b0c-4bab-8bf0-ecc3317ffa2f}</Project>
-      <Name>slagtool</Name>
+      <Name>slagDll</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

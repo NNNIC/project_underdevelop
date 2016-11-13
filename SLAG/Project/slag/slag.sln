@@ -7,7 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slag", "slag\slag.csproj", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Basic", "Basic", "{A4B53464-7151-41FD-B39A-61F8D1DD522D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slagtool", "slaglangtool\slagtool.csproj", "{B65C40E9-6B0C-4BAB-8BF0-ECC3317FFA2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slagDll", "slaglangtool\slagDll.csproj", "{B65C40E9-6B0C-4BAB-8BF0-ECC3317FFA2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slagInteractiveDll", "slagInteractiveDll\slagInteractiveDll.csproj", "{8CA9E726-23E5-4195-B22D-DA17556A84EB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Temp", "Temp", "{B17DB24D-003B-4E85-9497-B359EFAE826D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test", "test\test.csproj", "{F7B90D47-EE61-48F4-8925-BEE880466602}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +29,14 @@ Global
 		{B65C40E9-6B0C-4BAB-8BF0-ECC3317FFA2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B65C40E9-6B0C-4BAB-8BF0-ECC3317FFA2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B65C40E9-6B0C-4BAB-8BF0-ECC3317FFA2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CA9E726-23E5-4195-B22D-DA17556A84EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CA9E726-23E5-4195-B22D-DA17556A84EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CA9E726-23E5-4195-B22D-DA17556A84EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CA9E726-23E5-4195-B22D-DA17556A84EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7B90D47-EE61-48F4-8925-BEE880466602}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7B90D47-EE61-48F4-8925-BEE880466602}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7B90D47-EE61-48F4-8925-BEE880466602}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7B90D47-EE61-48F4-8925-BEE880466602}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,5 +44,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{CE85A0B7-A2F5-4CE2-BE98-E3566CCB50A4} = {A4B53464-7151-41FD-B39A-61F8D1DD522D}
 		{B65C40E9-6B0C-4BAB-8BF0-ECC3317FFA2F} = {A4B53464-7151-41FD-B39A-61F8D1DD522D}
+		{8CA9E726-23E5-4195-B22D-DA17556A84EB} = {A4B53464-7151-41FD-B39A-61F8D1DD522D}
+		{F7B90D47-EE61-48F4-8925-BEE880466602} = {B17DB24D-003B-4E85-9497-B359EFAE826D}
 	EndGlobalSection
 EndGlobal

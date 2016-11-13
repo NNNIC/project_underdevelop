@@ -33,6 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="slagInteractiveDll">
+      <HintPath>..\..\..\slag\slagInteractiveDll\bin\Debug\slagInteractiveDll.dll</HintPath>
+    </Reference>
+    <Reference Include="slaglangtool">
+      <HintPath>..\..\..\slag\slaglangtool\bin\Debug\slaglangtool.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

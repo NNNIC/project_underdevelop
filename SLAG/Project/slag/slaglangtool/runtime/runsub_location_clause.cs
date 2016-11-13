@@ -150,6 +150,7 @@ namespace slagtool.runtime
         {
             //アセンブリ調査 --- set/get不明なので直前の形で返す
             var searchname = (pre + "." + cur).ToUpper();
+#if nouity
             var ti = find_typeinfo(searchname);
             if (ti!=null)
             {
@@ -160,6 +161,7 @@ namespace slagtool.runtime
             var literal = new Literal();
             literal.s = pre + "." + cur;
             item.o = literal;
+#endif
             return item;
         }
         private static LocationItem GetObj(object o, string cur,LocationItem item)
@@ -229,6 +231,7 @@ namespace slagtool.runtime
             }
             return null;
         }
+#if nouity
         private static TypeInfo find_typeinfo(string searchname)
         {
             TypeInfo find_ti = null;
@@ -240,8 +243,10 @@ namespace slagtool.runtime
             });
             return find_ti;
         }
+#endif
         private static void travarse_asm(Action<TypeInfo> act)
         {
+#if nounity
             foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
             {
                 foreach(var ti in asm.DefinedTypes)
@@ -249,6 +254,7 @@ namespace slagtool.runtime
                     act(ti);
                 }
             }
+#endif
         }
     }
 }
