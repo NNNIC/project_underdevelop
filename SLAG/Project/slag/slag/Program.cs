@@ -130,7 +130,12 @@ namespace slag
                 }
             }
             else {    // Interactive mode
-                interactive_mode.interactive();
+
+                monitor.interactive(
+                    (s)=>Console.Write(s),
+                    (s)=>Console.WriteLine(s),
+                    ()=> {return Console.ReadLine(); }
+                    );
             }
         }
 

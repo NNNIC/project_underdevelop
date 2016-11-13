@@ -34,7 +34,23 @@ namespace SlagConsole
         {
             if (s!=null)
             { 
-                textBox1.AppendText(s + Environment.NewLine);
+                var lines = s.Split('\x0a');
+                foreach(var i in lines)
+                {
+                    var p= i;
+                    if (checkBox1.Checked==false)
+                    {
+                        if (p.StartsWith("<slag>"))
+                        {
+                            p = p.Substring(6);
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                    }
+                    textBox1.AppendText(p + Environment.NewLine);
+                }
             }
         }
 
@@ -45,6 +61,7 @@ namespace SlagConsole
             {
                 var s = m_pipe.Read();
                 if (s==null) break;
+
                 readmsg += s + Environment.NewLine;
             }
             WriteLog(readmsg);
@@ -68,6 +85,7 @@ namespace SlagConsole
                 var s = textBox2.Text.Trim();
                 if (!string.IsNullOrEmpty(s))
                 {
+                    s="<slag>cmd:" + s;
                     m_cmds.Enqueue(s);
                 }
                 textBox2.Text=null;
@@ -80,6 +98,11 @@ namespace SlagConsole
             {
                 textBox2.Text = null;
             }
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

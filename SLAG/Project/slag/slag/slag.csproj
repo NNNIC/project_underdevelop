@@ -33,6 +33,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="slagmonitor">
+      <HintPath>..\slagmonitor\bin\Debug\slagmonitor.dll</HintPath>
+    </Reference>
+    <Reference Include="slagtool">
+      <HintPath>..\slagtool\bin\Debug\slagtool.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -65,16 +71,6 @@
     <Content Include="Test\test91.js" />
     <Content Include="Test\test92.js" />
     <Content Include="Test\tmp.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\slagInteractiveDll\slagInteractiveDll.csproj">
-      <Project>{8ca9e726-23e5-4195-b22d-da17556a84eb}</Project>
-      <Name>slagInteractiveDll</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\slaglangtool\slagDll.csproj">
-      <Project>{b65c40e9-6b0c-4bab-8bf0-ecc3317ffa2f}</Project>
-      <Name>slagDll</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
