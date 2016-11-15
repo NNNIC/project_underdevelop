@@ -43,7 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="controller.cs" />
+    <Compile Include="command.cs" />
+    <Compile Include="command_exec.cs" />
+    <Compile Include="communicate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TcpPipe.cs" />

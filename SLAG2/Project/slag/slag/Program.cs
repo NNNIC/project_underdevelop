@@ -12,7 +12,6 @@ namespace slag
     {                 
         static void Main(string[] args)
         {
-            
         }
     }
 }

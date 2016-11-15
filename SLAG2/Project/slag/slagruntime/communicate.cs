@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace slagruntime
 {
-    public class controller
+    internal class communicate
     {
         string m_self_ip   = "127.0.0.1";
         int    m_self_port = 2001;
@@ -18,32 +18,40 @@ namespace slagruntime
         Queue<string> m_log;
         Thread        m_thread;
         
+        object        m_mtx;
+        string        m_cmd;
 
+        static communicate V;
 
         public void Start()
         {
+            V = this;
+            m_mtx = new object();
+
             m_pipe   = new TcpPipe(m_self_ip,m_self_port);
             m_log    = new Queue<string>();
             m_thread = new Thread(Work);
             m_thread.Start();
         }
-
         
         private void Work()
         {
             while(true)
             {
-                Update();
+                _update();
 
                 var cmd = m_pipe.Read();
-                process(cmd);
+                record(cmd);
                 Thread.Sleep(33);
             }
         }
 
-        private void process(string cmd)
+        private void record(string cmd)
         {
-
+            lock(m_mtx)
+            { 
+                m_cmd = cmd;
+            }
         }
 
         #region ログ
@@ -54,7 +62,7 @@ namespace slagruntime
                 m_log.Enqueue(s);
             }
         }
-        public void Update()
+        private void _update()
         {
             string s = null;
             lock(m_log)
@@ -67,7 +75,20 @@ namespace slagruntime
             }
             m_pipe.Write(m_to_ip,m_to_port,s);
         }
-
         #endregion
+
+        #region cmd
+        public string GetCmd()
+        {
+            string s = null;
+            lock(V.m_mtx)
+            {
+                s= V.m_cmd;
+                V.m_cmd = null;
+            }
+            return s;
+        }
+        #endregion
+
     }
 }
