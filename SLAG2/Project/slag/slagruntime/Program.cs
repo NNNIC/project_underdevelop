@@ -33,10 +33,13 @@ namespace slagruntime
         private static string m_tmp;
         public static void Log(string s)
         {
+            Console.Write(s);
+
             m_tmp += s;
         }
         public static void LogLine(string s=null)
         {
+            Console.WriteLine(s);
             m_tmp += s;
             m_tmp = null;
             Program.m_comm.Log(s);

@@ -6,7 +6,7 @@ using System.Threading;
 
 namespace slagruntime
 {
-    internal class communicate
+    public class communicate
     {
         string m_self_ip   = "127.0.0.1";
         int    m_self_port = 2001;
@@ -29,7 +29,7 @@ namespace slagruntime
             m_mtx = new object();
 
             m_pipe   = new TcpPipe(m_self_ip,m_self_port);
-            m_pipe.Start();
+            m_pipe.Start(util.Log);
 
             m_log    = new Queue<string>();
             m_thread = new Thread(Work);
@@ -57,7 +57,7 @@ namespace slagruntime
         }
 
         #region ログ
-        public void Log(string s)
+        public void SendMsg(string s)
         {
             lock(m_log)
             {
@@ -76,6 +76,7 @@ namespace slagruntime
                 }
             }
             m_pipe.Write(m_to_ip,m_to_port,s);
+            m_pipe.Update();
         }
         #endregion
 

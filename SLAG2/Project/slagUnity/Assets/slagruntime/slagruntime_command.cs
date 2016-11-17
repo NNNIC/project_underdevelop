@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace slagruntime
 {
@@ -37,7 +37,7 @@ namespace slagruntime
                 case CMD.STOP:    break;
                 case CMD.RESUME:  break;
                 case CMD.QUIT:    break;
-                default: util.LogLine("ignore:" + cmdbuff); break;
+                default: util.SendWriteLine("ignore:" + cmdbuff); break;
             }
         }
 
@@ -49,7 +49,7 @@ namespace slagruntime
             {
                 case CMD.STOP: break;
                 case CMD.QUIT: break;
-                default: util.LogLine("ignore:" + cmd.ToString()); break;
+                default: util.SendWriteLine("ignore:" + cmd.ToString()); break;
             }
         }
 
@@ -60,11 +60,12 @@ namespace slagruntime
             string p0 = token[0].ToUpper();
             p1        = token.Length>1 ? token[1] : null;
 
-            CMD cmd = CMD.NONE;
-            if (!Enum.TryParse<CMD>(p0,out cmd))
-            {
-                util.LogLine("Unknow command:" + cmdbuff);
+            if (!Enum.IsDefined(typeof(CMD),p0))
+            { 
+                util.SendWriteLine("Unknow command:" + cmdbuff);
+                return CMD.NONE;
             }
+            var cmd = (CMD)Enum.Parse(typeof(CMD),p0);
             return cmd;
         }
     }
