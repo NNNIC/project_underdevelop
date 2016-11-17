@@ -9,7 +9,7 @@ namespace slagruntime
 {
     class command_exec
     {
-        public static void Load(string file)
+        public static void Load(string file, bool bRunNow)
         {
             if (file==null)
             {
@@ -31,7 +31,7 @@ namespace slagruntime
 
             try
             {
-                slagtool.process.Run(raw,true);
+                slagtool.process.Run(raw,!bRunNow);
             } catch (SystemException e)
             {
                 util.SendWriteLine("-- EXCEPTION --");
@@ -40,6 +40,11 @@ namespace slagruntime
                 return;
             }
             util.SendWriteLine(".. Read.");
+        }
+
+        public static void Test()
+        {
+            util.SendWriteLine(".. 1234.\n567."  );
         }
     }
 }

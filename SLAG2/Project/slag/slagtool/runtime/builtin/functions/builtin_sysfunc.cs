@@ -44,7 +44,7 @@ namespace slagtool.runtime.builtin
             }
             kit.check_num_of_args(ol,1);
             var o = kit.get_ol_at(ol,0);
-            Console.Write(kit.convert_escape(o));
+            sys.log(kit.convert_escape(o));
             return null;
         }
         public static object F_Println(bool bHelp,object[] ol,StateBuffer sb)
@@ -55,7 +55,7 @@ namespace slagtool.runtime.builtin
             }
             kit.check_num_of_args(ol,1);
             var o = kit.get_ol_at(ol,0);
-            Console.WriteLine(kit.convert_escape(o));
+            sys.log(kit.convert_escape(o));
             return null;
         }
         public static object F_Dump(bool bHelp,object[] ol,StateBuffer sb)
@@ -95,7 +95,7 @@ namespace slagtool.runtime.builtin
                 s += tostr(o);
             }
 
-            Console.WriteLine(s);
+            sys.log(s);
 
             return s;
         }

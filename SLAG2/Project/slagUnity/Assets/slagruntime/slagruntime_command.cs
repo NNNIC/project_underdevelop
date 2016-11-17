@@ -12,13 +12,15 @@ namespace slagruntime
         {
             NONE,
             LOAD,   //Load FILENAME (.js or .txt)
-            LOADBIN,//Load TEXT
+            LOADRUN,//Load and run FILENAME (.js or .txt)
+            LOADBIN,//Store BASE64 binary
             RUN,    //Run
             STEP,   //Step in or out
             BP,     //Set breakpoint          
             PRINT,  //Print variable
             STOP,   //Stop next line          --- 実行中OK
             RESUME, //Resume
+            TEST,   //Test
             QUIT    //Quit and Close          --- 実行中OK
         }
 
@@ -28,7 +30,8 @@ namespace slagruntime
             CMD cmd = GetCmd(cmdbuff,out p1);
             switch(cmd)
             {
-                case CMD.LOAD:    break;
+                case CMD.LOAD:    command_exec.Load(p1,false); break;
+                case CMD.LOADRUN: command_exec.Load(p1,true); break;
                 case CMD.LOADBIN: break;
                 case CMD.RUN:     break;
                 case CMD.STEP:    break;
@@ -36,6 +39,7 @@ namespace slagruntime
                 case CMD.PRINT:   break;
                 case CMD.STOP:    break;
                 case CMD.RESUME:  break;
+                case CMD.TEST:    command_exec.Test(); break;
                 case CMD.QUIT:    break;
                 default: util.SendWriteLine("ignore:" + cmdbuff); break;
             }

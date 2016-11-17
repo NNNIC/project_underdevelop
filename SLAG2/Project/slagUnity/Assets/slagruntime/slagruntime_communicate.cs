@@ -75,7 +75,7 @@ namespace slagruntime
                     s+=m_log.Dequeue();
                 }
             }
-            m_pipe.Write(m_to_ip,m_to_port,s);
+            if (s!=null) m_pipe.Write(m_to_ip,m_to_port,s);
             m_pipe.Update();
         }
         #endregion

@@ -16,6 +16,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slag", "slag\slag.csproj", 
 		{C5596762-934B-483F-86EF-E9073FFB0CDB} = {C5596762-934B-483F-86EF-E9073FFB0CDB}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slagmonitor", "slagmonitor\slagmonitor.csproj", "{23F8B69F-9FEB-4AB6-B6B5-558FA9BEBEC8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D49C9D5C-37E0-4EA0-87AA-45230210197E} = {D49C9D5C-37E0-4EA0-87AA-45230210197E}
+		{C5596762-934B-483F-86EF-E9073FFB0CDB} = {C5596762-934B-483F-86EF-E9073FFB0CDB}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,6 +40,10 @@ Global
 		{0032B8BC-1FD6-497D-9E56-5FB0685BA4DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0032B8BC-1FD6-497D-9E56-5FB0685BA4DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0032B8BC-1FD6-497D-9E56-5FB0685BA4DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23F8B69F-9FEB-4AB6-B6B5-558FA9BEBEC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23F8B69F-9FEB-4AB6-B6B5-558FA9BEBEC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23F8B69F-9FEB-4AB6-B6B5-558FA9BEBEC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23F8B69F-9FEB-4AB6-B6B5-558FA9BEBEC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
