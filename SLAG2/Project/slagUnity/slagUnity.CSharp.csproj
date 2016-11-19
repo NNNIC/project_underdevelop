@@ -67,9 +67,6 @@
     <Reference Include="UnityEditor.iOS.Extensions.Common">
       <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
-    <Reference Include="slagtool">
-      <HintPath>Assets\Plugins\slagtool.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\slagruntime\TcpPipe.cs" />
@@ -78,6 +75,23 @@
     <Compile Include="Assets\slagruntime\slagruntime_communicate.cs" />
     <Compile Include="Assets\slagruntime\unity\slagruntime_main.cs" />
     <Compile Include="Assets\slagruntime\unity\slagruntime_util.cs" />
+    <Compile Include="Assets\slagtest\test1.cs" />
+    <Compile Include="Assets\slagtool\analyze\syntax\lex.cs" />
+    <Compile Include="Assets\slagtool\analyze\syntax\ydef.cs" />
+    <Compile Include="Assets\slagtool\analyze\yanalyzer.cs" />
+    <Compile Include="Assets\slagtool\analyze\ydef_api.cs" />
+    <Compile Include="Assets\slagtool\analyze\ydef_debug.cs" />
+    <Compile Include="Assets\slagtool\analyze\ydef_do.cs" />
+    <Compile Include="Assets\slagtool\analyze\yengine.cs" />
+    <Compile Include="Assets\slagtool\analyze\ysaveload.cs" />
+    <Compile Include="Assets\slagtool\analyze\yvalue.cs" />
+    <Compile Include="Assets\slagtool\process.cs" />
+    <Compile Include="Assets\slagtool\runtime\builtin\builtin_func.cs" />
+    <Compile Include="Assets\slagtool\runtime\builtin\builtin_kit.cs" />
+    <Compile Include="Assets\slagtool\runtime\builtin\functions\builtin_sysfunc.cs" />
+    <Compile Include="Assets\slagtool\runtime\run_script.cs" />
+    <Compile Include="Assets\slagtool\runtime\runsub_location_clause.cs" />
+    <Compile Include="Assets\slagtool\sys.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
