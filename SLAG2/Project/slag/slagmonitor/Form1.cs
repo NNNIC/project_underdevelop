@@ -52,5 +52,10 @@ namespace slagmonitor
                 textBox2.Text = null;
             }
         }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            m_pipe.Tenminate();
+        }
     }
 }

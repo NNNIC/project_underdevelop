@@ -5,6 +5,7 @@ echo : Setup slag for development
 echo :
 echo : 1 ... Copy dll
 echo : 2 ... Copy src
+echo : 3 ... Overwrite orginal source from here
 set /p a="H"
 goto ;_%a%
 
@@ -25,7 +26,11 @@ rd /s /q slagtool 2>nul
 robocopy N:\Project\slag\slagtool slagtool *.cs /S /XD obj /XD Properties
 goto :_end
 
-
+:_3
+echo : robocopy slagtool N:\Project\slag\slagtool slagtool *.cs /S   ... Confirm.
+pause
+robocopy slagtool N:\Project\slag\slagtool *.cs /S /XD obj /XD Properties
+goto :_end
 
 :_end
 echo :

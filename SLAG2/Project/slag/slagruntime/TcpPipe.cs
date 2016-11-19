@@ -38,11 +38,15 @@ public class TcpPipe {
     log    m_log;
 
     Queue<string> m_req_list;
-    
+
+    bool   m_force_exit;
+
     public TcpPipe(string my_ip, int my_port)
     {
         m_ip = my_ip;
         m_port = my_port;
+
+        m_force_exit = false;
     }
 
     public void Start(Action<string> logfunc=null)
@@ -57,6 +61,10 @@ public class TcpPipe {
     public void Update()
     {
         m_log.Update();
+    }
+    public void Tenminate()
+    {
+        m_force_exit = true;
     }
 
     public string Read()
@@ -82,12 +90,13 @@ public class TcpPipe {
     {
         while(true)
         {
+            if (m_force_exit) return;
             _server();
         }
     }
 
     private void _server()
-    {
+    { 
         var ipString = m_ip; 
         var ipAdd = IPAddress.Parse(ipString);
 
@@ -99,6 +108,16 @@ public class TcpPipe {
         m_log.WriteLine(string.Format("Listenを開始しました({0}:{1})。",
             ((IPEndPoint)listener.LocalEndpoint).Address,
             ((IPEndPoint)listener.LocalEndpoint).Port));
+
+        while(!listener.Pending())
+        {
+            Thread.Sleep(33);
+            if (m_force_exit)
+            {
+                listener.Stop();
+                return;
+            }
+        }
 
         var client = listener.AcceptTcpClient();
         m_log.WriteLine(string.Format("クライアント({0}:{1})と接続しました。",
