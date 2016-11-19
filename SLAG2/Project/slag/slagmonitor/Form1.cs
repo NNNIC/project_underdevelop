@@ -23,7 +23,7 @@ namespace slagmonitor
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            m_pipe = new TcpPipe("127.0.0.1",2002);
+            m_pipe = new TcpPipe("127.0.0.1",22002);
             m_pipe.Start(s=>textBox1.AppendText(s));
 
             _cmdlog_init();
@@ -52,7 +52,7 @@ namespace slagmonitor
                 if (!string.IsNullOrEmpty(s))
                 { 
                     _recordcmd(s);
-                    m_pipe.Write("127.0.0.1",2001,s);
+                    m_pipe.Write("127.0.0.1",22001,s);
                 }
                 textBox2.Text = null;
             }

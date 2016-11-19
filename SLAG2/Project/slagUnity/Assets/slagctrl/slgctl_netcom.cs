@@ -9,10 +9,10 @@ namespace slgctl
     public class netcomm
     {
         string m_self_ip   = "127.0.0.1";
-        int    m_self_port = 2001;
+        int    m_self_port = 22001;
 
         string m_to_ip   = "127.0.0.1";
-        int    m_to_port = 2002;
+        int    m_to_port = 22002;
 
         TcpPipe       m_pipe;
         Queue<string> m_log;
@@ -75,7 +75,7 @@ namespace slgctl
                     s+=m_log.Dequeue();
                 }
             }
-            if (s!=null) m_pipe.Write(m_to_ip,m_to_port,s);
+            if (s!=null) m_pipe.Write(s,m_to_ip,m_to_port);
             m_pipe.Update();
         }
         #endregion

@@ -41,7 +41,7 @@ public class TcpPipe {
 
     bool   m_force_exit;
 
-    public TcpPipe(string my_ip, int my_port)
+    public TcpPipe(string my_ip, int my_port=2000)
     {
         m_ip = my_ip;
         m_port = my_port;
@@ -80,7 +80,7 @@ public class TcpPipe {
         }
         return null;
     }
-    public void Write(string ip, int port, string msg)
+    public void Write(string msg,string ip, int port=2000)
     {
         send_client(ip,port,msg);
     }
