@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Text;
-//using System.Threading.Tasks;
 using ARRAY = System.Collections.Generic.List<object>;
 
 namespace slagtool.runtime
@@ -11,7 +10,7 @@ namespace slagtool.runtime
     public class CFG //Config
     {
         public const int    LOOPMAX      = 9999;
-        public const string TMPBIN       = "tmp.bin"; //キャッシュ
+        public const string TMPBIN       = null; //キャッシュ  nullを指定すると内部保存
     }
 
     public enum BREAKTYPE

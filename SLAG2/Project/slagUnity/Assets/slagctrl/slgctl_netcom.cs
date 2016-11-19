@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace slagruntime
+namespace slgctl
 {
-    public class communicate
+    public class netcomm
     {
         string m_self_ip   = "127.0.0.1";
         int    m_self_port = 2001;
@@ -21,7 +21,7 @@ namespace slagruntime
         object        m_mtx;
         string        m_cmd;
 
-        static communicate V;
+        static netcomm V;
 
         public void Start()
         {
@@ -29,7 +29,7 @@ namespace slagruntime
             m_mtx = new object();
 
             m_pipe   = new TcpPipe(m_self_ip,m_self_port);
-            m_pipe.Start(util.Log);
+            m_pipe.Start(wk.Log);
 
             m_log    = new Queue<string>();
             m_thread = new Thread(Work);

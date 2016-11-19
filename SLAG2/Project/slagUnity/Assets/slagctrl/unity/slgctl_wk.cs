@@ -2,8 +2,8 @@
 using System.Collections;
 using System;
 
-namespace slagruntime { 
-    public class util
+namespace slgctl { 
+    public class wk
     {
         private static string m_tmp;
         public static void SendWrite(string s)
@@ -14,7 +14,7 @@ namespace slagruntime {
         {
             m_tmp += s;
             m_tmp = null;
-            slagruntime_main.m_comm.SendMsg(s);
+            slgctl_main.m_netcomm.SendMsg(s);
             Debug.Log(s);
         }
 

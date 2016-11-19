@@ -16,9 +16,8 @@ public class test1 : MonoBehaviour {
         var path = Path.Combine(m_folder,m_file + ".js");
         var src  = File.ReadAllText(path,Encoding.UTF8);
         
-        slagtool.process.SetLogFunc(Log,LogLine);
-
-        slagtool.process.Run(src);
+        slagtool.util.SetLogFunc(Log,LogLine);
+        slagtool.util.ExeSrc(src);
     }
 
     //---

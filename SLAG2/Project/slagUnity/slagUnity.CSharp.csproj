@@ -69,12 +69,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\slagruntime\TcpPipe.cs" />
-    <Compile Include="Assets\slagruntime\slagruntime_command.cs" />
-    <Compile Include="Assets\slagruntime\slagruntime_command_exec.cs" />
-    <Compile Include="Assets\slagruntime\slagruntime_communicate.cs" />
-    <Compile Include="Assets\slagruntime\unity\slagruntime_main.cs" />
-    <Compile Include="Assets\slagruntime\unity\slagruntime_util.cs" />
+    <Compile Include="Assets\slagctrl\TcpPipe.cs" />
+    <Compile Include="Assets\slagctrl\slgctl_cmd.cs" />
+    <Compile Include="Assets\slagctrl\slgctl_cmd_sub.cs" />
+    <Compile Include="Assets\slagctrl\slgctl_netcom.cs" />
+    <Compile Include="Assets\slagctrl\unity\slgctl_main.cs" />
+    <Compile Include="Assets\slagctrl\unity\slgctl_wk.cs" />
     <Compile Include="Assets\slagtest\test1.cs" />
     <Compile Include="Assets\slagtool\analyze\syntax\lex.cs" />
     <Compile Include="Assets\slagtool\analyze\syntax\ydef.cs" />
@@ -92,6 +92,10 @@
     <Compile Include="Assets\slagtool\runtime\run_script.cs" />
     <Compile Include="Assets\slagtool\runtime\runsub_location_clause.cs" />
     <Compile Include="Assets\slagtool\sys.cs" />
+    <Compile Include="Assets\slagtool\util.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\slagtool\__util__に外部アクセスを集める__.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

@@ -9,14 +9,8 @@ namespace slagtool
 {
     public class process
     {
-        public static void SetLogFunc(Action<string> write, Action<string> writeline )
-        {
-            sys.m_conWrite = write;
-            sys.m_conWriteLine = writeline;
-            sys.DEBUGMODE = true;
-        }
 
-        public static void Run(string src, bool bCompileOnly=false,string outbinfile = null)
+        internal static void Run(string src, bool bCompileOnly=false,string outbinfile = null)
         {
             var engine = new yengine();
 
@@ -78,7 +72,7 @@ namespace slagtool
             sys.logline("\n*end");
         }
 
-        public static void Run_from_savefile(string file = null)
+        internal static void Run_from_savefile(string file = null)
         {
             if (file==null)
             {

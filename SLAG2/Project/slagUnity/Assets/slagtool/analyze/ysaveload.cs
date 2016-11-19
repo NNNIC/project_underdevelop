@@ -10,39 +10,110 @@ namespace slagtool
 {
     public static class YSAVELOAD
     {
+        static List<YVALUE> m_temp;
+
+        /// <summary>
+        /// セーブ
+        /// ※pathがnull時は内部保存
+        /// </summary>
         public static void Save(List<YVALUE> l, string path)
         {
-            var bf = new BinaryFormatter();
-            var ms = new MemoryStream();
+            m_temp = l;
 
-            bf.Serialize(ms,l);
+            if (path!=null)
+            { 
+                var data = GetBin();
 
-            try { 
-                File.WriteAllBytes(path,ms.ToArray());
-            } catch
-            {
-                sys.error("Faild to save!");
+                try { 
+                    File.WriteAllBytes(path,data);
+                } catch
+                {
+                    sys.error("Faild to save!");
+                }
             }
         }
 
+        /// <summary>
+        /// バイナリ保存
+        /// </summary>
+        public static void Save(byte[] bytes, string path)
+        {
+            m_temp = Load(bytes);
+            if (path!=null)
+            {
+                try { 
+                    File.WriteAllBytes(path,bytes);
+                } catch
+                {
+                    sys.error("Faild to save!");
+                }
+            }
+        }
+
+        /// <summary>
+        /// ロード
+        /// pathがnul時は内部保存を返す
+        /// </summary>
         public static List<YVALUE> Load(string path)
         {
-            if (!File.Exists(path))
-            {
-                sys.error("File does not exist! .. " + path);
+            if (path != null)
+            { 
+                if (!File.Exists(path))
+                {
+                    sys.error("File does not exist! .. " + path);
+                }
+                var bytes = File.ReadAllBytes(path);
+
+                return Load(bytes);
             }
-            var bytes = File.ReadAllBytes(path);
-            var ms = new MemoryStream(bytes);
+            return m_temp;
+        }
+
+        /// <summary>
+        /// バイナリからロード
+        /// </summary>
+        public static List<YVALUE> Load(byte[] data)
+        {
+            var ms = new MemoryStream(data);
 
             List<YVALUE> l = null;
             try {
                 var bf = new BinaryFormatter();
                 l = (List<YVALUE>)bf.Deserialize(ms);
-            } catch
-            {
-                sys.error("Faild to load!");
             }
+            catch (SystemException e)
+            {
+                sys.error("Faild to conver to yvalue list : " + e.Message);
+            }
+
+            m_temp = l;
             return l;
+        }
+
+        /// <summary>
+        /// バイナリを返す
+        /// </summary>
+        public static byte[] GetBin()
+        {
+            if (m_temp==null) return null;
+
+            byte[] data = null;
+
+            try { 
+                using (var ms = new MemoryStream())
+                { 
+                    var bf = new BinaryFormatter();
+                    bf.Serialize(ms, m_temp);
+                    data = ms.ToArray();
+                }
+            }
+            catch (SystemException e)
+            {
+                data = null;
+                sys.error("Faile to convert to binary : " + e.Message);
+            }
+
+            return data;
         }
     }
 }
