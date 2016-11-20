@@ -9,7 +9,7 @@ namespace slgctl
 {
     class cmd_sub
     {
-        public static void Load(string file, bool bRunNow)
+        public static void Load(string file)
         {
             if (file==null)
             {
@@ -41,16 +41,13 @@ namespace slgctl
 
             try
             {
-                if (bRunNow)
-                { 
-                    slagtool.util.ExeSrc(raw);
-                    wk.SendWriteLine(".. Done to read and run " + file);
-                }
-                else
-                {
-                    slagtool.util.LoadSrc(raw);
-                    wk.SendWriteLine(".. Done to read " + file);
-                }
+                //if (bRunNow)
+                //{ 
+                //    slagtool.util.ExeSrc(raw);
+                //    wk.SendWriteLine(".. Done to read and run " + file);
+                //}
+                slagtool.util.LoadSrc(raw);
+                wk.SendWriteLine(".. Done to read " + file);
             } catch (SystemException e)
             {
                 wk.SendWriteLine("-- EXCEPTION --");

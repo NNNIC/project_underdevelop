@@ -10,7 +10,20 @@ namespace slagtool
 {
     public static class YSAVELOAD
     {
-        static List<YVALUE> m_temp;
+        static List<YVALUE> __temp;
+        static List<YVALUE> m_temp
+        {
+            get {return __temp; }
+            set
+            {
+                if (value==null)
+                {
+                    sys.logline("!!");
+                   
+                }
+                __temp = value;
+            }
+        }
 
         /// <summary>
         /// セーブ

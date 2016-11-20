@@ -13,7 +13,7 @@ namespace slagmonitor
 {
     public partial class Form1 : Form
     {
-        TcpPipe m_pipe;
+        FilePipe m_pipe;
         List<string> m_cmdlog;
 
         public Form1()
@@ -23,7 +23,7 @@ namespace slagmonitor
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            m_pipe = new TcpPipe("127.0.0.1",22002);
+            m_pipe = new FilePipe("127.0.0.1",22002);
             m_pipe.Start(s=>textBox1.AppendText(s));
 
             _cmdlog_init();
@@ -32,11 +32,15 @@ namespace slagmonitor
         private void timer1_Tick(object sender, EventArgs e)
         {
             m_pipe.Update();
-            var msg = m_pipe.Read();
-            if (msg!=null)
+            string s= null;
+            for(var loop=0; loop<100;loop++)
             {
-                textBox1.AppendText(msg + Environment.NewLine);
+                var msg = m_pipe.Read();
+                if (msg==null) break;
+                if (s!=null) s+=Environment.NewLine;
+                s+=msg;
             }
+            if (s!=null) textBox1.AppendText(s + Environment.NewLine);
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -52,7 +56,7 @@ namespace slagmonitor
                 if (!string.IsNullOrEmpty(s))
                 { 
                     _recordcmd(s);
-                    m_pipe.Write("127.0.0.1",22001,s);
+                    m_pipe.Write(s,"127.0.0.1",22001);
                 }
                 textBox2.Text = null;
             }
@@ -96,6 +100,7 @@ namespace slagmonitor
                 m_cmdlog.Remove(s);
             }
             m_cmdlog.Add(s);
+            _savecmd = s;
             try
             {
                 File.WriteAllLines(_cmdlogfile,m_cmdlog.ToArray());
@@ -128,6 +133,11 @@ namespace slagmonitor
                 _savecmd = (idx>=0 && idx < m_cmdlog.Count) ? m_cmdlog[idx] : null;
                 return _savecmd;
             }
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            textBox2.Focus();
         }
     }
 }

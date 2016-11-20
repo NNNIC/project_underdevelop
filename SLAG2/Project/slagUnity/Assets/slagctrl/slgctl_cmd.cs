@@ -30,10 +30,10 @@ namespace slgctl
             COMMAND cmd = GetCmd(cmdbuff,out p1);
             switch(cmd)
             {
-                case COMMAND.LOAD:    cmd_sub.Load(p1,false); break;
-                case COMMAND.LOADRUN: cmd_sub.Load(p1,true);  break;
-                case COMMAND.LOADBIN: cmd_sub.LoadBin(p1);    break;
-                case COMMAND.RUN:     cmd_sub.Run();          break;
+                case COMMAND.LOAD:    cmd_sub.Load(p1);                 break;
+                case COMMAND.LOADRUN: cmd_sub.Load(p1); cmd_sub.Run();  break;
+                case COMMAND.LOADBIN: cmd_sub.LoadBin(p1);              break;
+                case COMMAND.RUN:     cmd_sub.Run();                    break;
                 case COMMAND.STEP:    break;
                 case COMMAND.BP:      break;
                 case COMMAND.PRINT:   break;

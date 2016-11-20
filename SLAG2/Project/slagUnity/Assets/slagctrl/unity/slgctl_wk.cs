@@ -13,8 +13,9 @@ namespace slgctl {
         public static void SendWriteLine(string s=null)
         {
             m_tmp += s;
+            var save = m_tmp;
             m_tmp = null;
-            slgctl_main.m_netcomm.SendMsg(s);
+            slgctl_main.m_netcomm.SendMsg(save);
             Debug.Log(s);
         }
 

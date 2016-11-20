@@ -14,7 +14,7 @@ namespace slgctl
         string m_to_ip   = "127.0.0.1";
         int    m_to_port = 22002;
 
-        TcpPipe       m_pipe;
+        FilePipe       m_pipe;
         Queue<string> m_log;
         Thread        m_thread;
         
@@ -28,7 +28,7 @@ namespace slgctl
             V = this;
             m_mtx = new object();
 
-            m_pipe   = new TcpPipe(m_self_ip,m_self_port);
+            m_pipe   = new FilePipe(m_self_ip,m_self_port);
             m_pipe.Start(wk.Log);
 
             m_log    = new Queue<string>();
@@ -43,8 +43,14 @@ namespace slgctl
                 _update();
 
                 var cmd = m_pipe.Read();
-                record(cmd);
-                Thread.Sleep(33);
+                if (cmd!=null)
+                { 
+                    record(cmd);
+                }
+                else
+                { 
+                    Thread.Sleep(33);
+                }
             }
         }
 

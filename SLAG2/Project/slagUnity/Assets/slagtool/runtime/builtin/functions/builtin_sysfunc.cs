@@ -44,7 +44,9 @@ namespace slagtool.runtime.builtin
             }
             kit.check_num_of_args(ol,1);
             var o = kit.get_ol_at(ol,0);
-            sys.log(kit.convert_escape(o));
+            var s = kit.convert_escape(o);
+            sys.log(s);
+            UnityEngine.Debug.Log(s);
             return null;
         }
         public static object F_Println(bool bHelp,object[] ol,StateBuffer sb)
@@ -55,7 +57,7 @@ namespace slagtool.runtime.builtin
             }
             kit.check_num_of_args(ol,1);
             var o = kit.get_ol_at(ol,0);
-            sys.log(kit.convert_escape(o));
+            sys.logline(kit.convert_escape(o));
             return null;
         }
         public static object F_Dump(bool bHelp,object[] ol,StateBuffer sb)
@@ -95,7 +97,8 @@ namespace slagtool.runtime.builtin
                 s += tostr(o);
             }
 
-            sys.log(s);
+            sys.logline(s);
+            UnityEngine.Debug.Log(s);
 
             return s;
         }
