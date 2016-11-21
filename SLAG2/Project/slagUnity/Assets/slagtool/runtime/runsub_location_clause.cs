@@ -12,12 +12,14 @@ namespace slagtool.runtime
     // Ｃ＃依存部分
     public class runsub_location_clause //ピリオド区切りの文字列に対しての処理
     {
-        public static StateBuffer run(YVALUE v, StateBuffer sb, bool bSet=false, object setvalue=null) 
+        public static StateBuffer run(YVALUE v, StateBuffer sb, LocationMode mode = LocationMode.GET) 
         {
             var nsb = sb;
+            var item = new LocationItem(); //先行アイテム。中身なし
+            item.mode = mode;
 
-            var item = new LocationItem(); //先行アイテム。中身null
-            nsb.set_locatioitem_save(item);
+            nsb.m_locationitem = item;
+
             var size = v.list_size();
             for(int i = 0 ; i<size ; i++)
             {
@@ -26,13 +28,13 @@ namespace slagtool.runtime
                 
                 if (vn.IsType(YDEF.PERIOD)) continue;
 
-                item = nsb.get_locationitem_save();
+                item = nsb.m_locationitem;
                 item.setter = null;
                 item.getter = null;
 
                 nsb = run_script.run(vn,nsb.curnull());
                 
-                item = nsb.get_locationitem_save();
+                item = nsb.m_locationitem;
                 if (item.o == null) break;                               //最近の流行りを取り入れてnullだったら後ろは処理しない
 
                 if (i<size-1)
@@ -40,21 +42,22 @@ namespace slagtool.runtime
                     if (item.getter!=null)
                     {
                         item.o = item.getter();
-                        nsb.set_locatioitem_save(item);
+                        nsb.m_locationitem =item;
                     }
                 }
             }
 
-            item = nsb.get_locationitem_save();
+            item = nsb.m_locationitem;
 
-            if (bSet)
+            if (item.mode == LocationMode.SET)
             {
-                if (item.setter!=null)
-                {
-                    item.setter(setvalue);
-                }
+                //if (item.setter!=null)
+                //{
+                //    item.setter(setvalue);
+                //}
+                //TBI
             }
-            else
+            else if (item.mode == LocationMode.GET)
             { 
                 if (item.getter!=null)
                 {
@@ -65,8 +68,11 @@ namespace slagtool.runtime
                     nsb.m_cur = item.o;
                 }
             }
-
-            nsb.savenull();
+            else if (item.mode == LocationMode.NEW)
+            {
+               
+            }
+            nsb.locationiemnull();
 
             return nsb;
         }
@@ -74,7 +80,7 @@ namespace slagtool.runtime
         {
             var nsb = sb;
             var name = v.GetString();
-            LocationItem item = nsb.get_locationitem_save();
+            LocationItem item = nsb.m_locationitem;
             var preobj = item.o; //先行ロケーションアイテムの値
             if (preobj == null) //先行値がないのでNAMEとしてバッファを検索し、なければリテラルとして処理を以降に任せる
             {
@@ -88,7 +94,7 @@ namespace slagtool.runtime
                     literal.s = name;
                     item.o = literal;
                 }
-                nsb.set_locatioitem_save(item);
+                nsb.m_locationitem = item;
                 
                 return nsb;                
             }
@@ -97,19 +103,19 @@ namespace slagtool.runtime
             {
                 var literal = (Literal)preobj;
                 item = GetObj(literal.s,name, item);
-                nsb.set_locatioitem_save(item);
+                nsb.m_locationitem =item;
             }
             else
             {
                 item = GetObj(preobj,name, item);
-                nsb.set_locatioitem_save(item);
+                nsb.m_locationitem = item;
             }
             return nsb;
         }
         public static StateBuffer run_func(YVALUE v, StateBuffer sb, string name, List<object> ol)
         {
             var nsb = sb;
-            var item = nsb.get_locationitem_save();
+            var item = nsb.m_locationitem;
             var preobj = item.o; //先行ロケーションアイテムの値
             if (preobj == null) //先行値がない場合は予想外
             {
@@ -120,7 +126,7 @@ namespace slagtool.runtime
             {
                 var literal = (Literal)preobj;
                 item = ExecuteFunc(literal.s,name,ol,item);
-                nsb.set_locatioitem_save(item);
+                nsb.m_locationitem =item;
             }
             else
             {
@@ -131,17 +137,17 @@ namespace slagtool.runtime
         public static StateBuffer run_num(YVALUE v, StateBuffer sb)
         {
             var nsb = sb;
-            var item = nsb.get_locationitem_save();
+            var item = nsb.m_locationitem;
             item.o = v.GetNumber();
-            nsb.set_locatioitem_save(item);
+            nsb.m_locationitem =item;
             return nsb;
         }
         public static StateBuffer run_qstr(YVALUE v, StateBuffer sb)
         {
             var nsb = sb;
-            var item = nsb.get_locationitem_save();
+            var item = nsb.m_locationitem;
             item.o =v.GetString();
-            nsb.set_locatioitem_save(item);
+            nsb.m_locationitem = item;
             return nsb;
         }
 
@@ -259,6 +265,17 @@ namespace slagtool.runtime
 #endif
         private static LocationItem ExecuteFunc(string pre, string cur, List<object> param, LocationItem item)
         {
+            if (item!=null && item.mode == LocationMode.NEW)
+            {
+                var searchname = (pre + "." + cur).ToUpper();
+                var ti = find_typeinfo(searchname);
+                if (ti!=null)
+                {
+
+
+                }
+                return item;
+            }
             throw new SystemException("unexpected");
         }
         private static LocationItem ExecuteFunc(object o, string cur, List<object> param, LocationItem item)

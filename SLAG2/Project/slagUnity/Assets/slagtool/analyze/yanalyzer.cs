@@ -150,6 +150,7 @@ namespace slagtool
             {
                 m_separators = new List<string>(lexPrimitive.operators);
                 m_separators.Add(";");
+                m_separators.Add("NEW");
                 m_target = extruct_list(l,ob,cb);
                 m_index = 0;
             }

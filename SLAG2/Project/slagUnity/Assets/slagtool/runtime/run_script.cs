@@ -26,8 +26,12 @@ namespace slagtool.runtime
         public string s;
     }
 
-    public class LocationItem //ピリオド区切りのロケーション要素
+    #region ピリオド区切りのロケーション要素
+    public enum  LocationMode { GET,SET,NEW } 
+    public class LocationItem 
     {
+        public LocationMode mode;
+
         public object o;
         public override string ToString()
         {
@@ -42,6 +46,7 @@ namespace slagtool.runtime
             setter = null;
         }
     }
+    #endregion
 
     public class StateBuffer
     {
@@ -49,8 +54,8 @@ namespace slagtool.runtime
         public Hashtable    m_front_dic;          //フロント
         public Hashtable    m_func_dic;           //ファンクション格納
 
-        public object m_save;
-        public object m_cur;
+        public LocationItem m_locationitem;       //ピリオド区切りのアイテム
+        public object       m_cur;
 
         public BREAKTYPE m_breakType;
 
@@ -218,21 +223,9 @@ namespace slagtool.runtime
             if (m_cur==null) return null;
             return m_cur.ToString();
         }
-        public LocationItem get_locationitem_save()
+        public void locationiemnull()
         {
-            if (m_save!=null && m_save.GetType() == typeof(LocationItem))
-            {
-                return (LocationItem)m_save;
-            }
-            return null;
-        }
-        public void set_locatioitem_save(LocationItem item)
-        {
-            m_save = item;
-        }
-        public void savenull()
-        {
-            m_save = null;
+            m_locationitem = null;
         }
 
         #endregion
@@ -685,6 +678,7 @@ namespace slagtool.runtime
 
                     var is_1st_incop = (v.list[0].type == YDEF.INCOP);
                     var is_2nd_icnop = (v.list[1].type == YDEF.INCOP);
+                    var is_new_word  = (v.list[0].type == YDEF.NEW);
 
                     if (is_1st_incop)
                     {
@@ -699,6 +693,7 @@ namespace slagtool.runtime
 
                             nsb.find_and_set(n,num);
                             nsb.m_cur = num;
+                            return nsb;
                         }
                         else
                         {
@@ -718,11 +713,21 @@ namespace slagtool.runtime
                             else util._error("unexpected");
 
                             nsb.find_and_set(n,num);
+                            return nsb;
                         }
                         else
                         {
                             util._error("unexpected");
                         }
+                    }
+                    else if (is_new_word)
+                    {
+                        var nv = v.list[1].FindValueByTravarse(YDEF.get_type(YDEF.sx_location_clause));
+                        if (nv!=null)
+                        {
+                            nsb = runsub_location_clause.run(nv,nsb.curnull(),LocationMode.NEW);
+                        }
+                        return nsb;
                     }
                     else
                     { 
@@ -762,6 +767,7 @@ namespace slagtool.runtime
                         {
                             util._error("unexpected");
                         }
+                        return nsb;
                     }
                 }
                 else
@@ -844,8 +850,8 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.get_type(YDEF.sx_func))
             {
-                var save_location_item = nsb.get_locationitem_save();
-                nsb.savenull();
+                var save_location_item = nsb.m_locationitem;
+                nsb.locationiemnull();
 
                 var name = v.list_at(0).GetString();
 
@@ -880,7 +886,7 @@ namespace slagtool.runtime
 
                 if (save_location_item!=null) //ロケーションアイテム
                 {
-                    nsb.set_locatioitem_save(save_location_item);
+                    nsb.m_locationitem = save_location_item;
                     nsb = runsub_location_clause.run_func(v,nsb,name,ol);
                     return nsb;
                 }
@@ -927,12 +933,12 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.get_type(YDEF.sx_location_clause))
             {
-                nsb = runsub_location_clause.run(v,nsb);                    
+                nsb = runsub_location_clause.run(v,nsb);                
                 return nsb;
             }
             if (v.type == YDEF.NAME)
             {
-                if (nsb.get_locationitem_save()!=null)
+                if (nsb.m_locationitem!=null)
                 {
                     nsb = runsub_location_clause.run_name(v,nsb);
                     return nsb;
@@ -943,7 +949,7 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.NUM)
             {
-                if (nsb.get_locationitem_save()!=null)
+                if (nsb.m_locationitem!=null)
                 {
                     nsb = runsub_location_clause.run_num(v,nsb);
                     return nsb;
@@ -954,7 +960,7 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.QSTR)
             {
-                if (nsb.get_locationitem_save()!=null)
+                if (nsb.m_locationitem!=null)
                 {
                     nsb = runsub_location_clause.run_qstr(v,nsb);
                     return nsb;

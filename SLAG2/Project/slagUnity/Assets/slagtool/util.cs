@@ -88,12 +88,15 @@ namespace slagtool
         #endregion
 
         #region ログ設定
-        public static void SetLogFunc(Action<string> write, Action<string> writeline )
+        public static void SetLogFunc(Action<string> write, Action<string> writeline, int debugLevel=1 )
         {
             sys.m_conWrite = write;
             sys.m_conWriteLine = writeline;
-            if (!sys.DEBUGMODE) sys.DEBUGMODE = true;
+            sys.DEBUGLEVEL = debugLevel;
         }
         #endregion
+
+        public static void SetDebugMode(int n) { sys.DEBUGLEVEL = n;    }
+        public static int  GetDebugMode()      { return sys.DEBUGLEVEL; }
     }
 }
