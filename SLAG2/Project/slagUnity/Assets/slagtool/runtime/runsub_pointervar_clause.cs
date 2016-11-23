@@ -10,15 +10,15 @@ using ARRAY = System.Collections.Generic.List<object>;
 namespace slagtool.runtime
 {
     // Ｃ＃依存部分
-    public class runsub_location_clause //ピリオド区切りの文字列に対しての処理
+    public class runsub_pointervar_clause //ピリオド区切りの文字列に対しての処理
     {
-        public static StateBuffer run(YVALUE v, StateBuffer sb, LocationMode mode = LocationMode.GET) 
+        public static StateBuffer run(YVALUE v, StateBuffer sb, PointervarMode mode = PointervarMode.GET) 
         {
             var nsb = sb;
-            var item = new LocationItem(); //先行アイテム。中身なし
+            var item = new PointervarItem(); //先行アイテム。中身なし
             item.mode = mode;
 
-            nsb.m_locationitem = item;
+            nsb.m_pvitem = item;
 
             var size = v.list_size();
             for(int i = 0 ; i<size ; i++)
@@ -28,13 +28,13 @@ namespace slagtool.runtime
                 
                 if (vn.IsType(YDEF.PERIOD)) continue;
 
-                item = nsb.m_locationitem;
+                item = nsb.m_pvitem;
                 item.setter = null;
                 item.getter = null;
 
                 nsb = run_script.run(vn,nsb.curnull());
                 
-                item = nsb.m_locationitem;
+                item = nsb.m_pvitem;
                 if (item.o == null) break;                               //最近の流行りを取り入れてnullだったら後ろは処理しない
 
                 if (i<size-1)
@@ -42,14 +42,14 @@ namespace slagtool.runtime
                     if (item.getter!=null)
                     {
                         item.o = item.getter();
-                        nsb.m_locationitem =item;
+                        nsb.m_pvitem =item;
                     }
                 }
             }
 
-            item = nsb.m_locationitem;
+            item = nsb.m_pvitem;
 
-            if (item.mode == LocationMode.SET)
+            if (item.mode == PointervarMode.SET)
             {
                 //if (item.setter!=null)
                 //{
@@ -57,7 +57,7 @@ namespace slagtool.runtime
                 //}
                 //TBI
             }
-            else if (item.mode == LocationMode.GET)
+            else if (item.mode == PointervarMode.GET)
             { 
                 if (item.getter!=null)
                 {
@@ -68,11 +68,11 @@ namespace slagtool.runtime
                     nsb.m_cur = item.o;
                 }
             }
-            else if (item.mode == LocationMode.NEW)
+            else if (item.mode == PointervarMode.NEW)
             {
                 nsb.m_cur = item.o;  
             }
-            nsb.locationiemnull();
+            nsb.pvitemnull();
 
             return nsb;
         }
@@ -80,7 +80,7 @@ namespace slagtool.runtime
         {
             var nsb = sb;
             var name = v.GetString();
-            LocationItem item = nsb.m_locationitem;
+            PointervarItem item = nsb.m_pvitem;
             var preobj = item.o; //先行ロケーションアイテムの値
             if (preobj == null) //先行値がないのでNAMEとしてバッファを検索し、なければリテラルとして処理を以降に任せる
             {
@@ -94,7 +94,7 @@ namespace slagtool.runtime
                     literal.s = name;
                     item.o = literal;
                 }
-                nsb.m_locationitem = item;
+                nsb.m_pvitem = item;
                 
                 return nsb;                
             }
@@ -103,19 +103,19 @@ namespace slagtool.runtime
             {
                 var literal = (Literal)preobj;
                 item = GetObj(literal.s,name, item);
-                nsb.m_locationitem =item;
+                nsb.m_pvitem =item;
             }
             else
             {
                 item = GetObj(preobj,name, item);
-                nsb.m_locationitem = item;
+                nsb.m_pvitem = item;
             }
             return nsb;
         }
         public static StateBuffer run_func(YVALUE v, StateBuffer sb, string name, List<object> ol)
         {
             var nsb = sb;
-            var item = nsb.m_locationitem;
+            var item = nsb.m_pvitem;
             var preobj = item.o; //先行ロケーションアイテムの値
             if (preobj == null) //先行値がない場合は予想外
             {
@@ -126,7 +126,7 @@ namespace slagtool.runtime
             {
                 var literal = (Literal)preobj;
                 item = ExecuteFunc(literal.s,name,ol,item);
-                nsb.m_locationitem =item;
+                nsb.m_pvitem =item;
             }
             else
             {
@@ -137,23 +137,23 @@ namespace slagtool.runtime
         public static StateBuffer run_num(YVALUE v, StateBuffer sb)
         {
             var nsb = sb;
-            var item = nsb.m_locationitem;
+            var item = nsb.m_pvitem;
             item.o = v.GetNumber();
-            nsb.m_locationitem =item;
+            nsb.m_pvitem =item;
             return nsb;
         }
         public static StateBuffer run_qstr(YVALUE v, StateBuffer sb)
         {
             var nsb = sb;
-            var item = nsb.m_locationitem;
+            var item = nsb.m_pvitem;
             item.o =v.GetString();
-            nsb.m_locationitem = item;
+            nsb.m_pvitem = item;
             return nsb;
         }
 
         // -- tool for this class
 #if UNITY_5
-        private static LocationItem GetObj(string pre, string cur, LocationItem item)
+        private static PointervarItem GetObj(string pre, string cur, PointervarItem item)
         {
             //アセンブリ調査 --- set/get不明なので直前の形で返す
             var searchname = (pre + "." + cur).ToUpper();
@@ -169,7 +169,7 @@ namespace slagtool.runtime
             item.o = literal;
             return item;
         }
-        private static LocationItem GetObj(object o, string cur,LocationItem item)
+        private static PointervarItem GetObj(object o, string cur,PointervarItem item)
         {
             var name = cur.ToUpper();
             Type type = (Type)o;
@@ -263,9 +263,9 @@ namespace slagtool.runtime
             return item;
         }
 #endif
-        private static LocationItem ExecuteFunc(string pre, string cur, List<object> param, LocationItem item)
+        private static PointervarItem ExecuteFunc(string pre, string cur, List<object> param, PointervarItem item)
         {
-            if (item!=null && item.mode == LocationMode.NEW)
+            if (item!=null && item.mode == PointervarMode.NEW)
             {
                 var searchname = (pre + "." + cur).ToUpper();
                 var ti = find_typeinfo(searchname);
@@ -277,7 +277,7 @@ namespace slagtool.runtime
             }
             throw new SystemException("unexpected");
         }
-        private static LocationItem ExecuteFunc(object o, string cur, List<object> param, LocationItem item)
+        private static PointervarItem ExecuteFunc(object o, string cur, List<object> param, PointervarItem item)
         {
             var name = cur.ToUpper();
             Type type = (Type)o;

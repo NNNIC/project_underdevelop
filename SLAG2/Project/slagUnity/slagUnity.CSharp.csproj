@@ -85,17 +85,18 @@
     <Compile Include="Assets\slagtool\analyze\yengine.cs" />
     <Compile Include="Assets\slagtool\analyze\ysaveload.cs" />
     <Compile Include="Assets\slagtool\analyze\yvalue.cs" />
-    <Compile Include="Assets\slagtool\process.cs" />
     <Compile Include="Assets\slagtool\runtime\builtin\builtin_func.cs" />
     <Compile Include="Assets\slagtool\runtime\builtin\builtin_kit.cs" />
     <Compile Include="Assets\slagtool\runtime\builtin\functions\builtin_sysfunc.cs" />
+    <Compile Include="Assets\slagtool\runtime\process.cs" />
     <Compile Include="Assets\slagtool\runtime\run_script.cs" />
-    <Compile Include="Assets\slagtool\runtime\runsub_location_clause.cs" />
+    <Compile Include="Assets\slagtool\runtime\runsub_pointervar_clause.cs" />
     <Compile Include="Assets\slagtool\sys.cs" />
     <Compile Include="Assets\slagtool\util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\slagtool\__util__に外部アクセスを集める__.txt" />
+    <None Include="Assets\メモ.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

@@ -3,10 +3,56 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using slagtool;
 
-
-namespace slagtool
+namespace slagtool.runtime
 {
+    public class process
+    {
+        List<YVALUE> m_illist;  //intermediate langege list
+        StateBuffer  m_statebuf;
+
+        public void Init(List<YVALUE> illist)
+        {
+            m_illist = illist;
+            m_statebuf = new StateBuffer();
+        }      
+        public void Run()
+        {
+            run_script.run(m_illist[0],m_statebuf);
+        }
+        public object CallFunc(string funcname, List<object> param)
+        {
+            
+            return null;
+        }
+        public object GetVal(string name)
+        {
+            return null;
+        }
+        public double GetNumVal(string name)
+        {
+            return 0;
+        }
+        public string GetStrVal(string name)
+        {
+            return null;
+        }
+        public void SetVal(string name, object val)
+        {
+            return;
+        }
+        public void SetNumVal(string name, double val)
+        {
+            return;
+        }
+        public void GetStrVal(string name, string str)
+        {
+            return;
+        }
+    }
+}
+
     //public class process
     //{
         //internal static void Run(string src, bool bCompileOnly=false,string outbinfile = null)
@@ -90,4 +136,4 @@ namespace slagtool
         //    sys.logline("\n*end");
         //}
     //}
-}
+//}

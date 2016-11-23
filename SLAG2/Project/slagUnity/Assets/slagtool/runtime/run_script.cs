@@ -26,11 +26,11 @@ namespace slagtool.runtime
         public string s;
     }
 
-    #region ピリオド区切りのロケーション要素
-    public enum  LocationMode { GET,SET,NEW } 
-    public class LocationItem 
+    #region ピリオド区切りのポインタ変数要素
+    public enum  PointervarMode { GET,SET,NEW } 
+    public class PointervarItem 
     {
-        public LocationMode mode;
+        public PointervarMode mode;
 
         public object o;
         public override string ToString()
@@ -54,8 +54,8 @@ namespace slagtool.runtime
         public Hashtable    m_front_dic;          //フロント
         public Hashtable    m_func_dic;           //ファンクション格納
 
-        public LocationItem m_locationitem;       //ピリオド区切りのアイテム
-        public object       m_cur;
+        public PointervarItem m_pvitem;           //ポインタ変数のアイテム
+        public object         m_cur;
 
         public BREAKTYPE m_breakType;
 
@@ -223,9 +223,9 @@ namespace slagtool.runtime
             if (m_cur==null) return null;
             return m_cur.ToString();
         }
-        public void locationiemnull()
+        public void pvitemnull()
         {
-            m_locationitem = null;
+            m_pvitem = null;
         }
 
         #endregion
@@ -725,10 +725,10 @@ namespace slagtool.runtime
                     }
                     else if (is_new_word)
                     {
-                        var nv = v.list[1].FindValueByTravarse(YDEF.get_type(YDEF.sx_location_clause));
+                        var nv = v.list[1].FindValueByTravarse(YDEF.get_type(YDEF.sx_pointervar_clause));
                         if (nv!=null)
                         {
-                            nsb = runsub_location_clause.run(nv,nsb.curnull(),LocationMode.NEW);
+                            nsb = runsub_pointervar_clause.run(nv,nsb.curnull(),PointervarMode.NEW);
                         }
                         return nsb;
                     }
@@ -853,8 +853,8 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.get_type(YDEF.sx_func))
             {
-                var save_location_item = nsb.m_locationitem;
-                nsb.locationiemnull();
+                var save_pvitem = nsb.m_pvitem;
+                nsb.pvitemnull();
 
                 var name = v.list_at(0).GetString();
 
@@ -887,10 +887,10 @@ namespace slagtool.runtime
                     util._error("unexpected");
                 }
 
-                if (save_location_item!=null) //ロケーションアイテム
+                if (save_pvitem!=null) //ロケーションアイテム
                 {
-                    nsb.m_locationitem = save_location_item;
-                    nsb = runsub_location_clause.run_func(v,nsb,name,ol);
+                    nsb.m_pvitem = save_pvitem;
+                    nsb = runsub_pointervar_clause.run_func(v,nsb,name,ol);
                     return nsb;
                 }
 
@@ -934,16 +934,16 @@ namespace slagtool.runtime
                 nsb.add_func(n,v);
                 return nsb;
             }
-            if (v.type == YDEF.get_type(YDEF.sx_location_clause))
+            if (v.type == YDEF.get_type(YDEF.sx_pointervar_clause))
             {
-                nsb = runsub_location_clause.run(v,nsb);                
+                nsb = runsub_pointervar_clause.run(v,nsb);                
                 return nsb;
             }
             if (v.type == YDEF.NAME)
             {
-                if (nsb.m_locationitem!=null)
+                if (nsb.m_pvitem!=null)
                 {
-                    nsb = runsub_location_clause.run_name(v,nsb);
+                    nsb = runsub_pointervar_clause.run_name(v,nsb);
                     return nsb;
                 }
                 var n = v.GetString();
@@ -952,9 +952,9 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.NUM)
             {
-                if (nsb.m_locationitem!=null)
+                if (nsb.m_pvitem!=null)
                 {
-                    nsb = runsub_location_clause.run_num(v,nsb);
+                    nsb = runsub_pointervar_clause.run_num(v,nsb);
                     return nsb;
                 }
                 var n = v.GetNumber();
@@ -963,9 +963,9 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.QSTR)
             {
-                if (nsb.m_locationitem!=null)
+                if (nsb.m_pvitem!=null)
                 {
-                    nsb = runsub_location_clause.run_qstr(v,nsb);
+                    nsb = runsub_pointervar_clause.run_qstr(v,nsb);
                     return nsb;
                 }
                 var n = v.GetString();

@@ -303,7 +303,7 @@ namespace slagtool
                                                              __OR__,
                                                              "sx_func",                                    __MAKE__, YCODE.DO_NEW, 0,
                                                              __OR__,
-                                                             "sx_location_clause",                            __MAKE__, YCODE.DO_NEW, 0,
+                                                             "sx_pointervar_clause",                            __MAKE__, YCODE.DO_NEW, 0,
                                                              __OR__,
                                                              NAME,INCOP,                                   __MAKE__, YCODE.DO_NEW, 0,1,
                                                              __OR__,
@@ -343,9 +343,9 @@ namespace slagtool
                                                             "(", ")",                                      __MAKE__, YCODE.DO_NEW, 0,1
                                                       };
 
-        public static object[] sx_location_clause =  { "sx_location_clause",
+        public static object[] sx_pointervar_clause = { "sx_pointervar_clause",
                                                        1054,
-                                                            "sx_location_clause",".","sx_expr",               __MAKE__, YCODE.DO_ADD, 0,1,2,
+                                                            "sx_pointervar_clause",".","sx_expr",          __MAKE__, YCODE.DO_ADD, 0,1,2,
                                                             __OR__,
                                                             "sx_expr",".","sx_expr",                       __MAKE__, YCODE.DO_NEW, 0,1,2,
                                                       };
