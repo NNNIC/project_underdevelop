@@ -6,4 +6,6 @@
 //Print(path.getfilenamewithoutextension("abc.def"));
 //Print(System.io.path.getfilenamewithoutextension("abc.def"));
 
-var go = new UnityEngine.GameObject("hoge");
+//var go = new UnityEngine.GameObject("hoge");
+var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
+

@@ -70,7 +70,7 @@ namespace slagtool.runtime
             }
             else if (item.mode == LocationMode.NEW)
             {
-               
+                nsb.m_cur = item.o;  
             }
             nsb.locationiemnull();
 
@@ -271,8 +271,7 @@ namespace slagtool.runtime
                 var ti = find_typeinfo(searchname);
                 if (ti!=null)
                 {
-
-
+                    item.o = Activator.CreateInstance(ti,args:param.ToArray());
                 }
                 return item;
             }

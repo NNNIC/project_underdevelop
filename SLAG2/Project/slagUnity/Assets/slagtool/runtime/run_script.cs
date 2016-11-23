@@ -231,6 +231,9 @@ namespace slagtool.runtime
         #endregion
     }
 
+    
+
+
     public class run_script
     {
         public static void Run(YVALUE v)
@@ -238,7 +241,7 @@ namespace slagtool.runtime
             YDEF_DEBUG.bForceToStop = false;
             YDEF_DEBUG.stoppedLine = -1;
             var buf  = new StateBuffer();
-            var nbuf = run(v,buf);  
+            var nbuf = run(v,buf);
         }
 
         public static StateBuffer run(YVALUE v, StateBuffer sb)
