@@ -88,6 +88,9 @@ namespace slagtool
         }
         #endregion
 
+        
+
+
         #region ログ設定
         public static void SetLogFunc(Action<string> write, Action<string> writeline, int debugLevel=1 )
         {
@@ -182,6 +185,22 @@ namespace slagtool
             runtime.run_script.Run(executable_value_list[0]);
 
             sys.logline("\n*end");
+        }
+
+        internal static runtime.process CreateProcess(string file = null)
+        {
+            if (file == null)
+            {
+                file = slagtool.runtime.CFG.TMPBIN;
+            }
+
+            //LOAD
+            var executable_value_list = YSAVELOAD.Load(file);
+
+            var proc = new runtime.process();
+            proc.Init(executable_value_list);
+
+            return proc;
         }
     }
 }

@@ -21,119 +21,104 @@ namespace slagtool.runtime
         {
             run_script.run(m_illist[0],m_statebuf);
         }
-        public object CallFunc(string funcname, List<object> param)
+
+        #region 関数関連
+        public bool ExistFunc(string funcname)
         {
-            
-            return null;
+            return builtin.builtin_func.IsFunc(funcname);
+        }
+        public object CallFunc(string funcname,object[] param)
+        {
+            if (builtin.builtin_func.IsFunc(funcname))
+            {
+                return builtin.builtin_func.Run(funcname,param,m_statebuf);
+            }
+            throw new SystemException("CallFunc : Not Found The Function : " + funcname);
+        }
+        #endregion
+
+        #region 変数関連
+        public bool ExistVal(string name)
+        {
+            name = name.ToUpper();
+            if (m_statebuf!=null&&m_statebuf.m_root_dic!=null)
+            {
+                return m_statebuf.m_root_dic.ContainsKey(name);
+            }
+            return false;
         }
         public object GetVal(string name)
         {
+            var ret = _getval(name);
+            if (ret==null) throw new SystemException("GetVal : Not Found Valriable : " + name);
+            return ret;
+        }
+        private object _getval(string name)
+        {
+            name = name.ToUpper();
+            if (m_statebuf!=null&&m_statebuf.m_root_dic!=null)
+            {
+                var dic = m_statebuf.m_root_dic;
+                if (dic.ContainsKey(name))
+                {
+                    return dic[name];
+                }
+            }
             return null;
         }
         public double GetNumVal(string name)
         {
-            return 0;
+            var ret = _getval(name);
+            if (ret==null)                       throw new SystemException("GetNumVal : Not Found Valriable : "     + name);
+            if (ret.GetType() != typeof(double)) throw new SystemException("GetNumVal : Valriable is not Number : " + name);
+                
+            return (double)ret;
+        
         }
         public string GetStrVal(string name)
         {
-            return null;
+            var ret = _getval(name);
+            if (ret==null)                       throw new SystemException("GetStrVal : Not Found Valriable : "     + name);
+            if (ret.GetType() != typeof(string)) throw new SystemException("GetStrVal : Valriable is not String : " + name);
+                
+            return (string)ret;
         }
-        public void SetVal(string name, object val)
+        public void SetVal(string name, object val,bool bCreateIfNotExist=true)
+        {            
+            if (!_setval(name,val,bCreateIfNotExist))
+            {
+                throw new SystemException("SetVal : Fail to Set ; " + name);
+            }
+        }
+        public bool _setval(string name, object val, bool bCreateIfNotExist)
         {
-            return;
+            name = name.ToUpper();
+            if (ExistVal(name))
+            {
+                m_statebuf.m_root_dic[name] = val;
+                return true;
+            }
+            if (bCreateIfNotExist)
+            {
+                m_statebuf.m_root_dic[name] = val;
+                return true;
+            }
+            return false;
         }
-        public void SetNumVal(string name, double val)
+        public void SetNumVal(string name, double val,bool bCreateIfNotExist=true)
         {
-            return;
+            if (!_setval(name,val,bCreateIfNotExist))
+            {
+                throw new SystemException("SetNumVal : Fail to Set ; " + name);
+            }
         }
-        public void GetStrVal(string name, string str)
+        public void SetStrVal(string name, string val,bool bCreateIfNotExist=true)
         {
-            return;
+            if (!_setval(name,val,bCreateIfNotExist))
+            {
+                throw new SystemException("SetStrVal : Fail to Set ; " + name);
+            }
         }
+        #endregion
     }
 }
-
-    //public class process
-    //{
-        //internal static void Run(string src, bool bCompileOnly=false,string outbinfile = null)
-        //{
-        //    var engine = new yengine();
-
-        //    // 終末記号に分類
-        //    var lex_output = engine.Lex(src);
-
-        //    //スペース・コメント削除。"文字列"以外大文字化。
-        //    engine.Normalize(ref lex_output);                             sys.logline("\n*lex_output");           YDEF_DEBUG.DumpList(lex_output, true);
-
-        //    //１行化
-        //    var one_line = engine.Make_one_line(lex_output);
-
-        //    //実行用リスト作成(解析)
-        //    var analyzed = engine.Interpret(one_line);       
-        //    var executable_value_list = analyzed[0];
-            
-
-        //    //ダンプ
-        //    sys.logline("\n[executable_value_list]\n");
-
-        //    YDEF_DEBUG.PrintListValue(executable_value_list);
-
-        //    sys.logline("\n");
-
-        //    //リストの整合性テスト
-        //    List<int> errorline;
-        //    if (YDEF_DEBUG.IsExecutable(executable_value_list,out errorline))
-        //    {
-        //        sys.logline("This script is ready to excute.");
-        //    }
-        //    else
-        //    {
-        //        string s = null;
-        //        errorline.ForEach(i=> {
-        //            if (s!=null) s+=",";
-        //            s += (i+1);
-        //        });
-        //        sys.error("This script is not executable. Check syntax at " + s);
-        //    }
-
-        //    //SAVE
-        //    YSAVELOAD.Save(executable_value_list,slagtool.runtime.CFG.TMPBIN);
-        //    if (outbinfile!=null)
-        //    {
-        //        YSAVELOAD.Save(executable_value_list,outbinfile);
-        //    }
-
-        //    if (!bCompileOnly)
-        //    { 
-        //        //LOAD
-        //        executable_value_list = YSAVELOAD.Load(slagtool.runtime.CFG.TMPBIN);
-
-        //        //実行
-        //        sys.logline("\n\n*Execute! \n");
-
-        //        runtime.builtin.builtin_func.Init();
-        //        runtime.run_script.Run(executable_value_list[0]);
-        //    }
-        //    sys.logline("\n*end");
-        //}
-
-        //internal static void Run_from_savefile(string file = null)
-        //{
-        //    if (file==null)
-        //    {
-        //        file = slagtool.runtime.CFG.TMPBIN;
-        //    }
-
-        //    //LOAD
-        //    var executable_value_list = YSAVELOAD.Load(file);
-
-        //    //実行
-        //    sys.logline("\n\n*Execute! \n");
-
-        //    runtime.builtin.builtin_func.Init();
-        //    runtime.run_script.Run(executable_value_list[0]);
-
-        //    sys.logline("\n*end");
-        //}
-    //}
-//}
