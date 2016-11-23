@@ -56,6 +56,7 @@ namespace slagtool.runtime.builtin
 
         public static bool IsFunc(string name)
         {
+            if (m_hash==null) return false;
             var i = (item)m_hash[name.ToUpper()];
             return (i!=null);
         }

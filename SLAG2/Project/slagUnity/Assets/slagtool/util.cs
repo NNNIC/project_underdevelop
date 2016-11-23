@@ -78,13 +78,17 @@ namespace slagtool
         }
         #endregion
 
-        #region 汎用実行
+        #region 実行
         /// <summary>
         /// 格納ソース実行
         /// </summary>
         public static void Run()
         {
             util_sub.Run_from_savefile();
+        }
+        public static runtime.process CreateProcess()
+        {
+            return util_sub.CreateProcess();
         }
         #endregion
 

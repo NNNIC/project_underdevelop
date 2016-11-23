@@ -27,12 +27,44 @@ namespace slagtool.runtime
         {
             return builtin.builtin_func.IsFunc(funcname);
         }
-        public object CallFunc(string funcname,object[] param)
+        public object CallFunc(string funcname,object[] param=null)
         {
-            if (builtin.builtin_func.IsFunc(funcname))
+            var fv = (YVALUE)m_statebuf.get_func(funcname);
+            if (fv==null)
             {
-                return builtin.builtin_func.Run(funcname,param,m_statebuf);
+                if (builtin.builtin_func.IsFunc(funcname))
+                {
+                    return builtin.builtin_func.Run(funcname,param,m_statebuf);
+                }
+                throw new SystemException("CallFunc : Not Found Function : " + funcname);
             }
+            if (fv!=null)
+            {
+                var ol = param;
+                var numofparam= ol!=null ? ol.Length : 0;
+                m_statebuf.set_funcwork();
+                {
+                    var fvbk = util.normalize_func_bracket(fv.list_at(1).list_at(1)); //ファンクション定義部の引数部分
+                    if (   fvbk.list.Count != numofparam)
+                    {
+                        util._error("number of arguments in valid.");
+                    }
+                    int n = 0;
+                    if (fvbk!=null) for(int i = 0; i<fvbk.list.Count; i+=2)
+                    {
+                        var varname = fvbk.list_at(i).GetString();//定義側の変数名
+                        object o = ol!=null && n < ol.Length ? ol[n] : null;
+                        m_statebuf.define(varname, o);
+                        n++;
+                    }
+                    m_statebuf = run_script.run(fv.list_at(2),m_statebuf);
+                    m_statebuf.breaknone();
+                }
+                m_statebuf.reset_funcwork();
+
+                return m_statebuf.m_cur;
+            }
+
             throw new SystemException("CallFunc : Not Found The Function : " + funcname);
         }
         #endregion

@@ -9,3 +9,7 @@
 //var go = new UnityEngine.GameObject("hoge");
 var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
 
+function Update()
+{
+    UnityEngine.Debug.Log(UnityEngine.Time.time);
+}

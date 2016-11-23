@@ -3,3 +3,7 @@
 ・外部からの変数値参照・値変更・新規・削除
 
 ・loction -> poinervariable ポインタ変数に変更 pointervar
+
+
+・YVALUE の o には、大文字強制まえの文字が入っているようにしよう。
+

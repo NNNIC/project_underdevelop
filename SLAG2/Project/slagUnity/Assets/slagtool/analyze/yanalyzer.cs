@@ -15,7 +15,7 @@ namespace slagtool
         //  構文解析は構文の優先順位順に対象データの走査を繰り返す。
         //  走査は括弧（丸括弧、波カッコ）内と区分けした要素を優先的に行う。
         //  
-        const int LOOPMAX = 10000;
+        const int LOOPMAX = 5000;
 
         public static bool Analyze(List<YVALUE> src, out List<YVALUE> dst)
         {
