@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 //using System.Threading.Tasks;
+#if UNITY_5
+using number = System.Single;
+#else
+using number = System.Double;
+#endif
 
 namespace slagtool
 {
@@ -76,7 +81,7 @@ namespace slagtool
 
         // tools for this class
 
-        static double _getnum(object[] o,int n)
+        static number _getnum(object[] o,int n)
         {
             if (n>=0 &&  n < o.Length)
             {

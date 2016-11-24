@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 //using System.Threading.Tasks;
+#if UNITY_5
+using number = System.Single;
+#else
+using number = System.Double;
+#endif
 
 /*
  * プリミティブ構文解析 
@@ -174,8 +179,8 @@ namespace slagtool
                     }
                 }
                 if (wdlen == 0) wdlen = ls.Length;
-                double d;
-                if (double.TryParse(s, out d))
+                number d;
+                if (number.TryParse(s, out d))
                 {
                     return any_return(v, YDEF.NUM, d, s);
                 }
@@ -313,12 +318,12 @@ namespace slagtool
 
             return v;
         }
-        static YVALUE any_return(YVALUE v, int type, double? n=null, string s=null)
+        static YVALUE any_return(YVALUE v, int type, number? n=null, string s=null)
         {
             v.type = type;
             if (n!=null)
             {
-                v.o = v.n = (double)n;
+                v.o = v.n = (number)n;
             }
             if (s!=null)
             {

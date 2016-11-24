@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 //using System.Threading.Tasks;
+#if UNITY_5
+using number = System.Single;
+#else
+using number = System.Double;
+#endif
 
 namespace slagtool
 {

@@ -4,6 +4,11 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using slagtool;
+#if UNITY_5
+using number = System.Single;
+#else
+using number = System.Double;
+#endif
 
 namespace slagtool.runtime
 {
@@ -16,6 +21,8 @@ namespace slagtool.runtime
         {
             m_illist = illist;
             m_statebuf = new StateBuffer();
+
+            runtime.builtin.builtin_func.Init();
         }      
         public void Run()
         {
@@ -98,13 +105,13 @@ namespace slagtool.runtime
             }
             return null;
         }
-        public double GetNumVal(string name)
+        public number GetNumVal(string name)
         {
             var ret = _getval(name);
             if (ret==null)                       throw new SystemException("GetNumVal : Not Found Valriable : "     + name);
-            if (ret.GetType() != typeof(double)) throw new SystemException("GetNumVal : Valriable is not Number : " + name);
+            if (ret.GetType() != typeof(number)) throw new SystemException("GetNumVal : Valriable is not Number : " + name);
                 
-            return (double)ret;
+            return (number)ret;
         
         }
         public string GetStrVal(string name)
@@ -137,7 +144,7 @@ namespace slagtool.runtime
             }
             return false;
         }
-        public void SetNumVal(string name, double val,bool bCreateIfNotExist=true)
+        public void SetNumVal(string name, number val,bool bCreateIfNotExist=true)
         {
             if (!_setval(name,val,bCreateIfNotExist))
             {

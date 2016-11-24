@@ -5,6 +5,12 @@ using System.Linq;
 using System.Text;
 using ARRAY = System.Collections.Generic.List<object>;
 
+#if UNITY_5
+using number = System.Single;
+#else
+using number = System.Double;
+#endif
+
 namespace slagtool.runtime
 {
     public class CFG //Config
@@ -26,7 +32,7 @@ namespace slagtool.runtime
         public string s;
     }
 
-    #region ピリオド区切りのポインタ変数要素
+#region ピリオド区切りのポインタ変数要素
     public enum  PointervarMode { GET,SET,NEW } 
     public class PointervarItem 
     {
@@ -46,7 +52,7 @@ namespace slagtool.runtime
             setter = null;
         }
     }
-    #endregion
+#endregion
 
     public class StateBuffer
     {
@@ -59,7 +65,7 @@ namespace slagtool.runtime
 
         public BREAKTYPE m_breakType;
 
-        #region api
+#region api
 
         public const string KEY_PARENT   = "!PARENT!";
         public const string KEY_CHILD    = "!CHILD!";
@@ -161,8 +167,8 @@ namespace slagtool.runtime
         }
         public void find_and_set_array(string name, object index, object o)
         {
-            if (index.GetType()!=typeof(double)) util._error("index is not number");
-            var i = (int)((double)index);
+            if (index.GetType()!=typeof(number)) util._error("index is not number");
+            var i = (int)((number)index);
 
             var v = get(name);
             if (v==null || v.GetType()!=typeof(ARRAY)) util._error(name + " is not array");
@@ -196,9 +202,9 @@ namespace slagtool.runtime
                 {
                     return (bool)m_cur;
                 }
-                else if (m_cur.GetType()==typeof(double))
+                else if (m_cur.GetType()==typeof(number))
                 {
-                    return (double)m_cur != 0;
+                    return (number)m_cur != 0;
                 }
                 else
                 {
@@ -207,16 +213,16 @@ namespace slagtool.runtime
             }
             return false;
         }
-        public double get_number_cur()
+        public number get_number_cur()
         {
             if (m_cur!=null)
             {
-                if (m_cur.GetType()==typeof(double))
+                if (m_cur.GetType()==typeof(number))
                 {
-                    return (double)m_cur;
+                    return (number)m_cur;
                 }
             }
-            return double.NaN;
+            return number.NaN;
         }
         public string get_string_cur()
         {
@@ -228,7 +234,7 @@ namespace slagtool.runtime
             m_pvitem = null;
         }
 
-        #endregion
+#endregion
     }
 
     
@@ -357,11 +363,11 @@ namespace slagtool.runtime
                         var value = nsb.m_cur;
                         var array_index = array_var.list_at(1);
                         nsb = run(array_index.list_at(1),nsb.curnull());
-                        if (nsb.m_cur==null || nsb.m_cur.GetType()!=typeof(double))
+                        if (nsb.m_cur==null || nsb.m_cur.GetType()!=typeof(number))
                         {
                             util._error("array_index is invalid." );
                         }
-                        var index = (int)((double)nsb.m_cur);
+                        var index = (int)((number)nsb.m_cur);
                         nsb.m_cur = nsb.get(name);
                         if (nsb.m_cur!=null && nsb.m_cur.GetType()==typeof(List<object>))
                         {
@@ -608,6 +614,7 @@ namespace slagtool.runtime
                 {
                     var v0 = v.list_at(0);
                     var bArrayV0 = (v0.type == YDEF.get_type(YDEF.sx_array_var));
+                    var bPvV0    = (v0.IsType(YDEF.get_type(YDEF.sx_pointervar_clause)));
                     var op = v.list_at(1).GetString();
                     var v2 = v.list_at(2);
 
@@ -628,6 +635,21 @@ namespace slagtool.runtime
                         nsb = run(v0.list_at(1),nsb.curnull());
                         var index = nsb.m_cur;
                         nsb.find_and_set_array(name,index,o);
+                    }
+                    if (bPvV0)
+                    {
+                        var v0p = v0.FindValueByTravarse(YDEF.get_type(YDEF.sx_pointervar_clause));
+                        nsb = runsub_pointervar_clause.run(v0p,nsb,PointervarMode.SET);
+                        if (nsb.m_cur!=null)
+                        {
+                            var func =  (Action<object>)nsb.m_cur;
+                            if (func!=null)
+                            { 
+                                func(o);
+                            }
+                            return nsb;
+                        }
+                        util._error("unexpected");
                     }
                     else
                     {
@@ -687,9 +709,9 @@ namespace slagtool.runtime
                     {
                         var n = str_2nd;
                         var o = nsb.get(n);
-                        if (o.GetType()==typeof(double))
+                        if (o.GetType()==typeof(number))
                         {
-                            var num = (double)o;
+                            var num = (number)o;
                             if (str_1st=="++") num++;
                             else if (str_1st=="--") num--;
                             else util._error("unexpected");
@@ -707,9 +729,9 @@ namespace slagtool.runtime
                     {
                         var n = str_1st;
                         var o = nsb.get(n);
-                        if (o.GetType()==typeof(double))
+                        if (o.GetType()==typeof(number))
                         {
-                            var num = (double)o;
+                            var num = (number)o;
                             nsb.m_cur = num;
                             if (str_2nd=="++") num++;
                             else if (str_2nd=="--") num--;
@@ -741,9 +763,9 @@ namespace slagtool.runtime
                         }
                         else if (str_1st == "-")
                         {
-                            if (nsb.m_cur.GetType()==typeof(double))
+                            if (nsb.m_cur.GetType()==typeof(number))
                             {
-                                nsb.m_cur = (double)nsb.m_cur * (-1.0f);
+                                nsb.m_cur = (number)nsb.m_cur * (-1.0f);
                             }
                             else
                             {
@@ -756,9 +778,9 @@ namespace slagtool.runtime
                             {
                                 nsb.m_cur = !((bool)nsb.m_cur);
                             }
-                            else if (nsb.m_cur.GetType()==typeof(double))
+                            else if (nsb.m_cur.GetType()==typeof(number))
                             {
-                                var n = (double)nsb.m_cur;
+                                var n = (number)nsb.m_cur;
                                 nsb.m_cur = !(n!=0);
                             }
                             else
@@ -806,11 +828,11 @@ namespace slagtool.runtime
                 var name = v.list_at(0).GetString();
                 var array_index = v.list_at(1);
                 nsb = run(array_index.list_at(1),nsb.curnull());
-                if (nsb.m_cur==null || nsb.m_cur.GetType()!=typeof(double))
+                if (nsb.m_cur==null || nsb.m_cur.GetType()!=typeof(number))
                 {
                     util._error("array_index is invalid." );
                 }
-                var index = (int)((double)nsb.m_cur);
+                var index = (int)((number)nsb.m_cur);
                 nsb.m_cur = nsb.get(name);
                 if (nsb.m_cur!=null && nsb.m_cur.GetType()==typeof(List<object>))
                 {
@@ -1109,10 +1131,10 @@ namespace slagtool.runtime
                     default:    _error("unexpected string operaion");   break;
                 }
             }
-            else if (a.GetType()==typeof(double))
+            else if (a.GetType()==typeof(number))
             {
-                var x = (double)a;
-                var y = (double)b;
+                var x = (number)a;
+                var y = (number)b;
                 
                 switch(op)
                 {

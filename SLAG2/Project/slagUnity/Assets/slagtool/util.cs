@@ -2,6 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+#if UNITY_5
+using number = System.Single;
+#else
+using number = System.Double;
+#endif
 
 namespace slagtool
 {
@@ -200,6 +205,7 @@ namespace slagtool
 
             //LOAD
             var executable_value_list = YSAVELOAD.Load(file);
+
 
             var proc = new runtime.process();
             proc.Init(executable_value_list);

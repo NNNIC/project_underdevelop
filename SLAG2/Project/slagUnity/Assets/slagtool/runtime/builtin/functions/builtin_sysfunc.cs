@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 //using System.Threading.Tasks;
+#if UNITY_5
+using number = System.Single;
+#else
+using number = System.Double;
+#endif
 
 namespace slagtool.runtime.builtin
 {
@@ -21,7 +26,7 @@ namespace slagtool.runtime.builtin
             kit.check_num_of_args(ol,1);
 
             var x = kit.get_double_at(ol,0);
-            if (!double.IsNaN(x))
+            if (!number.IsNaN(x))
             { 
                 x = x * 1000.0f;
             }
@@ -130,11 +135,11 @@ namespace slagtool.runtime.builtin
             kit.check_num_of_args(ol,1);
 
             var x = kit.get_double_at(ol,0);
-            if (!double.IsNaN(x))
+            if (!number.IsNaN(x))
             {
                 return x;
             }
-            return (double)0;
+            return (number)0;
         }
 
         #endregion
@@ -156,7 +161,7 @@ namespace slagtool.runtime.builtin
             var r = new System.Random(DateTime.Now.Millisecond);
             var i = r.Next((int)diff+1);
            
-            return (double)(min + i);
+            return (number)(min + i);
         }
         public static object F_ToInt(bool bHelp,object[] ol,StateBuffer sb)
         {
@@ -168,10 +173,10 @@ namespace slagtool.runtime.builtin
             kit.check_num_of_args(ol,1);
 
             var x = kit.get_double_at(ol,0);
-            if (!double.IsNaN(x))
+            if (!number.IsNaN(x))
             {
                 var i = (int)x;
-                return (double)i;
+                return (number)i;
             }
             return 0;
         }
@@ -237,9 +242,9 @@ namespace slagtool.runtime.builtin
             var list = kit.get_list_at(ol,0);
             if (list!=null)
             { 
-                return (double)list.Count;
+                return (number)list.Count;
             }
-            return (double)0;
+            return (number)0;
         }
         public static object F_ListCombine(bool bHelp, object[] ol,StateBuffer sb)
         {
@@ -340,7 +345,7 @@ namespace slagtool.runtime.builtin
 
             var list = kit.get_list_at(ol,0);
             var n    = kit.get_double_at(ol,1);
-            if (list!=null && !double.IsNaN(n) && n < list.Count)
+            if (list!=null && !number.IsNaN(n) && n < list.Count)
             {
                 return list[(int)n];
             }
@@ -356,9 +361,9 @@ namespace slagtool.runtime.builtin
             var src = kit.get_list_at(ol,0);
             if (src==null) kit.error("ListSort arg is not valid.");
             var l = new List<object>(src);
-            if (l.Count>0 && l[0].GetType()==typeof(double))
+            if (l.Count>0 && l[0].GetType()==typeof(number))
             {
-                l.Sort((a,b)=> (int)Math.Ceiling((double)a - (double)b));
+                l.Sort((a,b)=> (int)Math.Ceiling((number)a - (number)b));
             }
             else
             { 

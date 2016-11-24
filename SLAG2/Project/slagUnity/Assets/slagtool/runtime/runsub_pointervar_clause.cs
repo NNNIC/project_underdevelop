@@ -6,6 +6,11 @@ using System.Text;
 //using System.Threading.Tasks;
 using System.Reflection;
 using ARRAY = System.Collections.Generic.List<object>;
+#if UNITY_5
+using number = System.Single;
+#else
+using number = System.Double;
+#endif
 
 namespace slagtool.runtime
 {
@@ -51,11 +56,7 @@ namespace slagtool.runtime
 
             if (item.mode == PointervarMode.SET)
             {
-                //if (item.setter!=null)
-                //{
-                //    item.setter(setvalue);
-                //}
-                //TBI
+                nsb.m_cur = item.setter;
             }
             else if (item.mode == PointervarMode.GET)
             { 
@@ -172,7 +173,11 @@ namespace slagtool.runtime
         private static PointervarItem GetObj(object o, string cur,PointervarItem item)
         {
             var name = cur.ToUpper();
-            Type type = (Type)o;
+            Type type = null;
+            if (o is Type)
+            {
+                type = (Type)o;
+            }
             object obj  = null;
             if (type!=null)
             {
@@ -280,7 +285,11 @@ namespace slagtool.runtime
         private static PointervarItem ExecuteFunc(object o, string cur, List<object> param, PointervarItem item)
         {
             var name = cur.ToUpper();
-            Type type = (Type)o;
+            Type type = null;
+            if (o is Type)
+            {
+                type = (Type)o;
+            }
             object obj  = null;
             if (type!=null)
             {

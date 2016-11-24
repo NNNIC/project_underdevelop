@@ -3,13 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 //using System.Threading.Tasks;
+#if UNITY_5
+using number = System.Single;
+#else
+using number = System.Double;
+#endif
 
 namespace slagtool
 {
     [System.Serializable]
     public class YVALUE
     {
-        public double n;
+        public number n;
         public string s;
         public object o;
 
@@ -43,11 +48,11 @@ namespace slagtool
             }
             return null;
         }
-        public double GetNumber()
+        public number GetNumber()
         {
-            if (o!=null && o.GetType()==typeof(double))
+            if (o!=null && o.GetType()==typeof(number))
             {
-                return (double)o;
+                return (number)o;
             }
             if (list !=null && list.Count==1)
             {
@@ -70,7 +75,7 @@ namespace slagtool
         public string GetTerminal()
         {
             if (s!=null) return s;
-            if (o!=null && o.GetType()==typeof(double)) return o.ToString();
+            if (o!=null && o.GetType()==typeof(number)) return o.ToString();
             return null;
         }
         public object GetTerminalObject()
@@ -78,7 +83,7 @@ namespace slagtool
             if (o != null)
             {
                 var t = o.GetType();
-                if (t == typeof(string) || t==typeof(double))
+                if (t == typeof(string) || t==typeof(number))
                 {
                     return o;
                 }

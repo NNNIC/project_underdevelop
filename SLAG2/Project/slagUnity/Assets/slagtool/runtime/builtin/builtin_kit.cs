@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 //using System.Threading.Tasks;
+#if UNITY_5
+using number = System.Single;
+#else
+using number = System.Double;
+#endif
 
 namespace slagtool.runtime.builtin
 {
@@ -33,17 +38,17 @@ namespace slagtool.runtime.builtin
             var s = o.ToString();
             return s.Replace("\\n",NL);
         }
-        public static double get_double_at(object[] ol, int n)
+        public static number get_double_at(object[] ol, int n)
         {
             var o = get_ol_at(ol,n);
-            if (o==null) return double.NaN;
-            if (o.GetType()==typeof(double)) return (double)o;
-            double x;
-            if (double.TryParse(o.ToString(),out x))
+            if (o==null) return number.NaN;
+            if (o.GetType()==typeof(number)) return (number)o;
+            number x;
+            if (number.TryParse(o.ToString(),out x))
             {
                 return x;
             }
-            return double.NaN;
+            return number.NaN;
         }
         public static List<object> get_list_at(object[] ol, int n)
         {
