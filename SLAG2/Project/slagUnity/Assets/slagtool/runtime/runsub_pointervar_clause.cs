@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Text;
-//using System.Threading.Tasks;
 using System.Reflection;
 using ARRAY = System.Collections.Generic.List<object>;
+
 #if UNITY_5
 using number = System.Single;
 #else
@@ -284,32 +284,8 @@ namespace slagtool.runtime
         }
         private static PointervarItem ExecuteFunc(object o, string cur, List<object> param, PointervarItem item)
         {
-            var name = cur.ToUpper();
-            Type type = null;
-            if (o is Type)
-            {
-                type = (Type)o;
-            }
-            object obj  = null;
-            if (type!=null)
-            {
-                obj  = null;
-            }
-            else
-            {
-                type = o.GetType();
-                obj  = o;
-            }
-
-            var mts = type.GetMethods();
-
-            var find_mi = Array.Find(type.GetMethods(),mi=>mi.Name.ToUpper()==name);
-            if (find_mi!=null)
-            {
-                item.o = find_mi.Invoke(obj,param.ToArray());
-                return item;
-            }
-            return null;
+            item.o = reflection_util.ExecuteFunc(o,cur,param.ToArray());
+            return item;
         }
 #if UNITY_5
         private static Type find_typeinfo(string searchname)

@@ -93,6 +93,7 @@
     <Compile Include="Assets\slagtool\runtime\process.cs" />
     <Compile Include="Assets\slagtool\runtime\run_script.cs" />
     <Compile Include="Assets\slagtool\runtime\runsub_pointervar_clause.cs" />
+    <Compile Include="Assets\slagtool\runtime\runsub_util.cs" />
     <Compile Include="Assets\slagtool\sys.cs" />
     <Compile Include="Assets\slagtool\util.cs" />
   </ItemGroup>
