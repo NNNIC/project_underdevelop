@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using ARRAY = System.Collections.Generic.List<object>;
 
-#if UNITY_5
+#if NUMBERISFLOAT
 using number = System.Single;
 #else
 using number = System.Double;

@@ -5,7 +5,7 @@ using System.Text;
 //using System.Threading.Tasks;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-#if UNITY_5
+#if NUMBERISFLOAT
 using number = System.Single;
 #else
 using number = System.Double;

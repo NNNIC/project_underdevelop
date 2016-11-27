@@ -76,7 +76,7 @@ public class test2Update : MonoBehaviour {
     }
     public void DumpAllLog()
     {
-        Debug.Log(m_alllog);
+        if (m_alllog!=null) Debug.Log(m_alllog);
         m_alllog = null;
     }
 

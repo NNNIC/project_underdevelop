@@ -6,7 +6,7 @@ using System.Text;
 using System.Reflection;
 using ARRAY = System.Collections.Generic.List<object>;
 
-#if UNITY_5
+#if NUMBERISFLOAT
 using number = System.Single;
 #else
 using number = System.Double;
@@ -118,7 +118,7 @@ namespace slagtool.runtime
             var nsb = sb;
             var item = nsb.m_pvitem;
             var preobj = item.o; //先行ロケーションアイテムの値
-            if (preobj == null) //先行値がない場合は予想外
+            if (preobj == null)  //先行値がない場合は予想外
             {
                 throw new SystemException("unexpected");
             }
@@ -153,7 +153,7 @@ namespace slagtool.runtime
         }
 
         // -- tool for this class
-#if UNITY_5
+#if DOTNENET20
         private static PointervarItem GetObj(string pre, string cur, PointervarItem item)
         {
             //アセンブリ調査 --- set/get不明なので直前の形で返す
@@ -287,16 +287,21 @@ namespace slagtool.runtime
             item.o = reflection_util.ExecuteFunc(o,cur,param.ToArray());
             return item;
         }
-#if UNITY_5
+#if DOTNENET20
         private static Type find_typeinfo(string searchname)
         {
-            Type find_ti = null;
+            Type find_ti = cache_util.GetCache_for_find_typeinfo(searchname);
+            if (find_ti!=null) return find_ti;
+
             travarse_asm((ti)=>{
                 if (ti.FullName.ToUpper()==searchname)
                 { 
                     find_ti = ti;
                 }
             });
+
+            cache_util.RecordCache_for_find_typeinfo(searchname,find_ti);
+
             return find_ti;
         }
         private static void travarse_asm(Action<Type> act)

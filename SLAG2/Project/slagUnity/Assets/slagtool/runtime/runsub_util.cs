@@ -8,7 +8,7 @@ using System.Text;
 
 using ARRAY = System.Collections.Generic.List<object>;
 
-#if UNITY_5
+#if NUMBERISFLOAT
 using number = System.Single;
 #else
 using number = System.Double;
@@ -42,15 +42,27 @@ namespace slagtool.runtime
             var paramtypes = GetObjectsType(parameters);
             var mts = type.GetMethods();
 
-            foreach(var m in type.GetMethods())
+            MethodInfo find_m = null;
+            var mlist = cache_util.GetCache(name,type,paramtypes);
+            mlist.AddRange(type.GetMethods());
+
+            foreach(var m in mlist)
             {
                 if (m.Name.ToUpper() != name) continue;
-                var pis = m.GetParameters();// .GetGenericArguments();//    GetFmtParameterType(m.ToString());
+                var pis = m.GetParameters();
                 if (_isMatchTypes(paramtypes,pis))
                 {
-                    return m.Invoke(obj,parameters);
+                    find_m = m;
+                    break;
                 }                
             }
+
+            if (find_m!=null)
+            {
+                cache_util.RecordCache(name,type,paramtypes,find_m);
+                return find_m.Invoke(obj,parameters);
+            }
+
             return null;
         }
         private static bool _isMatchTypes(Type[] paramtypes, ParameterInfo[] pis)
@@ -100,31 +112,88 @@ namespace slagtool.runtime
             return tlist.ToArray();
         }
         #endregion
-        #region 文字列よりタイプ検索
-        private static Type find_typeinfo(string searchname)
-        {
-            Type find_ti = null;
-            travarse_asm((ti)=>{
-                if (ti.FullName.ToUpper()==searchname)
-                { 
-                    find_ti = ti;
-                }
-            });
-            return find_ti;
-        }
-        private static void travarse_asm(Action<Type> act)
-        {
-            foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
-            {
-                var types= asm.GetTypes();
+    }
 
-                foreach(var ti in asm.GetTypes())
-                {
-                    act(ti);
-                }
+    public class cache_util
+    {
+        private static Dictionary<object,ARRAY> m_hash;
+        internal static ARRAY GetCache(object key)
+        {
+            if (m_hash!=null &&  m_hash.ContainsKey(key))
+            {
+                return m_hash[key];
             }
+            return null;
+        }
+        internal static void RecordCache(object key, object val)
+        {
+            if (m_hash == null)
+            {
+                m_hash = new Dictionary<object, ARRAY>();
+            }
+
+            ARRAY vlist = m_hash.ContainsKey(key) ? m_hash[key] : new ARRAY();
+            if (!vlist.Contains(val))
+            {
+                vlist.Add(val);
+            }
+            m_hash[key] = vlist;
+        }
+
+        #region Method Info用
+        internal static List<MethodInfo> GetCache(string name,Type type, Type[] tlist)
+        {
+            var key =_makekey(name,type,tlist);
+            var vlist = GetCache(key);
+
+            var ml = new List<MethodInfo>();
+            if (vlist!=null) { 
+                vlist.ForEach(i=> {
+                    if (i is MethodInfo)
+                    {
+                        ml.Add((MethodInfo)i);
+                    }
+                });
+            }
+
+            return ml;         
+        }
+        internal static void RecordCache(string name,Type type, Type[] tlist, MethodInfo m)
+        {
+            var key = _makekey(name,type,tlist);
+            RecordCache(key,m);
         }
         #endregion
 
+        #region find_typeinfo用キャッシュ
+        internal static Type GetCache_for_find_typeinfo(string searchname)
+        {
+            var key= "GetFindInCache_" + searchname;
+            var vlist = GetCache(key);
+            if (vlist!=null && vlist[0] is Type)
+            {
+                return (Type)vlist[0];   
+            }    
+            return null;
+        }
+        internal static void RecordCache_for_find_typeinfo(string searchname, Type val)
+        {
+            var key= "GetFindInCache_" + searchname;
+            RecordCache(key,val);
+        }
+        #endregion
+
+        private static string _makekey(string name,Type type, Type[] tlist)
+        {
+            string s = name + type.ToString();
+            if (tlist!=null)
+            {
+                foreach(var t in tlist)
+                {
+                    s += t!=null ? t.ToString() : "null";
+                }
+            } 
+            return s;
+        }
     }
 }

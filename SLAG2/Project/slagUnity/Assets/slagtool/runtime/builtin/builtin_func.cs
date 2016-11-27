@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 //using System.Threading.Tasks;
 using System.Reflection;
-#if UNITY_5
+#if NUMBERISFLOAT
 using number = System.Single;
 #else
 using number = System.Double;
