@@ -22,9 +22,13 @@ public class test1 : MonoBehaviour {
         var src  = File.ReadAllText(path,Encoding.UTF8);
         
         slagtool.util.SetLogFunc(Log,LogLine,2);
-        slagtool.util.ExeSrc(src);
+        slagtool.util.SetBuitIn(typeof(unity_builtinfunc));
+        slagtool.util.LoadSrc(src);
 
         DumpAllLog();
+
+        slagtool.util.Run();
+
     }
 
     //---

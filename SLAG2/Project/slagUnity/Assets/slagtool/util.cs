@@ -13,6 +13,13 @@ namespace slagtool
 {
     public class util {
 
+        #region 組込関数設定
+        public static void SetBuitIn(Type type,string name=null)
+        {
+            var catname = !string.IsNullOrEmpty(name) ? name : type.ToString();
+            runtime.builtin.builtin_func.Subscribe(type,catname);
+        }
+        #endregion
         #region テキストソース
         /// <summary>
         /// テキストソース実行
@@ -98,8 +105,6 @@ namespace slagtool
         }
         #endregion
 
-        
-
 
         #region ログ設定
         public static void SetLogFunc(Action<string> write, Action<string> writeline, int debugLevel=1 )
@@ -169,10 +174,12 @@ namespace slagtool
                 //LOAD
                 executable_value_list = YSAVELOAD.Load(slagtool.runtime.CFG.TMPBIN);
 
-                //実行
                 sys.logline("\n\n*Execute! \n");
 
+                //初期化
                 runtime.builtin.builtin_func.Init();
+
+                //実行
                 runtime.run_script.Run(executable_value_list[0]);
             }
             sys.logline("\n*end");
@@ -188,10 +195,12 @@ namespace slagtool
             //LOAD
             var executable_value_list = YSAVELOAD.Load(file);
 
-            //実行
             sys.logline("\n\n*Execute! \n");
 
+            //初期化
             runtime.builtin.builtin_func.Init();
+
+            //実行
             runtime.run_script.Run(executable_value_list[0]);
 
             sys.logline("\n*end");
@@ -206,7 +215,6 @@ namespace slagtool
 
             //LOAD
             var executable_value_list = YSAVELOAD.Load(file);
-
 
             var proc = new runtime.process();
             proc.Init(executable_value_list);

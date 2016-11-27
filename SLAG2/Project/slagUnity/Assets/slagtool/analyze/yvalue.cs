@@ -16,7 +16,7 @@ namespace slagtool
     {
         public number n;
         public string s;
-        public object o;
+        public object o;   //オリジナルの文字列。または、数。
 
         public int type;
         public List<YVALUE> list;

@@ -14,7 +14,6 @@ using number = System.Single;
 using number = System.Double;
 #endif
 
-
 namespace slagtool.runtime
 {
     public class reflection_util
@@ -163,6 +162,18 @@ namespace slagtool.runtime
             var key = _makekey(name,type,tlist);
             RecordCache(key,m);
         }
+        private static string _makekey(string name,Type type, Type[] tlist)
+        {
+            string s = name + type.ToString();
+            if (tlist!=null)
+            {
+                foreach(var t in tlist)
+                {
+                    s += t!=null ? t.ToString() : "null";
+                }
+            } 
+            return s;
+        }
         #endregion
 
         #region find_typeinfo用キャッシュ
@@ -183,17 +194,5 @@ namespace slagtool.runtime
         }
         #endregion
 
-        private static string _makekey(string name,Type type, Type[] tlist)
-        {
-            string s = name + type.ToString();
-            if (tlist!=null)
-            {
-                foreach(var t in tlist)
-                {
-                    s += t!=null ? t.ToString() : "null";
-                }
-            } 
-            return s;
-        }
     }
 }

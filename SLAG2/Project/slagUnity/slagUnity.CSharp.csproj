@@ -78,6 +78,7 @@
     <Compile Include="Assets\slagctrl\unity\slgctl_wk.cs" />
     <Compile Include="Assets\slagtest\test1.cs" />
     <Compile Include="Assets\slagtest\test2Update.cs" />
+    <Compile Include="Assets\slagtest\unity_builtinfunc.cs" />
     <Compile Include="Assets\slagtool\analyze\syntax\lex.cs" />
     <Compile Include="Assets\slagtool\analyze\syntax\ydef.cs" />
     <Compile Include="Assets\slagtool\analyze\yanalyzer.cs" />
@@ -93,7 +94,7 @@
     <Compile Include="Assets\slagtool\runtime\process.cs" />
     <Compile Include="Assets\slagtool\runtime\run_script.cs" />
     <Compile Include="Assets\slagtool\runtime\runsub_pointervar_clause.cs" />
-    <Compile Include="Assets\slagtool\runtime\runsub_util.cs" />
+    <Compile Include="Assets\slagtool\runtime\runsub_reflection_util.cs" />
     <Compile Include="Assets\slagtool\sys.cs" />
     <Compile Include="Assets\slagtool\util.cs" />
   </ItemGroup>

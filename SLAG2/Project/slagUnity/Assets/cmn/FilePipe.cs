@@ -5,6 +5,35 @@ using System.Text;
 using System.Threading;
 using System.IO;
 
+/// <summary>
+/// FilePipe : ファイルを使ってパイプ通信
+/// 
+/// Tcp通信中はデバッガが使えなかったための措置　故に ip,portの記述あり
+/// 
+// 
+/// 使い方
+/// 
+/// var pipe = new FilePipe("myname");
+/// pipe.Start(s=>Console.WriteLine(s)); //開始。ログ出力にをコンソール指定
+/// 
+/// while(true)
+/// {
+///     var msg = pipe.Read();                 //読み込み
+///     if (msg!=nll) 
+///     {
+///          DoSomething(msg);
+///          pipe.Write("some","who_sendto"); //書き込み
+///     }
+///     pipe.Update();         
+///     Sleep(33);
+/// }
+/// 
+/// 
+/// 制限
+///   
+///   テキストのみ
+/// 
+/// </summary>
 public class FilePipe
 {
     string m_name; //自名            

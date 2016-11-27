@@ -19,6 +19,9 @@ public class test2Update : MonoBehaviour {
 	    m_sm.Update();
 	}
 
+
+
+
     //---
 
     void S_WAITKEY(bool bFirst)
@@ -42,8 +45,10 @@ public class test2Update : MonoBehaviour {
             }
             var src  = File.ReadAllText(Path.Combine(m_folder,file),Encoding.UTF8);
             slagtool.util.SetLogFunc(Log,LogLine,2);
+            slagtool.util.SetBuitIn(typeof(unity_builtinfunc));
 
             slagtool.util.LoadSrc(src);
+
             m_proc = slagtool.util.CreateProcess();
             DumpAllLog();
 

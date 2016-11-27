@@ -17,7 +17,6 @@ namespace slagtool.runtime.builtin
     {
         public class item
         {
-            //public bool   bSysOrApp;
             public string category;
             public string name;
             
@@ -34,28 +33,42 @@ namespace slagtool.runtime.builtin
             }
         }
 
+        static bool m_bReady = false;
+
         public static Hashtable m_hash;
-        public static List<string> m_categoryList;
+
+        public class CategoryData { public string categoryname; public Type type; }
+        public static List<CategoryData> m_categoryList = new List<CategoryData>();
+
+        public static void Subscribe(Type type, string name)
+        {
+            if ( m_categoryList.Find(i=>i.type == type)==null )
+            { 
+                m_categoryList.Add(new CategoryData() { type = type, categoryname = name });
+            }
+        }
 
         public static void Init()
         {
-            RegisterFunctions(typeof(builtin_sysfunc),"System");
+            if (!m_bReady)
+            {
+                m_categoryList.Insert(0,new CategoryData() { type = typeof(builtin_sysfunc), categoryname = "System" });
+                m_categoryList.ForEach(d=>RegisterFunctions(d));
+                m_bReady = true;
+            }
         }
-
-        public static void RegisterFunctions(Type type, string _category)
+        private static void RegisterFunctions(CategoryData d)
         {
             if (m_hash == null)
             {
                 m_hash = new Hashtable();
-                m_categoryList = new List<string>();
             }
-            m_categoryList.Add(_category);
-            foreach (var m in type.GetMethods())
+            foreach (var m in d.type.GetMethods())
             {
                 var n = m.Name.ToUpper();
                 if (!n.StartsWith("F_")) continue;
                 n = n.Substring(2);
-                m_hash[n] = new item() { category = _category, name = m.Name.Substring(2), mi = m };
+                m_hash[n] = new item() { category = d.categoryname, name = m.Name.Substring(2), mi = m };
             }
         }
 
@@ -86,7 +99,7 @@ namespace slagtool.runtime.builtin
                 foreach(var k in m_hash.Keys)
                 {
                     var i = (item)m_hash[k];
-                    if (i.category == cat)
+                    if (i.category == cat.categoryname)
                     {
                         s+= helpFormat(i) + NL; 
                     }
@@ -94,7 +107,6 @@ namespace slagtool.runtime.builtin
             }
             
             return s;
-
         }
         private static string helpFormat(item i)
         {

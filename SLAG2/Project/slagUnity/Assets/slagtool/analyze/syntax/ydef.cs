@@ -338,6 +338,8 @@ namespace slagtool
                                                              "!", "sx_expr",                               __MAKE__, YCODE.DO_NEW, 0, 1,
                                                              __OR__,
                                                              NEW,"sx_expr",                                __MAKE__, YCODE.DO_NEW, 0, 1,
+                                                             __OR__,
+                                                             "sx_expr","?","sx_expr",":","sx_expr",        __MAKE__, YCODE.DO_NEW, 0, 1, 2, 3, 4,//3項演算子
                                                       };
 
         public static object[] sx_expr_bracket     =  { "sx_expr_bracket",

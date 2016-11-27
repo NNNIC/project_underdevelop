@@ -40,7 +40,8 @@ namespace slagtool.runtime.builtin
         }
         #endregion
 
-        #region コンソール/デバッグ
+#if obs
+#region コンソール/デバッグ
         public static object F_Print(bool bHelp,object[] ol,StateBuffer sb)
         {
             if (bHelp)
@@ -122,9 +123,10 @@ namespace slagtool.runtime.builtin
 
             return line;
         }
-        #endregion
+#endregion
+#endif
 
-        #region 変換
+#region 変換
         public static object F_ToNumber(bool bHelp, object[] ol,StateBuffer sb=null)
         {
             if (bHelp)
@@ -141,10 +143,9 @@ namespace slagtool.runtime.builtin
             }
             return (number)0;
         }
+#endregion
 
-        #endregion
-
-        #region 数値操作
+#region 数値操作
         public static object F_RandomInt(bool bHelp,object[] ol,StateBuffer sb) // 引数 0 -- 最少数  1 -- 最大数
         {
             if (bHelp)
@@ -198,9 +199,9 @@ namespace slagtool.runtime.builtin
             var x = kit.get_double_at(ol,0);
             return (System.Int32)x;
         }
-        #endregion
+#endregion
 
-        #region 文字列操作
+#region 文字列操作
         public static object F_Substring(bool bHelp, object[] ol, StateBuffer sb)
         {
             if (bHelp)
@@ -228,9 +229,9 @@ namespace slagtool.runtime.builtin
             return null;
         }
 
-        #endregion
+#endregion
 
-        #region 配列操作
+#region 配列操作
         public static object F_ListSize(bool bHelp,object[] ol,StateBuffer sb)
         {
             if (bHelp)
@@ -371,9 +372,9 @@ namespace slagtool.runtime.builtin
             }
             return l;
         }
-        #endregion
+#endregion
 
-        #region Assembley
+#region Assembley
         public static object F_GetAllAsm(bool bHelp, object[] ol, StateBuffer sb)
         {
             foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())

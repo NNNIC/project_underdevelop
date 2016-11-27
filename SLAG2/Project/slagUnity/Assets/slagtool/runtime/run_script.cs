@@ -667,22 +667,20 @@ namespace slagtool.runtime
             {
                 if (v.list.Count==1)
                 {
-                    //if (v.IsType(YDEF.NAME))
-                    //{
-                    //    nsb.m_cur = nsb.get(v.GetString());
-                    //    return nsb;
-                    //}
-                    //if (v.IsType(YDEF.QSTR))
-                    //{
-                    //    nsb.m_cur = util.DelDQ(v.GetString());
-                    //    return nsb;
-                    //}
-                    //if (v.IsType(YDEF.NUM))
-                    //{
-                    //    nsb.m_cur = v.GetNumber();
-                    //    return nsb;
-                    //}
                     nsb = run(v.list_at(0),nsb.curnull());
+                    return nsb;
+                }
+                else if (v.list.Count==5) //3項演算子  p0 ? p2 : p4
+                {
+                    nsb = run(v.list_at(0),nsb.curnull());
+                    if (nsb.get_bool_cur())
+                    {
+                        nsb = run(v.list_at(2),nsb.curnull());
+                    }
+                    else
+                    {
+                        nsb = run(v.list_at(4),nsb.curnull());
+                    }
                     return nsb;
                 }
                 else if (v.list.Count==3)
@@ -869,7 +867,12 @@ namespace slagtool.runtime
             {
                 if (v.list.Count==3)
                 {
+                    var save = nsb.m_pvitem; //ポイント変数保存 , クリア
+                    nsb.m_pvitem = null;
+
                     nsb = run(v.list_at(1),nsb.curnull());
+
+                    nsb.m_pvitem = save;     //ポイント変数復帰
                 }
                 return nsb;
             }
