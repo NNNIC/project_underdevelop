@@ -299,7 +299,7 @@ namespace slagtool
                                                              __OR__,
                                                              BOOL,                                         __MAKE__, YCODE.DO_NEW, 0,
                                                              __OR__,
-                                                             NULL,                                         __MAKE__, YCODE.DO_NEW, 0,
+                                                             NULL,                                        __MAKE__, YCODE.DO_NEW, 0,
                                                              __OR__,
                                                              "sx_array_var",                               __MAKE__, YCODE.DO_NEW, 0,
                                                              __OR__,
@@ -329,6 +329,8 @@ namespace slagtool
                                                              __OR__,
                                                              //"sx_expr",OP14,"sx_expr",                     __MAKE__, YCODE.DO_NEW, 0, 1, 2,
                                                              //__OR__,
+                                                             "sx_expr","?","sx_expr",":","sx_expr",        __MAKE__, YCODE.DO_NEW, 0, 1, 2, 3, 4,//3項演算子
+                                                             __OR__,
                                                              "sx_expr",OP,"sx_expr",                       __MAKE__, YCODE.DO_NEW, 0, 1, 2,
                                                              __OR__,
                                                              "-", "sx_expr",                               __MAKE__, YCODE.DO_NEW, 0, 1,
@@ -338,8 +340,6 @@ namespace slagtool
                                                              "!", "sx_expr",                               __MAKE__, YCODE.DO_NEW, 0, 1,
                                                              __OR__,
                                                              NEW,"sx_expr",                                __MAKE__, YCODE.DO_NEW, 0, 1,
-                                                             __OR__,
-                                                             "sx_expr","?","sx_expr",":","sx_expr",        __MAKE__, YCODE.DO_NEW, 0, 1, 2, 3, 4,//3項演算子
                                                       };
 
         public static object[] sx_expr_bracket     =  { "sx_expr_bracket",

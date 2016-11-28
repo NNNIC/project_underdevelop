@@ -8,31 +8,32 @@
 
 //var go = new UnityEngine.GameObject("hoge");
 
-PrintLn("Check PrintLn Works");
-PrintLn("Check PrintLn Works");
-PrintLn("Check PrintLn Works");
-PrintLn("Check PrintLn Works");
-PrintLn("Check PrintLn Works");
+//PrintLn("Check PrintLn Works");
+//PrintLn("Check PrintLn Works");
+//PrintLn("Check PrintLn Works");
+//PrintLn("Check PrintLn Works");
+//PrintLn("Check PrintLn Works");
 
-var x = 1;
+//var x = 1;
+var y = (1-7 == 1) ? "yes" : "no";
+PrintLn(y);
+//
 
-var y = x == 1 ? "yes" : "no";
+//PrintLn("y=" + y);
 
-PrintLn("y=" + y);
+//var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
+//var speed = 50;
+//var cur = 0;
+//function Update()
+//{
+//    UnityEngine.Debug.Log(Time.time);
 
-var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-var speed = 50;
-var cur = 0;
-function Update()
-{
-    UnityEngine.Debug.Log(Time.time);
+//    cur += speed / 10;
+//    go.transform.localEulerAngles = new UnityEngine.Vector3(cur, 0, 0);
 
-    cur += speed / 10;
-    go.transform.localEulerAngles = new UnityEngine.Vector3(cur, 0, 0);
-
-    var bUp = UnityEngine.Input.GetKey(UnityEngine.KeyCode.UpArrow);
-    var bDwn = UnityEngine.Input.GetKey(UnityEngine.KeyCode.DownArrow);
+//    var bUp = UnityEngine.Input.GetKey(UnityEngine.KeyCode.UpArrow);
+//    var bDwn = UnityEngine.Input.GetKey(UnityEngine.KeyCode.DownArrow);
     
-    if (bUp)  { speed++; Println(speed); }
-    if (bDwn) { speed--; Println(speed); }
-}
+//    if (bUp)  { speed++; Println(speed); }
+//    if (bDwn) { speed--; Println(speed); }
+//}
