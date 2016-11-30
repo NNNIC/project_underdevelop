@@ -43,8 +43,18 @@ namespace slagmon
         private void timer1_Tick(object sender, EventArgs e)
         {
             m_pipe.Update();
-            var s = m_pipe.Read();
-            if (s!=null) WriteLog(s);
+            for(var loop= 0; loop<5000; loop++)
+            { 
+                var s = m_pipe.Read();
+                if (s!=null)
+                { 
+                    WriteLog(s);
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
 
         private void textBox3_input_KeyDown(object sender, KeyEventArgs e)

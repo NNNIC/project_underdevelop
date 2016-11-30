@@ -12,6 +12,7 @@ public class slgctl_main : MonoBehaviour {
         m_netcomm.Start();
 
         slagtool.util.SetLogFunc(wk.SendWrite,wk.SendWriteLine);
+        slagtool.util.SetBuitIn(typeof(unity_builtinfunc));
 
         while(true)
         {
@@ -28,5 +29,6 @@ public class slgctl_main : MonoBehaviour {
     void Update()
     {
         wk.Update();
+        slgctl.cmd_sub.UpdateExec();
     }
 }

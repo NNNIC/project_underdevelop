@@ -8,9 +8,9 @@ namespace slgctl
 {
     public class netcomm
     {
-        string m_self_ip   = "unity";
+        string m_myname  = "unity";
 
-        string m_to_ip   = "mon";
+        string m_toname  = "mon";
 
         FilePipe       m_pipe;
         Queue<string> m_log;
@@ -26,7 +26,7 @@ namespace slgctl
             V = this;
             m_mtx = new object();
 
-            m_pipe   = new FilePipe(m_self_ip);
+            m_pipe   = new FilePipe(m_myname);
             m_pipe.Start(wk.Log);
 
             m_log    = new Queue<string>();
@@ -79,7 +79,7 @@ namespace slgctl
                     s+=m_log.Dequeue();
                 }
             }
-            if (s!=null) m_pipe.Write(s,m_to_ip);
+            if (s!=null) m_pipe.Write(s,m_toname);
             m_pipe.Update();
         }
         #endregion

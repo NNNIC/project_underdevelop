@@ -35,6 +35,7 @@ namespace slgctl
             {
                 m_slag = new slagtool.slag();
                 m_slag.LoadFile(file);
+                wk.SendWriteLine("Loaded.");
             }
             catch(SystemException e)
             {
@@ -45,35 +46,6 @@ namespace slgctl
             }
 
             return m_slag;
-
-            //string raw = null;
-            //try { 
-            //    raw = File.ReadAllText(file,Encoding.UTF8);
-            //}
-            //catch(System.Exception e)
-            //{
-            //    wk.SendWriteLine("-- EXCEPTION --");
-            //    wk.SendWriteLine(e.Message);
-            //    wk.SendWriteLine("---------------");
-            //    return;
-            //}
-
-            //try
-            //{
-            //    //if (bRunNow)
-            //    //{ 
-            //    //    slagtool.util.ExeSrc(raw);
-            //    //    wk.SendWriteLine(".. Done to read and run " + file);
-            //    //}
-            //    slagtool.util.LoadSrc(raw);
-            //    wk.SendWriteLine(".. Done to read " + file);
-            //} catch (SystemException e)
-            //{
-            //    wk.SendWriteLine("-- EXCEPTION --");
-            //    wk.SendWriteLine(e.Message);
-            //    wk.SendWriteLine("---------------");
-            //    return;
-            //}
         }
 
         public static void Run(slagtool.slag slag = null)
@@ -82,6 +54,7 @@ namespace slgctl
 
             try
             {
+                UpdateClear();
                 m_slag.Run();
             }
             catch (SystemException e)
@@ -96,5 +69,35 @@ namespace slgctl
         {
             wk.SendWriteLine(".. 1234.\n567.");
         }
+
+        //-- Update用
+        private static List<string> m_updateFunc;
+        public static void UpdateClear()
+        {
+            m_updateFunc = null;
+        }
+        public static void UpdateAddFunc(string func)
+        {
+            if (m_updateFunc==null) m_updateFunc = new List<string>();
+            m_updateFunc.Add(func);
+        }
+        public static void UpdateExec()
+        {
+            if (m_slag==null) return;
+            if (m_updateFunc==null) return;
+            try { 
+                foreach(var f in m_updateFunc)
+                {
+                    m_slag.CallFunc(f);
+                }
+            }
+            catch(SystemException e)
+            {
+                wk.SendWriteLine("-- EXCEPTION --");
+                wk.SendWriteLine(e.Message);
+                wk.SendWriteLine("---------------");
+            }
+        }
+        
     }
 }

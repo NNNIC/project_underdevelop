@@ -24,6 +24,7 @@ PrintLn(y);
 var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
 var speed = 50;
 var cur = 0;
+HookUpdate("Update");
 function Update()
 {
     UnityEngine.Debug.Log(Time.time);

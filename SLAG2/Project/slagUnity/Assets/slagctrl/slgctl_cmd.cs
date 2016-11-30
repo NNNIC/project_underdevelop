@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.IO;
 
 namespace slgctl
 {
@@ -34,8 +35,7 @@ namespace slgctl
             switch(cmd)
             {
                 case COMMAND.WD:      Set_WorkingDirectoy(p1);          break;
-                case COMMAND.LOAD:    cmd_sub.Load(p1);                 break;
-                case COMMAND.LOADRUN: cmd_sub.Load(p1); cmd_sub.Run();  break;
+                case COMMAND.LOAD:    cmd_sub.Load(Path.Combine(m_workDir,p1));  break;
                 case COMMAND.RUN:     cmd_sub.Run();                    break;
                 case COMMAND.STEP:    break;
                 case COMMAND.BP:      break;

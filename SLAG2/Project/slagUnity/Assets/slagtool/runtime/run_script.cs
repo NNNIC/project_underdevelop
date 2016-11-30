@@ -56,14 +56,14 @@ namespace slagtool.runtime
 
     public class StateBuffer
     {
-        public Hashtable    m_root_dic;           //ルート
-        public Hashtable    m_front_dic;          //フロント
-        public Hashtable    m_func_dic;           //ファンクション格納
+        public Hashtable      m_root_dic;         //ルート
+        public Hashtable      m_front_dic;        //フロント
+        public Hashtable      m_func_dic;         //ファンクション格納
 
         public PointervarItem m_pvitem;           //ポインタ変数のアイテム
         public object         m_cur;
 
-        public BREAKTYPE m_breakType;
+        public BREAKTYPE      m_breakType;
 
 #region api
 

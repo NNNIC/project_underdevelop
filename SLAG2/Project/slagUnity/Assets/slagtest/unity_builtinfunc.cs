@@ -69,4 +69,16 @@ public class unity_builtinfunc {
 
         return s;
     }
+    public static object F_HookUpdate(bool bHelp, object[] ol, StateBuffer sb)
+    {
+        if (bHelp)
+        {
+            return "Hook up a function with Update on monobehaviour." + NL +"ex) HookUpdate(\"function\"";
+        }
+        var f = kit.get_string_at(ol,0);
+
+        slgctl.cmd_sub.UpdateAddFunc(f);
+
+        return null;
+    }
 }
