@@ -152,7 +152,7 @@ public class FilePipe
     #region クライアント
     private void send_client(string msg, string to_name, int to_port)
     {
-        if (msg == null)
+        if (string.IsNullOrEmpty(msg))
         {
             m_log.WriteLine("メッセージが設定されていません");
             return;

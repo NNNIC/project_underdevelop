@@ -11,6 +11,7 @@ namespace slgctl
         public enum COMMAND
         {
             NONE,
+            WD,     //Set Working Directory
             LOAD,   //Load FILENAME (.js or .txt)
             LOADRUN,//Load and run FILENAME (.js or .txt)
             LOADBIN,//Store BASE64 binary
@@ -24,12 +25,15 @@ namespace slgctl
             QUIT    //Quit and Close          --- 実行中OK
         }
 
+        public static string m_workDir = @"N:\Project\test";
+
         public static void execute(string cmdbuff)
         {
             string p1;
             COMMAND cmd = GetCmd(cmdbuff,out p1);
             switch(cmd)
             {
+                case COMMAND.WD:      Set_WorkingDirectoy(p1);          break;
                 case COMMAND.LOAD:    cmd_sub.Load(p1);                 break;
                 case COMMAND.LOADRUN: cmd_sub.Load(p1); cmd_sub.Run();  break;
                 case COMMAND.RUN:     cmd_sub.Run();                    break;
@@ -70,6 +74,14 @@ namespace slgctl
             }
             var cmd = (COMMAND)Enum.Parse(typeof(COMMAND),p0);
             return cmd;
+        }
+        private static void Set_WorkingDirectoy(string dir)
+        {
+            if (dir!=null)
+            {
+                m_workDir = dir;
+            }
+            wk.SendWriteLine("Current Working Directory : " + m_workDir);
         }
     }
 }

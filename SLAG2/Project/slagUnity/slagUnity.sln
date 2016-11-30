@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2015
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slagUnity.CSharp", "slagUnity.CSharp.csproj", "{CF2D6CF9-3030-E0C0-2E80-E885DBA4521C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "slagUnity.CSharp.Editor", "slagUnity.CSharp.Editor.csproj", "{2B067083-E257-9EBD-F9C7-3D55D7882DF9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{CF2D6CF9-3030-E0C0-2E80-E885DBA4521C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF2D6CF9-3030-E0C0-2E80-E885DBA4521C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF2D6CF9-3030-E0C0-2E80-E885DBA4521C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B067083-E257-9EBD-F9C7-3D55D7882DF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B067083-E257-9EBD-F9C7-3D55D7882DF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B067083-E257-9EBD-F9C7-3D55D7882DF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B067083-E257-9EBD-F9C7-3D55D7882DF9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
