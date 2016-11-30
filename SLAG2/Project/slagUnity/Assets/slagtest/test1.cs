@@ -23,12 +23,15 @@ public class test1 : MonoBehaviour {
         
         slagtool.util.SetLogFunc(Log,LogLine,2);
         slagtool.util.SetBuitIn(typeof(unity_builtinfunc));
-        slagtool.util.LoadSrc(src);
+
+        var slag = new slagtool.slag();
+        slag.LoadSrc(src);
 
         DumpAllLog();
 
-        slagtool.util.Run();
+        slag.Run();
 
+        DumpAllLog();
     }
 
     //---

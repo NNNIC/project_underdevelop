@@ -19,9 +19,6 @@ public class test2Update : MonoBehaviour {
 	    m_sm.Update();
 	}
 
-
-
-
     //---
 
     void S_WAITKEY(bool bFirst)
@@ -32,7 +29,8 @@ public class test2Update : MonoBehaviour {
         }
     }
 
-    slagtool.runtime.process m_proc;
+    //slagtool.runtime.process m_proc;
+    slagtool.slag m_slag;
 
     void S_RUN(bool bFirst)
     {
@@ -47,18 +45,20 @@ public class test2Update : MonoBehaviour {
             slagtool.util.SetLogFunc(Log,LogLine,2);
             slagtool.util.SetBuitIn(typeof(unity_builtinfunc));
 
-            slagtool.util.LoadSrc(src);
+            m_slag = new slagtool.slag();
+            m_slag.LoadSrc(src);
 
-            m_proc = slagtool.util.CreateProcess();
+            //m_proc = slagtool.util.CreateProcess();
             DumpAllLog();
 
-            m_proc.Run();
+            m_slag.Run();
+
             DumpAllLog();
 
         }
         else
         {
-            m_proc.CallFunc("Update");
+            m_slag.CallFunc("Update");
         }
     }
     //---
@@ -71,20 +71,16 @@ public class test2Update : MonoBehaviour {
     }
     public void LogLine(string s)
     {
-        m_log += s;
-        //Debug.Log(m_log);
-        System.Diagnostics.Debug.WriteLine(m_log);
-
-        m_alllog += m_log + System.Environment.NewLine;
-
+        if (s!=null)     m_log += s;
+        if (m_log!=null) m_alllog += m_log;
+        m_alllog += System.Environment.NewLine;
         m_log = null;
     }
     public void DumpAllLog()
     {
-        if (m_alllog!=null) Debug.Log(m_alllog);
+        if (!string.IsNullOrEmpty(m_alllog)) Debug.Log(m_alllog); 
         m_alllog = null;
     }
-
     //--
 #if UNITY_EDITOR
     [ContextMenu("Edit source")]

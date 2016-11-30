@@ -21,19 +21,19 @@ PrintLn(y);
 
 //PrintLn("y=" + y);
 
-//var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-//var speed = 50;
-//var cur = 0;
-//function Update()
-//{
-//    UnityEngine.Debug.Log(Time.time);
+var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
+var speed = 50;
+var cur = 0;
+function Update()
+{
+    UnityEngine.Debug.Log(Time.time);
 
-//    cur += speed / 10;
-//    go.transform.localEulerAngles = new UnityEngine.Vector3(cur, 0, 0);
+    cur += speed / 10;
+    go.transform.localEulerAngles = new UnityEngine.Vector3(cur, 0, 0);
 
-//    var bUp = UnityEngine.Input.GetKey(UnityEngine.KeyCode.UpArrow);
-//    var bDwn = UnityEngine.Input.GetKey(UnityEngine.KeyCode.DownArrow);
+    var bUp = UnityEngine.Input.GetKey(UnityEngine.KeyCode.UpArrow);
+    var bDwn = UnityEngine.Input.GetKey(UnityEngine.KeyCode.DownArrow);
     
-//    if (bUp)  { speed++; Println(speed); }
-//    if (bDwn) { speed--; Println(speed); }
-//}
+    if (bUp)  { speed++; Println(speed); }
+    if (bDwn) { speed--; Println(speed); }
+}

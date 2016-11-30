@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.4.2f2</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -86,7 +88,6 @@
     <Compile Include="Assets\slagtool\analyze\ydef_debug.cs" />
     <Compile Include="Assets\slagtool\analyze\ydef_do.cs" />
     <Compile Include="Assets\slagtool\analyze\yengine.cs" />
-    <Compile Include="Assets\slagtool\analyze\ysaveload.cs" />
     <Compile Include="Assets\slagtool\analyze\yvalue.cs" />
     <Compile Include="Assets\slagtool\runtime\builtin\builtin_func.cs" />
     <Compile Include="Assets\slagtool\runtime\builtin\builtin_kit.cs" />
