@@ -11,8 +11,8 @@ while(a>=0)
 
 	a=a-1;
 
-	Print(a);
+	PrintLn(a);
 }
 
 
-Print("\n"+sum);
+PrintLn("\n"+sum);

@@ -31,7 +31,8 @@ namespace slagtool
 
             for(int loop = 0; loop<=LOOPMAX; loop++)
             {
-                if (loop == LOOPMAX) sys.error("Analyze LoopMax:1"); 
+                if (loop == LOOPMAX)
+                    sys.error("Analyze LoopMax:1"); 
                 if (vp.Update())
                 {
                     dst = vp.GetResult();

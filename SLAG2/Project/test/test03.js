@@ -19,4 +19,4 @@ else if (a==3) { //test
 else if (a==4) {c= -4;}
 
 
-print(c);
+println(c);

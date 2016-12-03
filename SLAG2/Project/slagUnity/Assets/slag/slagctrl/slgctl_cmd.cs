@@ -23,7 +23,7 @@ namespace slgctl
             STOP,   //Stop next line          --- 実行中OK
             RESUME, //Resume
             TEST,   //Test
-            QUIT    //Quit and Close          --- 実行中OK
+            QUIT,   //Quit and Close          --- 実行中OK
         }
 
         public static string m_workDir = @"N:\Project\test";
@@ -42,8 +42,8 @@ namespace slgctl
                 case COMMAND.PRINT:   break;
                 case COMMAND.STOP:    break;
                 case COMMAND.RESUME:  break;
-                case COMMAND.TEST:    cmd_sub.Test(); break;
-                case COMMAND.QUIT:    break;
+                case COMMAND.TEST:    cmd_sub.Test();  break;
+                case COMMAND.QUIT:    cmd_sub.Reset(); break;
                 default: wk.SendWriteLine("ignore:" + cmdbuff); break;
             }
         }

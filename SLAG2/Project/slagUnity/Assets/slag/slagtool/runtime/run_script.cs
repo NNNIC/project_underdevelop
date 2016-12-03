@@ -1121,7 +1121,16 @@ namespace slagtool.runtime
         }
         public static object Calc_op(object a, object b, string op)
         {
-            if (a==null || b==null) _error("unexpected null");
+            if (a==null || b==null)
+            {
+                switch(op)
+                {
+                    case "==": return (a==null && b==null);
+                    case "!=": return (a!=b);
+                }
+                _error("unexpected null");
+                return null;
+            }
             if (a.GetType()==typeof(string))
             {
                 var x = a.ToString();

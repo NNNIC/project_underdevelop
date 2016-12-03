@@ -4,16 +4,10 @@
 
 var s1 = "hoge";
 var s2 = "vv";
-//var s3 = s1 + s2;
 
-//consolewriteline(s1);
-//consolewriteline(s2);
-//consolewriteline(s3);
-consolewriteline( s1 + s2 + "GG" );
+println(s1 + s2 + "GG");
 
 //var x = 5 + 10 * 10;
-
-//consolewriteline("5 + 10 * 10=" + x);
 
 
 var s = ReadLine("Input>");

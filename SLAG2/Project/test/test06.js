@@ -8,9 +8,9 @@ var c = "d";
 
 switch(c)
 {
-case "a": Print(c + "!"); break;
-case "b": Print(c + "!!"); break;
-case "c": Print(c + "!!!"); break;
-default:  Print(c + "****"); break;
+case "a": PrintLn(c + "!"); break;
+case "b": PrintLn(c + "!!"); break;
+case "c": PrintLn(c + "!!!"); break;
+default:  PrintLn(c + "****"); break;
 }
 

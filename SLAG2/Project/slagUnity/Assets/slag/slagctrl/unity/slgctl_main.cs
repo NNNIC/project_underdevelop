@@ -8,10 +8,15 @@ public class slgctl_main : MonoBehaviour {
     public static netcomm m_netcomm;
 
 	IEnumerator Start () {
+
+        if (m_netcomm!=null) {  DestroyImmediate(gameObject);  yield break; }
+
+        GameObject.DontDestroyOnLoad(gameObject);
+
         m_netcomm = new netcomm();
         m_netcomm.Start();
 
-        slagtool.util.SetLogFunc(wk.SendWrite,wk.SendWriteLine);
+        slagtool.util.SetLogFunc(wk.SendWrite,wk.SendWriteLine,1);
         slagtool.util.SetBuitIn(typeof(unity_builtinfunc));
 
         while(true)

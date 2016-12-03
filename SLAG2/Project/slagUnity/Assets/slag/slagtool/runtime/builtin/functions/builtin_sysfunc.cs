@@ -25,7 +25,7 @@ namespace slagtool.runtime.builtin
 
             kit.check_num_of_args(ol,1);
 
-            var x = kit.get_double_at(ol,0);
+            var x = kit.get_number_at(ol,0);
             if (!number.IsNaN(x))
             { 
                 x = x * 1000.0f;
@@ -136,7 +136,7 @@ namespace slagtool.runtime.builtin
 
             kit.check_num_of_args(ol,1);
 
-            var x = kit.get_double_at(ol,0);
+            var x = kit.get_number_at(ol,0);
             if (!number.IsNaN(x))
             {
                 return x;
@@ -155,8 +155,8 @@ namespace slagtool.runtime.builtin
 
             kit.check_num_of_args(ol,2);
 
-            var min = kit.get_double_at(ol,0);
-            var max = kit.get_double_at(ol,1);
+            var min = kit.get_number_at(ol,0);
+            var max = kit.get_number_at(ol,1);
             var diff = max - min;
 
             var r = new System.Random(DateTime.Now.Millisecond);
@@ -173,7 +173,7 @@ namespace slagtool.runtime.builtin
 
             kit.check_num_of_args(ol,1);
 
-            var x = kit.get_double_at(ol,0);
+            var x = kit.get_number_at(ol,0);
             if (!number.IsNaN(x))
             {
                 var i = (int)x;
@@ -187,7 +187,7 @@ namespace slagtool.runtime.builtin
             {
                 return "Cast number to float.";
             }
-            var x = kit.get_double_at(ol,0);
+            var x = kit.get_number_at(ol,0);
             return (float)x;
         }
         public static object F_CastInt32(bool bHelp,object[] ol, StateBuffer sb)
@@ -196,7 +196,7 @@ namespace slagtool.runtime.builtin
             {
                 return "Cast numner to int32";
             }
-            var x = kit.get_double_at(ol,0);
+            var x = kit.get_number_at(ol,0);
             return (System.Int32)x;
         }
 #endregion
@@ -213,14 +213,14 @@ namespace slagtool.runtime.builtin
             if (ol.Length==2)
             {
                 var s = ol[0].ToString();
-                var n = kit.get_double_at(ol,1);
+                var n = kit.get_number_at(ol,1);
                 return s.Substring((int)n);
             }
             else if (ol.Length==3)
             {
                 var s = ol[0].ToString();
-                var n = kit.get_double_at(ol,1);
-                var c = kit.get_double_at(ol,2);
+                var n = kit.get_number_at(ol,1);
+                var c = kit.get_number_at(ol,2);
                 return s.Substring((int)n,(int)c);
             }
 
@@ -345,7 +345,7 @@ namespace slagtool.runtime.builtin
             kit.check_num_of_args(ol,2);
 
             var list = kit.get_list_at(ol,0);
-            var n    = kit.get_double_at(ol,1);
+            var n    = kit.get_number_at(ol,1);
             if (list!=null && !number.IsNaN(n) && n < list.Count)
             {
                 return list[(int)n];

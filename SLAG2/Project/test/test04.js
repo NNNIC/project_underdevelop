@@ -7,9 +7,9 @@ for ( var i = 0; i<20; i=i+1)
 {
 	sum = sum + i;
 	
-	if (i==10) { Print("break!!\n");  break;  }
+	if (i==10) { Println("break!!\n");  break;  }
 }
 
-Print("total="+sum);
+Println("total="+sum);
 
 

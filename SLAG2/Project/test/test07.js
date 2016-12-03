@@ -8,7 +8,7 @@ function hoge(x,y,z)
 }
 function hehe() 
 {
-   ConsoleWrite("A");
+   PrintLn("A");
 }
 function hege()
 {
@@ -19,12 +19,12 @@ function hege()
 
 var c = hoge(1,2,3);
 
-ConsoleWriteLine("hoge()=" + c);
+PrintLn("hoge()=" + c);
 
 hehe();
 hehe();
 hehe();
-ConsoleWriteLine();
+PrintLn("");
 hege();
 
 

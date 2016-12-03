@@ -13,13 +13,11 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.4.2f2</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -71,36 +69,38 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\cmn\FilePipe.cs" />
-    <Compile Include="Assets\cmn\StateManager.cs" />
-    <Compile Include="Assets\slagctrl\slgctl_cmd.cs" />
-    <Compile Include="Assets\slagctrl\slgctl_cmd_sub.cs" />
-    <Compile Include="Assets\slagctrl\slgctl_netcom.cs" />
-    <Compile Include="Assets\slagctrl\unity\slgctl_main.cs" />
-    <Compile Include="Assets\slagctrl\unity\slgctl_wk.cs" />
+    <Compile Include="Assets\slag\cmn\FilePipe.cs" />
+    <Compile Include="Assets\slag\cmn\StateManager.cs" />
+    <Compile Include="Assets\slag\slagctrl\slgctl_cmd.cs" />
+    <Compile Include="Assets\slag\slagctrl\slgctl_cmd_sub.cs" />
+    <Compile Include="Assets\slag\slagctrl\slgctl_netcom.cs" />
+    <Compile Include="Assets\slag\slagctrl\unity\slgctl_main.cs" />
+    <Compile Include="Assets\slag\slagctrl\unity\slgctl_wk.cs" />
+    <Compile Include="Assets\slag\slagtool\analyze\syntax\lex.cs" />
+    <Compile Include="Assets\slag\slagtool\analyze\syntax\ydef.cs" />
+    <Compile Include="Assets\slag\slagtool\analyze\yanalyzer.cs" />
+    <Compile Include="Assets\slag\slagtool\analyze\ydef_api.cs" />
+    <Compile Include="Assets\slag\slagtool\analyze\ydef_debug.cs" />
+    <Compile Include="Assets\slag\slagtool\analyze\ydef_do.cs" />
+    <Compile Include="Assets\slag\slagtool\analyze\yengine.cs" />
+    <Compile Include="Assets\slag\slagtool\analyze\yvalue.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\builtin\builtin_func.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\builtin\builtin_kit.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\builtin\functions\builtin_sysfunc.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\process.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\run_script.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\runsub_pointervar_clause.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\runsub_reflection_util.cs" />
+    <Compile Include="Assets\slag\slagtool\sys.cs" />
+    <Compile Include="Assets\slag\slagtool\util.cs" />
+    <Compile Include="Assets\slagtest\guiDisplay.cs" />
     <Compile Include="Assets\slagtest\test1.cs" />
     <Compile Include="Assets\slagtest\test2Update.cs" />
     <Compile Include="Assets\slagtest\unity_builtinfunc.cs" />
-    <Compile Include="Assets\slagtool\analyze\syntax\lex.cs" />
-    <Compile Include="Assets\slagtool\analyze\syntax\ydef.cs" />
-    <Compile Include="Assets\slagtool\analyze\yanalyzer.cs" />
-    <Compile Include="Assets\slagtool\analyze\ydef_api.cs" />
-    <Compile Include="Assets\slagtool\analyze\ydef_debug.cs" />
-    <Compile Include="Assets\slagtool\analyze\ydef_do.cs" />
-    <Compile Include="Assets\slagtool\analyze\yengine.cs" />
-    <Compile Include="Assets\slagtool\analyze\yvalue.cs" />
-    <Compile Include="Assets\slagtool\runtime\builtin\builtin_func.cs" />
-    <Compile Include="Assets\slagtool\runtime\builtin\builtin_kit.cs" />
-    <Compile Include="Assets\slagtool\runtime\builtin\functions\builtin_sysfunc.cs" />
-    <Compile Include="Assets\slagtool\runtime\process.cs" />
-    <Compile Include="Assets\slagtool\runtime\run_script.cs" />
-    <Compile Include="Assets\slagtool\runtime\runsub_pointervar_clause.cs" />
-    <Compile Include="Assets\slagtool\runtime\runsub_reflection_util.cs" />
-    <Compile Include="Assets\slagtool\sys.cs" />
-    <Compile Include="Assets\slagtool\util.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\slagtool\__util__に外部アクセスを集める__.txt" />
+    <None Include="Assets\Data\Font\aboutfont.txt" />
+    <None Include="Assets\slag\slagtool\__util__に外部アクセスを集める__.txt" />
     <None Include="Assets\メモ.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

@@ -38,7 +38,7 @@ namespace slagtool.runtime.builtin
             var s = o.ToString();
             return s.Replace("\\n",NL);
         }
-        public static number get_double_at(object[] ol, int n)
+        public static number get_number_at(object[] ol, int n)
         {
             var o = get_ol_at(ol,n);
             if (o==null) return number.NaN;
