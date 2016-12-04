@@ -25,7 +25,6 @@ function S_READ(bFirst)
         var s = ReadLineDone();
         if (s!=null)
         {
-            PrintLn("Input>" + s);
             StateGoto("S_END");
         }
     }

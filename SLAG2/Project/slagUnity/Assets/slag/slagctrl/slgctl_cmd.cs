@@ -23,6 +23,7 @@ namespace slgctl
             STOP,   //Stop next line          --- 実行中OK
             RESUME, //Resume
             TEST,   //Test
+            DEBUG,  //Debug [0|1|2]
             QUIT,   //Quit and Close          --- 実行中OK
         }
 
@@ -42,8 +43,9 @@ namespace slgctl
                 case COMMAND.PRINT:   break;
                 case COMMAND.STOP:    break;
                 case COMMAND.RESUME:  break;
-                case COMMAND.TEST:    cmd_sub.Test();  break;
-                case COMMAND.QUIT:    cmd_sub.Reset(); break;
+                case COMMAND.TEST:    cmd_sub.Test();           break;
+                case COMMAND.DEBUG:   cmd_sub.Debug(p1);        break;
+                case COMMAND.QUIT:    cmd_sub.Reset();          break;
                 default: wk.SendWriteLine("ignore:" + cmdbuff); break;
             }
         }

@@ -29,6 +29,8 @@ public class unity_builtinfunc {
         Debug.Log(s);
         guiDisplay.WriteLine(s);
 
+        
+
         return null;
     }
     public static object F_Print(bool bHelp,object[] ol,StateBuffer sb)

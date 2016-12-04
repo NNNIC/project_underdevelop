@@ -76,6 +76,20 @@ namespace slgctl
             wk.SendWriteLine(".. 1234.\n567.");
         }
 
+        public static void Debug(string p)
+        {
+            int x = -1;
+            if (!string.IsNullOrEmpty(p) && int.TryParse(p,out x) && x>=0 && x<=2)
+            {
+                wk.SendWriteLine("Set Debug Mode : " + x);
+                slagtool.util.SetDebugMode(x);
+            }
+            else
+            {
+                wk.SendWriteLine("Current Debug Mode : " + slagtool.util.GetDebugMode());
+            }
+        }
+
         //-- Update用
         private static List<string> m_updateFunc;
         public static void UpdateClear()
@@ -89,12 +103,13 @@ namespace slgctl
         }
         public static void UpdateExec()
         {
-            if (m_sm!=null) m_sm.Update();
-
-            if (m_slag==null) return;
-            if (m_updateFunc==null) return;
             try { 
-                foreach(var f in m_updateFunc)
+                if (m_sm!=null) m_sm.Update();
+
+                if (m_slag==null) return;
+                if (m_updateFunc==null) return;
+
+                foreach (var f in m_updateFunc)
                 {
                     m_slag.CallFunc(f);
                 }
@@ -104,6 +119,8 @@ namespace slgctl
                 wk.SendWriteLine("-- EXCEPTION --");
                 wk.SendWriteLine(e.Message);
                 wk.SendWriteLine("---------------");
+                m_sm = null;
+                m_updateFunc = null;
             }
         }
         //-- StateMachine用
