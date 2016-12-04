@@ -24,6 +24,7 @@ namespace slagmon
 
         private void Form1_Resize(object sender, EventArgs e)
         {
+#if enable_resize
             textBox1_log.Width = this.Width / 2 - 10;
             textBox2_src.Width = this.Width / 2 - 20;
             var loc = textBox2_src.Location;
@@ -33,6 +34,7 @@ namespace slagmon
             loc= label2_source.Location;
             loc.X = textBox2_src.Location.X;
             label2_source.Location = loc;
+#endif
         }
 
         private void WriteLog(string s)
@@ -56,17 +58,64 @@ namespace slagmon
                 }
             }
         }
+        private void textBox3_input_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '\r')
+            {
+                string cmd = null;
+
+                var topindex = textBox3_input.GetFirstCharIndexOfCurrentLine();
+                var buf = textBox3_input.Text.Substring(topindex);
+                if (string.IsNullOrWhiteSpace(buf)) return;
+                var endindex = buf.IndexOf('\xa');
+                if (endindex < 0)
+                {
+                    cmd = buf.TrimStart('>').TrimEnd();
+                }
+                else
+                {
+                    cmd = buf.Substring(0, endindex).TrimStart('>').TrimEnd();
+                    e.KeyChar= '\x00';
+                }
+
+                if (!string.IsNullOrWhiteSpace(cmd))
+                {
+                    textBox1_log.AppendText("Send Command : " + cmd + Environment.NewLine);
+                    m_pipe.Write(cmd, "unity");
+                }
+
+            }
+
+        }
 
         private void textBox3_input_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode != Keys.Enter) return;
+            //if (e.KeyCode == Keys.Enter)
+            //{
+            //    string cmd = null;
 
-            var l = textBox3_input.Text.Split('\xa');
-            if (l.Length>0)
-            {
-                var cmd = l[l.Length-1].Trim('>');
-                m_pipe.Write(cmd,"unity");
-            }
+            //    var topindex = textBox3_input.GetFirstCharIndexOfCurrentLine();
+            //    var buf = textBox3_input.Text.Substring(topindex);
+            //    if (string.IsNullOrWhiteSpace(buf)) return;
+            //    var endindex = buf.IndexOf('\xa');
+            //    if (endindex < 0)
+            //    {
+            //        cmd = buf.TrimStart('>').TrimEnd();
+            //    }
+            //    else
+            //    {
+            //        cmd = buf.Substring(0, endindex).TrimStart('>').TrimEnd();
+            //    }
+
+            //    if (!string.IsNullOrWhiteSpace(cmd))
+            //    {
+            //        textBox1_log.AppendText("Send Command : " + cmd + Environment.NewLine);
+            //        m_pipe.Write(cmd, "unity");
+            //    }
+
+            //}
+
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -77,6 +126,8 @@ namespace slagmon
         private void textBox3_input_TextChanged(object sender, EventArgs e)
         {
             var txt = textBox3_input.Text;
+
+
             if (txt.Length>1)
             {
                 if (txt[txt.Length-1]=='\x0a')
@@ -91,5 +142,6 @@ namespace slagmon
         {
             m_pipe.Tenminate();
         }
+
     }
 }

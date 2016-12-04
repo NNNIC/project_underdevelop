@@ -76,6 +76,7 @@
             this.textBox3_input.WordWrap = false;
             this.textBox3_input.TextChanged += new System.EventHandler(this.textBox3_input_TextChanged);
             this.textBox3_input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox3_input_KeyDown);
+            this.textBox3_input.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox3_input_KeyPress);
             // 
             // label1_log
             // 

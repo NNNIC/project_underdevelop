@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\slagUnity\Assets\cmn\FilePipe.cs">
+    <Compile Include="..\..\..\..\slagUnity\Assets\slag\cmn\FilePipe.cs">
       <Link>FilePipe.cs</Link>
     </Compile>
     <Compile Include="Form1.cs">

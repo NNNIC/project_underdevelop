@@ -68,6 +68,7 @@ public class guiDisplay : MonoBehaviour
     {
         if (m_list == null) m_list = new List<Item>();
         m_list.Add(new Item() { bReadOrWrite=false, text =s });
+        m_pos.y = float.MaxValue;
     }
     void write(string s)
     {
@@ -82,6 +83,7 @@ public class guiDisplay : MonoBehaviour
             l.text += s;
             m_list[m_list.Count-1] = l;
         }
+        m_pos.y = float.MaxValue;
     }
     #endregion
 
