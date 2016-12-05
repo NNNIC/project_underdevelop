@@ -24,6 +24,7 @@ namespace slgctl
             RESUME, //Resume
             TEST,   //Test
             DEBUG,  //Debug [0|1|2]
+            HELP, 
             QUIT,   //Quit and Close          --- 実行中OK
         }
 
@@ -35,8 +36,8 @@ namespace slgctl
             COMMAND cmd = GetCmd(cmdbuff,out p1);
             switch(cmd)
             {
-                case COMMAND.WD:      Set_WorkingDirectoy(p1);          break;
-                case COMMAND.LOAD:    cmd_sub.Load(Path.Combine(m_workDir,p1));  break;
+                case COMMAND.WD:      if (!string.IsNullOrEmpty(p1)) Set_WorkingDirectoy(p1);          break;
+                case COMMAND.LOAD:    if (!string.IsNullOrEmpty(p1)) cmd_sub.Load(Path.Combine(m_workDir,p1));  break;
                 case COMMAND.RUN:     cmd_sub.Run();                    break;
                 case COMMAND.STEP:    break;
                 case COMMAND.BP:      break;
@@ -46,6 +47,7 @@ namespace slgctl
                 case COMMAND.TEST:    cmd_sub.Test();           break;
                 case COMMAND.DEBUG:   cmd_sub.Debug(p1);        break;
                 case COMMAND.QUIT:    cmd_sub.Reset();          break;
+                case COMMAND.HELP:    cmd_sub.Help();           break;
                 default: wk.SendWriteLine("ignore:" + cmdbuff); break;
             }
         }

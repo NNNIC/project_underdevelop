@@ -90,6 +90,12 @@ namespace slgctl
             }
         }
 
+        public static void Help()
+        {
+            var s = slagtool.runtime.builtin.builtin_func.Help();
+            wk.SendWriteLine(s);
+        }
+
         //-- Update用
         private static List<string> m_updateFunc;
         public static void UpdateClear()

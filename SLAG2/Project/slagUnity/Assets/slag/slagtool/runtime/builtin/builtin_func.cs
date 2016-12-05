@@ -95,7 +95,7 @@ namespace slagtool.runtime.builtin
 
             foreach(var cat in m_categoryList)
             {
-                s += string.Format("== {0} Functions ==") + NL;
+                s += string.Format("== {0} Functions ==",cat.categoryname) + NL;
                 foreach(var k in m_hash.Keys)
                 {
                     var i = (item)m_hash[k];

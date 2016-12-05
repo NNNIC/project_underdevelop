@@ -93,6 +93,8 @@ public class unity_builtinfunc {
     static string m_readtext;
     public static object F_ReadLineStart(bool bHelp, object[] ol, StateBuffer sb)
     {
+        if (bHelp) return "";
+
         m_readtext = null;
         var label = kit.get_string_at(ol,0);
         guiDisplay.GetInput(label,"",(s)=>m_readtext=s);
@@ -100,6 +102,8 @@ public class unity_builtinfunc {
     }
     public static object F_ReadLineDone(bool bHelp, object[] ol, StateBuffer sb)
     {
+        if (bHelp) return "";
+
         return m_readtext;
     }
 
@@ -143,6 +147,8 @@ public class unity_builtinfunc {
     }
     public static object F_StateWait(bool bHelp, object[] ol, StateBuffer sb)
     {
+        if (bHelp) return "";
+
         var f = kit.get_number_at(ol,0);
         var c = f * 60.0f;
         slgctl.cmd_sub.StateWaitCnt((int)c);

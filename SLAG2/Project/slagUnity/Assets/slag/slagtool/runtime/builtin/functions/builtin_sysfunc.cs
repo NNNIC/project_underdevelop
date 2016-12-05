@@ -377,6 +377,10 @@ namespace slagtool.runtime.builtin
 #region Assembley
         public static object F_GetAllAsm(bool bHelp, object[] ol, StateBuffer sb)
         {
+            if (bHelp)
+            {
+                return "";
+            }
             foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
             {
                 Console.WriteLine(asm.FullName);
@@ -385,6 +389,11 @@ namespace slagtool.runtime.builtin
         }
         public static object F_FindType(bool bHelp, object[] ol, StateBuffer sb)
         {
+            if (bHelp)
+            {
+                return "";
+            }
+
             var _type      = kit.get_string_at(ol,0).ToUpper();
 #if nounity
             foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())

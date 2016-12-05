@@ -42,6 +42,7 @@
             // 
             this.textBox1_log.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
+            this.textBox1_log.Font = new System.Drawing.Font("ＭＳ ゴシック", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.textBox1_log.Location = new System.Drawing.Point(2, 24);
             this.textBox1_log.Multiline = true;
             this.textBox1_log.Name = "textBox1_log";
@@ -49,10 +50,12 @@
             this.textBox1_log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox1_log.Size = new System.Drawing.Size(398, 328);
             this.textBox1_log.TabIndex = 0;
+            this.textBox1_log.WordWrap = false;
             // 
             // textBox2_src
             // 
-            this.textBox2_src.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox2_src.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox2_src.Location = new System.Drawing.Point(406, 24);
             this.textBox2_src.Multiline = true;

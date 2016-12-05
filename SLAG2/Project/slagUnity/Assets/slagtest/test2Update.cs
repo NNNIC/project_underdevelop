@@ -16,7 +16,7 @@ public class test2Update : MonoBehaviour {
 	}
 	
 	void Update () {
-	    m_sm.Update();
+	    if (m_sm==null) m_sm.Update();
 	}
 
     //---
