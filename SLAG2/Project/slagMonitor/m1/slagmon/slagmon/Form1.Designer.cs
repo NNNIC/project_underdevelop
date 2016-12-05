@@ -64,6 +64,7 @@
             this.textBox2_src.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.textBox2_src.Size = new System.Drawing.Size(379, 328);
             this.textBox2_src.TabIndex = 1;
+            this.textBox2_src.WordWrap = false;
             // 
             // textBox3_input
             // 
