@@ -4,11 +4,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-public class test1 : MonoBehaviour {
+public class simple : MonoBehaviour {
 
     public string m_folder = @"N:\Project\test";
 
     public string m_file   = "test01";
+
+
+    void Start()
+    {
+        Exec();
+    }
 
     [ContextMenu("Execute")]
     public void Exec()
@@ -44,7 +50,7 @@ public class test1 : MonoBehaviour {
     public void LogLine(string s)
     {
         m_log += s;
-        //Debug.Log(m_log);
+
         System.Diagnostics.Debug.WriteLine(m_log);
 
         m_alllog += m_log + System.Environment.NewLine;
@@ -57,14 +63,4 @@ public class test1 : MonoBehaviour {
         m_alllog = null;
     }
 
-    //--
-#if UNITY_EDITOR
-    [ContextMenu("Edit source")]
-    void OpenEdit()
-    {
-        var path = Path.Combine(m_folder,m_file);
-        var editor= @"C:\Program Files\Hidemaru\Hidemaru.exe";
-        System.Diagnostics.Process.Start(editor,path);
-    }
-#endif
 }

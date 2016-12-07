@@ -36,6 +36,7 @@
             this.label2_source = new System.Windows.Forms.Label();
             this.label3_input = new System.Windows.Forms.Label();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.button1clear = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox1_log
@@ -115,11 +116,22 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // button1clear
+            // 
+            this.button1clear.Location = new System.Drawing.Point(26, 6);
+            this.button1clear.Name = "button1clear";
+            this.button1clear.Size = new System.Drawing.Size(50, 18);
+            this.button1clear.TabIndex = 6;
+            this.button1clear.Text = "clear";
+            this.button1clear.UseVisualStyleBackColor = true;
+            this.button1clear.Click += new System.EventHandler(this.button1clear_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(786, 469);
+            this.Controls.Add(this.button1clear);
             this.Controls.Add(this.label3_input);
             this.Controls.Add(this.label2_source);
             this.Controls.Add(this.label1_log);
@@ -145,6 +157,7 @@
         private System.Windows.Forms.Label label2_source;
         private System.Windows.Forms.Label label3_input;
         private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Button button1clear;
     }
 }
 

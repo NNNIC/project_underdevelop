@@ -22,14 +22,16 @@ public class unity_builtinfunc {
         {
             return "Print a string with break line." + NL + "ex)PrintLn(\"hoge!\");";
         }
-        kit.check_num_of_args(ol,1);
-        var o = kit.get_ol_at(ol,0);
-        var s = kit.convert_escape(o);
-
+        
+        var s = "";
+        if (ol!=null&&ol.Length>0)
+        { 
+            kit.check_num_of_args(ol,1);
+            var o = kit.get_ol_at(ol,0);
+            s = kit.convert_escape(o);
+        }
         Debug.Log(s);
         guiDisplay.WriteLine(s);
-
-        
 
         return null;
     }

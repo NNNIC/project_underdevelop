@@ -143,5 +143,9 @@ namespace slagmon
             m_pipe.Tenminate();
         }
 
+        private void button1clear_Click(object sender, EventArgs e)
+        {
+            textBox1_log.Clear();
+        }
     }
 }

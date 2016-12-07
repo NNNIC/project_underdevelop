@@ -22,6 +22,7 @@ public class guiDisplay : MonoBehaviour
     public class Item {
         public bool           bReadOrWrite;
         public string         text;
+        public bool           bLF;
     };
 
     List<Item> m_list;
@@ -62,12 +63,12 @@ public class guiDisplay : MonoBehaviour
     }
 
     #region write
-    public static void WriteLine(string s) { V.writeLine(s); }
-    public static void Write(string s)     { V.write(s);     }
+    public static void WriteLine(string s) { if (V!=null) V.writeLine(s); }
+    public static void Write(string s)     { if (V!=null) V.write(s);     }
     void writeLine(string s)
     {
         if (m_list == null) m_list = new List<Item>();
-        m_list.Add(new Item() { bReadOrWrite=false, text =s });
+        m_list.Add(new Item() { bReadOrWrite=false, text =s , bLF = true});
         m_pos.y = float.MaxValue;
     }
     void write(string s)
@@ -75,13 +76,20 @@ public class guiDisplay : MonoBehaviour
         if (m_list == null) m_list = new List<Item>();
         if (m_list.Count==0)
         {
-            m_list.Add(new Item() { bReadOrWrite=false, text =s });
+            m_list.Add(new Item() { bReadOrWrite=false, text =s, bLF = false });
         }
         else
         {
             var l = m_list[m_list.Count-1];
-            l.text += s;
-            m_list[m_list.Count-1] = l;
+            if (!l.bLF)
+            { 
+                l.text += s;
+                m_list[m_list.Count-1] = l;
+            }
+            else
+            {
+                m_list.Add(new Item() { bReadOrWrite=false, text =s, bLF = false });
+            }
         }
         m_pos.y = float.MaxValue;
     }
@@ -90,7 +98,7 @@ public class guiDisplay : MonoBehaviour
     #region input
     public static void GetInput(string label, string initialtext, Action<string> cb)
     {
-        V.getinput(label,initialtext,cb);
+        if (V!=null) V.getinput(label,initialtext,cb);
     }
     void getinput(string label, string initialtext, Action<string> cb)
     {

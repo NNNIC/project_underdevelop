@@ -94,7 +94,7 @@
     <Compile Include="Assets\slag\slagtool\sys.cs" />
     <Compile Include="Assets\slag\slagtool\util.cs" />
     <Compile Include="Assets\slagtest\guiDisplay.cs" />
-    <Compile Include="Assets\slagtest\test1.cs" />
+    <Compile Include="Assets\slagtest\simple.cs" />
     <Compile Include="Assets\slagtest\test2Update.cs" />
     <Compile Include="Assets\slagtest\unity_builtinfunc.cs" />
   </ItemGroup>
