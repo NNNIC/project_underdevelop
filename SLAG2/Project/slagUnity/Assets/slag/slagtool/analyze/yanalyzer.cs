@@ -31,9 +31,11 @@ namespace slagtool
 
             for(int loop = 0; loop<=LOOPMAX; loop++)
             {
-                if (loop == LOOPMAX)
-                    sys.error("Analyze LoopMax:1"); 
-                if (vp.Update())
+                if (loop == LOOPMAX) sys.error("Analyze LoopMax:1"); 
+
+                vp.Update();
+
+                if (vp.IsDone())
                 {
                     dst = vp.GetResult();
                     break;
@@ -44,6 +46,96 @@ namespace slagtool
         }
 
         #region 優先要素抽出
+#if !try
+        public class ValProvider : StateManager
+        {
+            List<YVALUE> m_target;
+
+            public void Init(List<YVALUE> org)
+            {
+                m_target = org;
+                Goto(S_FIND_DEEPEST_BRACKETS);
+            }
+            public List<YVALUE> GetResult()
+            {
+                return m_target;
+            }
+            public bool IsDone()
+            {
+                return Check(S_END);
+            }
+
+            //state
+
+            List<YVALUE>  m_subtarget;
+                          
+            int           m_brackets_open_index;
+            int           m_brackets_close_index;
+                          
+            TokenProvider m_tp;
+
+            // 対象の括弧を検索
+            void S_FIND_DEEPEST_BRACKETS(bool bFirst)
+            {
+                if (bFirst)
+                {
+                    var b = set_start_end(m_target,out m_brackets_open_index, out m_brackets_close_index);
+                    if (!b)
+                    {
+                        Goto(S_END);
+                    }
+                    else
+                    {
+                        m_subtarget = extruct_list(m_target,m_brackets_open_index,m_brackets_close_index);
+                        if (m_brackets_open_index + 1 == m_brackets_close_index)
+                        {
+                            Goto(S_CHECK_WITH_BRACKETS);
+                        }
+                        else
+                        {
+                            Goto(S_CHECK_INSIDE_BRACKETS);
+                        }
+                    }
+                }
+            }
+
+            // 括弧内を分割子で分けられた要素ごとに変換
+            void S_CHECK_INSIDE_BRACKETS(bool bFirst)
+            {
+                if (bFirst)
+                { 
+                    m_tp = new TokenProvider();
+                    m_tp.Init(m_subtarget,1,m_subtarget.Count-2);
+                }
+                else
+                {
+                    var bDone = m_tp.Update();
+                    if (bDone)
+                    {
+                        var result = m_tp.GetResult();
+                        m_tp = null;
+
+                        replace_list(ref m_subtarget,1,m_subtarget.Count-2,result);
+                        Goto(S_CHECK_WITH_BRACKETS);
+                    }
+                }
+            }
+
+            // 括弧を含めて変換
+            void S_CHECK_WITH_BRACKETS(bool bFirst)
+            {
+                if (bFirst)
+                { 
+                    _analyze(ref m_subtarget);
+                    replace_list(ref m_target,m_brackets_open_index,m_brackets_close_index,m_subtarget);
+                    Goto(S_FIND_DEEPEST_BRACKETS);
+                }
+            }
+            void S_END(bool bFirst)
+            {
+            }
+        }
+#else
         public class ValProvider
         {
             public enum MODE
@@ -73,7 +165,8 @@ namespace slagtool
             {
                 return m_target;
             }
-            public bool Update() // return true, if done.
+            public void Update() { }
+            public bool IsDone() // return true, if done.
             {
                 switch(m_mode)
                 {
@@ -140,8 +233,8 @@ namespace slagtool
                 replace_list(ref m_target,m_brackets_open_index,m_brackets_close_index,m_subtarget);
                 m_mode = MODE.FIND_DEEPEST_BRACKETS;
             }
-
         }
+#endif
 
         public class TokenProvider
         {
@@ -207,9 +300,9 @@ namespace slagtool
                 return m_target;
             }
         }
-        #endregion 優先要素抽出
+#endregion 優先要素抽出
 
-        #region  解析
+#region  解析
         private static bool _analyze(ref List<YVALUE> dst)
         {
             if (slagtool.sys.DEBUGLEVEL>=2)
@@ -375,9 +468,9 @@ namespace slagtool
             return true;
         }
 
-        #endregion
+#endregion
 
-        #region tool for this class
+#region tool for this class
         private static bool set_start_end(List<YVALUE> l , out int start, out int end)  // valid return ture;
         {
             start = -1;
@@ -465,6 +558,6 @@ namespace slagtool
             
             return result;
         }
-        #endregion
+#endregion
     }
 }

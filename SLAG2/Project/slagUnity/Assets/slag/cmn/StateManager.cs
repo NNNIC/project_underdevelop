@@ -26,4 +26,10 @@ public class StateManager {
             m_curstate(false);
         }
     }
+
+    //確認
+    public bool Check(Action<bool> state)
+    {
+        return m_curstate == state;
+    }
 }
