@@ -18,8 +18,12 @@ namespace slagtool
 {
     public class lexPrimitive
     {
-        //計算記号  2文字を先に。次は除外 =, :, ?
-        public static string[] operators = {"++","--","==","!=","<=",">=","+=","-=","*=","/=","%=","&&","||","=","+","-","*","/","%",">","<","!",",","."}; //未サポート含む
+        //計算記号  2文字を先に。
+        public static string[] operators_all       = {"++","--","==","!=","<=",">=","+=","-=","*=","/=","%=","&&","||","=","+","-","*","/","%",">","<","!",",",".",":","?"}; //未サポート含む
+        public static string[] operators_prefix    = {"++","--","+","-","!","~" };
+        public static string[] operators_postfix   = {"++","--"};
+        public static string[] operators_ternay    = {"?",":"};
+        public static string[] operators_binary    = {"==","!=","<=",">=","+=","-=","*=","/=","%=","&&","||","=","+","-","*","/","%",">","<",",","." };
 
         string m_src;
         string[] m_lines;
@@ -239,7 +243,7 @@ namespace slagtool
             }
             
             //計算記号  2文字を先に。 "="は除外
-            string[] ops = lexPrimitive.operators;//{"++","--","==","!=","<=",">=","+=","-=","*=","/=","%=","&&","||","=","+","-","*","/","%",">","<","!",",","."}; //未サポート含む
+            string[] ops = lexPrimitive.operators_all;//{"++","--","==","!=","<=",">=","+=","-=","*=","/=","%=","&&","||","=","+","-","*","/","%",">","<","!",",","."}; //未サポート含む
             foreach(var op in ops)
             {
                 if (op.Length==2 && ls.Length>=2)
