@@ -79,6 +79,7 @@
     <Compile Include="Assets\slag\slagtool\analyze\syntax\lex.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\ydef.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\yanalyzer.cs" />
+    <Compile Include="Assets\slag\slagtool\analyze\yanalyzer_tokenprovider.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\ydef_api.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\ydef_debug.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\ydef_do.cs" />
