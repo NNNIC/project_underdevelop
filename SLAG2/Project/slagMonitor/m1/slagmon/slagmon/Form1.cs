@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace slagmon
 {
@@ -82,6 +83,8 @@ namespace slagmon
                 {
                     textBox1_log.AppendText("Send Command : " + cmd + Environment.NewLine);
                     m_pipe.Write(cmd, "unity");
+
+                    _loadScriptWhenCmdHas(cmd);
                 }
 
             }
@@ -147,5 +150,21 @@ namespace slagmon
         {
             textBox1_log.Clear();
         }
+
+        //---
+        private void _loadScriptWhenCmdHas(string cmd)
+        {
+            if (string.IsNullOrWhiteSpace(cmd)) return;
+            var tokens = cmd.Split(' ');
+            if (tokens[0].Trim().ToUpper()=="LOAD" && tokens.Length>=2)
+            {
+                var file = @"N:\Project\test\" + tokens[1].Trim();
+                if (File.Exists(file))
+                {
+                    textBox2_src.Text = File.ReadAllText(file);
+                }              
+            }
+        }
+
     }
 }

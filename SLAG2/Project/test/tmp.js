@@ -2,5 +2,6 @@
 // Tmp
 //
 
-var x = 1 + -2 + 56 * 3;
-PrintLn(x);
+var s = 123 * true ? 10:3;
+print(s);
+

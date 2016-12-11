@@ -47,13 +47,62 @@ namespace slagtool
 
         #region 優先要素抽出
 #if !try
+        //ValProviderで使うステートマシン
+        public class StateManager {
+            Action<bool> m_curstate;
+            Action<bool> m_nextstate;
+    
+            //リクエスト
+            public void Goto(Action<bool> func) 
+            { 
+                m_nextstate = func;  
+            }
+    
+            //更新
+            public void Update()
+            {
+                if (m_nextstate!=null)
+                {
+                    m_curstate = m_nextstate;
+                    m_nextstate = null;
+                    m_curstate(true);
+                }
+                else
+                {
+                    m_curstate(false);
+                }
+            }
+
+            //確認
+            public bool Check(Action<bool> state)
+            {
+                return m_curstate == state;
+            }
+        }
+
+        //要素抽出
         public class ValProvider : StateManager
         {
             List<YVALUE> m_target;
 
+            List<YVALUE>  m_subtarget;
+                          
+            int           m_brackets_open_index;
+            int           m_brackets_close_index;
+                          
+            TokenProvider         m_tp;
+
             public void Init(List<YVALUE> org)
             {
-                m_target = org;
+                m_target    = org;
+                m_subtarget = null;
+
+                m_brackets_open_index  = -1;
+                m_brackets_close_index = -1;
+
+                m_tp                   = new TokenProvider();
+                m_tp.Init();
+
                 Goto(S_FIND_DEEPEST_BRACKETS);
             }
             public List<YVALUE> GetResult()
@@ -64,17 +113,6 @@ namespace slagtool
             {
                 return Check(S_END);
             }
-
-            //state
-
-            List<YVALUE>  m_subtarget;
-                          
-            int           m_brackets_open_index;
-            int           m_brackets_close_index;
-                          
-            TokenProvider         m_tp;
-            TokenProvider_prefix  m_tppre;
-            TokenProvider_postfix m_tppost;
 
             // 対象の括弧を検索
             void S_FIND_DEEPEST_BRACKETS(bool bFirst)
@@ -106,8 +144,7 @@ namespace slagtool
             {
                 if (bFirst)
                 { 
-                    m_tp = new TokenProvider();
-                    m_tp.Init(m_subtarget,1,m_subtarget.Count-2);
+                    m_tp.Start(m_subtarget,1,m_subtarget.Count-2,TokenProvideMode.ALL_VALUES);
                 }
                 else
                 {
@@ -115,10 +152,28 @@ namespace slagtool
                     if (bDone)
                     {
                         var result = m_tp.GetResult();
-                        m_tp = null;
 
                         replace_list(ref m_subtarget,1,m_subtarget.Count-2,result);
-                        //Goto(S_CHECK_INSIDE_BRACKETS_2);
+                        Goto(S_CHECK_INSIDE_BRACKETS__POINTERVAL);
+                    }
+                }
+            }
+
+            // 括弧内のポインタ変数要素を変換
+            void S_CHECK_INSIDE_BRACKETS__POINTERVAL(bool bFirst)
+            {
+                if (bFirst)
+                {
+                    m_tp.Start(m_subtarget,1,m_subtarget.Count-2,TokenProvideMode.POINTER_VALUES);
+                }
+                else
+                {
+                    var bDone = m_tp.Update();
+                    if (bDone)
+                    {
+                        var result = m_tp.GetResult();
+
+                        replace_list(ref m_subtarget,1,m_subtarget.Count-2,result);
                         Goto(S_CHECK_INSIDE_BRACKETS__PREFIX);
                     }
                 }
@@ -129,16 +184,14 @@ namespace slagtool
             {
                 if (bFirst)
                 { 
-                    m_tppre = new TokenProvider_prefix();
-                    m_tppre.Init(m_subtarget,1,m_subtarget.Count-2);
+                    m_tp.Start(m_subtarget,1,m_subtarget.Count-2,TokenProvideMode.PREFIX_VALUES);
                 }
                 else
                 {
-                    var bDone = m_tppre.Update();
+                    var bDone = m_tp.Update();
                     if (bDone)
                     {
-                        var result = m_tppre.GetResult();
-                        m_tppre = null;
+                        var result = m_tp.GetResult();
 
                         replace_list(ref m_subtarget,1,m_subtarget.Count-2,result);
                         Goto(S_CHECK_INSIDE_BRACKETS__POSTFIX);
@@ -151,16 +204,34 @@ namespace slagtool
             {
                 if (bFirst)
                 { 
-                    m_tppost = new TokenProvider_postfix();
-                    m_tppost.Init(m_subtarget,1,m_subtarget.Count-2);
+                    m_tp.Start(m_subtarget,1,m_subtarget.Count-2,TokenProvideMode.POSTFIX_VALUES);
                 }
                 else
                 {
-                    var bDone = m_tppost.Update();
+                    var bDone = m_tp.Update();
                     if (bDone)
                     {
-                        var result = m_tppost.GetResult();
-                        m_tppost = null;
+                        var result = m_tp.GetResult();
+
+                        replace_list(ref m_subtarget,1,m_subtarget.Count-2,result);
+                        Goto(S_CHECK_INSIDE_BRACKETS__TERNARY);
+                    }
+                }
+            }
+
+            // 括弧内の３項演算子を変換
+            void S_CHECK_INSIDE_BRACKETS__TERNARY(bool bFirst)
+            {
+                if (bFirst)
+                {
+                    m_tp.Start(m_subtarget,1,m_subtarget.Count-2,TokenProvideMode.TERNARY_VALUES);
+                }
+                else
+                {
+                    var bDone = m_tp.Update();
+                    if (bDone)
+                    {
+                        var result = m_tp.GetResult();
 
                         replace_list(ref m_subtarget,1,m_subtarget.Count-2,result);
                         Goto(S_CHECK_WITH_BRACKETS);
