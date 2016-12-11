@@ -31,6 +31,7 @@ namespace slgctl
 
             m_slag = null;
 
+#if !NOT_USE_EXCEPTION
             try
             {
                 m_slag = new slagtool.slag();
@@ -44,6 +45,11 @@ namespace slgctl
                 wk.SendWriteLine("---------------");
                 return null;
             }
+#else
+                m_slag = new slagtool.slag();
+                m_slag.LoadFile(file);
+                wk.SendWriteLine("Loaded.");
+#endif
 
             return m_slag;
         }
@@ -55,7 +61,11 @@ namespace slgctl
             try
             {
                 UpdateClear();
+                var sw = new System.Diagnostics.Stopwatch();
+                sw.Start();
                 m_slag.Run();
+                sw.Stop();
+                wk.SendWriteLine("! The program used " + ((float)sw.ElapsedMilliseconds / 1000f).ToString("F3") + "sec !");
             }
             catch (SystemException e)
             {

@@ -58,6 +58,8 @@ op expr op expr op op expr op
 ４．後置演算子要素を解析
 ５．三項演算子要素を解析
 
+RELEASE でエクセプション回避いれた。
+
   
   
 

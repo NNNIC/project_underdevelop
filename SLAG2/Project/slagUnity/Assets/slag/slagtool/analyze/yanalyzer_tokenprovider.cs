@@ -16,6 +16,7 @@ using number = System.Double;
     ３. 前置演算子に対して
     ４．後置演算子に対して
     ５．３項演算子に対して
+    ６．SWITCHのCASE および DEFAULTに対して
 */
 namespace slagtool
 {
@@ -28,6 +29,7 @@ namespace slagtool
             PREFIX_VALUES,
             POSTFIX_VALUES,
             TERNARY_VALUES,
+            CASE_VALUES,
         }
 
         public class TokenProvider
@@ -79,6 +81,7 @@ namespace slagtool
                     case TokenProvideMode.PREFIX_VALUES:  return _update_prefix_values();
                     case TokenProvideMode.POSTFIX_VALUES: return _update_postfix_values();
                     case TokenProvideMode.TERNARY_VALUES: return _update_ternary_values();
+                    case TokenProvideMode.CASE_VALUES:    return _update_case_values();
                 }
                 return false;
             }
@@ -142,7 +145,7 @@ namespace slagtool
                     {
                         if (m_sample_start==null)
                         {
-                            m_sample_start = -1;
+                            m_sample_start = i-1;
                         }
                         m_sample_end = i + 1;
                     }
@@ -283,6 +286,52 @@ namespace slagtool
                         
                         break;   
                     }
+                }
+
+                if (m_sample_start!=null)
+                {
+                    m_subtarget = new List<YVALUE>();
+                    for(int j = (int)m_sample_start; j<= (int)m_sample_end; j++) m_subtarget.Add(m_target[j]);
+                    _analyze(ref m_subtarget);
+                    replace_list(ref m_target,(int)m_sample_start,(int)m_sample_end, m_subtarget);
+                    return false;
+                }
+
+                return true;
+            }
+            bool _update_case_values()
+            {
+                m_subtarget   = null;
+                m_sample_start= null;
+                m_sample_end  = null;
+
+                for(int i = 0; i<m_target.Count; i++)
+                {
+                    if (
+                        isStringOp(i,"CASE")
+                        &&
+                        isExpr(i+1)
+                        &&
+                        isStringOp(i+2,":")
+                        )
+                    {
+                        m_sample_start = i;
+                        m_sample_end   = i + 2;
+                        
+                        break;   
+                    }
+                    if (
+                        isStringOp(i,"DEFAULT")
+                        &&
+                        isStringOp(i+2,":")
+                        )
+                    {
+                        m_sample_start = i;
+                        m_sample_end   = i + 1;
+                        
+                        break;   
+                    }
+
                 }
 
                 if (m_sample_start!=null)

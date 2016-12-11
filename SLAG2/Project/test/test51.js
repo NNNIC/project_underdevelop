@@ -10,13 +10,18 @@ HookUpdate("Update");
 function Update()
 {
     UnityEngine.Debug.Log(Time.time);
-
     cur += speed / 10;
     go.transform.localEulerAngles = new UnityEngine.Vector3(cur, 0, 0);
 
-    var bUp = UnityEngine.Input.GetKey(UnityEngine.KeyCode.UpArrow);
-    var bDwn = UnityEngine.Input.GetKey(UnityEngine.KeyCode.DownArrow);
     
+    var bUp = UnityEngine.Input.GetKey(UnityEngine.KeyCode.UpArrow);
+    
+    var bDwn = UnityEngine.Input.GetKey(UnityEngine.KeyCode.DownArrow);
+
+
     if (bUp)  { speed++; Println(speed); }
+    
     if (bDwn) { speed--; Println(speed); }
+
 }
+
