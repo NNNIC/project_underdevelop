@@ -47,9 +47,13 @@ public class FilePipe
     string m_serverfile { get{ return get_filename(m_name,m_port); } }
 
     bool m_force_exit;
+    bool m_bEnd;
 
     public FilePipe(string myname, int myport=2000)
     {
+        m_force_exit = false;
+        m_bEnd       = false;
+
         m_name = myname;
         m_port = myport;
     }
@@ -67,9 +71,26 @@ public class FilePipe
     {
         m_log.Update();
     }
-    public void Tenminate()
+    public void Terminate()
     {
         m_force_exit = true;
+    }
+    public bool IsEnd()
+    {
+        if (m_bEnd && m_thread!=null)
+        {
+            if (m_log!=null)
+            { 
+                m_log.WriteLine("サーバ終了");
+            }
+
+            m_thread.Abort();
+            m_thread.Join();
+            m_thread = null;
+            return false;
+        }
+
+        return  m_bEnd;
     }
 
     public string Read()
@@ -98,42 +119,48 @@ public class FilePipe
         var file = m_serverfile;
         
         while (File.Exists(file)) {
-            if (m_force_exit) return;
+            if (m_force_exit) break;
 
             try { File.Delete(file); } catch { }
             Thread.Sleep(10);
         }
 
-        using (var fs = File.Open(file, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite))
-        {
-            m_log.WriteLine("サーバファイル:" + file);
+        if (!m_force_exit)
+        { 
+            using (var fs = File.Open(file, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite))
+            {
+                m_log.WriteLine("サーバファイル:" + file);
 
-            var data = new List<byte>();
-            while(true)
-            { 
-                if (m_force_exit) return;
+                var data = new List<byte>();
+                while(true)
+                { 
+                    if (m_force_exit)
+                        break;
 
-                try { 
-                    byte[] temp = null;
-                    var templen = fs.Length - fs.Position;
-                    if (templen <= 0)
+                    try { 
+                        byte[] temp = null;
+                        var templen = fs.Length - fs.Position;
+                        if (templen <= 0)
+                        {
+                            Thread.Sleep(33);
+                            continue;
+                        }
+                        temp = new byte[templen];
+                        fs.Read(temp,0,(int)templen);
+                        data.AddRange(temp);
+                        if (data.Contains((byte)'\n'))
+                        {
+                            _accumelate(ref data);
+                        }
+                    } catch (SystemException e)
                     {
-                        Thread.Sleep(33);
-                        continue;
+                        m_log.WriteLine("サーバーファイルエラー:" + e.Message);
                     }
-                    temp = new byte[templen];
-                    fs.Read(temp,0,(int)templen); 
-                    data.AddRange(temp);
-                    if (data.Contains((byte)'\n'))
-                    {
-                        _accumelate(ref data);
-                    }
-                } catch (SystemException e)
-                {
-                    m_log.WriteLine("サーバーファイルエラー:" + e.Message);
-                }
-           }
+               }
+            }
         }
+
+        m_bEnd = true;
     }
     void _accumelate(ref List<byte> data)
     {

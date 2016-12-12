@@ -158,13 +158,24 @@ namespace slagmon
             var tokens = cmd.Split(' ');
             if (tokens[0].Trim().ToUpper()=="LOAD" && tokens.Length>=2)
             {
-                var file = @"N:\Project\test\" + tokens[1].Trim();
-                if (File.Exists(file))
+                var filename = tokens[1].Trim();
+                var path = @"N:\Project\test\" + filename;
+                if (File.Exists(path))
                 {
-                    textBox2_src.Text = File.ReadAllText(file);
+                    textBox2_src.Text = File.ReadAllText(path);
+                    label1_filename.Text = filename;
                 }              
             }
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try { 
+                System.Diagnostics.Process.Start("notepad.exe",   @"N:\Project\test\" + label1_filename.Text);
+            } catch
+            {
+                ;
+            }
+        }
     }
 }

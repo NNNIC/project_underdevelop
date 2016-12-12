@@ -26,6 +26,7 @@ namespace slgctl
             DEBUG,  //Debug [0|1|2]
             HELP, 
             QUIT,   //Quit and Close          --- 実行中OK
+            RESET,  //Same as Quit
         }
 
         public static string m_workDir = @"N:\Project\test";
@@ -46,7 +47,10 @@ namespace slgctl
                 case COMMAND.RESUME:  break;
                 case COMMAND.TEST:    cmd_sub.Test();           break;
                 case COMMAND.DEBUG:   cmd_sub.Debug(p1);        break;
+
+                case COMMAND.RESET:
                 case COMMAND.QUIT:    cmd_sub.Reset();          break;
+
                 case COMMAND.HELP:    cmd_sub.Help();           break;
                 default: wk.SendWriteLine("ignore:" + cmdbuff); break;
             }

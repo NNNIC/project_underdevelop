@@ -15,7 +15,7 @@ namespace slgctl {
             m_tmp += s;
             var save = m_tmp;
             m_tmp = null;
-            slgctl_main.m_netcomm.SendMsg(save);
+            if (slgctl_main.m_netcomm!=null) slgctl_main.m_netcomm.SendMsg(save);
             Debug.Log(s);
         }
 

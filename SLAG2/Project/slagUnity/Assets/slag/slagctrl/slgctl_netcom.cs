@@ -19,11 +19,14 @@ namespace slgctl
         object        m_mtx;
         string        m_cmd;
 
-        static netcomm V;
+        bool          m_bReqAbort;
+        bool          m_bEnd;
 
         public void Start()
         {
-            V = this;
+            m_bReqAbort = false;
+            m_bEnd      = false;
+
             m_mtx = new object();
 
             m_pipe   = new FilePipe(m_myname);
@@ -33,7 +36,38 @@ namespace slgctl
             m_thread = new Thread(Work);
             m_thread.Start();
         }
-        
+
+        public void Terminate()
+        {
+            if (m_pipe!=null)
+            {
+                m_pipe.Terminate();
+            }
+        }
+
+        public bool IsEnd()
+        {
+            if (m_pipe!=null)
+            {
+                if (m_pipe.IsEnd() && m_log.Count==0)
+                {
+                    m_bReqAbort = true;
+                    m_pipe = null;
+                }
+                return false;
+            }
+
+            if (m_bEnd && m_thread!=null)
+            {
+                m_thread.Abort();
+                m_thread.Join();
+                m_thread = null;
+                return false;
+            }
+
+            return m_bEnd;
+        }
+
         private void Work()
         {
             while(true)
@@ -49,7 +83,9 @@ namespace slgctl
                 { 
                     Thread.Sleep(33);
                 }
+                if (m_bReqAbort) break;
             }
+            m_bEnd = true;
         }
 
         private void record(string cmd)
@@ -75,12 +111,17 @@ namespace slgctl
             {
                 while(m_log.Count>0)
                 {
+                    if (m_bReqAbort) break;
+
                     if (s!=null) s+=Environment.NewLine;
                     s+=m_log.Dequeue();
                 }
             }
-            if (s!=null) m_pipe.Write(s,m_toname);
-            m_pipe.Update();
+            if (!m_bReqAbort)
+            { 
+                if (s!=null) m_pipe.Write(s,m_toname);
+                m_pipe.Update();
+            }
         }
         #endregion
 
@@ -88,14 +129,13 @@ namespace slgctl
         public string GetCmd()
         {
             string s = null;
-            lock(V.m_mtx)
+            lock(m_mtx)
             {
-                s= V.m_cmd;
-                V.m_cmd = null;
+                s= m_cmd;
+                m_cmd = null;
             }
             return s;
         }
         #endregion
-
     }
 }

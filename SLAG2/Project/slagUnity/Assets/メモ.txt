@@ -60,7 +60,6 @@ op expr op expr op op expr op
 
 RELEASE でエクセプション回避いれた。
 
-  
-  
+終了ができない？
 
 

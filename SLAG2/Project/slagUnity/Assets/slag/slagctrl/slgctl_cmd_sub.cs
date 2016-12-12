@@ -78,7 +78,8 @@ namespace slgctl
         public static void Reset()
         {
             m_updateFunc = null;
-            UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);// Application.loadedLevelName;
+            UnityEngine.GameObject.Find("slgctl_main").SendMessage("Reset");
+            //UnityEngine.SceneManagement.SceneManager.LoadScene("reset");// Application.loadedLevelName;
         }
 
         public static void Test()
