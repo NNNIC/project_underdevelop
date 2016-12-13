@@ -16,6 +16,9 @@ public class slgctl_main : MonoBehaviour {
         m_bReqAbort = false;
         m_bEnd      = false;
 
+        netcomm.Log = (s)=>Debug.Log(s);
+        FilePipe.Log= (s)=>Debug.Log(s);
+
         m_netcomm = new netcomm();
         m_netcomm.Start();
 
@@ -53,7 +56,7 @@ public class slgctl_main : MonoBehaviour {
     IEnumerator _reset_co()
     {
 
-        Debug.Log("Reset!!");
+        Debug.Log("RESET!");
 
         if (m_netcomm!=null)
         {
@@ -62,13 +65,11 @@ public class slgctl_main : MonoBehaviour {
             m_netcomm = null;
         }
 
-        Debug.Log(".");
         m_bReqAbort = true;
 
         while(!m_bEnd) yield return null;
-        Debug.Log("..");
 
-        SceneManager.LoadScene("reset");
+        SceneManager.LoadScene("remotereset");
     }
 
 }

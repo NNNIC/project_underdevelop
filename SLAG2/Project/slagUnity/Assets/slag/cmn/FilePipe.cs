@@ -36,11 +36,13 @@ using System.IO;
 /// </summary>
 public class FilePipe
 {
+    public static Action<string> Log = (s)=> { System.Diagnostics.Debug.WriteLine(s); };
+
+
     string m_name; //自名            
     int    m_port; //自ポート  ・・・TcpPipeとの互換性
 
     Thread m_thread;
-    log    m_log;
 
     Queue<string> m_req_list;
 
@@ -61,15 +63,11 @@ public class FilePipe
     public void Start(Action<string> logfunc=null)
     {
         m_thread = new Thread(server);
+        m_thread.IsBackground = true;
+        m_thread.Priority = ThreadPriority.AboveNormal;
         m_thread.Start();
 
-        m_log = new log(logfunc);
-
         m_req_list = new Queue<string>();
-    }
-    public void Update()
-    {
-        m_log.Update();
     }
     public void Terminate()
     {
@@ -79,11 +77,6 @@ public class FilePipe
     {
         if (m_bEnd && m_thread!=null)
         {
-            if (m_log!=null)
-            { 
-                m_log.WriteLine("サーバ終了");
-            }
-
             m_thread.Abort();
             m_thread.Join();
             m_thread = null;
@@ -114,7 +107,7 @@ public class FilePipe
     #region サーバー
     private void server()
     {
-        m_log.WriteLine("サーバ開始");
+        Log("PIPEサーバ開始");
 
         var file = m_serverfile;
         
@@ -129,7 +122,7 @@ public class FilePipe
         { 
             using (var fs = File.Open(file, FileMode.CreateNew, FileAccess.ReadWrite, FileShare.ReadWrite))
             {
-                m_log.WriteLine("サーバファイル:" + file);
+                Log("PIPEサーバファイル:" + file);
 
                 var data = new List<byte>();
                 while(true)
@@ -142,7 +135,7 @@ public class FilePipe
                         var templen = fs.Length - fs.Position;
                         if (templen <= 0)
                         {
-                            Thread.Sleep(33);
+                            Thread.Sleep(100);
                             continue;
                         }
                         temp = new byte[templen];
@@ -154,11 +147,15 @@ public class FilePipe
                         }
                     } catch (SystemException e)
                     {
-                        m_log.WriteLine("サーバーファイルエラー:" + e.Message);
+                        Log("PIPEサーバーファイルエラー:" + e.Message);
+                        System.Diagnostics.Debug.WriteLine("FilePipe Exception:"+e.Message);
+                        break;
                     }
-               }
+                }
+                fs.Close();
             }
         }
+        Log("PIPEサーバ終了");
 
         m_bEnd = true;
     }
@@ -181,7 +178,7 @@ public class FilePipe
     {
         if (string.IsNullOrEmpty(msg))
         {
-            m_log.WriteLine("メッセージが設定されていません");
+            Log("メッセージが設定されていません");
             return;
         }
 
@@ -190,7 +187,7 @@ public class FilePipe
         var file = get_filename(to_name,to_port);
         if (!File.Exists(file))
         {
-            m_log.WriteLine("接続先が存在しません:" + to_name +":" + to_port);
+            Log("接続先が存在しません:" + to_name +":" + to_port);
             return;
         }
         var data = Encoding.UTF8.GetBytes(msg);
@@ -207,41 +204,5 @@ public class FilePipe
     private string get_filename(string name, int port)
     {
         return Path.Combine(Path.GetTempPath(),"~filepipe_"+name+"_"+port+".txt"); 
-    }
-
-    // --- For logging class
-    public class log
-    {
-        Action<string> m_logFunc;
-
-        object m_mutex;
-        string m_tmp; //途中
-        string m_out; //出力用
-
-        public log(Action<string> logfunc) { m_mutex = new object(); m_logFunc = logfunc;}
-        public void Update()
-        {
-            lock(m_mutex)
-            {
-                if (m_out!=null)
-                {
-                    if (m_logFunc!=null) m_logFunc(m_out);
-                    m_out = null;
-                }
-            }
-        }
-        public void Write(string s)
-        {
-            m_tmp +=s;
-        }
-        public void WriteLine(string s=null)
-        {
-            m_tmp += s + Environment.NewLine;
-            lock(m_mutex)
-            {
-                m_out += m_tmp;
-                m_tmp = null;
-            }
-        }
     }
 }

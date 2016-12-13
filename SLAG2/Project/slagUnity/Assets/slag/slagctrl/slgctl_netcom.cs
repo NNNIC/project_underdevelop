@@ -8,13 +8,15 @@ namespace slgctl
 {
     public class netcomm
     {
+        public static Action<string> Log = (s)=>{ System.Diagnostics.Debug.WriteLine(s);  };
+
         string m_myname  = "unity";
 
         string m_toname  = "mon";
 
         FilePipe       m_pipe;
-        Queue<string> m_log;
-        Thread        m_thread;
+        Queue<string>  m_sendlog;
+        Thread         m_thread;
         
         object        m_mtx;
         string        m_cmd;
@@ -24,17 +26,25 @@ namespace slgctl
 
         public void Start()
         {
+            //Log("netcomm:start");
+
             m_bReqAbort = false;
             m_bEnd      = false;
 
             m_mtx = new object();
+            //Log("netcomm:start+1");
 
             m_pipe   = new FilePipe(m_myname);
             m_pipe.Start(wk.Log);
+            //Log("netcomm:start+2");
 
-            m_log    = new Queue<string>();
+            m_sendlog   = new Queue<string>();
             m_thread = new Thread(Work);
+            m_thread.IsBackground = true;
+            m_thread.Priority = ThreadPriority.AboveNormal;
             m_thread.Start();
+
+            //Log("netcomm:start+3");
         }
 
         public void Terminate()
@@ -49,7 +59,7 @@ namespace slgctl
         {
             if (m_pipe!=null)
             {
-                if (m_pipe.IsEnd() && m_log.Count==0)
+                if (m_pipe.IsEnd())
                 {
                     m_bReqAbort = true;
                     m_pipe = null;
@@ -59,7 +69,6 @@ namespace slgctl
 
             if (m_bEnd && m_thread!=null)
             {
-                m_thread.Abort();
                 m_thread.Join();
                 m_thread = null;
                 return false;
@@ -70,21 +79,28 @@ namespace slgctl
 
         private void Work()
         {
-            while(true)
-            {
-                _update();
+            //Log("nectcomm:Work.START");
 
-                var cmd = m_pipe.Read();
-                if (cmd!=null)
-                { 
-                    record(cmd);
+            try { 
+                while(true)
+                {
+                    _update();
+
+                    var cmd = m_pipe.Read();
+                    if (cmd!=null)
+                    { 
+                        record(cmd);
+                    }
+                    else
+                    { 
+                        Thread.Sleep(33);
+                    }
+                    if (m_bReqAbort) break;
                 }
-                else
-                { 
-                    Thread.Sleep(33);
-                }
-                if (m_bReqAbort) break;
             }
+            catch (SystemException e) { Log(e.Message);   }
+
+            //Log("nectcomm:Work.END");
             m_bEnd = true;
         }
 
@@ -99,28 +115,28 @@ namespace slgctl
         #region ログ
         public void SendMsg(string s)
         {
-            lock(m_log)
+            Log(s);
+            lock(m_sendlog)
             {
-                m_log.Enqueue(s);
+                m_sendlog.Enqueue(s);
             }
         }
         private void _update()
         {
             string s = null;
-            lock(m_log)
+            lock(m_sendlog)
             {
-                while(m_log.Count>0)
+                while(m_sendlog.Count>0)
                 {
                     if (m_bReqAbort) break;
 
                     if (s!=null) s+=Environment.NewLine;
-                    s+=m_log.Dequeue();
+                    s+=m_sendlog.Dequeue();
                 }
             }
             if (!m_bReqAbort)
             { 
                 if (s!=null) m_pipe.Write(s,m_toname);
-                m_pipe.Update();
             }
         }
         #endregion
