@@ -2,6 +2,8 @@
 // Tmp
 //
 
-var s = UnityEngine.Time.time;
-print(s);
+var o = new UnityEngine.GameObject();
+UnityEngine.Object.DestroyImmediate(o);
+
+
 

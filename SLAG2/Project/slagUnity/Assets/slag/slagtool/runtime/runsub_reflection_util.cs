@@ -62,7 +62,7 @@ namespace slagtool.runtime
                 return find_m.Invoke(obj,parameters);
             }
 
-            return null;
+            throw new SystemException("Cannot find method : " + type + "." + name + "(API is none or parameter typs not match.)");
         }
         private static bool _isMatchTypes(Type[] paramtypes, ParameterInfo[] pis)
         {
@@ -83,7 +83,9 @@ namespace slagtool.runtime
                 var f = pis[i].ParameterType;
 
                 if (p==null && !f.IsValueType) continue; //Null許容はＯＫ
-                if (p!=f) return false;
+                if (p==f) continue;
+                if (p.IsSubclassOf(f)) continue; //ベース一致
+                return false;
             }
             return true;
         }

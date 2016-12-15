@@ -13,11 +13,22 @@ namespace slagmon
 {
     public partial class Form1 : Form
     {
+
+        Queue<string> m_log;
         FilePipe m_pipe;
 
         public Form1()
         {
             InitializeComponent();
+
+            m_log = new Queue<string>();
+
+            FilePipe.Log = (s) => {
+                lock(m_log)
+                {
+                    m_log.Enqueue(s);
+                }
+            };
 
             m_pipe = new FilePipe("mon");
             m_pipe.Start(s=>WriteLog(s));
@@ -45,7 +56,6 @@ namespace slagmon
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            m_pipe.Update();
             for(var loop= 0; loop<5000; loop++)
             { 
                 var s = m_pipe.Read();
@@ -58,6 +68,16 @@ namespace slagmon
                     break;
                 }
             }
+
+            lock(m_log)
+            {
+                while(m_log.Count>0)
+                {
+                    var s = m_log.Dequeue();
+                    textBox1_log.AppendText(s + Environment.NewLine);
+                }
+            }
+
         }
         private void textBox3_input_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -93,32 +113,6 @@ namespace slagmon
 
         private void textBox3_input_KeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.KeyCode == Keys.Enter)
-            //{
-            //    string cmd = null;
-
-            //    var topindex = textBox3_input.GetFirstCharIndexOfCurrentLine();
-            //    var buf = textBox3_input.Text.Substring(topindex);
-            //    if (string.IsNullOrWhiteSpace(buf)) return;
-            //    var endindex = buf.IndexOf('\xa');
-            //    if (endindex < 0)
-            //    {
-            //        cmd = buf.TrimStart('>').TrimEnd();
-            //    }
-            //    else
-            //    {
-            //        cmd = buf.Substring(0, endindex).TrimStart('>').TrimEnd();
-            //    }
-
-            //    if (!string.IsNullOrWhiteSpace(cmd))
-            //    {
-            //        textBox1_log.AppendText("Send Command : " + cmd + Environment.NewLine);
-            //        m_pipe.Write(cmd, "unity");
-            //    }
-
-            //}
-
-
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -143,7 +137,7 @@ namespace slagmon
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
         {
-            m_pipe.Tenminate();
+            m_pipe.Terminate();
         }
 
         private void button1clear_Click(object sender, EventArgs e)

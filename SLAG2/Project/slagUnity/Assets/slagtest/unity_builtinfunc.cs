@@ -122,6 +122,54 @@ public class unity_builtinfunc {
         return null;
     }
 
+    public static object F_SetStartCall(bool bHelp, object[] ol, StateBuffer sb)
+    {
+        if (bHelp)
+        {
+            return "Set Start Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetStartCall(a,\"StartCall\");  ";
+        }
+
+        kit.check_num_of_args(ol,2);
+        var go = (GameObject)ol[0];
+        var sm = go.GetComponent<slag_monoehaviour>();
+        if (sm==null) sm = go.AddComponent<slag_monoehaviour>();
+        sm.m_startfunc = kit.get_string_at(ol,1);
+        
+        return null;
+    }
+    public static object F_SetUpdateCall(bool bHelp, object[] ol, StateBuffer sb)
+    {
+        if (bHelp)
+        {
+            return "Set Update Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetUpdateCall(a,\"UpdateCall\");  ";
+        }
+
+        kit.check_num_of_args(ol,2);
+        var go = (GameObject)ol[0];
+        var sm = go.GetComponent<slag_monoehaviour>();
+        if (sm==null) sm = go.AddComponent<slag_monoehaviour>();
+        sm.m_updatefunc = kit.get_string_at(ol,1);
+        
+        return null;
+    }
+    public static object F_SetOnDestroyCall(bool bHelp, object[] ol, StateBuffer sb)
+    {
+        if (bHelp)
+        {
+            return "Set OnDestroy Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetOnDestroyCall(a,\"OnDestroyCall\");  ";
+        }
+
+        kit.check_num_of_args(ol,2);
+        var go = (GameObject)ol[0];
+        var sm = go.GetComponent<slag_monoehaviour>();
+        if (sm==null) sm = go.AddComponent<slag_monoehaviour>();
+        sm.m_ondestroyfunc = kit.get_string_at(ol,1);
+        
+        return null;
+    }
+
+
+
     #region ステートマシン
     public static object F_StateInit(bool bHelp, object[] ol, StateBuffer sb)
     {

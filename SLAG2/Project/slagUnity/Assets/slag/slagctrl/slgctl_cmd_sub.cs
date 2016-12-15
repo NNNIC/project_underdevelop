@@ -126,10 +126,13 @@ namespace slgctl
                 if (m_slag==null) return;
                 if (m_updateFunc==null) return;
 
+                var s = new System.Diagnostics.Stopwatch();
+                s.Start();
                 foreach (var f in m_updateFunc)
                 {
                     m_slag.CallFunc(f);
                 }
+                s.Stop();
             }
             catch(SystemException e)
             {
