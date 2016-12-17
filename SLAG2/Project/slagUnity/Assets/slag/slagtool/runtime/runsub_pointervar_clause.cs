@@ -402,7 +402,7 @@ namespace slagtool.runtime
         }
 
 #if DOTNENET20
-        private static Type find_typeinfo(string searchname)
+        public static Type find_typeinfo(string searchname)
         {
             Type find_ti = cache_util.GetCache_for_find_typeinfo(searchname);
             if (find_ti!=null) return find_ti;

@@ -3,17 +3,18 @@
 */
 function CreateRectangleGameObject(width,height)
 {
-    var go =  new UnityEngine.GameObject();
-    go.AddComponet("MeshRender");
-    var mf = go.AddComponent("MeshFilter");
+    var go = new UnityEngine.GameObject();
+    go.AddComponent(typeof("UnityEngine.MeshRenderer"));
+    var mf = go.AddComponent(typeof("UnityEngine.MeshFilter"));
     mf.mesh = CreateRectangleMesh(width,height);
+    return go;
 }
 
 function CreateRectangleMesh(width,height)
 {
     var verts   = new UnityEngine.Vector3[4];
     var normals = new UnityEngine.Vector3[4];
-    var uv      = new UnityEngine.Vector2[2];
+    var uv      = new UnityEngine.Vector2[4];
     var tri     = new System.Int32[6];
 
     var hw = width  / 2;
@@ -33,13 +34,13 @@ function CreateRectangleMesh(width,height)
     uv[2] = new UnityEngine.Vector2(0, 1);
     uv[3] = new UnityEngine.Vector2(1, 1);
 
-    tri[0] = 0;
-    tri[1] = 2;
-    tri[2] = 3;
+    tri[0] = CastInt(0);
+    tri[1] = CastInt(2);
+    tri[2] = CastInt(3);
 
-    tri[3] = 0;
-    tri[4] = 3;
-    tri[5] = 1;
+    tri[3] = CastInt(0);
+    tri[4] = CastInt(3);
+    tri[5] = CastInt(1);
 
     var mesh  = new UnityEngine.Mesh();
     mesh.vertices = verts;

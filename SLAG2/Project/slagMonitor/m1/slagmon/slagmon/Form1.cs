@@ -118,6 +118,7 @@ namespace slagmon
         private void Form1_Load(object sender, EventArgs e)
         {
             textBox3_input.AppendText(">");
+            
         }
 
         private void textBox3_input_TextChanged(object sender, EventArgs e)
@@ -170,6 +171,11 @@ namespace slagmon
             {
                 ;
             }
+        }
+
+        private void Form1_Shown(object sender, EventArgs e)
+        {
+            this.textBox3_input.Focus();
         }
     }
 }

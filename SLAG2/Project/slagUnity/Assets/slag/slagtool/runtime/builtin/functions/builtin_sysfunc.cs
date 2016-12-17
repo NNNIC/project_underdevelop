@@ -143,6 +143,20 @@ namespace slagtool.runtime.builtin
             }
             return (number)0;
         }
+        public static object F_Typeof(bool bHelp, object[] ol,StateBuffer sb=null)
+        {
+            if (bHelp)
+            {
+                return "Convert to type";
+            }
+
+            kit.check_num_of_args(ol,1);
+
+            var s = kit.get_string_at(ol,0).ToUpper();
+            var type = slagtool.runtime.runsub_pointervar_clause.find_typeinfo(s);
+
+            return type;
+        }
 #endregion
 
 #region 数値操作
@@ -195,6 +209,15 @@ namespace slagtool.runtime.builtin
             if (bHelp)
             {
                 return "Cast numner to int32";
+            }
+            var x = kit.get_number_at(ol,0);
+            return (System.Int32)x;
+        }
+        public static object F_CastInt(bool bHelp,object[] ol, StateBuffer sb)
+        {
+            if (bHelp)
+            {
+                return "Cast numner to int";
             }
             var x = kit.get_number_at(ol,0);
             return (System.Int32)x;

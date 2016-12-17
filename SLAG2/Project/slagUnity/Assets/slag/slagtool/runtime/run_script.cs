@@ -1194,7 +1194,19 @@ namespace slagtool.runtime
             else if (a.GetType()==typeof(number))
             {
                 var x = (number)a;
-                var y = (number)b;
+                number y = 0;
+                if (typeof(number)==typeof(float))
+                { 
+                    y = (number)Convert.ToSingle(b);
+                }
+                else if (typeof(number)==typeof(double))
+                {
+                    y = (number)Convert.ToDouble(b);
+                }
+                else
+                {
+                    _error("unexpected");
+                }
                 
                 switch(op)
                 {

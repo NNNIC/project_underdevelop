@@ -60,7 +60,16 @@ public class unity_builtinfunc {
         if (ol==null) return "-null-";
 
         Func<object,string> tostr = null;
-        Func<List<object>,string> join = (l)=> {
+        Func<List<object>,string> join_list = (l)=> {
+            string t= null;
+            foreach(var e in l)
+            {
+                if (t!=null) t+=",";
+                t+= tostr(e);
+            }
+            return t;
+        };
+        Func<Array,string> join_array = (l)=> {
             string t= null;
             foreach(var e in l)
             {
@@ -75,7 +84,12 @@ public class unity_builtinfunc {
             if (a.GetType()==typeof(List<object>))
             {
                 var l = (List<object>)a;
-                return "(" + join(l) + ")";
+                return "(" + join_list(l) + ")";
+            }
+            if (a.GetType().IsArray)
+            {
+                var l = (Array)a;
+                return "(" + join_array(l) +")";
             }
             return a.ToString();
         };
