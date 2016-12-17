@@ -20,10 +20,16 @@ namespace slagtool
         //  構文解析は構文の優先順位順に対象データの走査を繰り返す。
         //  走査は括弧（丸括弧、波カッコ）内と区分けした要素を優先的に行う。
         //  
-        const int LOOPMAX = 5000;
+        const int LOOPMAX = 10000;
+
+        static int m_match_count; //文法パターンが一致した回数。この回数が止まるとエラーとする。
+        const int MATCHLIMIT = 100; //m_match_countの停止許容
 
         public static bool Analyze(List<YVALUE> src, out List<YVALUE> dst)
         {
+            int stopmatch_count = 0;
+            int max_stopmatch_count = 0; //計測用
+            m_match_count = 0;
             dst = new List<YVALUE>(src);
 
             var vp = new ValProvider();
@@ -33,6 +39,8 @@ namespace slagtool
             {
                 if (loop == LOOPMAX) sys.error("Analyze LoopMax:1"); 
 
+                var save_match_count = m_match_count; 
+
                 vp.Update();
 
                 if (vp.IsDone())
@@ -40,8 +48,25 @@ namespace slagtool
                     dst = vp.GetResult();
                     break;
                 }
+
+                if (save_match_count == m_match_count)
+                {
+                    if (stopmatch_count++>MATCHLIMIT)
+                    { 
+                        sys.error("ERROR:Someting happend.");
+                    }
+
+                    max_stopmatch_count = Math.Max(stopmatch_count,max_stopmatch_count); //計測
+                }
+                else
+                {
+                    stopmatch_count = 0;
+                }
             }
             vp = null;
+
+            sys.logline("MAX of stopmatch_count=" + max_stopmatch_count);
+
             return true; 
         }
 
@@ -638,12 +663,14 @@ namespace slagtool
                     var syntax = syntax_order[i];
                     var tslist = YDEF.get_syntax_set(syntax);
 
-                    if (slagtool.sys.DEBUGLEVEL==3) Console.WriteLine(syntax[0].ToString());
+                    if (slagtool.sys.DEBUGLEVEL==3) sys.logline(syntax[0].ToString());
 
                     foreach (var ts in tslist)
                     {
                         if (_check_syntax(dst,ts))
                         {
+                            m_match_count++;
+
                             bNeedLoop = true;
                             break;
                         }

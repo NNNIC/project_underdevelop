@@ -151,6 +151,32 @@ namespace slagtool.runtime
             nsb.m_pvitem = item;
             return nsb;
         }
+        public static StateBuffer run_array_var(YVALUE v, StateBuffer sb, string name, int index)
+        {
+            var nsb  = sb;
+            var item = nsb.m_pvitem;
+            var preobj = item.o; 
+            if (preobj == null)
+            {
+                throw new SystemException("unexpected");
+            }
+
+            //var ol = new List<Object>();
+            //ol.Add(index);
+
+            var pretype = preobj.GetType();
+            if (pretype == typeof(Literal))
+            {
+                var literal = (Literal)preobj;
+                item = ExecuteArrayVar(literal.s,name, index ,item);
+                nsb.m_pvitem =item;
+            }
+            else
+            {
+                item = ExecuteArrayVar(preobj,name,index,item); // tbc
+            }
+            return nsb;
+        }
 
         // -- tool for this class
 #if DOTNENET20
@@ -287,6 +313,94 @@ namespace slagtool.runtime
             item.o = reflection_util.ExecuteFunc(o,cur,param.ToArray());
             return item;
         }
+        private static PointervarItem ExecuteArrayVar(string pre, string cur, int index, PointervarItem item)
+        {
+            if (item != null && item.mode == PointervarMode.NEW)
+            {
+                var searchname = (pre + "." + cur).ToUpper();
+                var ti = find_typeinfo(searchname);
+                if (ti != null)
+                {
+                    item.o =  Array.CreateInstance(ti, index);
+                }
+                return item;
+            }
+            throw new SystemException("unexpected");
+        }
+        private static PointervarItem ExecuteArrayVar(object o, string cur, int index, PointervarItem item)
+        {
+            var name = cur.ToUpper();
+            Type type = null;
+            if (o is Type)
+            {
+                type = (Type)o;
+            }
+            object obj = null;
+            if (type!=null)
+            {
+                obj = null;
+            }
+            else
+            {
+                type = o.GetType();
+                obj = o;
+            }
+            var mem1 = type.GetDefaultMembers();
+            var mem2 = type.GetMembers();
+            var find_mi = Array.Find(type.GetMembers(),mi=>mi.Name.ToUpper()==name);
+            if (find_mi!=null)
+            { 
+                if (find_mi.MemberType == MemberTypes.Property)
+                { 
+                    var pi = type.GetProperty(find_mi.Name);
+                    item.getter = ()=>  { return pi.GetValue(obj,new object[1] { index }); };
+                    item.setter = (x)=> { pi.SetValue(obj,x,new object[1] {index });      };
+                    return item;
+                }
+                if (find_mi.MemberType == MemberTypes.Field)
+                {
+                    var fi = type.GetField(find_mi.Name);
+                    item.getter = ()=>  {
+                        var z = fi.GetValue(obj);
+                        if (type.IsArray)
+                        {
+                            var a = (Array)z;
+                            return a.GetValue(index);
+                        }
+                        if (type.IsGenericType && true)
+                        {
+                            if (type is IList )
+                            { 
+                                var a = (IList)z;
+                                return a[index];
+                            }
+                        }
+                        return null;
+                    };
+                    item.setter = (x)=> {
+                        var z = fi.GetValue(obj);
+                        if (type.IsArray)
+                        {
+                            var a = (Array)z;
+                            a.SetValue(x,index);
+                        }
+                        if (type.IsGenericType && true)
+                        {
+                            if (type is IList )
+                            { 
+                                var a = (IList)z;
+                                a[index]=x;
+                            }
+                        }
+                    };
+                    return item;
+                }
+                throw new System.Exception("unknown");
+            }
+            return item;
+
+        }
+
 #if DOTNENET20
         private static Type find_typeinfo(string searchname)
         {

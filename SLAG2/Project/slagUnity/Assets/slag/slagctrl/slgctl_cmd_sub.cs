@@ -31,13 +31,15 @@ namespace slgctl
 
             m_slag = null;
 
-#if !NOT_USE_EXCEPTION
+#if USETRY
             try
+#endif
             {
                 m_slag = new slagtool.slag();
                 m_slag.LoadFile(file);
                 wk.SendWriteLine("Loaded.");
             }
+#if USETRY
             catch(SystemException e)
             {
                 wk.SendWriteLine("-- EXCEPTION --");
@@ -45,11 +47,12 @@ namespace slgctl
                 wk.SendWriteLine("---------------");
                 return null;
             }
-#else
-                m_slag = new slagtool.slag();
-                m_slag.LoadFile(file);
-                wk.SendWriteLine("Loaded.");
 #endif
+//#else
+//            m_slag = new slagtool.slag();
+//                m_slag.LoadFile(file);
+//                wk.SendWriteLine("Loaded.");
+//#endif
 
             return m_slag;
         }
@@ -58,7 +61,9 @@ namespace slgctl
         {
             if (slag!=null) m_slag = slag;
 
+#if USETRY
             try
+#endif
             {
                 UpdateClear();
                 var sw = new System.Diagnostics.Stopwatch();
@@ -67,12 +72,14 @@ namespace slgctl
                 sw.Stop();
                 wk.SendWriteLine("! The program used " + ((float)sw.ElapsedMilliseconds / 1000f).ToString("F3") + "sec !");
             }
+#if USETRY
             catch (SystemException e)
             {
                 wk.SendWriteLine("-- EXCEPTION --");
                 wk.SendWriteLine(e.Message);
                 wk.SendWriteLine("---------------");
             }
+#endif
         }
 
         public static void Reset()

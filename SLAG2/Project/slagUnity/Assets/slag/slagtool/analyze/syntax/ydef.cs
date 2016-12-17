@@ -128,6 +128,8 @@ namespace slagtool
  
         //文字列
         public static string CMTSTR = "//";
+        public static string CMTBGN = "/*";
+        public static string CMTEND = "*/";
         public static string DQ     = "\"";
 
         //構文ツリー     .yの表現をコードで実装。　第１，２要素はルール名とトークンタイプ。 __OR__は次の選択支へ。__MAKE__は次が処理用のファンクション。

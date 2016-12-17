@@ -131,6 +131,28 @@ namespace slagtool.runtime
             };
             return _get(m_front_dic);
         }
+        public object get(string name, int index)
+        {
+            var v = get(name);
+            if (v!=null)
+            {
+                var t = v.GetType();
+                if (t==typeof(ARRAY))
+                {
+                    var l = (ARRAY)v;
+                    if (index < 0 || index >= l.Count)  util._error( name + "["+index+"] is out of range");
+                    return l[index];
+                }
+                if (t.IsArray)
+                {
+                    var l = (Array)v;
+                    if (index<0 || index >= l.Length)   util._error( name + "["+index+"] is out of range");
+                    return l.GetValue(index);
+                }
+            }
+            util._error(name +"[" + index + "] cannot be found");
+            return null;
+        }
         public bool exist(string name)
         {
             name = name.ToUpper();
@@ -171,11 +193,25 @@ namespace slagtool.runtime
             var i = (int)((number)index);
 
             var v = get(name);
-            if (v==null || v.GetType()!=typeof(ARRAY)) util._error(name + " is not array");
-            var l = (ARRAY)v;
-            if (i < 0 || i >= l.Count)  util._error( "index("+i+") is out of range");
-            
-            l[i] = o;
+            if (v!=null)
+            {
+                var t = v.GetType();
+                if (t==typeof(ARRAY))
+                {
+                    var l = (ARRAY)v;
+                    if (i < 0 || i >= l.Count)  util._error( "index("+i+") is out of range");
+                    l[i] = o;
+                    return;
+                }
+                if (t.IsArray)
+                {
+                    var l = (Array)v;
+                    if (i<0||i>=l.Length)   util._error( "index("+i+") is out of range");
+                    l.SetValue(o,i);
+                    return;
+                }
+            }
+            util._error(name + "is not array");
         }
         public void define(string name, object o)
         {
@@ -635,6 +671,7 @@ namespace slagtool.runtime
                         nsb = run(v0.list_at(1),nsb.curnull());
                         var index = nsb.m_cur;
                         nsb.find_and_set_array(name,index,o);
+                        return nsb;
                     }
                     if (bPvV0)
                     {
@@ -823,6 +860,9 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.get_type(YDEF.sx_array_var))
             {
+                var save_pvitem = nsb.m_pvitem;
+                nsb.pvitemnull();
+
                 var name = v.list_at(0).GetString();
                 var array_index = v.list_at(1);
                 nsb = run(array_index.list_at(1),nsb.curnull());
@@ -831,23 +871,31 @@ namespace slagtool.runtime
                     util._error("array_index is invalid." );
                 }
                 var index = (int)((number)nsb.m_cur);
-                nsb.m_cur = nsb.get(name);
-                if (nsb.m_cur!=null && nsb.m_cur.GetType()==typeof(List<object>))
+
+                if (save_pvitem!=null)
                 {
-                    var list = (List<object>)nsb.m_cur;
-                    if (index >= 0 && index < list.Count)
-                    {
-                        nsb.m_cur = list[index];               
-                    }
-                    else
-                    {
-                        util._error("ouf of index");
-                    }
+                    nsb.m_pvitem = save_pvitem;
+                    nsb = runsub_pointervar_clause.run_array_var(v,nsb,name,index);
+                    return nsb;
                 }
-                else
-                {
-                    util._error("unexpected");
-                }
+
+                nsb.m_cur = nsb.get(name,index);
+                //if (nsb.m_cur!=null && nsb.m_cur.GetType()==typeof(List<object>))
+                //{
+                //    var list = (List<object>)nsb.m_cur;
+                //    if (index >= 0 && index < list.Count)
+                //    {
+                //        nsb.m_cur = list[index];               
+                //    }
+                //    else
+                //    {
+                //        util._error("ouf of index");
+                //    }
+                //}
+                //else
+                //{
+                //    util._error("unexpected");
+                //}
                 return nsb;
             }
             if (v.type == YDEF.get_type(YDEF.sx_array_index))
@@ -912,7 +960,7 @@ namespace slagtool.runtime
                     util._error("unexpected");
                 }
 
-                if (save_pvitem!=null) //ロケーションアイテム
+                if (save_pvitem!=null) //ポインタ変数
                 {
                     nsb.m_pvitem = save_pvitem;
                     nsb = runsub_pointervar_clause.run_func(v,nsb,name,ol);

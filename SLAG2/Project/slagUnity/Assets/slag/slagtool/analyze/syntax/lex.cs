@@ -29,6 +29,7 @@ namespace slagtool
         string[] m_lines;
         int      m_l;
         int      m_c;
+        bool     m_bInComment;   // スラッシュ(/)・アスタリスク(*)のコメント
 
         List<YVALUE> m_curline_value;
         public List<List<YVALUE>> m_value_list;  //行単位
@@ -39,6 +40,7 @@ namespace slagtool
             m_lines = m_src.Split('\x0a');
             m_l = 0;
             m_c = 0;
+            m_bInComment = false;
             m_value_list = new List<List<YVALUE>>();
         }
 
@@ -66,7 +68,7 @@ namespace slagtool
             }
             
             int wdlen;
-            var v = lexUtil.GetWord(out wdlen, m_c, m_lines[m_l],m_l);
+            var v = lexUtil.GetWord(ref m_bInComment, out wdlen, m_c, m_lines[m_l],m_l);
             m_c += wdlen;
 
             add(v);
@@ -108,7 +110,7 @@ namespace slagtool
             return lex.m_value_list;
         }
 
-        public static YVALUE GetWord(out int wdlen, int col, string i_line, int dbg_line = -1)
+        public static YVALUE GetWord(ref bool bInComment, out int wdlen, int col, string i_line, int dbg_line = -1)
         {
             var v= new YVALUE();
 
@@ -123,7 +125,33 @@ namespace slagtool
             if (string.IsNullOrEmpty(line) || col >= line.Length) return any_return(v,YDEF.EOL);
 
             var ls = i_line.Substring(col);
-            if (string.IsNullOrEmpty(ls)) return any_return(v,YDEF.EOL);
+            if (string.IsNullOrEmpty(ls)) return any_return(v,YDEF.EOL); 
+            //※以降 lsには最低1文字あり
+
+            //スラッシュ・アスタリスクコメント中の場合
+            if (bInComment)
+            {
+                /* Comment End を検索 */
+                var idx = ls.IndexOf(YDEF.CMTEND);
+                if (idx<0)
+                {
+                    wdlen = ls.Length;
+                    return any_return(v,YDEF.CMT,null,ls);
+                }
+                else
+                {
+                    bInComment = false;
+                    wdlen = idx + 2;
+                    return any_return(v,YDEF.CMT,null,ls);
+                }
+            }
+            //スラッシュアスタリスクコメント開始時
+            if (ls.StartsWith(YDEF.CMTBGN))
+            {
+                bInComment = true;
+                wdlen = 2;
+                return any_return(v,YDEF.CMT,null,ls);
+            }
 
             //コメントは全部
             if (ls.StartsWith(YDEF.CMTSTR))

@@ -12,7 +12,7 @@ var cur = 0;
 
 function Update(obj)
 {
-    UnityEngine.Debug.Log(Time.time);
+    UnityEngine.Debug.Log(UnityEngine.Time.time);
     cur += speed / 10;
     obj.transform.localEulerAngles = new UnityEngine.Vector3(cur, 0, 0);
 
