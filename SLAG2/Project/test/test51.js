@@ -1,6 +1,12 @@
-//
-// Test 51a
-//
+/*
+ Test 51
+ 
+ キューブ生成・削除・回転制御
+ 
+ ↑キーと↓キーで回転制御
+ Delキーでキューブ削除
+
+*/
 
 
 var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);

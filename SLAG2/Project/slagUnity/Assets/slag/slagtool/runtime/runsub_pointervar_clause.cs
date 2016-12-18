@@ -224,7 +224,9 @@ namespace slagtool.runtime
                 { 
                     var pi = type.GetProperty(find_mi.Name);
                     item.getter = ()=>  { return pi.GetValue(obj,null); };
-                    item.setter = (x)=> { pi.SetValue(obj,x,null);      };
+                    item.setter = (x)=> {
+                        pi.SetValue(obj,x,null);
+                    };
                     return item;
                 }
                 if (find_mi.MemberType == MemberTypes.Field)

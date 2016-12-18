@@ -5,7 +5,6 @@ function CreateRectangleGameObject(width,height)
 {
     var go = new UnityEngine.GameObject();
     var mr = go.AddComponent(typeof("UnityEngine.MeshRenderer"));
-    //mr.material = new UnityEngine.Material(UnityEngine.Shader.Find("Standard"));
     var shader = UnityEngine.Resources.Load("Shaders/SampleAlphaTex");
     var tex    = UnityEngine.Resources.Load("2d/at");
     mr.material = new UnityEngine.Material(shader);

@@ -58,8 +58,16 @@ op expr op expr op op expr op
 ４．後置演算子要素を解析
 ５．三項演算子要素を解析
 
-RELEASE でエクセプション回避いれた。
+USE_TRY でエクセプション回避いれた。
 
-終了ができない？
+終了ができない？ --> FilePipeのみ可能。
+
+NamedPipeは終了問題が解決できないので使用不可。
+
+メソッド検索時にFloat,Doubleを同意として扱う。 それをUnityだけとすればよい！　そうすれば、通常はDoubleとなり有効数字が15 (Singleは７)
+
+
+
+
 
 
