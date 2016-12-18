@@ -4,9 +4,16 @@
 function CreateRectangleGameObject(width,height)
 {
     var go = new UnityEngine.GameObject();
-    go.AddComponent(typeof("UnityEngine.MeshRenderer"));
+    var mr = go.AddComponent(typeof("UnityEngine.MeshRenderer"));
+    //mr.material = new UnityEngine.Material(UnityEngine.Shader.Find("Standard"));
+    var shader = UnityEngine.Resources.Load("Shaders/SampleAlphaTex");
+    var tex    = UnityEngine.Resources.Load("2d/at");
+    mr.material = new UnityEngine.Material(shader);
+    mr.material.SetTexture("_MainTex",tex);
+
     var mf = go.AddComponent(typeof("UnityEngine.MeshFilter"));
     mf.mesh = CreateRectangleMesh(width,height);
+
     return go;
 }
 

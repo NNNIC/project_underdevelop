@@ -17,6 +17,7 @@ using number = System.Double;
     ４．後置演算子に対して
     ５．３項演算子に対して
     ６．SWITCHのCASE および DEFAULTに対して
+    ７．セミコロンの句単位で
 */
 namespace slagtool
 {
@@ -30,6 +31,7 @@ namespace slagtool
             POSTFIX_VALUES,
             TERNARY_VALUES,
             CASE_VALUES,
+            CLAUSE_VALUES
         }
 
         public class TokenProvider
@@ -82,6 +84,7 @@ namespace slagtool
                     case TokenProvideMode.POSTFIX_VALUES: return _update_postfix_values();
                     case TokenProvideMode.TERNARY_VALUES: return _update_ternary_values();
                     case TokenProvideMode.CASE_VALUES:    return _update_case_values();
+                    case TokenProvideMode.CLAUSE_VALUES:  return _update_clause_values();
                 }
                 return false;
             }
@@ -332,6 +335,57 @@ namespace slagtool
                         break;   
                     }
 
+                }
+
+                if (m_sample_start!=null)
+                {
+                    m_subtarget = new List<YVALUE>();
+                    for(int j = (int)m_sample_start; j<= (int)m_sample_end; j++) m_subtarget.Add(m_target[j]);
+                    _analyze(ref m_subtarget);
+                    replace_list(ref m_target,(int)m_sample_start,(int)m_sample_end, m_subtarget);
+                    return false;
+                }
+
+                return true;
+            }
+            bool _update_clause_values()
+            {
+                /*
+                    セミコロン（含）を区切りとした要素を取り出して解析へ
+                    一要素の解析が終わるとfalseで戻る。
+                    終端記号のセミコロンが無くなればtrueで処理終了(true)
+
+                    ※clauseとなったものは対象外
+                */
+                m_subtarget    = null;
+                m_sample_start = null;
+                m_sample_end   = null;
+
+                if (m_target.TrueForAll(v=>v.s!=";")) //終末記号の';'が全くない場合、処理なし
+                {
+                    return true;
+                }
+
+                for(int i = 0; i<m_target.Count; i++)
+                {
+                    var v = getval(i);
+
+                    if (m_sample_start == null)
+                    { 
+                        if (v.IsType(YDEF.sx_sentence)) continue;
+                        m_sample_start = i;
+                        m_sample_end   = i;
+                        continue;
+                    }
+                    if (v.IsType(YDEF.sx_sentence))
+                    {
+                        break;
+                    }
+                    m_sample_end = i;
+                    if (v.s==";")
+                    {
+                        break;
+                    }
                 }
 
                 if (m_sample_start!=null)

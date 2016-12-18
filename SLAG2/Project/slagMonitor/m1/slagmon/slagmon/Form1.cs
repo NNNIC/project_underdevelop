@@ -165,17 +165,24 @@ namespace slagmon
 
         private void button1_Click(object sender, EventArgs e)
         {
-            try { 
-                System.Diagnostics.Process.Start("notepad.exe",   @"N:\Project\test\" + label1_filename.Text);
-            } catch
-            {
-                ;
-            }
+            //try { 
+            //    //System.Diagnostics.Process.Start("notepad.exe",   @"N:\Project\test\" + label1_filename.Text);
+            //} catch
+            //{
+            //    ;
+            //}
+            util.StartEditor(@"N:\Project\test\" + label1_filename.Text);
         }
 
         private void Form1_Shown(object sender, EventArgs e)
         {
             this.textBox3_input.Focus();
+        }
+
+        private void buttonConfig_Click(object sender, EventArgs e)
+        {
+            var fm = new FormConfig();
+            fm.ShowDialog();
         }
     }
 }

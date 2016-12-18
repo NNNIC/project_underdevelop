@@ -264,6 +264,7 @@ namespace slagtool
                 }
             }
 
+            // Switch文のCASE: DEFAULT:を変換
             void S_CHECK_INSIDE_BRACKETS__CASE(bool bFirst)
             {
                 if (bFirst)
@@ -278,10 +279,31 @@ namespace slagtool
                         var result = m_tp.GetResult();
 
                         replace_list(ref m_subtarget,1,m_subtarget.Count-2,result);
+                        Goto(S_CHECK_INSIDE_BRACKETS__CLAUSE);
+                    }
+                }
+            }
+
+            // 句単位で変換
+            void S_CHECK_INSIDE_BRACKETS__CLAUSE(bool bFirst)
+            {
+                if (bFirst)
+                {
+                    m_tp.Start(m_subtarget,1,m_subtarget.Count-2,TokenProvideMode.CLAUSE_VALUES);
+                }
+                else
+                {
+                    var bDone = m_tp.Update();
+                    if (bDone)
+                    {
+                        var result = m_tp.GetResult();
+
+                        replace_list(ref m_subtarget,1,m_subtarget.Count-2,result);
                         Goto(S_CHECK_WITH_BRACKETS);
                     }
                 }
             }
+
 
             // 括弧を含めて変換
             void S_CHECK_WITH_BRACKETS(bool bFirst)

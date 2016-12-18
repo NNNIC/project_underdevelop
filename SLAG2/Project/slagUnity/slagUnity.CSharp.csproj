@@ -103,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Data\Font\aboutfont.txt" />
+    <None Include="Assets\Resources\Shaders\SampleAlphaTex.shader" />
     <None Include="Assets\slag\slagtool\__util__に外部アクセスを集める__.txt" />
     <None Include="Assets\メモ.txt" />
   </ItemGroup>

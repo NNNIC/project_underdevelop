@@ -39,6 +39,8 @@
             this.button1clear = new System.Windows.Forms.Button();
             this.label1_filename = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.buttonConfig = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox1_log
@@ -147,11 +149,30 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(786, 24);
+            this.menuStrip1.TabIndex = 9;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // buttonConfig
+            // 
+            this.buttonConfig.Location = new System.Drawing.Point(325, 1);
+            this.buttonConfig.Name = "buttonConfig";
+            this.buttonConfig.Size = new System.Drawing.Size(75, 23);
+            this.buttonConfig.TabIndex = 10;
+            this.buttonConfig.Text = "Config";
+            this.buttonConfig.UseVisualStyleBackColor = true;
+            this.buttonConfig.Click += new System.EventHandler(this.buttonConfig_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(786, 469);
+            this.Controls.Add(this.buttonConfig);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1_filename);
             this.Controls.Add(this.button1clear);
@@ -161,6 +182,8 @@
             this.Controls.Add(this.textBox3_input);
             this.Controls.Add(this.textBox2_src);
             this.Controls.Add(this.textBox1_log);
+            this.Controls.Add(this.menuStrip1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "slag monitor";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
@@ -184,6 +207,8 @@
         private System.Windows.Forms.Button button1clear;
         private System.Windows.Forms.Label label1_filename;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.Button buttonConfig;
     }
 }
 
