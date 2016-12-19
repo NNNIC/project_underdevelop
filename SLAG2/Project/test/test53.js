@@ -12,7 +12,7 @@ function Text3d_Create(s)
     tm.alignment = UnityEngine.TextAlignment.Center;
     tm.anchor    = UnityEngine.TextAnchor.MiddleCenter;
     tm.characterSize = 0.2;
-    tm.fontSize = CastInt(64);
+    tm.fontSize = 64;
     tm.text = s;
 }
 

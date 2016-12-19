@@ -75,8 +75,10 @@
     <Compile Include="Assets\slag\slagctrl\slgctl_cmd_sub.cs" />
     <Compile Include="Assets\slag\slagctrl\slgctl_netcom.cs" />
     <Compile Include="Assets\slag\slagctrl\unity\resetscene.cs" />
+    <Compile Include="Assets\slag\slagctrl\unity\slag_monoehaviour.cs" />
     <Compile Include="Assets\slag\slagctrl\unity\slgctl_main.cs" />
     <Compile Include="Assets\slag\slagctrl\unity\slgctl_wk.cs" />
+    <Compile Include="Assets\slag\slagctrl\unity\unity_builtinfunc.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\lex.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\ydef.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\yanalyzer.cs" />
@@ -97,9 +99,7 @@
     <Compile Include="Assets\slag\slagtool\util.cs" />
     <Compile Include="Assets\slagtest\guiDisplay.cs" />
     <Compile Include="Assets\slagtest\simple.cs" />
-    <Compile Include="Assets\slagtest\slag_monoehaviour.cs" />
     <Compile Include="Assets\slagtest\test2Update.cs" />
-    <Compile Include="Assets\slagtest\unity_builtinfunc.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Data\Font\aboutfont.txt" />

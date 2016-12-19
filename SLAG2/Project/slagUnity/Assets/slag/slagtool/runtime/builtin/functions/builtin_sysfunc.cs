@@ -157,6 +157,21 @@ namespace slagtool.runtime.builtin
 
             return type;
         }
+        public static object F_Cast(bool bHelp, object[] ol, StateBuffer sb = null)
+        {
+            if (bHelp)
+            {
+                return "Cast the object to the specified type. ex)var i = Cast(\"System.Int16\",j);";
+            }
+
+            kit.check_num_of_args(ol,2);
+
+            var s = kit.get_string_at(ol,0).ToUpper();
+            var type = slagtool.runtime.runsub_pointervar_clause.find_typeinfo(s);
+
+            var o = ol[1];
+            return Convert.ChangeType(o,type);
+        }
 #endregion
 
 #region 数値操作
@@ -195,7 +210,7 @@ namespace slagtool.runtime.builtin
             }
             return 0;
         }
-        public static object F_CastFloat(bool bHelp,object[] ol, StateBuffer sb)
+        public static object F_Float(bool bHelp,object[] ol, StateBuffer sb)
         {
             if (bHelp)
             {
@@ -204,16 +219,16 @@ namespace slagtool.runtime.builtin
             var x = kit.get_number_at(ol,0);
             return (float)x;
         }
-        public static object F_CastInt32(bool bHelp,object[] ol, StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Cast numner to int32";
-            }
-            var x = kit.get_number_at(ol,0);
-            return (System.Int32)x;
-        }
-        public static object F_CastInt(bool bHelp,object[] ol, StateBuffer sb)
+        //public static object F_CastInt32(bool bHelp,object[] ol, StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Cast numner to int32";
+        //    }
+        //    var x = kit.get_number_at(ol,0);
+        //    return (System.Int32)x;
+        //}
+        public static object F_Int(bool bHelp,object[] ol, StateBuffer sb)
         {
             if (bHelp)
             {

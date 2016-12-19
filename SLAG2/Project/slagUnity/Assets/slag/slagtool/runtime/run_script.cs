@@ -44,6 +44,7 @@ namespace slagtool.runtime
             return o.ToString();
         }
         public Func<object>    getter;
+        public Type            setter_parametertype;
         public Action<object>  setter;
 
         public void getter_setter_null()
@@ -131,23 +132,38 @@ namespace slagtool.runtime
             };
             return _get(m_front_dic);
         }
-        public object get(string name, int index)
+        public object get(string name, object index)
         {
+            if (index == null) util._error("null index is invalid");
+
             var v = get(name);
             if (v!=null)
             {
                 var t = v.GetType();
-                if (t==typeof(ARRAY))
-                {
-                    var l = (ARRAY)v;
-                    if (index < 0 || index >= l.Count)  util._error( name + "["+index+"] is out of range");
-                    return l[index];
+                if (t==typeof(ARRAY) || t.IsArray)
+                { 
+                    var i = (int)((number)index);
+                    if (t==typeof(ARRAY))
+                    {
+                        var l = (ARRAY)v;
+                        if (i < 0 || i >= l.Count)  util._error( name + "["+index+"] is out of range");
+                        return l[i];
+                    }
+                    else
+                    {
+                        var l = (Array)v;
+                        if (i<0 || i >= l.Length)   util._error( name + "["+index+"] is out of range");
+                        return l.GetValue(i);
+                    }
                 }
-                if (t.IsArray)
+                if (t==typeof(Hashtable))
                 {
-                    var l = (Array)v;
-                    if (index<0 || index >= l.Length)   util._error( name + "["+index+"] is out of range");
-                    return l.GetValue(index);
+                    var ht = (Hashtable)v;
+                    if (ht.ContainsKey(index))
+                    {
+                        return ht[index];
+                    }
+                    return null;
                 }
             }
             util._error(name +"[" + index + "] cannot be found");
@@ -189,25 +205,36 @@ namespace slagtool.runtime
         }
         public void find_and_set_array(string name, object index, object o)
         {
-            if (index.GetType()!=typeof(number)) util._error("index is not number");
-            var i = (int)((number)index);
+            //if (index.GetType()!=typeof(number)) util._error("index is not number");
+            if (index==null) util._error("NULL index is invalid");
 
             var v = get(name);
             if (v!=null)
-            {
-                var t = v.GetType();
-                if (t==typeof(ARRAY))
+            { 
+                var vtype = v.GetType();
+                if (vtype == typeof(ARRAY) || vtype.IsArray)
                 {
-                    var l = (ARRAY)v;
-                    if (i < 0 || i >= l.Count)  util._error( "index("+i+") is out of range");
-                    l[i] = o;
-                    return;
+                    var i = (int)((number)index);
+                    if (vtype==typeof(ARRAY))
+                    {
+                        var l = (ARRAY)v;
+                        if (i < 0 || i >= l.Count)  util._error( "index("+i+") is out of range");
+                        l[i] = o;
+                        return;
+                    }
+                    else
+                    {
+                        var l = (Array)v;
+                        if (i<0||i>=l.Length)   util._error( "index("+i+") is out of range");
+                        l.SetValue(o,i);
+                        return;
+                    }
                 }
-                if (t.IsArray)
+
+                if (vtype == typeof(Hashtable))
                 {
-                    var l = (Array)v;
-                    if (i<0||i>=l.Length)   util._error( "index("+i+") is out of range");
-                    l.SetValue(o,i);
+                    var ht = (Hashtable)v;
+                    ht[index] = o;
                     return;
                 }
             }
@@ -679,10 +706,15 @@ namespace slagtool.runtime
                         nsb = runsub_pointervar_clause.run(v0p,nsb,PointervarMode.SET);
                         if (nsb.m_cur!=null)
                         {
-                            var func =  (Action<object>)nsb.m_cur;
-                            if (func!=null)
+                            var item = (PointervarItem)nsb.m_cur;
+                            if (item!=null&&item.setter!=null)
                             { 
-                                func(o);
+                                var otype =o.GetType();
+                                if (!otype.IsEnum && otype!=item.setter_parametertype)
+                                {
+                                    o = Convert.ChangeType(o,item.setter_parametertype);
+                                }
+                                item.setter(o);
                             }
                             return nsb;
                         }
@@ -870,6 +902,7 @@ namespace slagtool.runtime
                 {
                     util._error("array_index is invalid." );
                 }
+                var index_o = nsb.m_cur;
                 var index = (int)((number)nsb.m_cur);
 
                 if (save_pvitem!=null)
@@ -879,7 +912,7 @@ namespace slagtool.runtime
                     return nsb;
                 }
 
-                nsb.m_cur = nsb.get(name,index);
+                nsb.m_cur = nsb.get(name,index_o);
                 //if (nsb.m_cur!=null && nsb.m_cur.GetType()==typeof(List<object>))
                 //{
                 //    var list = (List<object>)nsb.m_cur;

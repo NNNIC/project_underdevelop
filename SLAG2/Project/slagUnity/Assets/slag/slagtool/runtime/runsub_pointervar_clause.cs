@@ -56,7 +56,7 @@ namespace slagtool.runtime
 
             if (item.mode == PointervarMode.SET)
             {
-                nsb.m_cur = item.setter;
+                nsb.m_cur = item;//.setter;
             }
             else if (item.mode == PointervarMode.GET)
             { 
@@ -224,6 +224,7 @@ namespace slagtool.runtime
                 { 
                     var pi = type.GetProperty(find_mi.Name);
                     item.getter = ()=>  { return pi.GetValue(obj,null); };
+                    item.setter_parametertype = pi.PropertyType;
                     item.setter = (x)=> {
                         pi.SetValue(obj,x,null);
                     };
@@ -233,6 +234,7 @@ namespace slagtool.runtime
                 {
                     var fi = type.GetField(find_mi.Name);
                     item.getter = ()=>  { return fi.GetValue(obj); };
+                    item.setter_parametertype = fi.FieldType;
                     item.setter = (x)=> { fi.SetValue(obj,x); };
                     return item;
                 }
@@ -356,6 +358,7 @@ namespace slagtool.runtime
                 { 
                     var pi = type.GetProperty(find_mi.Name);
                     item.getter = ()=>  { return pi.GetValue(obj,new object[1] { index }); };
+                    item.setter_parametertype = pi.PropertyType;
                     item.setter = (x)=> { pi.SetValue(obj,x,new object[1] {index });      };
                     return item;
                 }

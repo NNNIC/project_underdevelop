@@ -381,7 +381,9 @@ namespace slagtool
                                                        1058,
                                                             "[","sx_expr","]",                             __MAKE__, YCODE.DO_NEW, 0,1,2,
                                                             __OR__,
-                                                            "[","sx_param_list","]",                       __MAKE__, YCODE.DO_NEW, 0,1,2
+                                                            "[","sx_param_list","]",                       __MAKE__, YCODE.DO_NEW, 0,1,2,
+                                                            __OR__,
+                                                            "[","]",                                       __MAKE__, YCODE.DO_NEW, 0,1
                                                       };
         
         public static object[] sx_func             =  { "sx_func",
