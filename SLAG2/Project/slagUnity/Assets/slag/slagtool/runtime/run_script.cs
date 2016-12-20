@@ -710,7 +710,7 @@ namespace slagtool.runtime
                             if (item!=null&&item.setter!=null)
                             { 
                                 var otype =o.GetType();
-                                if (!otype.IsEnum && otype!=item.setter_parametertype)
+                                if (!otype.IsEnum &&item.setter_parametertype!=null && otype!=item.setter_parametertype)
                                 {
                                     o = Convert.ChangeType(o,item.setter_parametertype);
                                 }
@@ -913,22 +913,6 @@ namespace slagtool.runtime
                 }
 
                 nsb.m_cur = nsb.get(name,index_o);
-                //if (nsb.m_cur!=null && nsb.m_cur.GetType()==typeof(List<object>))
-                //{
-                //    var list = (List<object>)nsb.m_cur;
-                //    if (index >= 0 && index < list.Count)
-                //    {
-                //        nsb.m_cur = list[index];               
-                //    }
-                //    else
-                //    {
-                //        util._error("ouf of index");
-                //    }
-                //}
-                //else
-                //{
-                //    util._error("unexpected");
-                //}
                 return nsb;
             }
             if (v.type == YDEF.get_type(YDEF.sx_array_index))
@@ -936,6 +920,10 @@ namespace slagtool.runtime
                 if (v.list_size()==3)
                 {
                     nsb = run(v.list_at(1),nsb.curnull());
+                }
+                else if (v.list_size()==2)
+                {
+                    nsb.m_cur = new ARRAY();
                 }
                 else
                 {

@@ -100,17 +100,28 @@ namespace slagtool.runtime
                 return nsb;                
             }
             var pretype = preobj.GetType();
+
             if (pretype == typeof(Literal))
             {
                 var literal = (Literal)preobj;
                 item = GetObj(literal.s,name, item);
                 nsb.m_pvitem =item;
+                return nsb;
             }
-            else
+
+            if (pretype == typeof(Hashtable))
             {
-                item = GetObj(preobj,name, item);
+                var ht = (Hashtable)preobj;
+                item.o = ht[name];
+                item.getter = ()=>ht[name];
+                item.setter_parametertype = null;
+                item.setter = (x)=>ht[name]=x;
                 nsb.m_pvitem = item;
+                return nsb;
             }
+
+            item = GetObj(preobj,name, item);
+            nsb.m_pvitem = item;
             return nsb;
         }
         public static StateBuffer run_func(YVALUE v, StateBuffer sb, string name, List<object> ol)
@@ -223,19 +234,17 @@ namespace slagtool.runtime
                 if (find_mi.MemberType == MemberTypes.Property)
                 { 
                     var pi = type.GetProperty(find_mi.Name);
-                    item.getter = ()=>  { return pi.GetValue(obj,null); };
+                    item.getter = ()=>pi.GetValue(obj,null);
                     item.setter_parametertype = pi.PropertyType;
-                    item.setter = (x)=> {
-                        pi.SetValue(obj,x,null);
-                    };
+                    item.setter = (x)=> pi.SetValue(obj,x,null);
                     return item;
                 }
                 if (find_mi.MemberType == MemberTypes.Field)
                 {
                     var fi = type.GetField(find_mi.Name);
-                    item.getter = ()=>  { return fi.GetValue(obj); };
+                    item.getter = ()=> fi.GetValue(obj); 
                     item.setter_parametertype = fi.FieldType;
-                    item.setter = (x)=> { fi.SetValue(obj,x); };
+                    item.setter = (x)=> fi.SetValue(obj,x); 
                     return item;
                 }
                 throw new System.Exception("unknown");

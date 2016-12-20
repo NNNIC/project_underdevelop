@@ -40,6 +40,14 @@ namespace slagtool.runtime.builtin
         }
         #endregion
 
+        public static object F_Hashtable(bool bHelp, object[] ol,StateBuffer sb)
+        {
+            if (bHelp)
+            {
+                return "Create new hashtable." +NL + "ex) var t = hashtable();  t.a = 123; t.b=234;";
+            }
+            return new System.Collections.Hashtable();
+        }
 #if obs
 #region コンソール/デバッグ
         public static object F_Print(bool bHelp,object[] ol,StateBuffer sb)

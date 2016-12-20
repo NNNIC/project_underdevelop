@@ -118,8 +118,29 @@ namespace slagtool
             string s = null;
 
             s += type.ToString() + ":" + YDEF.get_name(type);
+            s += ":" + (o != null ? o.ToString() : "null") +">";
 
-            return s + ":" + (o != null ? o.ToString() : "null");
+            string q = null;
+            if (list!=null && list.Count>0)
+            {
+                foreach(var i in list)
+                {
+                    if (!string.IsNullOrEmpty(i.s))
+                    {
+                        if (q!=null) q+=",";
+                        q += i.s;
+                    }
+                    else if (i.o!=null)
+                    {
+                        if (q!=null) q+=",";
+                        q += o.GetType();
+                    }
+                }
+            }
+
+            if (q!=null) s+=q;
+
+            return s;
         }
         public string get_type_name()
         {
