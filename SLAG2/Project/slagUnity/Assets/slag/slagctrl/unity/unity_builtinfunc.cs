@@ -3,12 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-#if NUMBERISFLOAT
-using number = System.Single;
-#else
 using number = System.Double;
-#endif
-
 using slagtool.runtime;
 using slagtool.runtime.builtin;
 

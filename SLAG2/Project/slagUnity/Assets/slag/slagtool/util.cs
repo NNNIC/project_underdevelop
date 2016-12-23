@@ -6,12 +6,7 @@ using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
 
-#if NUMBERISFLOAT
-using number = System.Single;
-#else
 using number = System.Double;
-#endif
-
 using slagtool.runtime;
 using slagtool.runtime.builtin;
 

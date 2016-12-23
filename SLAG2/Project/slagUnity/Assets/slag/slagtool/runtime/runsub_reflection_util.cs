@@ -3,17 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Collections;
 using System.Reflection;
-using System.Linq;
 using System.Text;
 using System.Diagnostics;
-
 using ARRAY = System.Collections.Generic.List<object>;
-
-#if NUMBERISFLOAT
-using number = System.Single;
-#else
 using number = System.Double;
-#endif
 
 // constructorのタイプを調べる
 //https://msdn.microsoft.com/en-us/library/h93ya84h(v=vs.110).aspx

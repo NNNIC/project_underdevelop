@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-#if NUMBERISFLOAT
-using number = System.Single;
-#else
 using number = System.Double;
-#endif
 
 namespace slagtool
 {

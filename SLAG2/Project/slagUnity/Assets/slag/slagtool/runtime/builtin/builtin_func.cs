@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections;
-using System.Linq;
 using System.Text;
-//using System.Threading.Tasks;
 using System.Reflection;
-#if NUMBERISFLOAT
-using number = System.Single;
-#else
 using number = System.Double;
-#endif
 
 namespace slagtool.runtime.builtin
 {
