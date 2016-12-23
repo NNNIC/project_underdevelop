@@ -14,7 +14,7 @@ using number = System.Double;
 
 namespace slagtool.runtime
 {
-    public class reflection_util
+    public class sub_reflection
     {
         internal static object ExecuteFunc(object o, string api, object[] parameters )
         {
@@ -122,7 +122,7 @@ namespace slagtool.runtime
         #region オブジェクトのタイプ変換
         private static object[] ChangeObjs(object[] ol, ParameterInfo[] pis)
         {
-            System.Diagnostics.Debug.Assert(ol!=null&&pis!=null&&ol.Length==pis.Length);
+            util.Assert(ol!=null&&pis!=null&&ol.Length==pis.Length);
 
             for(int i = 0;i<pis.Length; i++)
             {

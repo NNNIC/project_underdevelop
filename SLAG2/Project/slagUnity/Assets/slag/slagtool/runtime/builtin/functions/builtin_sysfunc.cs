@@ -155,7 +155,7 @@ namespace slagtool.runtime.builtin
             kit.check_num_of_args(ol,1);
 
             var s = kit.get_string_at(ol,0).ToUpper();
-            var type = slagtool.runtime.runsub_pointervar_clause.find_typeinfo(s);
+            var type = slagtool.runtime.sub_pointervar_clause.find_typeinfo(s);
 
             return type;
         }
@@ -169,7 +169,7 @@ namespace slagtool.runtime.builtin
             kit.check_num_of_args(ol,2);
 
             var s = kit.get_string_at(ol,0).ToUpper();
-            var type = slagtool.runtime.runsub_pointervar_clause.find_typeinfo(s);
+            var type = slagtool.runtime.sub_pointervar_clause.find_typeinfo(s);
 
             var o = ol[1];
             return Convert.ChangeType(o,type);

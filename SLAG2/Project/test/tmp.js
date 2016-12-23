@@ -5,7 +5,7 @@
 var d = hashtable();
 
 d.s = 0;
-d.s++
+d.s++;
 
 
 

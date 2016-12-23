@@ -9,7 +9,7 @@ using number = System.Double;
 namespace slagtool.runtime
 {
     // Ｃ＃依存部分
-    public class runsub_pointervar_clause //ピリオド区切りの文字列に対しての処理
+    public class sub_pointervar_clause //ピリオド区切りの文字列に対しての処理
     {
         public static StateBuffer run(YVALUE v, StateBuffer sb, PointervarMode mode = PointervarMode.GET) 
         {
@@ -310,7 +310,7 @@ namespace slagtool.runtime
                 var ti = find_typeinfo(searchname);
                 if (ti!=null)
                 {
-                    item.o = runtime.reflection_util.InstantiateType(ti,param.ToArray());//Activator.CreateInstance(ti,args:param.ToArray());
+                    item.o = runtime.sub_reflection.InstantiateType(ti,param.ToArray());//Activator.CreateInstance(ti,args:param.ToArray());
                 }
                 return item;
             }
@@ -318,7 +318,7 @@ namespace slagtool.runtime
         }
         private static PointervarItem ExecuteFunc(object o, string cur, List<object> param, PointervarItem item)
         {
-            item.o = reflection_util.ExecuteFunc(o,cur,param.ToArray());
+            item.o = sub_reflection.ExecuteFunc(o,cur,param.ToArray());
             return item;
         }
         private static PointervarItem ExecuteArrayVar(string pre, string cur, object index_o, PointervarItem item)

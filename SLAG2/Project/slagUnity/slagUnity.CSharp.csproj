@@ -91,10 +91,11 @@
     <Compile Include="Assets\slag\slagtool\runtime\builtin\builtin_func.cs" />
     <Compile Include="Assets\slag\slagtool\runtime\builtin\builtin_kit.cs" />
     <Compile Include="Assets\slag\slagtool\runtime\builtin\functions\builtin_sysfunc.cs" />
-    <Compile Include="Assets\slag\slagtool\runtime\process.cs" />
-    <Compile Include="Assets\slag\slagtool\runtime\run_script.cs" />
-    <Compile Include="Assets\slag\slagtool\runtime\runsub_pointervar_clause.cs" />
-    <Compile Include="Assets\slag\slagtool\runtime\runsub_reflection_util.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\runtime_process.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\runtime_run_script.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\runtime_sub_pointervar_clause.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\runtime_sub_reflection.cs" />
+    <Compile Include="Assets\slag\slagtool\runtime\runtime_util.cs" />
     <Compile Include="Assets\slag\slagtool\sys.cs" />
     <Compile Include="Assets\slag\slagtool\util.cs" />
     <Compile Include="Assets\slagtest\guiDisplay.cs" />

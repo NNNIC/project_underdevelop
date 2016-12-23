@@ -129,6 +129,45 @@ namespace slagtool
                 }
 
             }
+            //bool _update_pointer_values_obs() //仕様変更 ポインタでつながったsx_exprを処理させる。
+            //{
+            //    m_subtarget    = null;
+            //    m_sample_start = null;
+            //    m_sample_end   = null;
+
+            //    for(int i = 0; i<m_target.Count; i++)
+            //    {
+            //        var v = getval(i);
+            //        if (v.s=="." && isExpr(i-1) && isExpr(i+1))
+            //        {
+            //            if (m_sample_start==null)
+            //            {
+            //                m_sample_start = i-1;
+            //            }
+            //            m_sample_end = i + 1;
+            //        }
+            //        else
+            //        {
+            //            if (m_sample_start!=null)
+            //            {
+            //                break;
+            //            }
+            //        }
+            //    }
+
+            //    if (m_sample_start!=null)
+            //    {
+            //        if (m_sample_start!=null)
+            //        {
+            //            m_subtarget = new List<YVALUE>();
+            //            for(int j = (int)m_sample_start; j<= (int)m_sample_end; j++) m_subtarget.Add(m_target[j]);
+            //            _analyze(ref m_subtarget);
+            //            replace_list(ref m_target,(int)m_sample_start,(int)m_sample_end, m_subtarget);
+            //            return false;
+            //        }
+            //    }
+            //    return true;
+            //}
             bool _update_pointer_values()
             {
                 m_subtarget    = null;
@@ -137,18 +176,30 @@ namespace slagtool
 
                 for(int i = 0; i<m_target.Count; i++)
                 {
-                    var v = getval(i);
-                    if (v.s=="." && isExpr(i-1) && isExpr(i+1))
-                    {
-                        if (m_sample_start==null)
+                    var v0 = getval(i);
+                    var v1 = getval(i+1);
+                    var v2 = getval(i+2);
+                    
+                    if (m_sample_start==null)
+                    { 
+                        if (v0!=null && v1!=null && v2!=null)
                         {
-                            m_sample_start = i-1;
+                            if (v0.IsType(YDEF.sx_expr) &&  v1.s == "." && v2.IsType(YDEF.sx_expr))
+                            {
+                                m_sample_start = i;
+                                m_sample_end   = i+2;
+                                continue;
+                            }
                         }
-                        m_sample_end = i + 1;
                     }
                     else
                     {
-                        if (m_sample_start!=null)
+                        if (v0.s=="." && v1.IsType(YDEF.sx_expr))
+                        {
+                            m_sample_end = i+1;
+                            continue;
+                        }
+                        else
                         {
                             break;
                         }
@@ -157,15 +208,13 @@ namespace slagtool
 
                 if (m_sample_start!=null)
                 {
-                    if (m_sample_start!=null)
-                    {
-                        m_subtarget = new List<YVALUE>();
-                        for(int j = (int)m_sample_start; j<= (int)m_sample_end; j++) m_subtarget.Add(m_target[j]);
-                        _analyze(ref m_subtarget);
-                        replace_list(ref m_target,(int)m_sample_start,(int)m_sample_end, m_subtarget);
-                        return false;
-                    }
+                    m_subtarget = new List<YVALUE>();
+                    for(int j = (int)m_sample_start; j<= (int)m_sample_end; j++) m_subtarget.Add(m_target[j]);
+                    _analyze(ref m_subtarget);
+                    replace_list(ref m_target,(int)m_sample_start,(int)m_sample_end, m_subtarget);
+                    return false;
                 }
+
                 return true;
             }
             bool _update_prefix_values()
