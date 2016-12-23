@@ -73,6 +73,20 @@ var h = hashtable();
 h.v = 10;
 h.l = [];
 
+---
+
+ログ関数は分かり易くファイル名で表示しておく
+
+---
+
+インスタンス時もタイプチェック必須。コンバートもやろう！
+
+https://msdn.microsoft.com/en-us/library/h93ya84h(v=vs.110).aspx
+
+
+---
+
+エラー文言確認せよ。
 
 
 

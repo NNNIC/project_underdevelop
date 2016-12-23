@@ -184,5 +184,10 @@ namespace slagmon
             var fm = new FormConfig();
             fm.ShowDialog();
         }
+
+        private void buttonFolder_Click(object sender, EventArgs e)
+        {
+            util.OpenFolder(@"N:\Project\test");
+        }
     }
 }

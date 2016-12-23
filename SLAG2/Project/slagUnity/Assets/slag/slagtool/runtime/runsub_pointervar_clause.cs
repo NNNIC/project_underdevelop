@@ -112,10 +112,11 @@ namespace slagtool.runtime
             if (pretype == typeof(Hashtable))
             {
                 var ht = (Hashtable)preobj;
-                item.o = ht[name];
-                item.getter = ()=>ht[name];
+                var nameo = name.ToUpper();
+                item.o = ht[nameo];
+                item.getter = ()=>ht[nameo];
                 item.setter_parametertype = null;
-                item.setter = (x)=>ht[name]=x;
+                item.setter = (x)=>ht[nameo]=x;
                 nsb.m_pvitem = item;
                 return nsb;
             }
@@ -162,7 +163,7 @@ namespace slagtool.runtime
             nsb.m_pvitem = item;
             return nsb;
         }
-        public static StateBuffer run_array_var(YVALUE v, StateBuffer sb, string name, int index)
+        public static StateBuffer run_array_var(YVALUE v, StateBuffer sb, string name, object index_o)
         {
             var nsb  = sb;
             var item = nsb.m_pvitem;
@@ -179,12 +180,12 @@ namespace slagtool.runtime
             if (pretype == typeof(Literal))
             {
                 var literal = (Literal)preobj;
-                item = ExecuteArrayVar(literal.s,name, index ,item);
+                item = ExecuteArrayVar(literal.s,name, index_o ,item);
                 nsb.m_pvitem =item;
             }
             else
             {
-                item = ExecuteArrayVar(preobj,name,index,item); // tbc
+                item = ExecuteArrayVar(preobj,name,index_o,item); // tbc
             }
             return nsb;
         }
@@ -315,7 +316,7 @@ namespace slagtool.runtime
                 var ti = find_typeinfo(searchname);
                 if (ti!=null)
                 {
-                    item.o = Activator.CreateInstance(ti,args:param.ToArray());
+                    item.o = runtime.reflection_util.InstantiateType(ti,param.ToArray());//Activator.CreateInstance(ti,args:param.ToArray());
                 }
                 return item;
             }
@@ -326,8 +327,9 @@ namespace slagtool.runtime
             item.o = reflection_util.ExecuteFunc(o,cur,param.ToArray());
             return item;
         }
-        private static PointervarItem ExecuteArrayVar(string pre, string cur, int index, PointervarItem item)
+        private static PointervarItem ExecuteArrayVar(string pre, string cur, object index_o, PointervarItem item)
         {
+            var index = (int)((number)index_o);
             if (item != null && item.mode == PointervarMode.NEW)
             {
                 var searchname = (pre + "." + cur).ToUpper();
@@ -340,9 +342,11 @@ namespace slagtool.runtime
             }
             throw new SystemException("unexpected");
         }
-        private static PointervarItem ExecuteArrayVar(object o, string cur, int index, PointervarItem item)
+        private static PointervarItem ExecuteArrayVar(object o, string cur, object index_o, PointervarItem item)
         {
             var name = cur.ToUpper();
+            int index = (index_o!=null && index_o.GetType()==typeof(number)) ? (int)((number)index_o) : -1;
+
             Type type = null;
             if (o is Type)
             {
@@ -357,6 +361,46 @@ namespace slagtool.runtime
             {
                 type = o.GetType();
                 obj = o;
+            }
+
+            if (type == typeof(Hashtable))
+            {
+                var ht = (Hashtable)obj;
+                var val = ht[name];
+                if (val==null)
+                {
+                    item.getter = null;
+                    item.setter_parametertype = null;
+                    item.setter = null;
+                    item.o = null;
+                    return item;
+                }
+                
+                if (val.GetType()==typeof(ARRAY))
+                {
+                    var l= (ARRAY)val;
+                    item.getter = ()=>l[index];
+                    item.setter_parametertype = null;
+                    item.setter = (x)=>l[index]=x;
+                    item.o = l;
+                    return item;
+                }
+
+                if (val.GetType()==typeof(Hashtable))
+                {
+                    var ht2 = (Hashtable)val;
+                    item.getter = ()=>ht2[index_o];
+                    item.setter_parametertype = null;
+                    item.setter = (x)=>ht2[index_o] = x;
+                    item.o = ht2;
+                    return item;
+                }
+
+                //var l = (ARRAY)obj;
+                //item.getter = () => l[index];
+                //item.setter_parametertype = null;
+                //item.setter = (x) => l[index] = x;
+                //return item;
             }
             var mem1 = type.GetDefaultMembers();
             var mem2 = type.GetMembers();

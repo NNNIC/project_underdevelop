@@ -40,13 +40,13 @@ function CreateRectangleMesh(width,height)
     uv[2] = new UnityEngine.Vector2(0, 1);
     uv[3] = new UnityEngine.Vector2(1, 1);
 
-    tri[0] = CastInt(0);
-    tri[1] = CastInt(2);
-    tri[2] = CastInt(3);
+    tri[0] = 0;
+    tri[1] = 2;
+    tri[2] = 3;
 
-    tri[3] = CastInt(0);
-    tri[4] = CastInt(3);
-    tri[5] = CastInt(1);
+    tri[3] = 0;
+    tri[4] = 3;
+    tri[5] = 1;
 
     var mesh  = new UnityEngine.Mesh();
     mesh.vertices = verts;

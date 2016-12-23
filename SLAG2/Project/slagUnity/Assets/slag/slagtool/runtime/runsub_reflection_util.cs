@@ -5,6 +5,7 @@ using System.Collections;
 using System.Reflection;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 using ARRAY = System.Collections.Generic.List<object>;
 
@@ -13,6 +14,10 @@ using number = System.Single;
 #else
 using number = System.Double;
 #endif
+
+// constructorのタイプを調べる
+//https://msdn.microsoft.com/en-us/library/h93ya84h(v=vs.110).aspx
+
 
 namespace slagtool.runtime
 {
@@ -59,7 +64,8 @@ namespace slagtool.runtime
             if (find_m!=null)
             {
                 cache_util.RecordCache(name,type,paramtypes,find_m);
-                return find_m.Invoke(obj,parameters);
+                var p2 = ChangeObjs(parameters,find_m.GetParameters());
+                return find_m.Invoke(obj,p2);
             }
 
             throw new SystemException("Cannot find method : " + type + "." + name + "(API is none or parameter typs not match.)");
@@ -84,7 +90,9 @@ namespace slagtool.runtime
 
                 if (p==null && !f.IsValueType) continue; //Null許容はＯＫ
                 if (p==f) continue;
+                if (__isFloat(p) && __isFloat(f)) continue;//フロート型はdouble/single許容
                 if (p.IsSubclassOf(f)) continue; //ベース一致
+
                 return false;
             }
             return true;
@@ -92,6 +100,10 @@ namespace slagtool.runtime
         private static bool __isNullOrNothing<T>(T[] x)
         {
             return (x==null || x.Length==0);
+        }
+        private static bool __isFloat(Type t)
+        {
+            return (t==typeof(Single) || t==typeof(Double));
         }
 
         #region タイプ収取
@@ -113,6 +125,53 @@ namespace slagtool.runtime
             return tlist.ToArray();
         }
         #endregion
+
+        #region オブジェクトのタイプ変換
+        private static object[] ChangeObjs(object[] ol, ParameterInfo[] pis)
+        {
+            System.Diagnostics.Debug.Assert(ol!=null&&pis!=null&&ol.Length==pis.Length);
+
+            for(int i = 0;i<pis.Length; i++)
+            {
+                var o  = ol[i];
+                var pi = pis[i];
+                if (o==null) continue;
+                var ot= o.GetType();
+                if (ot==pi.ParameterType) continue;
+                if (ot.IsEnum) continue;
+                if (ot.IsSubclassOf(pi.ParameterType)) continue; 
+
+                ol[i] = Convert.ChangeType(o,pi.ParameterType);
+            }
+
+            return ol;
+        }
+        #endregion
+
+        internal static object InstantiateType(Type type, object[] parameters)
+        {
+            var paramtypes = GetObjectsType(parameters);
+            var cts = type.GetConstructors();
+            if (cts==null) return null;
+
+            ConstructorInfo find_c = null;
+            
+            foreach(var c in cts)
+            {
+                var pis = c.GetParameters();
+                if (_isMatchTypes(paramtypes,pis))
+                {
+                    find_c = c;
+                    break;
+                }
+            }
+
+            if (find_c==null) throw new SystemException("the constractor can not find " + type.ToString() );
+
+            var p2 = ChangeObjs(parameters,find_c.GetParameters());
+            return Activator.CreateInstance(type,args:p2);
+        }
+
     }
 
     public class cache_util

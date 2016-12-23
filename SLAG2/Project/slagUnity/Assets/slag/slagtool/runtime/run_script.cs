@@ -226,6 +226,14 @@ namespace slagtool.runtime
                     {
                         var l = (Array)v;
                         if (i<0||i>=l.Length)   util._error( "index("+i+") is out of range");
+                        {//Change type
+                            var et =l.GetType().GetElementType();
+                            var ot =o.GetType();
+                            if (et!=ot && !et.IsEnum && !ot.IsSubclassOf(et))
+                            {
+                                o = Convert.ChangeType(o,et);
+                            }
+                        }
                         l.SetValue(o,i);
                         return;
                     }
@@ -684,7 +692,7 @@ namespace slagtool.runtime
                     nsb = run(v2,nsb.curnull());
                     var o = nsb.m_cur;
 
-                    if (op.Length==2 && op[1]=='=')
+                    if (op.Length==2 && op[1]=='=') //assign operation += *= ...
                     {
                         nsb = run(v0,nsb.curnull());
                         var a = nsb.m_cur;
@@ -908,7 +916,7 @@ namespace slagtool.runtime
                 if (save_pvitem!=null)
                 {
                     nsb.m_pvitem = save_pvitem;
-                    nsb = runsub_pointervar_clause.run_array_var(v,nsb,name,index);
+                    nsb = runsub_pointervar_clause.run_array_var(v,nsb,name,index_o);
                     return nsb;
                 }
 

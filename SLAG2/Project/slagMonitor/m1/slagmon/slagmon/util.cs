@@ -86,5 +86,15 @@ namespace slagmon
             }
 
         }
+        public static void OpenFolder(string folder)
+        {
+            try { 
+                System.Diagnostics.Process.Start(folder);
+            }
+            catch
+            {
+
+            }
+        }
     }
 }

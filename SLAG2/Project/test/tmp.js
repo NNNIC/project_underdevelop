@@ -2,13 +2,10 @@
  Tmp
 */
 
-var t = hashtable();
+var d = hashtable();
 
-t.vv = [];
-t.vv += 1;
-t.vv += 1;
-t.vv += 1;
-t.xy = 10;
+d.s = 0;
+d.s++
 
-Dump(t.vv);
+
 

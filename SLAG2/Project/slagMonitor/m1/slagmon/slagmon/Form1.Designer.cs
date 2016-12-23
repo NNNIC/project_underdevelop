@@ -41,6 +41,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.buttonConfig = new System.Windows.Forms.Button();
+            this.buttonFolder = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textBox1_log
@@ -167,11 +168,22 @@
             this.buttonConfig.UseVisualStyleBackColor = true;
             this.buttonConfig.Click += new System.EventHandler(this.buttonConfig_Click);
             // 
+            // buttonFolder
+            // 
+            this.buttonFolder.Location = new System.Drawing.Point(629, 1);
+            this.buttonFolder.Name = "buttonFolder";
+            this.buttonFolder.Size = new System.Drawing.Size(75, 23);
+            this.buttonFolder.TabIndex = 11;
+            this.buttonFolder.Text = "Folder";
+            this.buttonFolder.UseVisualStyleBackColor = true;
+            this.buttonFolder.Click += new System.EventHandler(this.buttonFolder_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(786, 469);
+            this.Controls.Add(this.buttonFolder);
             this.Controls.Add(this.buttonConfig);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1_filename);
@@ -209,6 +221,7 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Button buttonConfig;
+        private System.Windows.Forms.Button buttonFolder;
     }
 }
 
