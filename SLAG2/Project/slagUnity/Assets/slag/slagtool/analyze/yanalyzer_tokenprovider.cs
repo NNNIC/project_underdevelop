@@ -20,6 +20,7 @@ namespace slagtool
         public enum TokenProvideMode
         {
             ALL_VALUES,
+            POINTER_FUNCS_ARRAY,
             POINTER_VALUES,
             PREFIX_VALUES,
             POSTFIX_VALUES,
@@ -72,13 +73,14 @@ namespace slagtool
             {
                 switch(m_mode)
                 {
-                    case TokenProvideMode.ALL_VALUES:     return _update_all_values();
-                    case TokenProvideMode.POINTER_VALUES: return _update_pointer_values();
-                    case TokenProvideMode.PREFIX_VALUES:  return _update_prefix_values();
-                    case TokenProvideMode.POSTFIX_VALUES: return _update_postfix_values();
-                    case TokenProvideMode.TERNARY_VALUES: return _update_ternary_values();
-                    case TokenProvideMode.CASE_VALUES:    return _update_case_values();
-                    case TokenProvideMode.CLAUSE_VALUES:  return _update_clause_values();
+                    case TokenProvideMode.ALL_VALUES:          return _update_all_values();
+                    case TokenProvideMode.POINTER_FUNCS_ARRAY: return _update_pointer_funcs_and_arrays();
+                    case TokenProvideMode.POINTER_VALUES:      return _update_pointer_values();
+                    case TokenProvideMode.PREFIX_VALUES:       return _update_prefix_values();
+                    case TokenProvideMode.POSTFIX_VALUES:      return _update_postfix_values();
+                    case TokenProvideMode.TERNARY_VALUES:      return _update_ternary_values();
+                    case TokenProvideMode.CASE_VALUES:         return _update_case_values();
+                    case TokenProvideMode.CLAUSE_VALUES:       return _update_clause_values();
                 }
                 return false;
             }
@@ -168,6 +170,47 @@ namespace slagtool
             //    }
             //    return true;
             //}
+            bool _update_pointer_funcs_and_arrays() 
+            {
+                m_subtarget    = null;
+                m_sample_start = null;
+                m_sample_end   = null;
+
+                for(int i = 0; i<m_target.Count; i++)
+                {
+                    var v0 = getval(i);
+                    var v1 = getval(i+1);
+                    var v2 = getval(i+2);
+
+                    if (m_sample_start==null)
+                    {
+                        if (v0!=null && v1!=null && v2!=null && v0.s==".")
+                        {
+                            if (v1.IsType(YDEF.sx_expr) && v2.IsType(YDEF.sx_expr_bracket))
+                            {
+                                m_sample_start = i+1;
+                                m_sample_end   = i+2;
+                                break;
+                            }
+                            if (v1.IsType(YDEF.sx_expr) && v2.IsType(YDEF.sx_array_index))
+                            {
+                                m_sample_start = i+1;
+                                m_sample_end   = i+2;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (m_sample_start!=null)
+                {
+                    m_subtarget = new List<YVALUE>();
+                    for(int j = (int)m_sample_start; j<= (int)m_sample_end; j++) m_subtarget.Add(m_target[j]);
+                    _analyze(ref m_subtarget);
+                    replace_list(ref m_target,(int)m_sample_start,(int)m_sample_end, m_subtarget);
+                    return false;
+                }
+                return true;
+            }
             bool _update_pointer_values()
             {
                 m_subtarget    = null;

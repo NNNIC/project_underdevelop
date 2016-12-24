@@ -173,6 +173,26 @@ namespace slagtool
                         var result = m_tp.GetResult();
 
                         replace_list(ref m_subtarget,1,m_subtarget.Count-2,result);
+                        Goto(S_CHECK_INSIDE_BRACKETS__POINTERFUNCANDARRAY);
+                    }
+                }
+            }
+
+            // 括弧内のポインタ変数内の関数と配列を変換
+            void S_CHECK_INSIDE_BRACKETS__POINTERFUNCANDARRAY(bool bFirst)
+            {
+                if (bFirst)
+                {
+                    m_tp.Start(m_subtarget,1,m_subtarget.Count-2,TokenProvideMode.POINTER_FUNCS_ARRAY);
+                }
+                else
+                {
+                    var bDone = m_tp.Update();
+                    if (bDone)
+                    {
+                        var result = m_tp.GetResult();
+
+                        replace_list(ref m_subtarget,1,m_subtarget.Count-2,result);
                         Goto(S_CHECK_INSIDE_BRACKETS__POINTERVAL);
                     }
                 }
