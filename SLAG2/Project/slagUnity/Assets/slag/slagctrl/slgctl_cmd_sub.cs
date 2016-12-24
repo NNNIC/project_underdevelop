@@ -10,43 +10,76 @@ namespace slgctl
     {
         public static slagtool.slag m_slag;
 
-        public static slagtool.slag Load(string file)
+        public static slagtool.slag Load(string path, string file)
         {
-            if (file==null)
+            string fullpath = null;
+            try
+            {
+                fullpath = Path.Combine(path,file);
+            }
+            catch
+            {
+                wk.SendWriteLine("ERROR:Unexpcted path name");
+                return null;
+            }
+
+            if (fullpath==null)
             {
                 wk.SendWriteLine("ERROR:File name is null!");
                 return null;
             }
-            var ext = Path.GetExtension(file).ToUpper();
+            var ext = Path.GetExtension(fullpath).ToUpper();
             if (ext!=".JS" && ext!=".BIN")
             {
                 wk.SendWriteLine("ERROR:File name is not allowed");
                 return null;
             }
-            if (!File.Exists(file))
+            if (!File.Exists(fullpath))
             {
                 wk.SendWriteLine("ERROR:File does not exist!");
             }
 
             m_slag = null;
 
-#if USETRY
-            try
-#endif
+            if (slagtool.sys.USETRY)
+            {
+                try
+                {
+                    m_slag = new slagtool.slag();
+                    m_slag.LoadFile(fullpath);
+                }
+                catch(SystemException e)
+                {
+                    wk.SendWriteLine("-- EXCEPTION --");
+                    wk.SendWriteLine(e.Message);
+                    wk.SendWriteLine("---------------");
+                    return null;
+                }
+            }
+            else
             {
                 m_slag = new slagtool.slag();
-                m_slag.LoadFile(file);
-                wk.SendWriteLine("Loaded.");
+                m_slag.LoadFile(fullpath);
             }
-#if USETRY
-            catch(SystemException e)
-            {
-                wk.SendWriteLine("-- EXCEPTION --");
-                wk.SendWriteLine(e.Message);
-                wk.SendWriteLine("---------------");
-                return null;
-            }
-#endif
+            wk.SendWriteLine("Loaded.");
+
+//#if USETRY
+//            try
+//#endif
+//            {
+//                m_slag = new slagtool.slag();
+//                m_slag.LoadFile(file);
+//                wk.SendWriteLine("Loaded.");
+//            }
+//#if USETRY
+//            catch(SystemException e)
+//            {
+//                wk.SendWriteLine("-- EXCEPTION --");
+//                wk.SendWriteLine(e.Message);
+//                wk.SendWriteLine("---------------");
+//                return null;
+//            }
+//#endif
 //#else
 //            m_slag = new slagtool.slag();
 //                m_slag.LoadFile(file);
@@ -60,25 +93,48 @@ namespace slgctl
         {
             if (slag!=null) m_slag = slag;
 
-#if USETRY
-            try
-#endif
+            UpdateClear();
+            var sw = new System.Diagnostics.Stopwatch();
+            sw.Start();
+            if (slagtool.sys.USETRY)
             {
-                UpdateClear();
-                var sw = new System.Diagnostics.Stopwatch();
-                sw.Start();
+                try { 
+                    m_slag.Run();
+                } 
+                catch(SystemException e)
+                {
+                    wk.SendWriteLine("-- EXCEPTION --");
+                    wk.SendWriteLine(e.Message);
+                    wk.SendWriteLine("Stop at Line:" + slagtool.YDEF_DEBUG.current_v.get_dbg_line(true).ToString() );
+                    wk.SendWriteLine("---------------");
+                }
+            }
+            else
+            {
                 m_slag.Run();
-                sw.Stop();
-                wk.SendWriteLine("! The program used " + ((float)sw.ElapsedMilliseconds / 1000f).ToString("F3") + "sec !");
             }
-#if USETRY
-            catch (SystemException e)
-            {
-                wk.SendWriteLine("-- EXCEPTION --");
-                wk.SendWriteLine(e.Message);
-                wk.SendWriteLine("---------------");
-            }
-#endif
+            sw.Stop();
+            wk.SendWriteLine("! The program exection time : " + ((float)sw.ElapsedMilliseconds / 1000f).ToString("F3") + "sec !");
+
+//#if USETRY
+//            try
+//#endif
+//            {
+//                UpdateClear();
+//                var sw = new System.Diagnostics.Stopwatch();
+//                sw.Start();
+//                m_slag.Run();
+//                sw.Stop();
+//                wk.SendWriteLine("! The program used " + ((float)sw.ElapsedMilliseconds / 1000f).ToString("F3") + "sec !");
+//            }
+//#if USETRY
+//            catch (SystemException e)
+//            {
+//                wk.SendWriteLine("-- EXCEPTION --");
+//                wk.SendWriteLine(e.Message);
+//                wk.SendWriteLine("---------------");
+//            }
+//#endif
         }
 
         public static void Reset()
@@ -126,29 +182,66 @@ namespace slgctl
         }
         public static void UpdateExec()
         {
-            try { 
-                if (m_sm!=null) m_sm.Update();
-
-                if (m_slag==null) return;
-                if (m_updateFunc==null) return;
-
-                var s = new System.Diagnostics.Stopwatch();
-                s.Start();
-                foreach (var f in m_updateFunc)
-                {
-                    m_slag.CallFunc(f);
-                }
-                s.Stop();
-            }
-            catch(SystemException e)
+            if (slagtool.sys.USETRY)
             {
-                wk.SendWriteLine("-- EXCEPTION --");
-                wk.SendWriteLine(e.Message);
-                wk.SendWriteLine("---------------");
-                m_sm = null;
-                m_updateFunc = null;
+                try
+                {
+                    _updateExec();
+                }
+                catch (SystemException e)
+                {
+                    wk.SendWriteLine("-- EXCEPTION --");
+                    wk.SendWriteLine(e.Message);
+                    wk.SendWriteLine("Stop at Line:" + slagtool.YDEF_DEBUG.current_v.get_dbg_line(true).ToString() );
+                    wk.SendWriteLine("---------------");
+                    m_sm = null;
+                    m_updateFunc = null;
+                }
             }
+            else
+            {
+                _updateExec();
+            }
+
+            //try { 
+            //    if (m_sm!=null) m_sm.Update();
+
+            //    if (m_slag==null) return;
+            //    if (m_updateFunc==null) return;
+
+            //    var s = new System.Diagnostics.Stopwatch();
+            //    s.Start();
+            //    foreach (var f in m_updateFunc)
+            //    {
+            //        m_slag.CallFunc(f);
+            //    }
+            //    s.Stop();
+            //}
+            //catch(SystemException e)
+            //{
+            //    wk.SendWriteLine("-- EXCEPTION --");
+            //    wk.SendWriteLine(e.Message);
+            //    wk.SendWriteLine("---------------");
+            //    m_sm = null;
+            //    m_updateFunc = null;
+            //}
         }
+        private static void _updateExec()
+        {
+            if (m_sm!=null) m_sm.Update();
+
+            if (m_slag==null) return;
+            if (m_updateFunc==null) return;
+
+            var s = new System.Diagnostics.Stopwatch();
+            s.Start();
+            foreach (var f in m_updateFunc)
+            {
+                m_slag.CallFunc(f);
+            }
+            s.Stop();
+        }
+
         //-- StateMachine用
         public class StateMachine
         {

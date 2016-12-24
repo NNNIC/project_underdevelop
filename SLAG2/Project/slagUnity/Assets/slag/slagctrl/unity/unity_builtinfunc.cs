@@ -176,9 +176,6 @@ public class unity_builtinfunc {
         
         return null;
     }
-
-
-
     #region ステートマシン
     public static object F_StateInit(bool bHelp, object[] ol, StateBuffer sb)
     {

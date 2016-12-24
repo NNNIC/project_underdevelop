@@ -79,6 +79,7 @@
     <Compile Include="Assets\slag\slagctrl\unity\slgctl_main.cs" />
     <Compile Include="Assets\slag\slagctrl\unity\slgctl_wk.cs" />
     <Compile Include="Assets\slag\slagctrl\unity\unity_builtinfunc.cs" />
+    <Compile Include="Assets\slag\slagctrl\unity\unity_calc_op.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\lex.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\ydef.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\yanalyzer.cs" />

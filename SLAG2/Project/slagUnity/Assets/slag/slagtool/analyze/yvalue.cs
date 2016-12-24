@@ -181,10 +181,10 @@ namespace slagtool
             print_terminals(this);
             return s;
         }
-        public int get_dbg_line(int depth = 0) //depth==0 最後まで確認
+        public int get_dbg_line(bool baseNumIsOne=false,int depth = 0) //depth==0 最後まで確認
         {
             int line = -1;
-            int cnt = 0;
+            int cnt  = 0;
             Travarse(v => {
                 if (Enum.IsDefined(typeof(TOKEN),v.type))
                 {
@@ -197,9 +197,12 @@ namespace slagtool
                 }
                 return false;
             },depth);
+
+            if (line >=0 && baseNumIsOne) line++;
+
             return line;
         }
-        public int get_debug_column(int depth = 0) //depth==0 最後まで確認
+        public int get_dbg_col(bool baseNumIsOne=false,int depth = 0) //depth==0 最後まで確認
         {
             int line = -1;
             int cnt = 0;
@@ -215,6 +218,9 @@ namespace slagtool
                 }
                 return false;
             },depth);
+
+            if (line>=0 && baseNumIsOne) line++;
+
             return line;
         }
         #endregion

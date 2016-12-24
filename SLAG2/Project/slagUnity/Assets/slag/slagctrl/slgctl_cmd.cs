@@ -37,7 +37,7 @@ namespace slgctl
             switch(cmd)
             {
                 case COMMAND.WD:      if (!string.IsNullOrEmpty(p1)) Set_WorkingDirectoy(p1);          break;
-                case COMMAND.LOAD:    if (!string.IsNullOrEmpty(p1)) cmd_sub.Load(Path.Combine(m_workDir,p1));  break;
+                case COMMAND.LOAD:    if (!string.IsNullOrEmpty(p1)) cmd_sub.Load(m_workDir,p1);  break;
                 case COMMAND.RUN:     cmd_sub.Run();                    break;
                 case COMMAND.STEP:    break;
                 case COMMAND.BP:      break;

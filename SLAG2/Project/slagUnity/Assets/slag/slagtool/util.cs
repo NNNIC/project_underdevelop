@@ -298,6 +298,10 @@ namespace slagtool
             var catname = !string.IsNullOrEmpty(name) ? name : type.ToString();
             runtime.builtin.builtin_func.Subscribe(type,catname);
         }
+        public static void SetCalcOp(Func<object,object,string,object> user_calc_op)
+        {
+            runtime.util.User_Calc_op = user_calc_op;
+        }
         #endregion
 
 
@@ -310,6 +314,10 @@ namespace slagtool
         }
         #endregion
 
+        public static void Error(string msg)
+        {
+            slagtool.runtime.util._error(msg);
+        }
         public static void SetDebugMode(int n) { sys.DEBUGLEVEL = n;    }
         public static int  GetDebugMode()      { return sys.DEBUGLEVEL; }
     }

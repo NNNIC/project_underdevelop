@@ -92,4 +92,7 @@ https://msdn.microsoft.com/en-us/library/h93ya84h(v=vs.110).aspx
 
 v.s = "." 等は、まずいんじゃないか？　定義名等がスクリプトで使用できない <------------------------------- ※
 
+---
+
+util.isNumericType() <--------------- 作成せよ。
 

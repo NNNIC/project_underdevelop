@@ -26,9 +26,9 @@ namespace slagtool
         bool     m_bInComment;   // スラッシュ(/)・アスタリスク(*)のコメント
 
         List<YVALUE> m_curline_value;
-        public List<List<YVALUE>> m_value_list;  //行単位
+        internal List<List<YVALUE>> m_value_list;  //行単位
 
-        public void Init(string src)
+        internal void Init(string src)
         {
             m_src = src;
             m_lines = m_src.Split('\x0a');
@@ -50,7 +50,7 @@ namespace slagtool
             m_curline_value = null;
         }
 
-        public bool CheckOne() //no more then return false;
+        internal bool CheckOne() //no more then return false;
         {
             if (m_l >= m_lines.Length)
             {
@@ -86,7 +86,7 @@ namespace slagtool
 
     public class lexUtil //汎用で使う。
     {
-        public static List<List<YVALUE>> lexSource(string src)
+        internal static List<List<YVALUE>> lexSource(string src)
         {
             const int LOOPMAX = 10000;
 
@@ -104,7 +104,7 @@ namespace slagtool
             return lex.m_value_list;
         }
 
-        public static YVALUE GetWord(ref bool bInComment, out int wdlen, int col, string i_line, int dbg_line = -1)
+        internal static YVALUE GetWord(ref bool bInComment, out int wdlen, int col, string i_line, int dbg_line = -1)
         {
             var v= new YVALUE();
 

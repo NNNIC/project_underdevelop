@@ -19,6 +19,8 @@ namespace slagtool
         static int m_match_count; //文法パターンが一致した回数。この回数が止まるとエラーとする。
         const int MATCHLIMIT = 100; //m_match_countの停止許容
 
+        static List<YVALUE> m_latest_analyze_target;
+
         public static bool Analyze(List<YVALUE> src, out List<YVALUE> dst)
         {
             int stopmatch_count = 0;
@@ -47,6 +49,15 @@ namespace slagtool
                 {
                     if (stopmatch_count++>MATCHLIMIT)
                     { 
+                        if (m_latest_analyze_target!=null)
+                        { 
+                            sys.logline("=============================",true);
+                            sys.logline("= The Latest Analyze Target =",true);
+                            YDEF_DEBUG.PrintLineAndCol(m_latest_analyze_target,true); sys.logline(null,true);
+                            YDEF_DEBUG.PrintListValue(m_latest_analyze_target,true); 
+                            sys.logline("=============================",true);
+                            sys.error("ERROR:Check the latest analyze target.");
+                        }
                         sys.error("ERROR:Someting happend.");
                     }
 
@@ -677,6 +688,7 @@ namespace slagtool
 #region  解析
         private static bool _analyze(ref List<YVALUE> dst)
         {
+            m_latest_analyze_target = dst;
             if (slagtool.sys.DEBUGLEVEL>=2)
             { 
                 sys.logline("==================");

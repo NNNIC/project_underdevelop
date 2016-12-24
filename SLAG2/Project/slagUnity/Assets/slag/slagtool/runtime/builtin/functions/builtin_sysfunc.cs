@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Text;
 using number = System.Double;
+using System.Reflection;
 
 namespace slagtool.runtime.builtin
 {
@@ -163,7 +165,7 @@ namespace slagtool.runtime.builtin
         {
             if (bHelp)
             {
-                return "Cast the object to the specified type. ex)var i = Cast(\"System.Int16\",j);";
+                return "Cast the object to the specified type. ex)var i = Cast(\"System.Int16\",j);  or Cast(type,j); ";
             }
 
             kit.check_num_of_args(ol,2);
@@ -173,6 +175,63 @@ namespace slagtool.runtime.builtin
 
             var o = ol[1];
             return Convert.ChangeType(o,type);
+        }
+        public static object F_ToArray(bool bHelp, object[] ol, StateBuffer sb)
+        {
+            if (bHelp)
+            {
+                return "Make the array to the specific type array." +NL + 
+                       "Format: var new_l1 = ToArray(\"System.Int16\",l);" + NL +
+                       "        var type = typeof(\"System.Int16\"); var new_l2 = ToArray(\"System.Int16\",l);";
+            }
+            kit.check_num_of_args(ol,2);
+
+            Type type = null;
+            if (ol[0] is Type)
+            {
+                type = (Type)ol[0];
+            }
+            else
+            { 
+                var s = kit.get_string_at(ol,0).ToUpper();
+                type = slagtool.runtime.sub_pointervar_clause.find_typeinfo(s);
+            }
+
+            var l = ol[1];
+            if (l==null) return null;
+            var lt = l.GetType();
+            if (l is IList)
+            {
+                var rl = (IList)l;
+                var oa = Array.CreateInstance(type,rl.Count);
+                for(var i = 0; i<rl.Count; i++)
+                {
+                    var e = rl[i];
+                    if (e!=null &&  e.GetType()!=type)
+                    { 
+                        e = Convert.ChangeType(e,type);
+                    }
+                    oa.SetValue(e,i);
+                }
+                return oa;
+            }
+            if (lt.IsArray)
+            {
+                var rl = (Array)l;
+                var oa = Array.CreateInstance(type,rl.Length);
+                for(var i = 0; i<rl.Length;i++)
+                {
+                    var e = rl.GetValue(i);
+                    if (e!=null && e.GetType()!=type)
+                    {
+                        e = Convert.ChangeType(e,type);
+                    }
+                    oa.SetValue(e,i);
+                }
+                return oa;
+            }
+            util._error("Unexpected");
+            return null;
         }
 #endregion
 

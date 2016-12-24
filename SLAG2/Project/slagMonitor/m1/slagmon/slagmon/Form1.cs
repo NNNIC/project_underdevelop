@@ -157,7 +157,7 @@ namespace slagmon
                 var path = @"N:\Project\test\" + filename;
                 if (File.Exists(path))
                 {
-                    textBox2_src.Text = File.ReadAllText(path);
+                    textBox2_src.Text = File.ReadAllText(path,Encoding.UTF8);
                     label1_filename.Text = filename;
                 }              
             }

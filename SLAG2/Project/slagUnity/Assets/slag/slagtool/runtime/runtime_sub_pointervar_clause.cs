@@ -67,6 +67,10 @@ namespace slagtool.runtime
             {
                 nsb.m_cur = item.o;  
             }
+            else if (item.mode == PointervarMode.ITEM)
+            {
+                nsb.m_cur = item;
+            }
             nsb.pvitemnull();
 
             return nsb;

@@ -28,7 +28,7 @@ namespace slagtool.runtime
     }
 
 #region ピリオド区切りのポインタ変数要素
-    public enum  PointervarMode { GET,SET,NEW } 
+    public enum  PointervarMode { GET,SET,NEW,ITEM }    //※ItemはPoitervarItemそのものを返す。 ++等の最適化のため
     public class PointervarItem 
     {
         public PointervarMode mode;
@@ -46,6 +46,39 @@ namespace slagtool.runtime
         {
             getter = null;
             setter = null;
+        }
+
+        public number get_number(bool ErrorAsNan=false)
+        {
+            if (getter==null)
+            {
+                if (ErrorAsNan) return number.NaN; 
+                util._error("Pointer Variable get_number unexpected #1");
+            }
+            object a = getter();
+
+            var num = util.ToNumber(a,ErrorAsNan);
+            
+            return (number)num;
+        }
+
+        public void set_object(object a)
+        {
+            if (setter==null) util._error("Pointer Variable set_object unexpectd");
+            if (a!=null)
+            { 
+                var at =a.GetType();
+                if (setter_parametertype!=null && at!=setter_parametertype && !at.IsEnum)
+                {
+                    a = Convert.ChangeType(a,setter_parametertype);
+                }
+            }
+            setter(a);
+        }
+
+        public void set_number(number n)
+        {
+            set_object(n);
         }
     }
 #endregion
@@ -281,14 +314,15 @@ namespace slagtool.runtime
         }
         public number get_number_cur()
         {
-            if (m_cur!=null)
-            {
-                if (m_cur.GetType()==typeof(number))
-                {
-                    return (number)m_cur;
-                }
-            }
-            return number.NaN;
+            return util.ToNumber(m_cur,true);
+            //if (m_cur!=null)
+            //{
+            //    if (m_cur.GetType()==typeof(number))
+            //    {
+            //        return (number)m_cur;
+            //    }
+            //}
+            //return number.NaN;
         }
         public string get_string_cur()
         {
@@ -710,15 +744,16 @@ namespace slagtool.runtime
                         if (nsb.m_cur!=null)
                         {
                             var item = (PointervarItem)nsb.m_cur;
-                            if (item!=null&&item.setter!=null)
-                            { 
-                                var otype =o.GetType();
-                                if (!otype.IsEnum &&item.setter_parametertype!=null && otype!=item.setter_parametertype)
-                                {
-                                    o = Convert.ChangeType(o,item.setter_parametertype);
-                                }
-                                item.setter(o);
-                            }
+                            item.set_object(o);
+                            //if (item!=null&&item.setter!=null)
+                            //{ 
+                            //    var otype =o.GetType();
+                            //    if (!otype.IsEnum &&item.setter_parametertype!=null && otype!=item.setter_parametertype)
+                            //    {
+                            //        o = Convert.ChangeType(o,item.setter_parametertype);
+                            //    }
+                            //    item.setter(o);
+                            //}
                             return nsb;
                         }
                         util._error("unexpected");
@@ -768,25 +803,47 @@ namespace slagtool.runtime
                 }
                 else if (v.list.Count==2)
                 {
-                    var str_1st = v.list[0].GetString();
-                    var str_2nd = v.list[1].GetString();
+                    var vlist0 = v.list[0];
+                    var vlist1 = v.list[1];
 
-                    var is_1st_incop = (v.list[0].type == YDEF.INCOP);
-                    var is_2nd_icnop = (v.list[1].type == YDEF.INCOP);
-                    var is_new_word  = (v.list[0].type == YDEF.NEW);
+                    var str_1st = vlist0.GetString();
+                    var str_2nd = vlist1.GetString();
+
+                    var is_1st_incop = (vlist0.type == YDEF.INCOP);
+                    var is_2nd_icnop = (vlist1.type == YDEF.INCOP);
+                    var is_new_word  = (vlist0.type == YDEF.NEW);
 
                     if (is_1st_incop)
                     {
-                        var n = str_2nd;
-                        var o = nsb.get(n);
-                        if (o.GetType()==typeof(number))
+                        if (vlist1.IsType(YDEF.NAME))
+                        { 
+                            var n = str_2nd;
+                            var o = nsb.get(n);
+                            var num = util.ToNumber(o,true);
+                            if (double.IsNaN(num))
+                            {
+                                util._error("unexpected operation for " + str_2nd);
+                            }
+                            if (str_1st=="++") num++;
+                            else if (str_1st=="--") num--;
+                            else util._error("the operation is unexpected");
+
+                            nsb.find_and_set(n,num);
+                            nsb.m_cur = num;
+                            return nsb;
+                        }
+                        else if (vlist1.IsType(YDEF.sx_pointervar_clause))
                         {
-                            var num = (number)o;
+                            nsb = sub_pointervar_clause.run(vlist1,nsb.curnull(),PointervarMode.ITEM);
+                            var item = (PointervarItem)nsb.m_cur;
+                            if (item==null) util._error("unexpected");
+
+                            var num= item.get_number();
                             if (str_1st=="++") num++;
                             else if (str_1st=="--") num--;
                             else util._error("unexpected");
 
-                            nsb.find_and_set(n,num);
+                            item.set_number(num);
                             nsb.m_cur = num;
                             return nsb;
                         }
@@ -798,16 +855,37 @@ namespace slagtool.runtime
                     else if (is_2nd_icnop)
                     {
                         var n = str_1st;
-                        var o = nsb.get(n);
-                        if (o.GetType()==typeof(number))
+                        if (vlist0.IsType(YDEF.NAME))
+                        { 
+                            var o = nsb.get(n);
+                            if (o.GetType()==typeof(number))
+                            {
+                                var num = (number)o;
+                                nsb.m_cur = num;
+                                if (str_2nd=="++") num++;
+                                else if (str_2nd=="--") num--;
+                                else util._error("unexpected");
+
+                                nsb.find_and_set(n,num);
+                                return nsb;
+                            }
+
+                        }
+                        else if (vlist0.IsType(YDEF.sx_pointervar_clause))
                         {
-                            var num = (number)o;
+                            nsb = sub_pointervar_clause.run(vlist0,nsb.curnull(),PointervarMode.ITEM);
+                            var item = (PointervarItem)nsb.m_cur;
+                            if (item==null) util._error("unexpected");
+                            
+                            var num = item.get_number();
                             nsb.m_cur = num;
+
                             if (str_2nd=="++") num++;
                             else if (str_2nd=="--") num--;
                             else util._error("unexpected");
 
-                            nsb.find_and_set(n,num);
+                            item.set_number(num);
+
                             return nsb;
                         }
                         else

@@ -22,8 +22,9 @@ public class slgctl_main : MonoBehaviour {
         m_netcomm = new netcomm();
         m_netcomm.Start();
 
-        slagtool.util.SetLogFunc(wk.SendWrite,wk.SendWriteLine,1);
+        slagtool.util.SetLogFunc(wk.SendWrite,wk.SendWriteLine,0);
         slagtool.util.SetBuitIn(typeof(unity_builtinfunc));
+        slagtool.util.SetCalcOp(unity_calc_op.Calc_op);
 
         while(true)
         {

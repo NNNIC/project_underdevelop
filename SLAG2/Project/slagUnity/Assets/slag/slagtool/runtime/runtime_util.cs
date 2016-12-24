@@ -10,7 +10,7 @@ namespace slagtool.runtime
 {
     public class util
     {
-        public static bool is_paramlist(YVALUE v)
+        internal static bool is_paramlist(YVALUE v)
         {
             if (v.type == YDEF.get_type(YDEF.sx_expr))
             {
@@ -25,7 +25,7 @@ namespace slagtool.runtime
             }
             return false;
         }
-        public static YVALUE normalize_func_bracket(YVALUE v)
+        internal static YVALUE normalize_func_bracket(YVALUE v)
         {
             if (v.type != YDEF.get_type(YDEF.sx_expr_bracket)) _error("unexpected");
 
@@ -59,7 +59,7 @@ namespace slagtool.runtime
             return v;        
         }
 
-        public static YVALUE check_switch_sentence_block(YVALUE v)
+        internal static YVALUE check_switch_sentence_block(YVALUE v)
         {
             if (v.type != YDEF.get_type(YDEF.sx_sentence_block)) throw new System.Exception("unexpected switch block #1");
             var inblock = v.list_at(1);
@@ -107,7 +107,7 @@ namespace slagtool.runtime
                 _error("unexpected switch senetence");
             }
         }
-        public static string DelDQ(string i)
+        internal static string DelDQ(string i)
         {
             var s = i;
             if (string.IsNullOrEmpty(i)) return "";
@@ -115,7 +115,9 @@ namespace slagtool.runtime
             if (s.EndsWith("\""))   s=s.Substring(0,s.Length-1);
             return s;
         }
-        public static object Calc_op(object a, object b, string op)
+
+        internal static Func<object, object, string, object> User_Calc_op = null; //ユーザ用
+        internal static object Calc_op(object a, object b, string op)
         {
             if (a==null || b==null)
             {
@@ -209,17 +211,57 @@ namespace slagtool.runtime
                     }
                 }
             }
+
+            if (User_Calc_op!=null)
+            {
+                return User_Calc_op(a,b,op);
+            }
+
             _error("unexpected calc op:"+op);  
             return null;                 
         }
 
+        internal static bool IsNumeric(Type type)
+        {
+            return (
+                type == typeof(System.Byte)    ||   type == typeof(System.SByte)
+                ||
+                type == typeof(System.Int16)   ||   type == typeof(System.UInt16)
+                ||
+                type == typeof(System.Int32)   ||   type == typeof(System.UInt32)
+                ||
+                type == typeof(System.Int64)   ||   type == typeof(System.UInt64)
+                ||
+                type == typeof(System.Single)  ||   type == typeof(System.Double)
+                );
+        }
+        internal static number ToNumber(object o, bool ErrorAsNan=false)
+        {
+            if (o==null)
+            {
+                if (ErrorAsNan) return number.NaN;
+                util._error("number is null");
+            }
+            var ot =o.GetType();
+            if (!IsNumeric(ot))
+            {
+                if (ErrorAsNan) return number.NaN;
+                util._error("it is not numeric");
+            }
+            if (ot != typeof(number))
+            {
+                return (number)Convert.ChangeType(o,typeof(number));
+            }
+            return (number)o;
+        }
+
         // Error
-        public static void _error(string cmt)
+        internal static void _error(string cmt)
         {
             var s = cmt + "\n" + YDEF_DEBUG.RuntimeErrorInfo();
             throw new SystemException(s);
         }
-        public static void Assert(bool condition)
+        internal static void Assert(bool condition)
         {
 #if UNITY_5
             UnityEngine.Assertions.Assert.IsTrue(condition);

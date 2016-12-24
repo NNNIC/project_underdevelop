@@ -159,7 +159,7 @@ namespace slagtool.runtime
                 }
             }
 
-            if (find_c==null) throw new SystemException("the constractor can not find " + type.ToString() );
+            if (find_c==null) util._error("the constractor can not find " + type.ToString() );
 
             var p2 = ChangeObjs(parameters,find_c.GetParameters());
             return Activator.CreateInstance(type,args:p2);

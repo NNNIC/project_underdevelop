@@ -2,10 +2,14 @@
  Tmp
 */
 
-var d = hashtable();
+function ToVector2From3(v)
+{
+    return new UnityEngine.Vector2(v.x,v.y);
+}
 
-d.s = 0;
-d.s++;
 
-
+var v  = new UnityEngine.Vector3(1,2,3);
+var v2 = v / 2;
+var u = ToVector2From3(v2);
+Dump(u.x);
 

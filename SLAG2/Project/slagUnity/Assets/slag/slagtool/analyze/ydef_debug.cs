@@ -136,11 +136,11 @@ namespace slagtool
         #endregion
 
         #region Print
-        public static void PrintListValue(List<YVALUE> l)
+        public static void PrintListValue(List<YVALUE> l,bool bForce=false)
         {
             var s = "";
             l.ForEach(v=>s+=PrintValue(v)); 
-            sys.logline(s);
+            sys.logline(s,bForce);
         }
         public static string PrintValue(YVALUE v)
         {
@@ -173,14 +173,14 @@ namespace slagtool
             }
             return s;
         }
-        public static void PrintLineAndCol(List<YVALUE> l)
+        public static void PrintLineAndCol(List<YVALUE> l,bool bForce=false)
         {
-            if (l==null || l.Count==0) { sys.log("Line:?,Col:?"); return; }
+            if (l==null || l.Count==0) { sys.log("Line:?,Col:?",bForce); return; }
             var v = l[0];
-            var line = v.get_dbg_line();
-            var col  = v.get_dbg_line();
+            var line = v.get_dbg_line(true);
+            var col  = v.get_dbg_col(true);
 
-            sys.log( string.Format("Line:{0},Col:{1}",line,col));
+            sys.log( string.Format("Line:{0},Col:{1}",line,col),bForce);
         }
         #endregion
 
@@ -191,7 +191,7 @@ namespace slagtool
 
             string s = null;
 
-            s += "Error at line:" + (current_v.get_dbg_line() + 1);
+            s += "Error at line:" + (current_v.get_dbg_line(true));
              
             return s;            
         }
