@@ -177,6 +177,7 @@ public class slagctl_unity_builtinfunc {
         return null;
     }
     #region ステートマシン
+#if obs
     public static object F_StateInit(bool bHelp, object[] ol, StateBuffer sb)
     {
         if (bHelp)
@@ -210,5 +211,34 @@ public class slagctl_unity_builtinfunc {
         slagctl.cmd_sub.StateWaitCnt((int)c);
         return null;
     }
+#else
+    public static object F_StateManager(bool bHelp, object[] ol, StateBuffer sb)
+    {
+        if (bHelp)
+        {
+            return "Create new State Manager. ex) var sm = new StateManager(); or var sm=new StateManager(gameObject);" +NL+ 
+                   "If you set a Game Object as a parameter, the state manager will be belonged to the Game Object" ;
+        }
+
+        slagctl_unity_statemanager sm = null;
+        if (ol.Length == 0)
+        {
+            sm = slagctl_unity_main.V.gameObject.AddComponent<slagctl_unity_statemanager>();
+        }
+        else if (ol[0] is GameObject)
+        {
+            sm = ((GameObject)ol[0]).AddComponent<slagctl_unity_statemanager>();
+        }
+        else
+        {
+            util._error("StateManager has unknown parameter.");
+        }
+
+        sm.Init();
+
+        return sm;
+    }
+
+#endif
     #endregion
 }

@@ -3,14 +3,18 @@
 //
 
 
-StateInit("S_START");
+//StateInit("S_START");
+var sm = StateManager();
+
+sm.Goto("S_START");
 
 function S_START(bFirst)
 {
     if (bFirst)
     {
         PrintLn("== START ==");
-        StateGoto("S_READ");
+        //StateGoto("S_READ");
+        sm.Goto("S_READ");
     }
 }
 
@@ -25,7 +29,7 @@ function S_READ(bFirst)
         var s = ReadLineDone();
         if (s!=null)
         {
-            StateGoto("S_END");
+            sm.Goto("S_END");
         }
     }
 }
@@ -37,6 +41,3 @@ function S_END(bFirst)
         PrintLn("== END ==");
     }
 }
-
-
-

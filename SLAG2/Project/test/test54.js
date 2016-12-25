@@ -141,6 +141,13 @@ function Circle_Create(radius,num_of_div,rev)
 
          PrintLn("a1:a2=" + a1 + ":" + a2);
 
+	 if (radius != 1)
+         {
+             v1 *= radius;
+             v2 *= radius;
+         }
+
+
          if (rev)
          {
   	     d = Add_Vertex(d,v2,v1,v0,uv2,uv1,uv0);
@@ -156,8 +163,32 @@ function Circle_Create(radius,num_of_div,rev)
     return go;
 }
 
-var g1 = Circle_Create(10, 4, true);
-g1.name = "#1:" + go.name;
-g1.transform.position = UnityEngine.Vector3.up * 3;
 
+var g1 = Circle_Create(1, 3, true);
+g1.name = "#1:" + go.name;
+g1.transform.position = UnityEngine.Vector3.up * 5 + UnityEngine.Vector3.left * 2;
+
+var g2 = Circle_Create(1, 4, true);
+g2.name = "#1:" + go.name;
+g2.transform.position = UnityEngine.Vector3.up * 3 + UnityEngine.Vector3.left * 2;
+
+var g3 = Circle_Create(1, 5, true);
+g3.name = "#3:" + go.name;
+g3.transform.position = UnityEngine.Vector3.up * 1 + UnityEngine.Vector3.left * 2;
+
+var g4 = Circle_Create(1, 6, true);
+g4.name = "#4:" + go.name;
+g4.transform.position = UnityEngine.Vector3.up * (-1) + UnityEngine.Vector3.left * 2;
+
+var g5 = Circle_Create(1, 8, true);
+g5.name = "#5:" + go.name;
+g5.transform.position = UnityEngine.Vector3.up * (-3) + UnityEngine.Vector3.left * 2;
+
+var g6 = Circle_Create(1, 20, true);
+g6.name = "#6:" + go.name;
+g6.transform.position = UnityEngine.Vector3.up * (-5) + UnityEngine.Vector3.left * 2;
+
+var g7 = Circle_Create(2, 40, true);
+g7.name = "#7:" + go.name;
+g7.transform.position = UnityEngine.Vector3.up * 0 + UnityEngine.Vector3.left * (-1);
 

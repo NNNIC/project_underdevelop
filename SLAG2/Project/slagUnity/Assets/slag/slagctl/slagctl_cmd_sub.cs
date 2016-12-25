@@ -243,6 +243,7 @@ namespace slagctl
         }
 
         //-- StateMachine用
+        [Obsolete]
         public class StateMachine
         {
             string m_cur;
@@ -250,9 +251,12 @@ namespace slagctl
 
             int    m_waitcnt;
 
+            [Obsolete]
             public void Goto(string func) { m_next     = func;  }
+            [Obsolete]
             public void Wait(int c)       { m_waitcnt  = c;}
 
+            [Obsolete]
             public void Update()
             {
                 if (m_waitcnt>0)
@@ -272,15 +276,18 @@ namespace slagctl
         }
 
         public static StateMachine m_sm;
+        [Obsolete]
         public static void StateInit(string func)
         {
             m_sm = new StateMachine();
             m_sm.Goto(func);
         }
+        [Obsolete]
         public static void StateGoto(string func)
         {
             m_sm.Goto(func);
         }
+        [Obsolete]
         public static void StateWaitCnt(int c)
         {
             m_sm.Wait(c);

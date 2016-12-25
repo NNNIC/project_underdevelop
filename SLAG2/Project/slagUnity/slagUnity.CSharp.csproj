@@ -75,10 +75,11 @@
     <Compile Include="Assets\slag\slagctl\slagctl_cmd_sub.cs" />
     <Compile Include="Assets\slag\slagctl\slagctl_netcom.cs" />
     <Compile Include="Assets\slag\slagctl\slagctl_wk.cs" />
+    <Compile Include="Assets\slag\slagctl\unity\builtin\commponent\slagctl_unity_monoehaviour.cs" />
+    <Compile Include="Assets\slag\slagctl\unity\builtin\commponent\slagctl_unity_statemanager.cs" />
     <Compile Include="Assets\slag\slagctl\unity\builtin\slagctl_unity_builtincalc_op.cs" />
     <Compile Include="Assets\slag\slagctl\unity\builtin\slagctl_unity_builtinfunc.cs" />
     <Compile Include="Assets\slag\slagctl\unity\slagctl_unity_main.cs" />
-    <Compile Include="Assets\slag\slagctl\unity\slagctl_unity_monoehaviour.cs" />
     <Compile Include="Assets\slag\slagctl\unity\slagctl_unity_resetscene.cs" />
     <Compile Include="Assets\slag\slagctl\unity\slagctl_unity_wk.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\lex.cs" />
