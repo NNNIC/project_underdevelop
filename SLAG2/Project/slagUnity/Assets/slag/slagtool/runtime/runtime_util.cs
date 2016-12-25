@@ -141,22 +141,10 @@ namespace slagtool.runtime
                     default:    _error("unexpected string operaion");   break;
                 }
             }
-            else if (a.GetType()==typeof(number))
+            else if (util.IsNumeric(a.GetType()))  // if (a.GetType()==typeof(number))
             {
-                var x = (number)a;
-                number y = 0;
-                if (typeof(number)==typeof(float))
-                { 
-                    y = (number)Convert.ToSingle(b);
-                }
-                else if (typeof(number)==typeof(double))
-                {
-                    y = (number)Convert.ToDouble(b);
-                }
-                else
-                {
-                    _error("unexpected");
-                }
+                var x = util.ToNumber(a);
+                var y = util.ToNumber(b);
                 
                 switch(op)
                 {

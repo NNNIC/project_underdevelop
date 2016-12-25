@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace slgctl
+namespace slagctl
 {
     public class netcomm
     {

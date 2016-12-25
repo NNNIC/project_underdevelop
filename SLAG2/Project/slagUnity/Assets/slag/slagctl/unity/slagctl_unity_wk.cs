@@ -2,8 +2,8 @@
 using System.Collections;
 using System;
 
-namespace slgctl { 
-    public class wk
+namespace slagctl.unity { 
+    public class wk_
     {
         private static string m_tmp;
         public static void SendWrite(string s)
@@ -15,7 +15,7 @@ namespace slgctl {
             m_tmp += s;
             var save = m_tmp;
             m_tmp = null;
-            if (slgctl_main.m_netcomm!=null) slgctl_main.m_netcomm.SendMsg(save);
+            if (slagctl_unity_main.m_netcomm!=null) slagctl_unity_main.m_netcomm.SendMsg(save);
             Debug.Log(s);
         }
 

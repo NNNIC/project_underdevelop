@@ -1,15 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Threading;
-using slgctl;
+using slagctl;
 using UnityEngine.SceneManagement;
 
-public class slgctl_main : MonoBehaviour {
 
+public class slagctl_unity_main : MonoBehaviour {
+
+    public static slagctl_unity_main V; //veridical pointer ... self pointer
     public static netcomm m_netcomm;
 
     bool m_bReqAbort;
     bool m_bEnd;
+
+    void Awake()
+    {
+        V = this;
+    }
 
 	IEnumerator Start () {
 
@@ -23,8 +30,8 @@ public class slgctl_main : MonoBehaviour {
         m_netcomm.Start();
 
         slagtool.util.SetLogFunc(wk.SendWrite,wk.SendWriteLine,0);
-        slagtool.util.SetBuitIn(typeof(unity_builtinfunc));
-        slagtool.util.SetCalcOp(unity_calc_op.Calc_op);
+        slagtool.util.SetBuitIn(typeof(slagctl_unity_builtinfunc));
+        slagtool.util.SetCalcOp(slagctl_unity_builtincalc_op.Calc_op);
 
         while(true)
         {
@@ -39,7 +46,7 @@ public class slgctl_main : MonoBehaviour {
             {
                 continue;
             }
-            slgctl.cmd.execute(cmd);
+            slagctl.cmd.execute(cmd);
         }
         m_bEnd = true;
     }
@@ -47,7 +54,7 @@ public class slgctl_main : MonoBehaviour {
     void Update()
     {
         if (!m_bReqAbort) wk.Update();
-        if (!m_bReqAbort) slgctl.cmd_sub.UpdateExec();
+        if (!m_bReqAbort) slagctl.cmd_sub.UpdateExec();
     }
 
     void Reset()

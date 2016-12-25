@@ -71,15 +71,16 @@
   <ItemGroup>
     <Compile Include="Assets\slag\cmn\FilePipe.cs" />
     <Compile Include="Assets\slag\cmn\StateManager.cs" />
-    <Compile Include="Assets\slag\slagctrl\slgctl_cmd.cs" />
-    <Compile Include="Assets\slag\slagctrl\slgctl_cmd_sub.cs" />
-    <Compile Include="Assets\slag\slagctrl\slgctl_netcom.cs" />
-    <Compile Include="Assets\slag\slagctrl\unity\resetscene.cs" />
-    <Compile Include="Assets\slag\slagctrl\unity\slag_monoehaviour.cs" />
-    <Compile Include="Assets\slag\slagctrl\unity\slgctl_main.cs" />
-    <Compile Include="Assets\slag\slagctrl\unity\slgctl_wk.cs" />
-    <Compile Include="Assets\slag\slagctrl\unity\unity_builtinfunc.cs" />
-    <Compile Include="Assets\slag\slagctrl\unity\unity_calc_op.cs" />
+    <Compile Include="Assets\slag\slagctl\slagctl_cmd.cs" />
+    <Compile Include="Assets\slag\slagctl\slagctl_cmd_sub.cs" />
+    <Compile Include="Assets\slag\slagctl\slagctl_netcom.cs" />
+    <Compile Include="Assets\slag\slagctl\slagctl_wk.cs" />
+    <Compile Include="Assets\slag\slagctl\unity\builtin\slagctl_unity_builtincalc_op.cs" />
+    <Compile Include="Assets\slag\slagctl\unity\builtin\slagctl_unity_builtinfunc.cs" />
+    <Compile Include="Assets\slag\slagctl\unity\slagctl_unity_main.cs" />
+    <Compile Include="Assets\slag\slagctl\unity\slagctl_unity_monoehaviour.cs" />
+    <Compile Include="Assets\slag\slagctl\unity\slagctl_unity_resetscene.cs" />
+    <Compile Include="Assets\slag\slagctl\unity\slagctl_unity_wk.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\lex.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\ydef.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\yanalyzer.cs" />

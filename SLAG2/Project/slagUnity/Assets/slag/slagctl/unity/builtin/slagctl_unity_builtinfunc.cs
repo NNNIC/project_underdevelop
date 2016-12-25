@@ -8,7 +8,7 @@ using slagtool.runtime;
 using slagtool.runtime.builtin;
 
 
-public class unity_builtinfunc {
+public class slagctl_unity_builtinfunc {
     static string NL = Environment.NewLine;
 
     public static object F_Println(bool bHelp,object[] ol,StateBuffer sb)
@@ -126,7 +126,7 @@ public class unity_builtinfunc {
         }
         var f = kit.get_string_at(ol,0);
 
-        slgctl.cmd_sub.UpdateAddFunc(f);
+        slagctl.cmd_sub.UpdateAddFunc(f);
 
         return null;
     }
@@ -140,8 +140,8 @@ public class unity_builtinfunc {
 
         kit.check_num_of_args(ol,2);
         var go = (GameObject)ol[0];
-        var sm = go.GetComponent<slag_monoehaviour>();
-        if (sm==null) sm = go.AddComponent<slag_monoehaviour>();
+        var sm = go.GetComponent<slagctl_unity_monoehaviour>();
+        if (sm==null) sm = go.AddComponent<slagctl_unity_monoehaviour>();
         sm.m_startfunc = kit.get_string_at(ol,1);
         
         return null;
@@ -155,8 +155,8 @@ public class unity_builtinfunc {
 
         kit.check_num_of_args(ol,2);
         var go = (GameObject)ol[0];
-        var sm = go.GetComponent<slag_monoehaviour>();
-        if (sm==null) sm = go.AddComponent<slag_monoehaviour>();
+        var sm = go.GetComponent<slagctl_unity_monoehaviour>();
+        if (sm==null) sm = go.AddComponent<slagctl_unity_monoehaviour>();
         sm.m_updatefunc = kit.get_string_at(ol,1);
         
         return null;
@@ -170,8 +170,8 @@ public class unity_builtinfunc {
 
         kit.check_num_of_args(ol,2);
         var go = (GameObject)ol[0];
-        var sm = go.GetComponent<slag_monoehaviour>();
-        if (sm==null) sm = go.AddComponent<slag_monoehaviour>();
+        var sm = go.GetComponent<slagctl_unity_monoehaviour>();
+        if (sm==null) sm = go.AddComponent<slagctl_unity_monoehaviour>();
         sm.m_ondestroyfunc = kit.get_string_at(ol,1);
         
         return null;
@@ -185,7 +185,7 @@ public class unity_builtinfunc {
         }
         var f = kit.get_string_at(ol,0);
 
-        slgctl.cmd_sub.StateInit(f);
+        slagctl.cmd_sub.StateInit(f);
 
         return null;
     }
@@ -197,7 +197,7 @@ public class unity_builtinfunc {
         }
         var f = kit.get_string_at(ol,0);
 
-        slgctl.cmd_sub.StateGoto(f);
+        slagctl.cmd_sub.StateGoto(f);
 
         return null;
     }
@@ -207,7 +207,7 @@ public class unity_builtinfunc {
 
         var f = kit.get_number_at(ol,0);
         var c = f * 60.0f;
-        slgctl.cmd_sub.StateWaitCnt((int)c);
+        slagctl.cmd_sub.StateWaitCnt((int)c);
         return null;
     }
     #endregion

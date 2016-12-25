@@ -46,9 +46,9 @@ namespace slagtool.runtime.builtin
         }
         public static List<object> get_list_at(object[] ol, int n)
         {
-            var o = get_ol_at(ol,n);
-            if (o==null) return null;
-            if (o.GetType()==typeof(List<object>)) return (List<object>)o;
+            var o = get_ol_at(ol, n);
+            if (o == null) return null;
+            if (o.GetType() == typeof(List<object>)) return (List<object>)o;
             return null;
         }
         // Error
@@ -57,5 +57,10 @@ namespace slagtool.runtime.builtin
             var s = cmt + YDEF_DEBUG.RuntimeErrorInfo();
             throw new SystemException(s);
         }
+        public static Type FindType(string s)
+        {
+            return slagtool.runtime.sub_pointervar_clause.find_typeinfo(s);
+        }
+
     }
 }

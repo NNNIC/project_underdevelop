@@ -100,12 +100,10 @@ function Circle_Create_test(radius,num_of_div)
      go.name = "Circle";
 }
 
-function Circle_Create(radius,num_of_div)
+function Circle_Create(radius,num_of_div,rev)
 {
 /*
-    y 
-    |
-    o--x
+    rev : reverse   true or false
 
 */
     var d = HashTable();
@@ -116,7 +114,7 @@ function Circle_Create(radius,num_of_div)
     d.trs    = [];
 
     var angle_deg = 360 / num_of_div;
-    var angle = angle_deg * Mathf.Deg2Rad;
+    var angle = angle_deg * UnityEngine.Mathf.Deg2Rad;
 
 
     PrintLn("angle=" + angle_deg);
@@ -143,12 +141,23 @@ function Circle_Create(radius,num_of_div)
 
          PrintLn("a1:a2=" + a1 + ":" + a2);
 
-	 d = Add_Vertex(d,v0,v1,v2,uv0,uv1,uv2);
+         if (rev)
+         {
+  	     d = Add_Vertex(d,v2,v1,v0,uv2,uv1,uv0);
+         }
+         else
+         {
+  	     d = Add_Vertex(d,v0,v1,v2,uv0,uv1,uv2);
+         }
     }
     
     var go = Create_GameObject(d);
     go.name = "Circle_div_"+num_of_div;
+    return go;
 }
 
-Circle_Create(10, 4);
+var g1 = Circle_Create(10, 4, true);
+g1.name = "#1:" + go.name;
+g1.transform.position = UnityEngine.Vector3.up * 3;
+
 

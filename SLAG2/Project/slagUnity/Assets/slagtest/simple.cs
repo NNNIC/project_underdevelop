@@ -28,7 +28,7 @@ public class simple : MonoBehaviour {
         var src  = File.ReadAllText(path,Encoding.UTF8);
         
         slagtool.util.SetLogFunc(Log,LogLine,2);
-        slagtool.util.SetBuitIn(typeof(unity_builtinfunc));
+        slagtool.util.SetBuitIn(typeof(slagctl_unity_builtinfunc));
 
         var slag = new slagtool.slag();
         slag.LoadSrc(src);
