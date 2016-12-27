@@ -21,16 +21,19 @@ namespace slagtool
 
         string m_src;
         string[] m_lines;
+        int      m_file_id;
         int      m_l;
         int      m_c;
         bool     m_bInComment;   // スラッシュ(/)・アスタリスク(*)のコメント
 
+
         List<YVALUE> m_curline_value;
         internal List<List<YVALUE>> m_value_list;  //行単位
 
-        internal void Init(string src)
+        internal void Init(string src, int file_id = 0)
         {
             m_src = src;
+            m_file_id = file_id;
             m_lines = m_src.Split('\x0a');
             m_l = 0;
             m_c = 0;
@@ -62,7 +65,7 @@ namespace slagtool
             }
             
             int wdlen;
-            var v = lexUtil.GetWord(ref m_bInComment, out wdlen, m_c, m_lines[m_l],m_l);
+            var v = lexUtil.GetWord(ref m_bInComment, out wdlen, m_c, m_lines[m_l],m_l,m_file_id);
             m_c += wdlen;
 
             add(v);
@@ -86,12 +89,12 @@ namespace slagtool
 
     public class lexUtil //汎用で使う。
     {
-        internal static List<List<YVALUE>> lexSource(string src)
+        internal static List<List<YVALUE>> lexSource(string src, int file_id)
         {
             const int LOOPMAX = 10000;
 
             var lex = new lexPrimitive();
-            lex.Init(src);
+            lex.Init(src, file_id);
             for(var loop = 0; loop<=LOOPMAX; loop++)
             {
                 if (loop == LOOPMAX)  sys.error("lexSource LOOP MAX");
@@ -104,13 +107,14 @@ namespace slagtool
             return lex.m_value_list;
         }
 
-        internal static YVALUE GetWord(ref bool bInComment, out int wdlen, int col, string i_line, int dbg_line = -1)
+        internal static YVALUE GetWord(ref bool bInComment, out int wdlen, int col, string i_line, int dbg_line = -1, int dbg_file_id=-1)
         {
             var v= new YVALUE();
 
-            v.type = YDEF.UNKNOWN;
-            v.dbg_col  = col;
-            v.dbg_line = dbg_line;
+            v.type        = YDEF.UNKNOWN;
+            v.dbg_col     = col;
+            v.dbg_line    = dbg_line;
+            v.dbg_file_id = dbg_file_id;
 
             wdlen = 0;
             if (string.IsNullOrEmpty(i_line)) return any_return(v,YDEF.EOL);

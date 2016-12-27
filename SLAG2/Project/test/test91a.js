@@ -1,10 +1,10 @@
 //
 // TEST 91
 //
-// ”Žš“–‚ÄƒQ[ƒ€
+// æ•°å­—å½“ã¦ã‚²ãƒ¼ãƒ 
 // Guess What number is.
 //
-// 3Œ…‚Ì”Žš‚ð“–‚Ä‚Ä‚­‚¾‚³‚¢B
+// 3æ¡ã®æ•°å­—ã‚’å½“ã¦ã¦ãã ã•ã„ã€‚
 
 
 var MAXTRY = 20;

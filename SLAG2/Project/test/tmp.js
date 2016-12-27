@@ -2,6 +2,8 @@
  Tmp
 */
 
+PrintLn("TMP.JS");
+
 function ToVector2From3(v)
 {
     return new UnityEngine.Vector2(v.x,v.y);

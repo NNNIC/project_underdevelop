@@ -32,13 +32,20 @@ namespace slagctl
 
         public static void execute(string cmdbuff)
         {
-            string p1;
-            COMMAND cmd = GetCmd(cmdbuff,out p1);
+            string[] plist;
+            COMMAND cmd = GetCmd(cmdbuff,out plist);
+            string p1 = plist!=null && plist.Length>0 ? plist[0] : null;
             switch(cmd)
             {
-                case COMMAND.WD:      if (!string.IsNullOrEmpty(p1)) Set_WorkingDirectoy(p1);          break;
-                case COMMAND.LOAD:    if (!string.IsNullOrEmpty(p1)) cmd_sub.Load(m_workDir,p1);  break;
-                case COMMAND.RUN:     cmd_sub.Run();                    break;
+                case COMMAND.WD:      if (!string.IsNullOrEmpty(p1)) Set_WorkingDirectoy(p1);     break;
+                case COMMAND.LOAD:    if (plist!=null)
+                                      { 
+                                          if (plist.Length == 1) { cmd_sub.Load(m_workDir,p1);    break; }
+                                          if (plist.Length>1)    { cmd_sub.Load(m_workDir,plist); break; }
+                                      }
+                                      wk.SendWriteLine("file name was not specified.");
+                                      break;
+                case COMMAND.RUN:     cmd_sub.Run();                                              break;
                 case COMMAND.STEP:    break;
                 case COMMAND.BP:      break;
                 case COMMAND.PRINT:   break;
@@ -55,25 +62,47 @@ namespace slagctl
             }
         }
 
-        public static void execute_in_running(string cmdbuff)
-        {
-            string p1;
-            COMMAND cmd = GetCmd(cmdbuff,out p1);
-            switch(cmd)
-            {
-                case COMMAND.STOP: break;
-                case COMMAND.QUIT: break;
-                default: wk.SendWriteLine("ignore:" + cmd.ToString()); break;
-            }
-        }
+        //public static void execute_in_running(string cmdbuff)
+        //{
+        //    string p1;
+        //    COMMAND cmd = GetCmd(cmdbuff,out p1);
+        //    switch(cmd)
+        //    {
+        //        case COMMAND.STOP: break;
+        //        case COMMAND.QUIT: break;
+        //        default: wk.SendWriteLine("ignore:" + cmd.ToString()); break;
+        //    }
+        //}
 
         // --- tool for this class
-        private static COMMAND GetCmd(string cmdbuff,out string p1)
-        {
-            var token = cmdbuff.Split(' ');
-            string p0 = token[0].ToUpper();
-            p1        = token.Length>1 ? token[1] : null;
+        //private static COMMAND GetCmd(string cmdbuff,out string p1)
+        //{
+        //    var token = cmdbuff.Split(' ');
+        //    string p0 = token[0].ToUpper();
+        //    p1        = token.Length>1 ? token[1] : null;
 
+        //    if (!Enum.IsDefined(typeof(COMMAND),p0))
+        //    { 
+        //        wk.SendWriteLine("Unknow command:" + cmdbuff);
+        //        return COMMAND.NONE;
+        //    }
+        //    var cmd = (COMMAND)Enum.Parse(typeof(COMMAND),p0);
+        //    return cmd;
+        //}
+        private static COMMAND GetCmd(string cmdbuff,out string[] parameters)
+        {
+            parameters = null;
+            var token  = cmdbuff.Split(' ');
+
+            var p0    = token[0].ToUpper();
+            var list  = new List<string>();
+            if (token.Length>1) for(var i = 1; i< token.Length; i++)
+            { 
+                list.Add(token[i]);
+            }
+            parameters = list.ToArray();
+
+            // コマンド確認
             if (!Enum.IsDefined(typeof(COMMAND),p0))
             { 
                 wk.SendWriteLine("Unknow command:" + cmdbuff);

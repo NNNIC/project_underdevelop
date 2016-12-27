@@ -27,10 +27,10 @@ namespace slagtool
             m_guid = System.Guid.NewGuid();
         }
 
-        public string ID
-        {
-            get{ return m_id!=null ? m_id : m_guid.ToString(); }
-        }
+        //public string ID
+        //{
+        //    get{ return m_id!=null ? m_id : m_guid.ToString(); }
+        //}
             
         #region ロード&セーブ
         /// <summary>
@@ -49,7 +49,6 @@ namespace slagtool
             switch(ext.ToUpper())
             {
                 case ".JS":
-                case ".TXT":
                     {
                         var src = File.ReadAllText(filename);
                         m_exelist = util_sub.Compile(src);
@@ -70,6 +69,22 @@ namespace slagtool
                 default:
                     throw new SystemException("unexpected");
             }
+        }
+        /// <summary>
+        /// 拡張子JSのファイル（複数）をロード
+        /// </summary>
+        /// <param name="filenames"></param>
+        public void LoadJSFiles(string[] filenames)
+        {
+            m_id = Path.GetFileNameWithoutExtension(filenames[0]);
+            m_filename = filenames[0];
+
+            var sources = new List<string>();
+            Array.ForEach(filenames,f=> {
+                sources.Add(File.ReadAllText(f));
+            });
+
+            m_exelist = util_sub.Compile(sources);
         }
         /// <summary>
         /// テキストソースロード
@@ -324,18 +339,24 @@ namespace slagtool
 
     internal class util_sub
     {
-        internal static List<YVALUE> Compile(string src)
+        internal static List<YVALUE> Compile(List<string> multiple_srces)
         {
             var engine = new yengine();
 
             // 終末記号に分類
-            var lex_output = engine.Lex(src);
+            var lex_output = new List<List<YVALUE>>();
+            for(int i = 0; i<multiple_srces.Count; i++)
+            { 
+                lex_output.AddRange( engine.Lex(multiple_srces[i],i));
+            }
 
             //スペース・コメント削除。"文字列"以外大文字化。
-            engine.Normalize(ref lex_output);                             sys.logline("\n*lex_output");           YDEF_DEBUG.DumpList(lex_output, true);
+            engine.Normalize(ref lex_output);
+            sys.logline("\n*lex_output");
+            YDEF_DEBUG.DumpList(lex_output, true);
 
-            //１行化
-            var one_line = engine.Make_one_line(lex_output);
+            //改行を無くしBOFとEOFを追加
+            var one_line = engine.Del_LF_And_Add_BOF_EOF(lex_output);
 
             //実行用リスト作成(解析)
             var analyzed = engine.Interpret(one_line);       
@@ -365,6 +386,13 @@ namespace slagtool
                 sys.error("This script is not executable. Check syntax at " + s);
             }
             return executable_value_list;
+        }
+        internal static List<YVALUE> Compile(string src)
+        {
+            var multiple_srces = new List<string>();
+            multiple_srces.Add(src);
+
+            return Compile(multiple_srces);
         }
 
         internal static void Run(List<YVALUE> executable_value_list)

@@ -31,11 +31,9 @@ namespace slagctl
             m_bEnd      = false;
 
             m_mtx = new object();
-            //Log("netcomm:start+1");
 
             m_pipe   = new FilePipe(m_myname);
             m_pipe.Start(wk.Log);
-            //Log("netcomm:start+2");
 
             m_sendlog   = new Queue<string>();
             m_thread = new Thread(Work);
@@ -43,7 +41,6 @@ namespace slagctl
             m_thread.Priority = ThreadPriority.AboveNormal;
             m_thread.Start();
 
-            //Log("netcomm:start+3");
         }
 
         public void Terminate()
@@ -78,8 +75,6 @@ namespace slagctl
 
         private void Work()
         {
-            //Log("nectcomm:Work.START");
-
             try { 
                 while(true)
                 {
@@ -99,7 +94,6 @@ namespace slagctl
             }
             catch (SystemException e) { Log(e.Message);   }
 
-            //Log("nectcomm:Work.END");
             m_bEnd = true;
         }
 

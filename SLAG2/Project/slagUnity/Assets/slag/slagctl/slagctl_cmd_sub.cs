@@ -10,6 +10,65 @@ namespace slagctl
     {
         public static slagtool.slag m_slag;
 
+        public static slagtool.slag Load(string path, string[] files)
+        {
+            m_slag = null;
+            m_slag = new slagtool.slag();
+
+            var fullpath_files = new List<string>();
+            for (var i = 0; i<files.Length; i++)
+            {
+                var file = files[i];
+                if (!file.ToUpper().EndsWith(".JS"))
+                {
+                    wk.SendWriteLine("ERROR:File is not JS :" + file );
+                    return null;
+                }
+                string fullpath = null;
+                try
+                {
+                    fullpath = Path.Combine(path,file);
+                }
+                catch
+                {
+                    wk.SendWriteLine("ERROR:Unexpcted path name");
+                    return null;
+                }
+
+                if (fullpath==null)
+                {
+                    wk.SendWriteLine("ERROR:File name is null!");
+                    return null;
+                }
+
+                fullpath_files.Add(fullpath);
+            }
+
+            if (slagtool.sys.USETRY)
+            {
+                try
+                {
+                    m_slag = new slagtool.slag();
+                    m_slag.LoadJSFiles(fullpath_files.ToArray());
+                }
+                catch(SystemException e)
+                {
+                    wk.SendWriteLine("-- EXCEPTION --");
+                    wk.SendWriteLine(e.Message);
+                    wk.SendWriteLine("---------------");
+                    return null;
+                }
+            }
+            else
+            {
+                m_slag = new slagtool.slag();
+                m_slag.LoadJSFiles(fullpath_files.ToArray());
+            }
+            wk.SendWriteLine("Loaded.");
+
+            return m_slag;
+        }
+
         public static slagtool.slag Load(string path, string file)
         {
             string fullpath = null;
@@ -63,29 +122,6 @@ namespace slagctl
             }
             wk.SendWriteLine("Loaded.");
 
-//#if USETRY
-//            try
-//#endif
-//            {
-//                m_slag = new slagtool.slag();
-//                m_slag.LoadFile(file);
-//                wk.SendWriteLine("Loaded.");
-//            }
-//#if USETRY
-//            catch(SystemException e)
-//            {
-//                wk.SendWriteLine("-- EXCEPTION --");
-//                wk.SendWriteLine(e.Message);
-//                wk.SendWriteLine("---------------");
-//                return null;
-//            }
-//#endif
-//#else
-//            m_slag = new slagtool.slag();
-//                m_slag.LoadFile(file);
-//                wk.SendWriteLine("Loaded.");
-//#endif
-
             return m_slag;
         }
 
@@ -116,32 +152,12 @@ namespace slagctl
             sw.Stop();
             wk.SendWriteLine("! The program exection time : " + ((float)sw.ElapsedMilliseconds / 1000f).ToString("F3") + "sec !");
 
-//#if USETRY
-//            try
-//#endif
-//            {
-//                UpdateClear();
-//                var sw = new System.Diagnostics.Stopwatch();
-//                sw.Start();
-//                m_slag.Run();
-//                sw.Stop();
-//                wk.SendWriteLine("! The program used " + ((float)sw.ElapsedMilliseconds / 1000f).ToString("F3") + "sec !");
-//            }
-//#if USETRY
-//            catch (SystemException e)
-//            {
-//                wk.SendWriteLine("-- EXCEPTION --");
-//                wk.SendWriteLine(e.Message);
-//                wk.SendWriteLine("---------------");
-//            }
-//#endif
         }
 
         public static void Reset()
         {
             m_updateFunc = null;
             UnityEngine.GameObject.Find("slgctl_main").SendMessage("Reset");
-            //UnityEngine.SceneManagement.SceneManager.LoadScene("reset");// Application.loadedLevelName;
         }
 
         public static void Test()
@@ -171,15 +187,18 @@ namespace slagctl
 
         //-- Update用
         private static List<string> m_updateFunc;
+        [Obsolete]
         public static void UpdateClear()
         {
             m_updateFunc = null;
         }
+        [Obsolete]
         public static void UpdateAddFunc(string func)
         {
             if (m_updateFunc==null) m_updateFunc = new List<string>();
             m_updateFunc.Add(func);
         }
+        [Obsolete]
         public static void UpdateExec()
         {
             if (slagtool.sys.USETRY)
@@ -226,6 +245,7 @@ namespace slagctl
             //    m_updateFunc = null;
             //}
         }
+        [Obsolete]
         private static void _updateExec()
         {
             if (m_sm!=null) m_sm.Update();

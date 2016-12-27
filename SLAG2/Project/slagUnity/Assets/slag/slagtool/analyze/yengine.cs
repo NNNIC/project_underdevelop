@@ -9,13 +9,14 @@ namespace slagtool
     public class yengine
     {
         string dbg_src;                 // デバッグ用途
+        
         List<List<YVALUE>> dbg_src_list; //     〃
         List<List<YVALUE>> dbg_out_list; //     〃
 
-        public List<List<YVALUE>> Lex(string src)
+        public List<List<YVALUE>> Lex(string src,int file_id)
         {
             dbg_src = src;
-            dbg_out_list = lexUtil.lexSource(src);
+            dbg_out_list = lexUtil.lexSource(src,file_id);
             return dbg_out_list;
         }
 
@@ -33,10 +34,10 @@ namespace slagtool
                 bool bNeedLoop = false;
                 for (int n = 0; n < src_list.Count; n++)
                 {
-                    var l = dbg_out_list[n];
+                    var l = src_list[n];
                     if (l.TrueForAll(i => i.IsType(YDEF.EOL) || i.IsType(YDEF.SP) || i.IsType(YDEF.CMT)))
                     {
-                        dbg_out_list.RemoveAt(n);
+                        src_list.RemoveAt(n);
                         bNeedLoop = true;
                         break;
                     }
@@ -89,7 +90,7 @@ namespace slagtool
             return;
         }
 
-        public List<List<YVALUE>> Make_one_line(List<List<YVALUE>> src)
+        public List<List<YVALUE>> Del_LF_And_Add_BOF_EOF(List<List<YVALUE>> src)
         {
             List<YVALUE> dst = new List<YVALUE>();
 

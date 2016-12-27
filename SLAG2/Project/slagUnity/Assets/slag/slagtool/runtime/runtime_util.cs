@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Text;
-using ARRAY = System.Collections.Generic.List<object>;
+using LIST = System.Collections.Generic.List<object>;
 using number = System.Double;
 
 namespace slagtool.runtime
@@ -145,7 +145,7 @@ namespace slagtool.runtime
             {
                 var x = util.ToNumber(a);
                 var y = util.ToNumber(b);
-                
+
                 switch(op)
                 {
                     case "+":   return x+y;
@@ -176,12 +176,12 @@ namespace slagtool.runtime
                     default:    _error("unexpected bool operaion:" + op);   break;                
                 }
             }
-            else if (a.GetType()==typeof(ARRAY))
+            else if (a.GetType()==typeof(LIST))
             {
-                if (b.GetType()==typeof(ARRAY))
+                if (b.GetType()==typeof(LIST))
                 {
-                    var ary_a = (ARRAY)a;
-                    var ary_b = (ARRAY)b;
+                    var ary_a = (LIST)a;
+                    var ary_b = (LIST)b;
                     switch(op)
                     {
                         case "+": ary_a.AddRange(ary_b); return ary_a;
@@ -191,7 +191,7 @@ namespace slagtool.runtime
                 }
                 else
                 {
-                    var ary_a = (ARRAY)a;
+                    var ary_a = (LIST)a;
                     switch(op)
                     {
                         case "+": ary_a.Add(b); return ary_a;

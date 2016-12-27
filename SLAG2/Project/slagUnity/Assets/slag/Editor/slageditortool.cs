@@ -9,7 +9,7 @@ public class slageditortool : MonoBehaviour {
     [MenuItem("slag/monitior")]
     static void CallMonitor()
     {
-        var path = Path.Combine(Application.dataPath,@"..\..\slagMonitor\m1\slagmon\slagmon\bin\Debug\slagmon.exe");
+        var path = Path.Combine(Application.dataPath,@"..\..\slagMonitor\m2\slagmon\slagmon\bin\Debug\slagmon.exe");
         UnityEngine.Debug.Log("path="+path);
         Process.Start(path);
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Text;
 using System.Reflection;
-using ARRAY = System.Collections.Generic.List<object>;
+using LIST = System.Collections.Generic.List<object>;
 using number = System.Double;
 
 namespace slagtool.runtime
@@ -374,9 +374,9 @@ namespace slagtool.runtime
                     return item;
                 }
                 
-                if (val.GetType()==typeof(ARRAY))
+                if (val.GetType()==typeof(LIST))
                 {
-                    var l= (ARRAY)val;
+                    var l= (LIST)val;
                     item.getter = ()=>l[index];
                     item.setter_parametertype = null;
                     item.setter = (x)=>l[index]=x;

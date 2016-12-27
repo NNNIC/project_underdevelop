@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Text;
-using ARRAY = System.Collections.Generic.List<object>;
+using LIST = System.Collections.Generic.List<object>;
 using number = System.Double;
 
 namespace slagtool.runtime
@@ -168,12 +168,12 @@ namespace slagtool.runtime
             if (v!=null)
             {
                 var t = v.GetType();
-                if (t==typeof(ARRAY) || t.IsArray)
+                if (t==typeof(LIST) || t.IsArray)
                 { 
                     var i = (int)((number)index);
-                    if (t==typeof(ARRAY))
+                    if (t==typeof(LIST))
                     {
-                        var l = (ARRAY)v;
+                        var l = (LIST)v;
                         if (i < 0 || i >= l.Count)  util._error( name + "["+index+"] is out of range");
                         return l[i];
                     }
@@ -240,12 +240,12 @@ namespace slagtool.runtime
             if (v!=null)
             { 
                 var vtype = v.GetType();
-                if (vtype == typeof(ARRAY) || vtype.IsArray)
+                if (vtype == typeof(LIST) || vtype.IsArray)
                 {
                     var i = (int)((number)index);
-                    if (vtype==typeof(ARRAY))
+                    if (vtype==typeof(LIST))
                     {
-                        var l = (ARRAY)v;
+                        var l = (LIST)v;
                         if (i < 0 || i >= l.Count)  util._error( "index("+i+") is out of range");
                         l[i] = o;
                         return;
@@ -1004,7 +1004,7 @@ namespace slagtool.runtime
                 }
                 else if (v.list_size()==2)
                 {
-                    nsb.m_cur = new ARRAY();
+                    nsb.m_cur = new LIST();
                 }
                 else
                 {

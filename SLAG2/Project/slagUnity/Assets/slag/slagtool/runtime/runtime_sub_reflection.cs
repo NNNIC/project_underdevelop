@@ -5,7 +5,7 @@ using System.Collections;
 using System.Reflection;
 using System.Text;
 using System.Diagnostics;
-using ARRAY = System.Collections.Generic.List<object>;
+using LIST = System.Collections.Generic.List<object>;
 using number = System.Double;
 
 // constructorのタイプを調べる
@@ -169,8 +169,8 @@ namespace slagtool.runtime
 
     public class cache_util
     {
-        private static Dictionary<object,ARRAY> m_hash;
-        internal static ARRAY GetCache(object key)
+        private static Dictionary<object,LIST> m_hash;
+        internal static LIST GetCache(object key)
         {
             if (m_hash!=null &&  m_hash.ContainsKey(key))
             {
@@ -182,10 +182,10 @@ namespace slagtool.runtime
         {
             if (m_hash == null)
             {
-                m_hash = new Dictionary<object, ARRAY>();
+                m_hash = new Dictionary<object, LIST>();
             }
 
-            ARRAY vlist = m_hash.ContainsKey(key) ? m_hash[key] : new ARRAY();
+            LIST vlist = m_hash.ContainsKey(key) ? m_hash[key] : new LIST();
             if (!vlist.Contains(val))
             {
                 vlist.Add(val);

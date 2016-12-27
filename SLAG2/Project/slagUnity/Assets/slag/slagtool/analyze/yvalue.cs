@@ -106,6 +106,7 @@ namespace slagtool
         #region //デバッグ
         public int dbg_line;
         public int dbg_col;
+        public int dbg_file_id;
 
         public override string ToString()
         {
