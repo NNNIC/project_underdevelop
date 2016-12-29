@@ -3,53 +3,14 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
 using System.Text;
+using LIST = System.Collections.Generic.List<object>;
 using number = System.Double;
 
 namespace slagtool
 {
     public class YDEF_DEBUG
     {
-        public static int                  save_startIndex;    //解析時の開始インデックス
-        public static int                  save_endindex;      //解析時の終了インデックス
-        public static YVALUE               current_v;          //実行中のＶ
-        public static runtime.StateBuffer  current_sb;         //ステートバッファ
-        public static List<int>            breakpoints;        //ブレイクポイント 
-        public static bool                 bForceToStop;       //
-        public static int                  stoppedLine;        
-
-        public enum STEPMODE
-        {
-            None    =0,
-            StepIn   ,
-            StepOver
-        }
-        public static STEPMODE             stepMode;           //ステップ実行中
-        public static int                  funcCntSmp {        //ファンクション用カウンタセマフォ 
-            get {
-                if (stepMode!= STEPMODE.StepOver)
-                {
-                    __funcntsmp = 0;
-                }
-                return __funcntsmp;
-            }
-            set
-            {
-                if (stepMode!= STEPMODE.StepOver)
-                {
-                    __funcntsmp = 0;
-                }
-                else
-                {
-                    __funcntsmp = value;
-                }
-                return;
-            }
-        }
-        private static int                 __funcntsmp;          
-        public static bool                 bRequestAbort;      //停止リクエスト
-
-        public static string NL { get {return Environment.NewLine; } }
-
+        #region [  ANALIZE  ]
         #region Check executable
         public static bool IsExecutable(List<YVALUE> list, out List<int> errorline)
         {
@@ -183,6 +144,149 @@ namespace slagtool
             sys.log( string.Format("Line:{0},Col:{1}",line,col),bForce);
         }
         #endregion
+        #endregion
+
+        #region [  RUNTIME  ]
+
+        public static bool                      bEnable { get { return sys.DEBUGMODE;  } } //便宜
+        public static int                       level   { get { return sys.DEBUGLEVEL; } } //便宜
+
+        public static int                       save_startIndex;    //解析時の開始インデックス
+        public static int                       save_endindex;      //解析時の終了インデックス
+        public static YVALUE                    current_v;          //実行中のＶ
+        public static runtime.StateBuffer       current_sb;         //ステートバッファ
+        public static List<int>                 breakpoints_obs;    //ブレイクポイント 
+        public static Dictionary<int,List<int>> breakpoints;        //ブレイクポイント
+        public static bool                      bPausing;           //
+        public static int                       stoppedLine;        //
+
+        public enum STEPMODE
+        {
+            None    =0,
+            StepIn   ,
+            StepOver
+        }
+        public static STEPMODE             stepMode;           //ステップ実行中
+        public static int                  funcCntSmp {        //ファンクション用カウンタセマフォ 
+            get {
+                if (stepMode!= STEPMODE.StepOver)
+                {
+                    __funcntsmp = 0;
+                }
+                return __funcntsmp;
+            }
+            set
+            {
+                if (stepMode!= STEPMODE.StepOver)
+                {
+                    __funcntsmp = 0;
+                }
+                else
+                {
+                    __funcntsmp = value;
+                }
+                return;
+            }
+        }
+        private static int                 __funcntsmp;          
+        public static bool                 bRequestAbort;      //停止リクエスト
+
+        public static string NL { get {return Environment.NewLine; } }
+
+        #region Set Breakpoint
+        public static void AddBreakpoint(int line, int file_id)
+        {
+            if (breakpoints==null) breakpoints = new Dictionary<int, List<int>>();
+            List<int> linelist = breakpoints.ContainsKey(file_id) ? breakpoints[file_id] : new List<int>();
+            if (linelist.Contains(line)) return;
+            linelist.Add(line);
+            linelist.Sort();
+            if (breakpoints.ContainsKey(file_id)) {
+                breakpoints[file_id] = linelist;
+            }
+            else
+            {
+                breakpoints.Add(file_id,linelist);
+            }
+        }
+        public static void DelBreakpoint(int line, int file_id)
+        {
+            if (breakpoints==null) return;
+            if (!breakpoints.ContainsKey(file_id)) return;
+            var list = breakpoints[file_id];
+            if (list.Contains(line))
+            {
+                list.Remove(line);
+            }
+        }
+        public static void ResetAllBreakpoints()
+        {
+            breakpoints = null;
+        }
+        #endregion
+
+        public static void DumpCurrentVariables(runtime.StateBuffer bf)
+        {
+            var depth = 0;
+            Action<Hashtable> trvs = null;
+            trvs = (t)=> {
+                depth++;
+                string title = null;
+                if (t==bf.m_root_dic) { title = depth.ToString("00") + " ROOT ";}
+                else if (depth==1) { title = "01 FRONT"; }
+                else {title = depth.ToString("00"); }
+
+                sys.logline("@--- [" + title + "] ---");
+                
+                foreach(var k in t.Keys)
+                {
+                    var ks = k.ToString();
+                    if (ks[0]=='!') continue;
+                    _dumpObj(ks,t[k]);
+                }
+                var po = t[runtime.StateBuffer.KEY_PARENT];
+                if (po!=null)
+                {
+                    trvs((Hashtable)po);
+                }
+            };
+
+            trvs(bf.m_front_dic);
+        }
+
+
+        private static void _dumpObj(string name,object o)
+        {
+            if (o is IList)
+            {
+                string s = null;
+                var l = (IList)o;
+                foreach(var i in l)
+                {
+                    if (s!=null)
+                    {
+                        s +=",";
+                    }
+                    s+= i!=null ? i.ToString() : "-null-";
+                }
+                sys.logline("@"+ name+" = " + s);
+                return;
+            }
+            if (o is Hashtable)
+            {
+                var t = (Hashtable)o;
+                foreach(var k in t.Keys)
+                {
+                    var c = t[k];
+                    string s = c!=null ? c.ToString() : "-null-";
+                    sys.logline("@" + name + "." + k.ToString() + " = " + s );
+                }
+                return;
+            }
+            string a = o!=null ? o.ToString() : "-null-";
+            sys.logline("@" + name + " = " + a);
+        }
+        #endregion//[RUNTIME]
 
         #region runtime error_info
         public static string RuntimeErrorInfo()

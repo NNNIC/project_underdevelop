@@ -60,7 +60,7 @@ public class FilePipe
         m_port = myport;
     }
 
-    public void Start(Action<string> logfunc=null)
+    public void Start()
     {
         m_thread = new Thread(server);
         m_thread.IsBackground = true;

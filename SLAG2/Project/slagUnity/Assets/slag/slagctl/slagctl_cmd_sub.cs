@@ -160,6 +160,51 @@ namespace slagctl
             UnityEngine.GameObject.Find("slgctl_main").SendMessage("Reset");
         }
 
+        public static void AddBreakPoint(string[] plist) //p0 = line , p1 = fileid   
+        {
+            int line   = -1;
+            int fileid = -1;
+            if (plist==null && plist.Length<=2)   {  wk.SendWriteLine("Breakpoint needs parameters"); return; }
+
+            if (!int.TryParse(plist[0],out line))
+            {
+                wk.SendWriteLine("Breakpoint: the first parameter should be interger.");
+                return;
+            }
+            if (!int.TryParse(plist[1],out fileid))
+            {
+                wk.SendWriteLine("Breakpoint: the sencond parameter should be interger or should no be specified as using previous id.");
+                return;
+            }
+            if (line!=-1 && fileid!=-1)
+            { 
+                line--;
+                fileid--;
+                slagtool.YDEF_DEBUG.AddBreakpoint(line,fileid);
+            }
+            else
+            {
+                wk.SendWriteLine("Breakpoint needs parameters");
+            }
+        }
+
+        #region STOP and RESUME
+        public static void Stop()
+        {
+            slagtool.YDEF_DEBUG.bPausing = true;
+        }
+        public static void Resume()
+        {
+            slagtool.YDEF_DEBUG.bPausing = false;
+        }
+        public static void Step(string p)
+        {
+            slagtool.YDEF_DEBUG.stepMode = !string.IsNullOrEmpty(p) && p.ToUpper()[0]=='I' ? slagtool.YDEF_DEBUG.STEPMODE.StepIn : slagtool.YDEF_DEBUG.STEPMODE.StepOver;
+            slagtool.YDEF_DEBUG.bPausing = false;
+        }
+        #endregion
+
+
         public static void Test()
         {
             wk.SendWriteLine(".. 1234.\n567.");
@@ -213,7 +258,7 @@ namespace slagctl
                     wk.SendWriteLine(e.Message);
                     wk.SendWriteLine("Stop at Line:" + slagtool.YDEF_DEBUG.current_v.get_dbg_line(true).ToString() );
                     wk.SendWriteLine("---------------");
-                    m_sm = null;
+                    //m_sm = null;
                     m_updateFunc = null;
                 }
             }
@@ -221,34 +266,11 @@ namespace slagctl
             {
                 _updateExec();
             }
-
-            //try { 
-            //    if (m_sm!=null) m_sm.Update();
-
-            //    if (m_slag==null) return;
-            //    if (m_updateFunc==null) return;
-
-            //    var s = new System.Diagnostics.Stopwatch();
-            //    s.Start();
-            //    foreach (var f in m_updateFunc)
-            //    {
-            //        m_slag.CallFunc(f);
-            //    }
-            //    s.Stop();
-            //}
-            //catch(SystemException e)
-            //{
-            //    wk.SendWriteLine("-- EXCEPTION --");
-            //    wk.SendWriteLine(e.Message);
-            //    wk.SendWriteLine("---------------");
-            //    m_sm = null;
-            //    m_updateFunc = null;
-            //}
         }
         [Obsolete]
         private static void _updateExec()
         {
-            if (m_sm!=null) m_sm.Update();
+            //if (m_sm!=null) m_sm.Update();
 
             if (m_slag==null) return;
             if (m_updateFunc==null) return;
@@ -295,22 +317,22 @@ namespace slagctl
             }
         }
 
-        public static StateMachine m_sm;
-        [Obsolete]
-        public static void StateInit(string func)
-        {
-            m_sm = new StateMachine();
-            m_sm.Goto(func);
-        }
-        [Obsolete]
-        public static void StateGoto(string func)
-        {
-            m_sm.Goto(func);
-        }
-        [Obsolete]
-        public static void StateWaitCnt(int c)
-        {
-            m_sm.Wait(c);
-        }
+        //public static StateMachine m_sm;
+        //[Obsolete]
+        //public static void StateInit(string func)
+        //{
+        //    m_sm = new StateMachine();
+        //    m_sm.Goto(func);
+        //}
+        //[Obsolete]
+        //public static void StateGoto(string func)
+        //{
+        //    m_sm.Goto(func);
+        //}
+        //[Obsolete]
+        //public static void StateWaitCnt(int c)
+        //{
+        //    m_sm.Wait(c);
+        //}
     }
 }

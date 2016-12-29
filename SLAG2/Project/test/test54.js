@@ -3,9 +3,6 @@
  
  サークル作成
 
-     1 2
-     0
-
 */
 
 var typeV3 = typeof ("UnityEngine.Vector3");
@@ -21,22 +18,11 @@ function Create_GameObject(d)
 
     var mesh = new UnityEngine.Mesh();
 
-    mesh.vertices = ToArray(typeV3, d.verts);
-
-    Dump(mesh.vertices);
-
+    mesh.vertices  = ToArray(typeV3,        d.verts);
     mesh.uv        = ToArray(typeV2,        d.uvs);
-
-    Dump(mesh.uv);
-
     mesh.normals   = ToArray(typeV3,        d.nrms);
-
-    Dump(d.nrms);
-    Dump(mesh.normals);
-
     mesh.triangles = ToArray("System.Int32",d.trs);
 
-    Dump(mesh.triangles);
 
     mf.mesh = mesh;
 
@@ -117,8 +103,6 @@ function Circle_Create(radius,num_of_div,rev)
     var angle = angle_deg * UnityEngine.Mathf.Deg2Rad;
 
 
-    PrintLn("angle=" + angle_deg);
-
     for(var n = 0; n<num_of_div; n++)
     {
          var v0 = UnityEngine.Vector3.zero;
@@ -128,7 +112,6 @@ function Circle_Create(radius,num_of_div,rev)
          var y1 = UnityEngine.Mathf.Sin(a1);
          var v1 = new UnityEngine.Vector3(x1,y1,0);
 
-         PrintLn("n=" + n +"," + v1);
 
          var a2 = angle * (n+1);
          var x2 = UnityEngine.Mathf.Cos(a2);
@@ -139,7 +122,6 @@ function Circle_Create(radius,num_of_div,rev)
          var uv1 = ToVector2From3(v1/2) + uv0;
          var uv2 = ToVector2From3(v2/2) + uv0;
 
-         PrintLn("a1:a2=" + a1 + ":" + a2);
 
 	 if (radius != 1)
          {

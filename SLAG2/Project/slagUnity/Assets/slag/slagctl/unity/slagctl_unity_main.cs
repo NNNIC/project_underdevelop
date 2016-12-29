@@ -33,6 +33,8 @@ public class slagctl_unity_main : MonoBehaviour {
         slagtool.util.SetBuitIn(typeof(slagctl_unity_builtinfunc));
         slagtool.util.SetCalcOp(slagctl_unity_builtincalc_op.Calc_op);
 
+        slagctl.cmd.init();
+
         while(true)
         {
             if (m_bReqAbort) break;

@@ -16,7 +16,7 @@ namespace slagctl.unity {
             var save = m_tmp;
             m_tmp = null;
             if (slagctl_unity_main.m_netcomm!=null) slagctl_unity_main.m_netcomm.SendMsg(save);
-            Debug.Log(s);
+            //Debug.Log(s);
         }
 
         static object m_logmtx = new object();

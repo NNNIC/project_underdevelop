@@ -224,6 +224,27 @@ namespace slagtool
 
             return line;
         }
+        public void get_dbg_id_line(out int id, out int line) 
+        {
+            id   = -1;
+            line = -1;
+
+            int _id   = -1;
+            int _line = -1;
+            Travarse(v => {
+                if (Enum.IsDefined(typeof(TOKEN),v.type))
+                {
+                    _line = v.dbg_line;
+                    _id   = v.dbg_file_id;
+                    return true;
+                }
+                return false;
+            },0);
+
+            id = _id;
+            line = _line;
+        }
+
         #endregion
 
         #region //実行時用

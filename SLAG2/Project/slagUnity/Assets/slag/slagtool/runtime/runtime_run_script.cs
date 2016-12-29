@@ -334,17 +334,17 @@ namespace slagtool.runtime
             m_pvitem = null;
         }
 
-#endregion
+        #endregion
     }
 
-    
+
 
 
     public class run_script
     {
         public static void Run(YVALUE v)
         {
-            YDEF_DEBUG.bForceToStop = false;
+            YDEF_DEBUG.bPausing = false;
             YDEF_DEBUG.stoppedLine = -1;
             var buf  = new StateBuffer();
             var nbuf = run(v,buf);
@@ -363,39 +363,57 @@ namespace slagtool.runtime
 
             if (v.type == YDEF.get_type(YDEF.sx_sentence))
             { 
-                var dbgline = v.get_dbg_line();
-                if (
-                        (
-                            YDEF_DEBUG.breakpoints!=null
-                            &&
-                            YDEF_DEBUG.breakpoints.Contains(dbgline) 
-                        )
-                        ||
-                        (
-                           (
-                            YDEF_DEBUG.stepMode == YDEF_DEBUG.STEPMODE.StepIn
+                if (YDEF_DEBUG.bEnable)
+                { 
+                    int dbgline;
+                    int dbgfile_id;
+
+                    v.get_dbg_id_line(out dbgfile_id,out dbgline);
+
+                    List<int> breakpoints = (YDEF_DEBUG.breakpoints!=null && YDEF_DEBUG.breakpoints.ContainsKey(dbgfile_id)) ? YDEF_DEBUG.breakpoints[dbgfile_id] : null;
+
+                    if (
+                            YDEF_DEBUG.bPausing
                             ||
-                              (
-                               YDEF_DEBUG.stepMode== YDEF_DEBUG.STEPMODE.StepOver
-                               &&
-                               YDEF_DEBUG.funcCntSmp==0
+                            (
+                                breakpoints != null
+                                &&
+                                breakpoints.Contains(dbgline)
+                            )
+                            ||
+                            (
+                               (
+                                YDEF_DEBUG.stepMode == YDEF_DEBUG.STEPMODE.StepIn
+                                ||
+                                  (
+                                   YDEF_DEBUG.stepMode== YDEF_DEBUG.STEPMODE.StepOver
+                                   &&
+                                   YDEF_DEBUG.funcCntSmp==0
+                                   )
                                )
-                           )
-                            &&
-                           YDEF_DEBUG.stoppedLine != dbgline
+                                &&
+                               YDEF_DEBUG.stoppedLine != dbgline
+                            )
                         )
-                    )
-                {
-                    YDEF_DEBUG.stepMode = YDEF_DEBUG.STEPMODE.None;
-                    YDEF_DEBUG.stoppedLine = dbgline;
-                    YDEF_DEBUG.bForceToStop = true;
-                    while(YDEF_DEBUG.bForceToStop)
                     {
-                        System.Threading.Thread.Sleep(100);
-                        if (YDEF_DEBUG.bRequestAbort)
+                        YDEF_DEBUG.stepMode = YDEF_DEBUG.STEPMODE.None;
+                        YDEF_DEBUG.stoppedLine = dbgline;
+                        YDEF_DEBUG.bPausing = true;
+
+                        sys.logline(string.Format("@Stop at Line:{0} in Src:{1}", dbgline + 1, dbgfile_id +1));
+                        YDEF_DEBUG.DumpCurrentVariables(sb);
+
+                        float limit = UnityEngine.Time.realtimeSinceStartup + 60;
+
+                        while(YDEF_DEBUG.bPausing)
                         {
-                            YDEF_DEBUG.bRequestAbort = false;
-                            throw new SystemException("Abort!");
+                            System.Threading.Thread.Sleep(100);
+                            if (YDEF_DEBUG.bRequestAbort || UnityEngine.Time.realtimeSinceStartup > limit)
+                            {
+                                YDEF_DEBUG.bRequestAbort = false;
+                                YDEF_DEBUG.bPausing = false;
+                                throw new SystemException("Abort!");
+                            }
                         }
                     }
                 }
@@ -745,15 +763,6 @@ namespace slagtool.runtime
                         {
                             var item = (PointervarItem)nsb.m_cur;
                             item.set_object(o);
-                            //if (item!=null&&item.setter!=null)
-                            //{ 
-                            //    var otype =o.GetType();
-                            //    if (!otype.IsEnum &&item.setter_parametertype!=null && otype!=item.setter_parametertype)
-                            //    {
-                            //        o = Convert.ChangeType(o,item.setter_parametertype);
-                            //    }
-                            //    item.setter(o);
-                            //}
                             return nsb;
                         }
                         util._error("unexpected");

@@ -44,6 +44,7 @@
             this.buttonFolder = new System.Windows.Forms.Button();
             this.textBoxVar = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.comboBoxFiles = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // textBox1_log
@@ -202,11 +203,22 @@
             this.label1.TabIndex = 13;
             this.label1.Text = "variables";
             // 
+            // comboBoxFiles
+            // 
+            this.comboBoxFiles.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxFiles.FormattingEnabled = true;
+            this.comboBoxFiles.Location = new System.Drawing.Point(444, 3);
+            this.comboBoxFiles.Name = "comboBoxFiles";
+            this.comboBoxFiles.Size = new System.Drawing.Size(183, 20);
+            this.comboBoxFiles.TabIndex = 14;
+            this.comboBoxFiles.SelectedIndexChanged += new System.EventHandler(this.comboBoxFiles_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1037, 469);
+            this.Controls.Add(this.comboBoxFiles);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBoxVar);
             this.Controls.Add(this.buttonFolder);
@@ -250,6 +262,7 @@
         private System.Windows.Forms.Button buttonFolder;
         private System.Windows.Forms.TextBox textBoxVar;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBoxFiles;
     }
 }
 

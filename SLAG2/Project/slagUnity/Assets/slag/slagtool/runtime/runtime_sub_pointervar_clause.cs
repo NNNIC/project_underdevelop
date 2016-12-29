@@ -189,7 +189,6 @@ namespace slagtool.runtime
         }
 
         // -- tool for this class
-#if DOTNENET20
         private static PointervarItem GetObj(string pre, string cur, PointervarItem item)
         {
             //アセンブリ調査 --- set/get不明なので直前の形で返す
@@ -250,62 +249,6 @@ namespace slagtool.runtime
             }
             return item;
         }
-#else
-        private static LocationItem GetObj(string pre, string cur, LocationItem item)
-        {
-            //アセンブリ調査 --- set/get不明なので直前の形で返す
-            var searchname = (pre + "." + cur).ToUpper();
-            var ti = find_typeinfo(searchname);
-            if (ti!=null)
-            {
-                item.o = ti.AsType();
-                return item;
-            }
-            //ない場合は、ピリオドで結合してリテラルとして返す
-            var literal = new Literal();
-            literal.s = pre + "." + cur;
-            item.o = literal;
-            return item;
-        }
-        private static LocationItem GetObj(object o, string cur,LocationItem item)
-        {
-            var name = cur.ToUpper();
-            Type type = (Type)o;
-            object obj  = null;
-            if (type!=null)
-            {
-                obj  = null;
-            }
-            else
-            {
-                type = o.GetType();
-                obj  = o;
-            }
-
-            var mem1 = type.GetDefaultMembers();
-            var mem2 = type.GetMembers();
-            var find_mi = Array.Find(type.GetMembers(),mi=>mi.Name.ToUpper()==name);
-            if (find_mi!=null)
-            { 
-                if (find_mi.MemberType == MemberTypes.Property)
-                { 
-                    var pi = type.GetProperty(find_mi.Name);
-                    item.getter = ()=>  { return pi.GetValue(obj); };
-                    item.setter = (x)=> { pi.SetValue(obj,x);      };
-                    return item;
-                }
-                if (find_mi.MemberType == MemberTypes.Field)
-                {
-                    var fi = type.GetField(find_mi.Name);
-                    item.getter = ()=>  { return fi.GetValue(obj); };
-                    item.setter = (x)=> { fi.SetValue(obj,x); };
-                    return item;
-                }
-                throw new System.Exception("unknown");
-            }
-            return item;
-        }
-#endif
         private static PointervarItem ExecuteFunc(string pre, string cur, List<object> param, PointervarItem item)
         {
             if (item!=null && item.mode == PointervarMode.NEW)
@@ -394,11 +337,6 @@ namespace slagtool.runtime
                     return item;
                 }
 
-                //var l = (ARRAY)obj;
-                //item.getter = () => l[index];
-                //item.setter_parametertype = null;
-                //item.setter = (x) => l[index] = x;
-                //return item;
             }
             var mem1 = type.GetDefaultMembers();
             var mem2 = type.GetMembers();
@@ -457,7 +395,6 @@ namespace slagtool.runtime
 
         }
 
-#if DOTNENET20
         public static Type find_typeinfo(string searchname)
         {
             Type find_ti = cache_util.GetCache_for_find_typeinfo(searchname);
@@ -486,28 +423,5 @@ namespace slagtool.runtime
                 }
             }
         }
-#else
-        private static TypeInfo find_typeinfo(string searchname)
-        {
-            TypeInfo find_ti = null;
-            travarse_asm((ti)=>{
-                if (ti.FullName.ToUpper()==searchname)
-                { 
-                    find_ti = ti;
-                }
-            });
-            return find_ti;
-        }
-        private static void travarse_asm(Action<TypeInfo> act)
-        {
-            foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
-            {
-                foreach(var ti in asm.DefinedTypes)
-                {
-                    act(ti);
-                }
-            }
-        }
-#endif
     }
 }

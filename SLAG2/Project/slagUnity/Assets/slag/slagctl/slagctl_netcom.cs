@@ -7,7 +7,14 @@ namespace slagctl
 {
     public class netcomm
     {
-        public static Action<string> Log = (s)=>{ System.Diagnostics.Debug.WriteLine(s);  };
+        public static Action<string>      Log           = (s)=>{ System.Diagnostics.Debug.WriteLine(s);  };// デバッグログ　※依存のため外出し
+
+        /// <summary>
+        /// コマンドを先処理します。
+        /// 注）別スレッドで実行されます。
+        /// 　　そのためスレッド依存関数は使用不可(※UnityAPIは依存関数になります)
+        /// </summary>
+        public static Func<string,string> PreProcessCmd = (s)=>{ return s;};                               // コマンド受取り直後に処理
 
         string m_myname  = "unity";
 
@@ -33,7 +40,7 @@ namespace slagctl
             m_mtx = new object();
 
             m_pipe   = new FilePipe(m_myname);
-            m_pipe.Start(wk.Log);
+            m_pipe.Start();
 
             m_sendlog   = new Queue<string>();
             m_thread = new Thread(Work);
@@ -101,7 +108,7 @@ namespace slagctl
         {
             lock(m_mtx)
             { 
-                m_cmd = cmd;
+                m_cmd = PreProcessCmd(cmd);
             }
         }
 

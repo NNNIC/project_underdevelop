@@ -29,6 +29,29 @@ namespace slagctl
         }
 
         public static string m_workDir = @"N:\Project\test";
+        public static void init()
+        {
+            netcomm.PreProcessCmd = preexecute;
+        }
+        
+        public static string preexecute(string cmdbuf)        //※UnityAPI使用不可
+        {
+            if (!slagtool.YDEF_DEBUG.bPausing) return cmdbuf; //ポーズ外・・通過。
+
+            string[] plist;
+            COMMAND cmd = GetCmd(cmdbuf,out plist);
+            string p1 = plist!=null && plist.Length>0 ? plist[0] : null;
+
+            switch (cmd)
+            {
+                case COMMAND.BP:    cmd_sub.AddBreakPoint(plist);      return null; 
+                case COMMAND.STEP:  cmd_sub.Step(p1);                  return null;
+                case COMMAND.RESUME:cmd_sub.Resume();                  return null;
+                case COMMAND.QUIT:  break;
+            }
+
+            return cmdbuf;
+        }
 
         public static void execute(string cmdbuff)
         {
@@ -47,9 +70,9 @@ namespace slagctl
                                       break;
                 case COMMAND.RUN:     cmd_sub.Run();                                              break;
                 case COMMAND.STEP:    break;
-                case COMMAND.BP:      break;
+                case COMMAND.BP:      cmd_sub.AddBreakPoint(plist);                               break;
                 case COMMAND.PRINT:   break;
-                case COMMAND.STOP:    break;
+                case COMMAND.STOP:    cmd_sub.Stop();                                             break;
                 case COMMAND.RESUME:  break;
                 case COMMAND.TEST:    cmd_sub.Test();           break;
                 case COMMAND.DEBUG:   cmd_sub.Debug(p1);        break;
@@ -62,33 +85,7 @@ namespace slagctl
             }
         }
 
-        //public static void execute_in_running(string cmdbuff)
-        //{
-        //    string p1;
-        //    COMMAND cmd = GetCmd(cmdbuff,out p1);
-        //    switch(cmd)
-        //    {
-        //        case COMMAND.STOP: break;
-        //        case COMMAND.QUIT: break;
-        //        default: wk.SendWriteLine("ignore:" + cmd.ToString()); break;
-        //    }
-        //}
-
         // --- tool for this class
-        //private static COMMAND GetCmd(string cmdbuff,out string p1)
-        //{
-        //    var token = cmdbuff.Split(' ');
-        //    string p0 = token[0].ToUpper();
-        //    p1        = token.Length>1 ? token[1] : null;
-
-        //    if (!Enum.IsDefined(typeof(COMMAND),p0))
-        //    { 
-        //        wk.SendWriteLine("Unknow command:" + cmdbuff);
-        //        return COMMAND.NONE;
-        //    }
-        //    var cmd = (COMMAND)Enum.Parse(typeof(COMMAND),p0);
-        //    return cmd;
-        //}
         private static COMMAND GetCmd(string cmdbuff,out string[] parameters)
         {
             parameters = null;

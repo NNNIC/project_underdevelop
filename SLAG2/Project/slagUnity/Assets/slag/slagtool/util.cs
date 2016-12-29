@@ -14,10 +14,10 @@ namespace slagtool
 {
     public class slag
     {
-        public   Guid          m_guid;
-        public   string        m_id;
+        public   Guid            m_guid;
+        public   string[]        m_idlist;
 
-        public   string        m_filename;
+        //public   string        m_filename;
             
         private  List<YVALUE>  m_exelist;
         private  StateBuffer   m_statebuf;
@@ -26,11 +26,6 @@ namespace slagtool
         {
             m_guid = System.Guid.NewGuid();
         }
-
-        //public string ID
-        //{
-        //    get{ return m_id!=null ? m_id : m_guid.ToString(); }
-        //}
             
         #region ロード&セーブ
         /// <summary>
@@ -42,16 +37,12 @@ namespace slagtool
         /// </summary>
         public void LoadFile(string filename,string id=null)
         {
-            if (id==null) m_id = Path.GetFileNameWithoutExtension(filename);
-            m_filename = filename;
-
             var ext = Path.GetExtension(filename);
             switch(ext.ToUpper())
             {
                 case ".JS":
                     {
-                        var src = File.ReadAllText(filename);
-                        m_exelist = util_sub.Compile(src);
+                        LoadJSFiles(new string[1] {filename });
                     }
                     break;
                 case ".BASE64":
@@ -76,32 +67,40 @@ namespace slagtool
         /// <param name="filenames"></param>
         public void LoadJSFiles(string[] filenames)
         {
-            m_id = Path.GetFileNameWithoutExtension(filenames[0]);
-            m_filename = filenames[0];
-
+            //m_id = Path.GetFileNameWithoutExtension(filenames[0]);
+            //m_filename = filenames[0];
+            var ids = new List<string>();
             var sources = new List<string>();
             Array.ForEach(filenames,f=> {
                 sources.Add(File.ReadAllText(f));
+                ids.Add(Path.GetFileNameWithoutExtension(f));
             });
 
+            m_idlist = ids.ToArray();
             m_exelist = util_sub.Compile(sources);
         }
         /// <summary>
         /// テキストソースロード
         /// id はデバッグ時の認識に利用
         /// </summary>
-        public void LoadSrc(string src, string id=null)
+        public void LoadSrc(string src,string id = null)
         {
-            m_id      =id;
+            m_idlist = id!=null ? new string[] { id} : null;
             m_exelist = util_sub.Compile(src);
         }
+        /// <summary>
+        /// バイナリロード
+        /// </summary>
         public void LoadBin(byte[] bin)
         {
             var d     = deserialize(bin);
             m_guid    = d.guid;
-            m_id      = d.id;
+            m_idlist  = d.ids;
             m_exelist = d.list;
         }
+        /// <summary>
+        /// Base64ロード
+        /// </summary>
         public void LoadBase64(string base64str)
         {
             var bin    = Convert.FromBase64String(base64str);
@@ -114,7 +113,7 @@ namespace slagtool
         }
         public byte[] GetBin()
         {
-            return serialize(m_exelist,m_guid,m_id);
+            return serialize(m_exelist,m_guid,m_idlist);
         }
         public string GetBase64()
         {
@@ -140,7 +139,7 @@ namespace slagtool
         {
 
         }
-        public void Breakpoint(int linenum, bool bSetOrClear=true)
+        public void Breakpoint(int linenum, bool bSetOrClear=true, int id=-1)
         {
 
         }
@@ -278,8 +277,8 @@ namespace slagtool
         [System.Serializable]
         public class SaveFormat
         {
-            public Guid   guid;
-            public string id;
+            public Guid         guid;
+            public string[]     ids;
             public List<YVALUE> list;
         }
 
@@ -291,11 +290,11 @@ namespace slagtool
                 return (SaveFormat)bf.Deserialize(ms);
             }
         }
-        private byte[] serialize(List<YVALUE> list, Guid guid, string id)
+        private byte[] serialize(List<YVALUE> list, Guid guid, string[] ids)
         {
             var d = new SaveFormat();
             d.guid = guid;
-            d.id   = id;
+            d.ids   = ids;
             d.list = list;
             var bf = new BinaryFormatter();
             using (var ms = new MemoryStream())

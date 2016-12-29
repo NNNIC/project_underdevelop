@@ -82,7 +82,7 @@ namespace slagmon
             }
             catch
             {
-
+                ;
             }
 
         }
@@ -93,7 +93,7 @@ namespace slagmon
             }
             catch
             {
-
+                ;
             }
         }
     }
