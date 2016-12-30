@@ -40,8 +40,8 @@ namespace slagtool.runtime
             var mts = type.GetMethods();
 
             MethodInfo find_m = null;
-            var mlist = cache_util.GetCache(name,type,paramtypes);
-            mlist.AddRange(type.GetMethods());
+            var mlist = cache_util.GetFuncCache(name,type,paramtypes);
+            mlist.AddRange(mts);
 
             foreach(var m in mlist)
             {
@@ -148,8 +148,10 @@ namespace slagtool.runtime
             if (cts==null) return null;
 
             ConstructorInfo find_c = null;
+            var clist = cache_util.GetNewCache(type,paramtypes);
+            clist.AddRange(cts);
             
-            foreach(var c in cts)
+            foreach(var c in clist)
             {
                 var pis = c.GetParameters();
                 if (_isMatchTypes(paramtypes,pis))
@@ -160,7 +162,8 @@ namespace slagtool.runtime
             }
 
             if (find_c==null) util._error("the constractor can not find " + type.ToString() );
-
+            
+            cache_util.RecordCache(type,paramtypes);
             var p2 = ChangeObjs(parameters,find_c.GetParameters());
             return Activator.CreateInstance(type,args:p2);
         }
@@ -194,9 +197,9 @@ namespace slagtool.runtime
         }
 
         #region Method Info用
-        internal static List<MethodInfo> GetCache(string name,Type type, Type[] tlist)
+        internal static List<MethodInfo> GetFuncCache(string name,Type type, Type[] tlist)
         {
-            var key =_makekey(name,type,tlist);
+            var key =_makekey_func(name,type,tlist);
             var vlist = GetCache(key);
 
             var ml = new List<MethodInfo>();
@@ -208,17 +211,46 @@ namespace slagtool.runtime
                     }
                 });
             }
-
             return ml;         
+        }
+        internal static List<ConstructorInfo> GetNewCache(Type type, Type[] tlist)
+        {
+            var key =_makekey_new(type,tlist);
+            var vlist = GetCache(key);
+
+            var cl = new List<ConstructorInfo>();
+            if (vlist!=null) { 
+                vlist.ForEach(i=> {
+                    if (i is ConstructorInfo)
+                    {
+                        cl.Add((ConstructorInfo)i);
+                    }
+                });
+            }
+            return cl;         
         }
         internal static void RecordCache(string name,Type type, Type[] tlist, MethodInfo m)
         {
-            var key = _makekey(name,type,tlist);
+            var key = _makekey_func(name,type,tlist);
             RecordCache(key,m);
         }
-        private static string _makekey(string name,Type type, Type[] tlist)
+        internal static void RecordCache(Type type, Type[] tlist, ConstructorInfo c)
         {
-            string s = name + type.ToString();
+            var key = _makekey_new(type,tlist);
+            RecordCache(key,c);
+        }
+        private static string _makekey_func(string name,Type type, Type[] tlist)
+        {
+            return _makekey("mi_",name,type,tlist);
+        }
+        private static string _makekey_new(Type type, Type[] tlist)
+        {
+            return _makekey("ci_","",type,tlist);
+        }
+
+        private static string _makekey(string id, string name,Type type, Type[] tlist)
+        {
+            string s = id + name + type.ToString();
             if (tlist!=null)
             {
                 foreach(var t in tlist)

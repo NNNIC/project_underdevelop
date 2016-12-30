@@ -420,6 +420,9 @@ namespace slagtool.runtime
             }
 
             var nsb =sb;
+
+            v = util.GetOptimize(v);
+
             if (v.type == YDEF.get_type(YDEF.sx_main_block))
             {
                 return run(v.list_at(1),nsb);

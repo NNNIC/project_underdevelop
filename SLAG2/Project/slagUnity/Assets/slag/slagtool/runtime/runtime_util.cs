@@ -10,6 +10,26 @@ namespace slagtool.runtime
 {
     public class util
     {
+        internal static YVALUE GetOptimize(YVALUE v)
+        {
+            YVALUE findV = v;
+
+            Action<YVALUE> trv = null;
+            trv = (w)=> {
+                if (w.list_size()==1)
+                {
+                    findV = w;
+                    trv(w);
+                }
+                else
+                {
+                    return;
+                }
+            };
+
+            return findV;
+        }
+
         internal static bool is_paramlist(YVALUE v)
         {
             if (v.type == YDEF.get_type(YDEF.sx_expr))

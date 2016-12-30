@@ -145,4 +145,13 @@ Main Thread
 
 まずは現在のままで Unity由来のみを別スレッドで実行する仕組みを。
 
+----
+
+[YVALUEの最適化 GetOptimize]
+
+test54.js 適用前:0.519sec 適用後:0.507sec  差13msec
+
+[New時にキャッシュ]
+
+test54.js 適用前:0.507sec 適用後:0.467sec  差40msec
 
