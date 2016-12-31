@@ -163,16 +163,20 @@ namespace slagtool.runtime
             }
             else if (util.IsNumeric(a.GetType()))  // if (a.GetType()==typeof(number))
             {
+                switch(op)
+                {
+                    case "+":   
+                    case "-":   
+                    case "*":   
+                    case "/":   
+                    case "%":   return _calc_numeric(a,b,op);
+                }
+
                 var x = util.ToNumber(a);
                 var y = util.ToNumber(b);
 
                 switch(op)
-                {
-                    case "+":   return x+y;
-                    case "-":   return x-y;
-                    case "*":   return x*y;
-                    case "/":   return x/y;
-                    case "%":   return x%y;
+                { 
                     case "==":  return (bool)(x==y);
                     case "!=":  return (bool)(x!=y);
                     case ">":   return (bool)(x>y);
@@ -204,20 +208,21 @@ namespace slagtool.runtime
                     var ary_b = (LIST)b;
                     switch(op)
                     {
-                        case "+": ary_a.AddRange(ary_b); return ary_a;
+                        //case "+": ary_a.AddRange(ary_b); return ary_a;
                         case "==": return ary_a.SequenceEqual(ary_b);
                         default:    _error("unexpected bool operaion:" + op);   break;                
                     }
                 }
-                else
-                {
-                    var ary_a = (LIST)a;
-                    switch(op)
-                    {
-                        case "+": ary_a.Add(b); return ary_a;
-                        default:    _error("unexpected bool operaion:" + op);   break;                
-                    }
-                }
+                //else
+                //{
+                //    var ary_a = (LIST)a;
+                //    switch(op)
+                //    {
+                //        case "+": ary_a.Add(b); return ary_a;
+                //        default:    _error("unexpected bool operaion:" + op);   break;                
+                //    }
+                //}
+                _error("unexpected bool operaion:" + op);
             }
 
             if (User_Calc_op!=null)
@@ -228,6 +233,164 @@ namespace slagtool.runtime
             _error("unexpected calc op:"+op);  
             return null;                 
         }
+
+        #region calc numeric ... for optimize
+        private static object _calc_numeric(object a, object b, string op)
+        {
+            var atype = a.GetType();
+            var btype = b.GetType();
+            object b2= atype==btype ? b : Convert.ChangeType(b,atype);
+            if (a is System.Byte)   return __calc_num((System.Byte)a , (System.Byte)b2,op);
+            if (a is System.SByte)  return __calc_num((System.SByte)a, (System.SByte)b2,op);
+
+            if (a is System.Int16)  return __calc_num((System.Int16)a, (System.Int16)b2,op);
+            if (a is System.UInt16) return __calc_num((System.UInt16)a,(System.UInt16)b2,op);
+
+            if (a is System.Int32)  return __calc_num((System.Int32)a, (System.Int32)b2,op);
+            if (a is System.UInt32) return __calc_num((System.UInt32)a,(System.UInt32)b2,op);
+
+            if (a is System.Int64)  return __calc_num((System.Int64)a, (System.Int64)b2,op);
+            if (a is System.UInt64) return __calc_num((System.UInt64)a,(System.UInt64)b2,op);
+
+            if (a is System.Single) return __calc_num((System.Single)a, (System.Single)b2,op);
+            if (a is System.Double) return __calc_num((System.Double)a, (System.Double)b2,op);
+
+            return null;
+
+        }
+        private static object __calc_num(System.Byte a, System.Byte b, string op)
+        {
+            switch (op)
+            {
+                case "+": return a + b;
+                case "-": return a - b;
+                case "*": return a * b;
+                case "/": return a / b;
+                case "%": return a % b;
+            }
+            _error("unexpected number operaion:" + op);
+            return null;
+        }
+        private static object __calc_num(System.SByte a, System.SByte b, string op)
+        {
+            switch (op)
+            {
+                case "+": return a + b;
+                case "-": return a - b;
+                case "*": return a * b;
+                case "/": return a / b;
+                case "%": return a % b;
+            }
+            _error("unexpected number operaion:" + op);
+            return null;
+        }
+        private static object __calc_num(System.Int16 a, System.Int16 b, string op)
+        {
+            switch (op)
+            {
+                case "+": return a + b;
+                case "-": return a - b;
+                case "*": return a * b;
+                case "/": return a / b;
+                case "%": return a % b;
+            }
+            _error("unexpected number operaion:" + op);
+            return null;
+        }
+        private static object __calc_num(System.UInt16 a, System.UInt16 b, string op)
+        {
+            switch (op)
+            {
+                case "+": return a + b;
+                case "-": return a - b;
+                case "*": return a * b;
+                case "/": return a / b;
+                case "%": return a % b;
+            }
+            _error("unexpected number operaion:" + op);
+            return null;
+        }
+        private static object __calc_num(System.Int32 a, System.Int32 b, string op)
+        {
+            switch (op)
+            {
+                case "+": return a + b;
+                case "-": return a - b;
+                case "*": return a * b;
+                case "/": return a / b;
+                case "%": return a % b;
+            }
+            _error("unexpected number operaion:" + op);
+            return null;
+        }
+
+        private static object __calc_num(System.UInt32 a, System.UInt32 b, string op)
+        {
+            switch (op)
+            {
+                case "+": return a + b;
+                case "-": return a - b;
+                case "*": return a * b;
+                case "/": return a / b;
+                case "%": return a % b;
+            }
+            _error("unexpected number operaion:" + op);
+            return null;
+        }
+        private static object __calc_num(System.Int64 a, System.Int64 b, string op)
+        {
+            switch (op)
+            {
+                case "+": return a + b;
+                case "-": return a - b;
+                case "*": return a * b;
+                case "/": return a / b;
+                case "%": return a % b;
+            }
+            _error("unexpected number operaion:" + op);
+            return null;
+        }
+
+        private static object __calc_num(System.UInt64 a, System.UInt64 b, string op)
+        {
+            switch (op)
+            {
+                case "+": return a + b;
+                case "-": return a - b;
+                case "*": return a * b;
+                case "/": return a / b;
+                case "%": return a % b;
+            }
+            _error("unexpected number operaion:" + op);
+            return null;
+        }
+        private static object __calc_num(System.Single a, System.Single b, string op)
+        {
+            switch (op)
+            {
+                case "+": return a + b;
+                case "-": return a - b;
+                case "*": return a * b;
+                case "/": return a / b;
+                case "%": return a % b;
+            }
+            _error("unexpected number operaion:" + op);
+            return null;
+        }
+        private static object __calc_num(System.Double a, System.Double b, string op)
+        {
+            switch (op)
+            {
+                case "+": return a + b;
+                case "-": return a - b;
+                case "*": return a * b;
+                case "/": return a / b;
+                case "%": return a % b;
+            }
+            _error("unexpected number operaion:" + op);
+            return null;
+        }
+        #endregion
 
         internal static bool IsNumeric(Type type)
         {

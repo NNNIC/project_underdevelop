@@ -217,6 +217,9 @@ namespace slagctl
             {
                 wk.SendWriteLine("Set Debug Mode : " + x);
                 slagtool.util.SetDebugMode(x);
+#if UNITY_5
+                UnityEngine.Debug.logger.logEnabled = (x>0);
+#endif
             }
             else
             {

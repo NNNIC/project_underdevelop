@@ -121,28 +121,31 @@ namespace slagtool
             return Convert.ToBase64String(bytes);
         }
         #endregion
-        public void Run(bool bStepIn=false)
+        public void Run()
         {
             m_statebuf = new StateBuffer();
             runtime.builtin.builtin_func.Init();
+
+            var save = Time.realtimeSinceStartup;
             run_script.run(m_exelist[0],m_statebuf);
+            Debug.Log(Time.realtimeSinceStartup- save);
         }
-        public void Step(bool bStepInOrOut=false)
-        {
+        //public void Step(bool bStepInOrOut=false)
+        //{
 
-        }
-        public void Pause(bool bStopOrResume=true)
-        {
+        //}
+        //public void Pause(bool bStopOrResume=true)
+        //{
 
-        }
-        public void Terminate()
-        {
+        //}
+        //public void Terminate()
+        //{
 
-        }
-        public void Breakpoint(int linenum, bool bSetOrClear=true, int id=-1)
-        {
+        //}
+        //public void Breakpoint(int linenum, bool bSetOrClear=true, int id=-1)
+        //{
 
-        }
+        //}
         #region 関数関連
         public bool ExistFunc(string funcname)
         {
@@ -394,10 +397,10 @@ namespace slagtool
             return Compile(multiple_srces);
         }
 
-        internal static void Run(List<YVALUE> executable_value_list)
-        {
-            runtime.builtin.builtin_func.Init();
-            runtime.run_script.Run(executable_value_list[0]);
-        }
+        //internal static void Run(List<YVALUE> executable_value_list)
+        //{
+        //    runtime.builtin.builtin_func.Init();
+        //    runtime.run_script.Run(executable_value_list[0]);
+        //}
     }
 }

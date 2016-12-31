@@ -23,6 +23,8 @@ public class slagctl_unity_main : MonoBehaviour {
         m_bReqAbort = false;
         m_bEnd      = false;
 
+        UnityEngine.Debug.logger.logEnabled = false;
+
         netcomm.Log = (s)=>Debug.Log(s);
         FilePipe.Log= (s)=>Debug.Log(s);
 
