@@ -270,7 +270,7 @@ namespace slagtool.runtime
         }
         private static PointervarItem ExecuteArrayVar(string pre, string cur, object index_o, PointervarItem item)
         {
-            var index = (int)((number)index_o);
+            var index = (int)util.ToNumber(index_o);
             if (item != null && item.mode == PointervarMode.NEW)
             {
                 var searchname = (pre + "." + cur).ToUpper();
@@ -286,7 +286,7 @@ namespace slagtool.runtime
         private static PointervarItem ExecuteArrayVar(object o, string cur, object index_o, PointervarItem item)
         {
             var name = cur.ToUpper();
-            int index = (index_o!=null && index_o.GetType()==typeof(number)) ? (int)((number)index_o) : -1;
+            int index = (int)util.ToNumber(index_o); //(index_o!=null && index_o.GetType()==typeof(number)) ? (int)((number)index_o) : -1;
 
             Type type = null;
             if (o is Type)

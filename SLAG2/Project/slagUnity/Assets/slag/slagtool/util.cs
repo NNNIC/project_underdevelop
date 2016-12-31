@@ -130,22 +130,6 @@ namespace slagtool
             run_script.run(m_exelist[0],m_statebuf);
             Debug.Log(Time.realtimeSinceStartup- save);
         }
-        //public void Step(bool bStepInOrOut=false)
-        //{
-
-        //}
-        //public void Pause(bool bStopOrResume=true)
-        //{
-
-        //}
-        //public void Terminate()
-        //{
-
-        //}
-        //public void Breakpoint(int linenum, bool bSetOrClear=true, int id=-1)
-        //{
-
-        //}
         #region 関数関連
         public bool ExistFunc(string funcname)
         {

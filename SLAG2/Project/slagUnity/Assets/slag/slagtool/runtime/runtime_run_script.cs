@@ -10,8 +10,8 @@ namespace slagtool.runtime
 {
     public class CFG //Config
     {
-        public const int    LOOPMAX      = 9999;
-        public const string TMPBIN       = null; //キャッシュ  nullを指定すると内部保存
+        public const int    LOOPMAX      = 50000;
+        public const float  PAUSELIMIT   = 180; //秒
     }
 
     public enum BREAKTYPE
@@ -170,7 +170,7 @@ namespace slagtool.runtime
                 var t = v.GetType();
                 if (t==typeof(LIST) || t.IsArray)
                 { 
-                    var i = (int)((number)index);
+                    var i = (int)util.ToNumber(index);
                     if (t==typeof(LIST))
                     {
                         var l = (LIST)v;
@@ -233,7 +233,6 @@ namespace slagtool.runtime
         }
         public void find_and_set_array(string name, object index, object o)
         {
-            //if (index.GetType()!=typeof(number)) util._error("index is not number");
             if (index==null) util._error("NULL index is invalid");
 
             var v = get(name);
@@ -242,7 +241,7 @@ namespace slagtool.runtime
                 var vtype = v.GetType();
                 if (vtype == typeof(LIST) || vtype.IsArray)
                 {
-                    var i = (int)((number)index);
+                    var i = (int)util.ToNumber(index);
                     if (vtype==typeof(LIST))
                     {
                         var l = (LIST)v;
@@ -301,9 +300,9 @@ namespace slagtool.runtime
                 {
                     return (bool)m_cur;
                 }
-                else if (m_cur.GetType()==typeof(number))
+                else if (util.IsNumeric(m_cur.GetType()))
                 {
-                    return (number)m_cur != 0;
+                    return util.ToNumber(m_cur) != 0;
                 }
                 else
                 {
@@ -315,14 +314,6 @@ namespace slagtool.runtime
         public number get_number_cur()
         {
             return util.ToNumber(m_cur,true);
-            //if (m_cur!=null)
-            //{
-            //    if (m_cur.GetType()==typeof(number))
-            //    {
-            //        return (number)m_cur;
-            //    }
-            //}
-            //return number.NaN;
         }
         public string get_string_cur()
         {
@@ -403,11 +394,17 @@ namespace slagtool.runtime
                         sys.logline(string.Format("@Stop at Line:{0} in Src:{1}", dbgline + 1, dbgfile_id +1));
                         YDEF_DEBUG.DumpCurrentVariables(sb);
 
-                        float limit = UnityEngine.Time.realtimeSinceStartup + 60;
+                        float limit = UnityEngine.Time.realtimeSinceStartup + CFG.PAUSELIMIT;
 
                         while(YDEF_DEBUG.bPausing)
                         {
                             System.Threading.Thread.Sleep(100);
+                            if (!YDEF_DEBUG.bPausing)
+                            {
+                                sys.logline("Resume!");
+                                break;
+                            }
+
                             if (YDEF_DEBUG.bRequestAbort || UnityEngine.Time.realtimeSinceStartup > limit)
                             {
                                 YDEF_DEBUG.bRequestAbort = false;
@@ -484,11 +481,11 @@ namespace slagtool.runtime
                         var value = nsb.m_cur;
                         var array_index = array_var.list_at(1);
                         nsb = run(array_index.list_at(1),nsb.curnull());
-                        if (nsb.m_cur==null || nsb.m_cur.GetType()!=typeof(number))
+                        if (nsb.m_cur==null || util.IsNumeric(nsb.m_cur.GetType()))
                         {
                             util._error("array_index is invalid." );
                         }
-                        var index = (int)((number)nsb.m_cur);
+                        var index = (int)util.ToNumber(nsb.m_cur);
                         nsb.m_cur = nsb.get(name);
                         if (nsb.m_cur!=null && nsb.m_cur.GetType()==typeof(List<object>))
                         {
@@ -831,33 +828,48 @@ namespace slagtool.runtime
                         { 
                             var n = str_2nd;
                             var o = nsb.get(n);
-                            var num = util.ToNumber(o,true);
-                            if (double.IsNaN(num))
+                            if (str_1st=="++")
                             {
-                                util._error("unexpected operation for " + str_2nd);
+                                o = util.Calc_op(o,(object)1,"+");
                             }
-                            if (str_1st=="++") num++;
-                            else if (str_1st=="--") num--;
+                            else if (str_1st=="--")
+                            {
+                                o = util.Calc_op(o,(object)1,"-");
+                            }
                             else util._error("the operation is unexpected");
-
-                            nsb.find_and_set(n,num);
-                            nsb.m_cur = num;
+                            nsb.find_and_set(n,o);
+                            nsb.m_cur = o;
                             return nsb;
                         }
                         else if (vlist1.IsType(YDEF.sx_pointervar_clause))
                         {
                             nsb = sub_pointervar_clause.run(vlist1,nsb.curnull(),PointervarMode.ITEM);
                             var item = (PointervarItem)nsb.m_cur;
-                            if (item==null) util._error("unexpected");
+                            if (item==null||item.getter==null||item.setter==null) util._error("unexpected");
 
-                            var num= item.get_number();
-                            if (str_1st=="++") num++;
-                            else if (str_1st=="--") num--;
-                            else util._error("unexpected");
+                            var o = item.getter();
+                            if (str_1st=="++")
+                            {
+                                o = util.Calc_op(o,(object)1,"+");
+                            }
+                            else if (str_1st=="--")
+                            {
+                                o = util.Calc_op(o,(object)1,"-");
+                            }
+                            else util._error("the operation is unexpected");
+                            
+                            item.setter(o);
+                            nsb.m_cur = o;
 
-                            item.set_number(num);
-                            nsb.m_cur = num;
                             return nsb;
+                            //var num= item.get_number();
+                            //if (str_1st=="++") num++;
+                            //else if (str_1st=="--") num--;
+                            //else util._error("unexpected");
+
+                            //item.set_number(num);
+                            //nsb.m_cur = num;
+                            //return nsb;
                         }
                         else
                         {
@@ -870,35 +882,66 @@ namespace slagtool.runtime
                         if (vlist0.IsType(YDEF.NAME))
                         { 
                             var o = nsb.get(n);
-                            if (o.GetType()==typeof(number))
+                            nsb.m_cur = o;
+                            if (str_2nd=="++")
                             {
-                                var num = (number)o;
-                                nsb.m_cur = num;
-                                if (str_2nd=="++") num++;
-                                else if (str_2nd=="--") num--;
-                                else util._error("unexpected");
-
-                                nsb.find_and_set(n,num);
-                                return nsb;
+                                o = util.Calc_op(o,(object)1,"+");
                             }
+                            else if (str_2nd=="--")
+                            {
+                                o = util.Calc_op(o,(object)1,"-");
+                            }
+                            else
+                            {
+                                util._error("unexpected");
+                            }
+                            nsb.find_and_set(n,o);
+                            return nsb;
+                            //if (o.GetType()==typeof(number))
+                            //{
+                            //    var num = (number)o;
+                            //    nsb.m_cur = num;
+                            //    if (str_2nd=="++") num++;
+                            //    else if (str_2nd=="--") num--;
+                            //    else util._error("unexpected");
 
+                            //    nsb.find_and_set(n,num);
+                            //    return nsb;
+                            //}
                         }
                         else if (vlist0.IsType(YDEF.sx_pointervar_clause))
                         {
                             nsb = sub_pointervar_clause.run(vlist0,nsb.curnull(),PointervarMode.ITEM);
                             var item = (PointervarItem)nsb.m_cur;
-                            if (item==null) util._error("unexpected");
-                            
-                            var num = item.get_number();
-                            nsb.m_cur = num;
-
-                            if (str_2nd=="++") num++;
-                            else if (str_2nd=="--") num--;
-                            else util._error("unexpected");
-
-                            item.set_number(num);
+                            if (item==null||item.getter==null||item.setter==null) util._error("unexpected");
+                            var o = item.getter();
+                            nsb.m_cur = o;
+                            if (str_2nd=="++")
+                            {
+                                o = util.Calc_op(o,(object)1,"+");
+                            }
+                            else if (str_2nd=="--")
+                            {
+                                o = util.Calc_op(o,(object)1,"-");
+                            }
+                            else
+                            {
+                                util._error("unexpected");
+                            }
+                            item.setter(o);
 
                             return nsb;
+
+                            //var num = item.get_number();
+                            //nsb.m_cur = num;
+
+                            //if (str_2nd=="++") num++;
+                            //else if (str_2nd=="--") num--;
+                            //else util._error("unexpected");
+
+                            //item.set_number(num);
+
+                            //return nsb;
                         }
                         else
                         {
@@ -923,14 +966,16 @@ namespace slagtool.runtime
                         }
                         else if (str_1st == "-")
                         {
-                            if (nsb.m_cur.GetType()==typeof(number))
-                            {
-                                nsb.m_cur = (number)nsb.m_cur * (-1.0f);
-                            }
-                            else
-                            {
-                                util._error("unexpected");
-                            }
+                            nsb.m_cur = util.Calc_op(-1,nsb.m_cur,"*");
+
+                            //if (nsb.m_cur.GetType()==typeof(number))
+                            //{
+                            //    nsb.m_cur = (number)nsb.m_cur * (-1.0f);
+                            //}
+                            //else
+                            //{
+                            //    util._error("unexpected");
+                            //}
                         }
                         else if (str_1st == "!")
                         {
@@ -938,9 +983,9 @@ namespace slagtool.runtime
                             {
                                 nsb.m_cur = !((bool)nsb.m_cur);
                             }
-                            else if (nsb.m_cur.GetType()==typeof(number))
+                            else if (util.IsNumeric(nsb.m_cur.GetType()))
                             {
-                                var n = (number)nsb.m_cur;
+                                var n = util.ToNumber(nsb.m_cur);
                                 nsb.m_cur = !(n!=0);
                             }
                             else
@@ -991,12 +1036,12 @@ namespace slagtool.runtime
                 var name = v.list_at(0).GetString();
                 var array_index = v.list_at(1);
                 nsb = run(array_index.list_at(1),nsb.curnull());
-                if (nsb.m_cur==null || nsb.m_cur.GetType()!=typeof(number))
+                if (nsb.m_cur==null || !util.IsNumeric(nsb.m_cur.GetType()))
                 {
                     util._error("array_index is invalid." );
                 }
                 var index_o = nsb.m_cur;
-                var index = (int)((number)nsb.m_cur);
+                //var index = (int)((number)nsb.m_cur);
 
                 if (save_pvitem!=null)
                 {
