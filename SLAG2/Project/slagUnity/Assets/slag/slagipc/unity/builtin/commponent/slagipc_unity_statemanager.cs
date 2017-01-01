@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using slagctl;
+using slagipc;
 
-public class slagctl_unity_statemanager : MonoBehaviour {
+public class slagipc_unity_statemanager : MonoBehaviour {
 
     public class StateManager
     {
@@ -11,6 +11,8 @@ public class slagctl_unity_statemanager : MonoBehaviour {
 
         int    m_waitcnt;
         float  m_waittime;
+
+        float  dbg_elapsedtime=0;
 
         public void Goto(string func)      { m_next     = func; }
         public void WaitCount(int c)       { m_waitcnt  = c;    }
@@ -32,12 +34,16 @@ public class slagctl_unity_statemanager : MonoBehaviour {
             bool bFirst = false;
             if (m_next!=null)
             {
+                if (m_cur!=null) wk.Log("!" + m_cur + " elapsed " + dbg_elapsedtime +" sec ! (wo synctime)");
+                dbg_elapsedtime = Time.realtimeSinceStartup;
                 m_cur  = m_next;
                 m_next = null;
                 bFirst = true;
             }
-            if (cmd_sub.m_slag!=null &&  m_cur!=null) { 
+            if (cmd_sub.m_slag!=null &&  m_cur!=null) {
+                var save = Time.realtimeSinceStartup;
                 cmd_sub.m_slag.CallFunc(m_cur,new object[1] { bFirst });
+                dbg_elapsedtime += Time.realtimeSinceStartup - save;
             }
         }
     }

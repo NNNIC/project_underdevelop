@@ -137,4 +137,5 @@ test54.js 適用前:0.507sec 適用後:0.467sec  差40msec
 
 ----
 
-Debug.Logを無効化せよ。
+Debug.Logを無効化せよ。---> Done!
+

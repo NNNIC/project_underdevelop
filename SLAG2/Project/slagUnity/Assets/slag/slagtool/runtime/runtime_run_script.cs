@@ -862,14 +862,6 @@ namespace slagtool.runtime
                             nsb.m_cur = o;
 
                             return nsb;
-                            //var num= item.get_number();
-                            //if (str_1st=="++") num++;
-                            //else if (str_1st=="--") num--;
-                            //else util._error("unexpected");
-
-                            //item.set_number(num);
-                            //nsb.m_cur = num;
-                            //return nsb;
                         }
                         else
                         {
@@ -897,17 +889,6 @@ namespace slagtool.runtime
                             }
                             nsb.find_and_set(n,o);
                             return nsb;
-                            //if (o.GetType()==typeof(number))
-                            //{
-                            //    var num = (number)o;
-                            //    nsb.m_cur = num;
-                            //    if (str_2nd=="++") num++;
-                            //    else if (str_2nd=="--") num--;
-                            //    else util._error("unexpected");
-
-                            //    nsb.find_and_set(n,num);
-                            //    return nsb;
-                            //}
                         }
                         else if (vlist0.IsType(YDEF.sx_pointervar_clause))
                         {
@@ -931,17 +912,6 @@ namespace slagtool.runtime
                             item.setter(o);
 
                             return nsb;
-
-                            //var num = item.get_number();
-                            //nsb.m_cur = num;
-
-                            //if (str_2nd=="++") num++;
-                            //else if (str_2nd=="--") num--;
-                            //else util._error("unexpected");
-
-                            //item.set_number(num);
-
-                            //return nsb;
                         }
                         else
                         {
@@ -967,15 +937,6 @@ namespace slagtool.runtime
                         else if (str_1st == "-")
                         {
                             nsb.m_cur = util.Calc_op(-1,nsb.m_cur,"*");
-
-                            //if (nsb.m_cur.GetType()==typeof(number))
-                            //{
-                            //    nsb.m_cur = (number)nsb.m_cur * (-1.0f);
-                            //}
-                            //else
-                            //{
-                            //    util._error("unexpected");
-                            //}
                         }
                         else if (str_1st == "!")
                         {
@@ -1041,7 +1002,6 @@ namespace slagtool.runtime
                     util._error("array_index is invalid." );
                 }
                 var index_o = nsb.m_cur;
-                //var index = (int)((number)nsb.m_cur);
 
                 if (save_pvitem!=null)
                 {

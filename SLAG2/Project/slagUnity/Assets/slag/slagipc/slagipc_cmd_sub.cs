@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading;
 using System.IO;
 
-namespace slagctl
+namespace slagipc
 {
     public class cmd_sub
     {
@@ -141,7 +141,7 @@ namespace slagctl
                 {
                     wk.SendWriteLine("-- EXCEPTION --");
                     wk.SendWriteLine(e.Message);
-                    wk.SendWriteLine("Stop at Line:" + slagtool.YDEF_DEBUG.current_v.get_dbg_line(true).ToString() );
+                    if (slagtool.YDEF_DEBUG.current_v!=null) wk.SendWriteLine("Stop at Line:" + slagtool.YDEF_DEBUG.current_v.get_dbg_line(true).ToString() );
                     wk.SendWriteLine("---------------");
                 }
             }

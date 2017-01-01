@@ -2,7 +2,7 @@
 using System.Collections;
 using System;
 
-namespace slagctl.unity { 
+namespace slagipc.unity { 
     public class wk_
     {
         private static string m_tmp;
@@ -15,7 +15,7 @@ namespace slagctl.unity {
             m_tmp += s;
             var save = m_tmp;
             m_tmp = null;
-            if (slagctl_unity_main.m_netcomm!=null) slagctl_unity_main.m_netcomm.SendMsg(save);
+            if (slagipc_unity_main.m_netcomm!=null) slagipc_unity_main.m_netcomm.SendMsg(save);
             //Debug.Log(s);
         }
 

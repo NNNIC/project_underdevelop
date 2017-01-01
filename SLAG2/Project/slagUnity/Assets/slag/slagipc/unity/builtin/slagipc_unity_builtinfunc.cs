@@ -8,7 +8,7 @@ using slagtool.runtime;
 using slagtool.runtime.builtin;
 
 
-public class slagctl_unity_builtinfunc {
+public class slagipc_unity_builtinfunc {
     static string NL = Environment.NewLine;
 
     public static object F_Println(bool bHelp,object[] ol,StateBuffer sb)
@@ -126,7 +126,7 @@ public class slagctl_unity_builtinfunc {
         }
         var f = kit.get_string_at(ol,0);
 
-        slagctl.cmd_sub.UpdateAddFunc(f);
+        slagipc.cmd_sub.UpdateAddFunc(f);
 
         return null;
     }
@@ -140,8 +140,8 @@ public class slagctl_unity_builtinfunc {
 
         kit.check_num_of_args(ol,2);
         var go = (GameObject)ol[0];
-        var sm = go.GetComponent<slagctl_unity_monoehaviour>();
-        if (sm==null) sm = go.AddComponent<slagctl_unity_monoehaviour>();
+        var sm = go.GetComponent<slagipc_unity_monoehaviour>();
+        if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
         sm.m_startfunc = kit.get_string_at(ol,1);
         
         return null;
@@ -155,8 +155,8 @@ public class slagctl_unity_builtinfunc {
 
         kit.check_num_of_args(ol,2);
         var go = (GameObject)ol[0];
-        var sm = go.GetComponent<slagctl_unity_monoehaviour>();
-        if (sm==null) sm = go.AddComponent<slagctl_unity_monoehaviour>();
+        var sm = go.GetComponent<slagipc_unity_monoehaviour>();
+        if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
         sm.m_updatefunc = kit.get_string_at(ol,1);
         
         return null;
@@ -170,8 +170,8 @@ public class slagctl_unity_builtinfunc {
 
         kit.check_num_of_args(ol,2);
         var go = (GameObject)ol[0];
-        var sm = go.GetComponent<slagctl_unity_monoehaviour>();
-        if (sm==null) sm = go.AddComponent<slagctl_unity_monoehaviour>();
+        var sm = go.GetComponent<slagipc_unity_monoehaviour>();
+        if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
         sm.m_ondestroyfunc = kit.get_string_at(ol,1);
         
         return null;
@@ -220,14 +220,14 @@ public class slagctl_unity_builtinfunc {
                    "If you set a Game Object as a parameter, the state manager will be belonged to the Game Object" ;
         }
 
-        slagctl_unity_statemanager sm = null;
+        slagipc_unity_statemanager sm = null;
         if (ol.Length == 0)
         {
-            sm = slagctl_unity_main.V.gameObject.AddComponent<slagctl_unity_statemanager>();
+            sm = slagipc_unity_main.V.gameObject.AddComponent<slagipc_unity_statemanager>();
         }
         else if (ol[0] is GameObject)
         {
-            sm = ((GameObject)ol[0]).AddComponent<slagctl_unity_statemanager>();
+            sm = ((GameObject)ol[0]).AddComponent<slagipc_unity_statemanager>();
         }
         else
         {

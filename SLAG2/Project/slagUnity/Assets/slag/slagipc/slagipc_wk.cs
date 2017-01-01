@@ -1,28 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace slagctl
+namespace slagipc
 {
 #if UNITY_5
     public class wk
     { 
         public static void SendWrite(string s)
         {
-            slagctl.unity.wk_.SendWrite(s);
+            slagipc.unity.wk_.SendWrite(s);
         }
         public static void SendWriteLine(string s=null)
         {
-            slagctl.unity.wk_.SendWriteLine(s);
+            slagipc.unity.wk_.SendWriteLine(s);
         }
 
         public static void Log(string s)
         {
-            slagctl.unity.wk_.Log(s);
+            slagipc.unity.wk_.Log(s);
         }
 
         public static void Update()
         {
-            slagctl.unity.wk_.Update();
+            slagipc.unity.wk_.Update();
         }
     }
 #else
