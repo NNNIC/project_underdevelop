@@ -346,6 +346,20 @@ namespace slagtool
             if (list == null) return 0;
             return list.Count;
         }
+        
+        /// <summary>
+        /// ファンクション名を返す
+        /// "sx_def_func_clause"タイプ時にリストからファンクション名を返す
+        /// </summary>
+        public string GetFunctionName()
+        {
+            if (!IsType(YDEF.sx_def_func_clause)) return null;
+            var func = list_at(1);
+            if (func==null) return null;
+            var func_at_0 = func.list_at(0);//.GetString();
+            if (func_at_0==null) return null;
+            return func_at_0.s;
+        }
         #endregion
         #region static 
         public static YVALUE BOF()

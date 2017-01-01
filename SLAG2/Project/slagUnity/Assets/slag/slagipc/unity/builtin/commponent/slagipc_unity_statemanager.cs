@@ -66,6 +66,10 @@ public class slagipc_unity_statemanager : MonoBehaviour {
 	   m_sm.Update(Time.deltaTime);
 	}
 
+    public void Goto(slagtool.YVALUE v)
+    {
+        Goto(v.GetFunctionName());
+    }
     public void Goto(string func)
     {
         m_sm.Goto(func);

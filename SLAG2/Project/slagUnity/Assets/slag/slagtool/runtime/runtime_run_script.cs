@@ -155,10 +155,18 @@ namespace slagtool.runtime
             _get = (d)=> {
                 if (d.ContainsKey(name)) return d[name];
                 var p = d.ContainsKey(KEY_FUNCMARK) ?  m_root_dic : d[KEY_PARENT];
-                if (p==null) util._error(name + " is not defined");
+                //if (p==null) util._error(name + " is not defined");
+                if (p==null) return null;
                 return _get((Hashtable)p);
             };
-            return _get(m_front_dic);
+            var x = _get(m_front_dic);
+            if (x==null)
+            {
+                x = m_func_dic[name];//ファンクションのvlistを返す
+            }
+            if (x==null) util._error(name + " is not defined");
+
+            return x;
         }
         public object get(string name, object index)
         {
@@ -212,7 +220,13 @@ namespace slagtool.runtime
                     return _find((Hashtable)p);
                 }
             };
-            return _find(m_front_dic);
+
+            var b = _find(m_front_dic);
+            if (b==false)
+            {
+                b = m_func_dic.ContainsKey(name);
+            }
+            return b;
         }
         public void find_and_set(string name, object o)
         {

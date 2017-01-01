@@ -27,3 +27,4 @@ function S_END(bFirst)
 var m_sm = StateManager();
 m_sm.Goto(S_INIT);
 
+//PrintLn("S_INIT="+ S_INIT.GetFunctionName());
