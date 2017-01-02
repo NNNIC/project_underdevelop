@@ -34,7 +34,7 @@ namespace slagtool.runtime
                 nsb = run_script.run(vn,nsb.curnull());
                 
                 item = nsb.m_pvitem;
-                if (i<size-1 && item.o == null) { //最後尾前のnull確認。
+                if (i<size-1 && item.o == null) { //最後尾前のnull確認。 最後尾のNULLは容認。
                     if (sys.DEBUGMODE)
                     {
                         sys.logline("Null Pointer, but ignored at line:" + v.get_dbg_line(true) +".");
@@ -402,33 +402,69 @@ namespace slagtool.runtime
 
         }
 
-        public static Type find_typeinfo(string searchname)
+
+        #region タイプ検索
+
+        internal class AllAssemblies
         {
-            Type find_ti = cache_util.GetCache_for_find_typeinfo(searchname);
-            if (find_ti!=null) return find_ti;
-
-            travarse_asm((ti)=>{
-                if (ti.FullName.ToUpper()==searchname)
-                { 
-                    find_ti = ti;
-                }
-            });
-
-            cache_util.RecordCache_for_find_typeinfo(searchname,find_ti);
-
-            return find_ti;
-        }
-        private static void travarse_asm(Action<Type> act)
-        {
-            foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
-            {
-                var types= asm.GetTypes();
-
-                foreach(var ti in asm.GetTypes())
+            Dictionary<string,Type> m_dic;
+            public AllAssemblies() {
+                m_dic = new Dictionary<string, Type>();
+                foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
                 {
-                    act(ti);
+                    var types= asm.GetTypes();
+
+                    foreach(var ti in asm.GetTypes())
+                    {
+                        var n = ti.FullName.ToUpper();
+                        if (!m_dic.ContainsKey(n))
+                        { 
+                            m_dic.Add(n,ti);
+                        }
+                    }
                 }
             }
+
+            internal Type Find(string name)
+            {
+                name = name.ToUpper();
+                if (m_dic.ContainsKey(name))
+                {
+                    return m_dic[name];
+                }
+                return null;
+            }
         }
+        private static AllAssemblies m_allAssemblies = new AllAssemblies(); //起動時に初期化
+
+        public static Type find_typeinfo(string searchname)
+        {
+            //Type find_ti = cache_util.GetCache_for_find_typeinfo(searchname);
+            //if (find_ti!=null) return find_ti;
+
+            //travarse_asm((ti)=>{
+            //    if (ti.FullName.ToUpper()==searchname)
+            //    { 
+            //        find_ti = ti;
+            //    }
+            //});
+
+            //cache_util.RecordCache_for_find_typeinfo(searchname,find_ti);
+
+            return m_allAssemblies.Find(searchname);
+        }
+        //private static void travarse_asm(Action<Type> act)
+        //{
+        //    foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
+        //    {
+        //        var types= asm.GetTypes();
+
+        //        foreach(var ti in asm.GetTypes())
+        //        {
+        //            act(ti);
+        //        }
+        //    }
+        //}
+        #endregion
     }
 }

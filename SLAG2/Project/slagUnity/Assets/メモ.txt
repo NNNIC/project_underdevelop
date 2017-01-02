@@ -139,3 +139,21 @@ test54.js 適用前:0.507sec 適用後:0.467sec  差40msec
 
 Debug.Logを無効化せよ。---> Done!
 
+----
+高速化
+
+UnityEngine.GameObject -> @134:"UnityEngine.GameObject"
+
+@NNN:"タイプ名" 
+  
+@   --- 事前検索済み
+NNN --- 
+
+----
+高速化
+
+ハッシュ化　検索をせずに一義で見つける
+
+test54.js 適用前:0.467sec 適用後:0.267sec  差200msec <--------- GREAT!
+
+

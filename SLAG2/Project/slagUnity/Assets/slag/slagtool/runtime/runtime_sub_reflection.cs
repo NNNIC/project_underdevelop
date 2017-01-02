@@ -263,21 +263,21 @@ namespace slagtool.runtime
         #endregion
 
         #region find_typeinfo用キャッシュ
-        internal static Type GetCache_for_find_typeinfo(string searchname)
-        {
-            var key= "GetFindInCache_" + searchname;
-            var vlist = GetCache(key);
-            if (vlist!=null && vlist[0] is Type)
-            {
-                return (Type)vlist[0];   
-            }    
-            return null;
-        }
-        internal static void RecordCache_for_find_typeinfo(string searchname, Type val)
-        {
-            var key= "GetFindInCache_" + searchname;
-            RecordCache(key,val);
-        }
+        //internal static Type GetCache_for_find_typeinfo(string searchname)
+        //{
+        //    var key= "GetFindInCache_" + searchname;
+        //    var vlist = GetCache(key);
+        //    if (vlist!=null && vlist[0] is Type)
+        //    {
+        //        return (Type)vlist[0];   
+        //    }    
+        //    return null;
+        //}
+        //internal static void RecordCache_for_find_typeinfo(string searchname, Type val)
+        //{
+        //    var key= "GetFindInCache_" + searchname;
+        //    RecordCache(key,val);
+        //}
         #endregion
 
     }
