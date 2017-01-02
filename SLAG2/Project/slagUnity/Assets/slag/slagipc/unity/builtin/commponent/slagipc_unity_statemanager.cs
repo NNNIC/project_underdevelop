@@ -12,7 +12,7 @@ public class slagipc_unity_statemanager : MonoBehaviour {
         int    m_waitcnt;
         float  m_waittime;
 
-        float  dbg_elapsedtime=0;
+        float  dbg_elapsedtime=0; //時間計測
 
         public void Goto(string func)      { m_next     = func; }
         public void WaitCount(int c)       { m_waitcnt  = c;    }
@@ -35,7 +35,7 @@ public class slagipc_unity_statemanager : MonoBehaviour {
             if (m_next!=null)
             {
                 if (m_cur!=null) wk.Log("!" + m_cur + " elapsed " + dbg_elapsedtime +" sec ! (wo synctime)");
-                dbg_elapsedtime = Time.realtimeSinceStartup;
+                dbg_elapsedtime = 0;
                 m_cur  = m_next;
                 m_next = null;
                 bFirst = true;

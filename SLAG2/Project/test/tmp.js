@@ -2,29 +2,19 @@
  Tmp
 */
 
-function S_INIT(bFirst)
-{
-    if (bFirst)
-    {
-        PrintLn("S_INIT");
-        m_sm.Goto(S_SECOND);
-    }
-}
+//function ToVector2From3(v)
+//{
+//    return new UnityEngine.Vector2(v.x,v.y);
+//}
 
-function S_SECOND(bFirst)
-{
-    if (bFirst)
-    {
-        PrintLn("S_SECOND");
-        m_sm.Goto(S_END);
-    }
-}
+//var vec3 = new UnityEngine.Vector3(1,1,1);
+var vec  = new UnityEngine.Vector2(0.5,0.5);
+var add  = new UnityEngine.Vector2(0.5,0.5);
 
-function S_END(bFirst)
-{
-}
+PrintLn(vec);
+PrintLn(add);
 
-var m_sm = StateManager();
-m_sm.Goto(S_INIT);
+var vec2 = vec + add;
 
-//PrintLn("S_INIT="+ S_INIT.GetFunctionName());
+PrintLn(vec2);
+

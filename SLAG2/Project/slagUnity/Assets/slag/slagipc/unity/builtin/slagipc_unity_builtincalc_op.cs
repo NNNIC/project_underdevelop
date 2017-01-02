@@ -10,7 +10,8 @@ public class slagipc_unity_builtincalc_op {
 
     public static object Calc_op(object a, object b, string op)
     {
-        if (a.GetType()==typeof(Vector3) && b.GetType()==typeof(Vector3))
+        // a:vector3
+        if (a.GetType()==typeof(Vector3) && (b.GetType()==typeof(Vector3) || b.GetType()==typeof(Vector2)) )
         {
             var v0 = (Vector3)a;
             var v1 = (Vector3)b;
@@ -32,8 +33,29 @@ public class slagipc_unity_builtincalc_op {
                 default: slagtool.runtime.util._error("unexpected"); break;
             }
         }
-
-
+        //a:Vector2
+        if (a.GetType()==typeof(Vector2) && (b.GetType()==typeof(Vector3) || b.GetType()==typeof(Vector2)) )
+        {
+            var v0 = (Vector2)a;
+            var v1 = (Vector2)b;
+            switch(op)
+            {
+                case "+": return v0 + v1;
+                case "-": return v0 - v1;
+                default: slagtool.runtime.util._error("unexpected"); break;
+            }
+        }
+        if (a.GetType()==typeof(Vector2) && slagtool.runtime.util.IsNumeric(b.GetType()))
+        {
+            var v0 = (Vector2)a;
+            var v1 = (float)slagtool.runtime.util.ToNumber(b);
+            switch(op)
+            {
+                case "*": return v0 * v1;
+                case "/": return v0 / v1;
+                default: slagtool.runtime.util._error("unexpected"); break;
+            }
+        }
 
         return null;
     }	

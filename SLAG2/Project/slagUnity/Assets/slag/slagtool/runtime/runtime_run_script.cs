@@ -245,6 +245,11 @@ namespace slagtool.runtime
             };
             _findset(m_front_dic);
         }
+        public void set(string name, object o)
+        {
+            name = name.ToUpper();
+            m_front_dic[name]=o;
+        }
         public void find_and_set_array(string name, object index, object o)
         {
             if (index==null) util._error("NULL index is invalid");
@@ -540,7 +545,7 @@ namespace slagtool.runtime
                 if (v2!=null)
                 {
                     nsb  = run(v2,nsb.curnull());
-                    nsb.find_and_set(name,nsb.m_cur);
+                    nsb.set(name,nsb.m_cur);
                 }
                 return nsb;
             }

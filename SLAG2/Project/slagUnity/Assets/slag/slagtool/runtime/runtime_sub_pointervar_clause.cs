@@ -34,7 +34,14 @@ namespace slagtool.runtime
                 nsb = run_script.run(vn,nsb.curnull());
                 
                 item = nsb.m_pvitem;
-                if (item.o == null) break;                               //最近の流行りを取り入れてnullだったら後ろは処理しない
+                if (i<size-1 && item.o == null) { //最後尾前のnull確認。
+                    if (sys.DEBUGMODE)
+                    {
+                        sys.logline("Null Pointer, but ignored at line:" + v.get_dbg_line(true) +".");
+                    }
+
+                    break;                               //最近の流行りを取り入れてnullだったら後ろは処理しない
+                }
 
                 if (i<size-1)
                 {
