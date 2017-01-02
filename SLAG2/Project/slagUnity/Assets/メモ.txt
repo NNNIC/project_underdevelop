@@ -142,7 +142,7 @@ Debug.Logを無効化せよ。---> Done!
 ----
 高速化
 
-UnityEngine.GameObject -> @134:"UnityEngine.GameObject"
+UnityEngine.GameObject -> @134:"UnityEngine.GameObject" --- 却下
 
 @NNN:"タイプ名" 
   
@@ -156,4 +156,31 @@ NNN ---
 
 test54.js 適用前:0.467sec 適用後:0.267sec  差200msec <--------- GREAT!
 
+----
+アセンブリ名省略
 
+ファイル先頭に・・・
+"using UnityEngine";
+"using System";
+
+----
+
+ストップウォッチ作成
+
+----
+バッチ
+
+test94.cmd
+ load test94-1.js test94-2.js test94-3.js
+
+batch test94.cmd
+
+----
+ブレイクポイント
+
+BP 行番号 [ファイル番号]
+ファイル番号を省略可能に。
+
+ファイル番号　指定なし時は最初のファイル。
+一度指定すると前のを覚えている。
+---

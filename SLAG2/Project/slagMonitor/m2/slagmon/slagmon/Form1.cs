@@ -13,6 +13,8 @@ namespace slagmon
 {
     public partial class Form1 : Form
     {
+        public static string m_work_path = @"N:\Project\test";
+
 
         Queue<string> m_log;
         FilePipe m_pipe;
@@ -116,15 +118,44 @@ namespace slagmon
 
                 if (!string.IsNullOrWhiteSpace(cmd))
                 {
-                    textBox1_log.AppendText("Send Command : " + cmd + Environment.NewLine);
-                    m_pipe.Write(cmd, "unity");
 
-                    _loadScriptWhenCmdHas(cmd);
+                    string[] cmdlist = null;
+                    bool bBatch = _get_cmdlist_if_batch(cmd, out cmdlist);
+                    if (bBatch)
+                    {
+                        textBox1_log.AppendText("--- [Start Batch] ---" +  Environment.NewLine);
+                    }
+                    
+                    foreach(var i in cmdlist)
+                    { 
+                        if (!string.IsNullOrWhiteSpace(i))
+                        { 
+                            textBox1_log.AppendText("Send Command : " + i + Environment.NewLine);
+
+                            m_pipe.Write(i, "unity");
+
+                            _loadScriptWhenCmdHas(i);
+                        }
+                    }
+
+                    if (bBatch)
+                    {
+                        textBox1_log.AppendText("---------------------" +  Environment.NewLine);
+                    }
                 }
-
             }
-
         }
+        private bool _get_cmdlist_if_batch(string cmd, out string[] cmdlist)
+        {
+            cmdlist= new string[1] {cmd};
+            var tokens = cmd.Split(' ');
+            if (tokens==null || tokens.Length<2 || tokens[0].ToLower()!="batch") return false;
+            try { 
+                cmdlist = File.ReadAllLines(Path.Combine(m_work_path, tokens[1]),Encoding.UTF8);
+            } catch { return false; }
+            return true;
+        }
+
 
         private void textBox3_input_KeyDown(object sender, KeyEventArgs e)
         {
@@ -166,7 +197,7 @@ namespace slagmon
         {
             try { 
                 var filename = comboBoxFiles.Items[comboBoxFiles.SelectedIndex].ToString().Substring(3);
-                util.StartEditor(@"N:\Project\test\" + filename);
+                util.StartEditor(Path.Combine(m_work_path , filename));
             }
             catch
             {

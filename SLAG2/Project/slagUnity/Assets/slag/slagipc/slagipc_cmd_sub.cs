@@ -319,23 +319,5 @@ namespace slagipc
                 if (m_slag!=null &&  m_cur!=null) m_slag.CallFunc(m_cur,new object[1] { bFirst });
             }
         }
-
-        //public static StateMachine m_sm;
-        //[Obsolete]
-        //public static void StateInit(string func)
-        //{
-        //    m_sm = new StateMachine();
-        //    m_sm.Goto(func);
-        //}
-        //[Obsolete]
-        //public static void StateGoto(string func)
-        //{
-        //    m_sm.Goto(func);
-        //}
-        //[Obsolete]
-        //public static void StateWaitCnt(int c)
-        //{
-        //    m_sm.Wait(c);
-        //}
     }
 }

@@ -404,7 +404,6 @@ namespace slagtool.runtime
 
 
         #region タイプ検索
-
         internal class AllAssemblies
         {
             Dictionary<string,Type> m_dic;
@@ -439,32 +438,8 @@ namespace slagtool.runtime
 
         public static Type find_typeinfo(string searchname)
         {
-            //Type find_ti = cache_util.GetCache_for_find_typeinfo(searchname);
-            //if (find_ti!=null) return find_ti;
-
-            //travarse_asm((ti)=>{
-            //    if (ti.FullName.ToUpper()==searchname)
-            //    { 
-            //        find_ti = ti;
-            //    }
-            //});
-
-            //cache_util.RecordCache_for_find_typeinfo(searchname,find_ti);
-
             return m_allAssemblies.Find(searchname);
         }
-        //private static void travarse_asm(Action<Type> act)
-        //{
-        //    foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
-        //    {
-        //        var types= asm.GetTypes();
-
-        //        foreach(var ti in asm.GetTypes())
-        //        {
-        //            act(ti);
-        //        }
-        //    }
-        //}
         #endregion
     }
 }

@@ -293,9 +293,12 @@ namespace slagtool
         {
             if (current_v==null) return null;
 
+            var fid = current_v.dbg_file_id;
+            var file = slag.m_curslag!=null &&  fid>=0 && slag.m_curslag.m_idlist.Length > fid ? slag.m_curslag.m_idlist[fid] : "";
+
             string s = null;
 
-            s += "Error at line:" + (current_v.get_dbg_line(true));
+            s += "Error at line:" + (current_v.get_dbg_line(true)) + " in File:" + file;
              
             return s;            
         }

@@ -75,6 +75,9 @@ namespace slagtool.runtime
             //引数の数が異なるは不適合
             if (paramtypes.Length != pis.Length) return false;
 
+
+            bool bOk = true;
+
             //全型一致検査
             for(int i = 0; i<paramtypes.Length ; i++)
             {
@@ -84,11 +87,32 @@ namespace slagtool.runtime
                 if (p==null && !f.IsValueType) continue; //Null許容はＯＫ
                 if (p==f) continue;
                 if (__isFloat(p) && __isFloat(f)) continue;//フロート型はdouble/single許容
+                //if (util.IsNumeric(p) && util.IsNumeric(f)) continue;
                 if (p.IsSubclassOf(f)) continue; //ベース一致
 
-                return false;
+                bOk = false;
+                break;
             }
-            return true;
+            if (bOk) return true;
+            
+            bOk = true;
+
+            //全数値型を同一とみなす
+            for(int i = 0; i<paramtypes.Length ; i++)
+            {
+                var p = paramtypes[i];
+                var f = pis[i].ParameterType;
+
+                if (p==null && !f.IsValueType) continue; //Null許容はＯＫ
+                if (p==f) continue;
+                if (util.IsNumeric(p) && util.IsNumeric(f)) continue;
+                if (p.IsSubclassOf(f)) continue; //ベース一致
+
+                bOk = false;
+                break;
+            }
+
+            return bOk;
         }
         private static bool __isNullOrNothing<T>(T[] x)
         {
@@ -261,24 +285,5 @@ namespace slagtool.runtime
             return s;
         }
         #endregion
-
-        #region find_typeinfo用キャッシュ
-        //internal static Type GetCache_for_find_typeinfo(string searchname)
-        //{
-        //    var key= "GetFindInCache_" + searchname;
-        //    var vlist = GetCache(key);
-        //    if (vlist!=null && vlist[0] is Type)
-        //    {
-        //        return (Type)vlist[0];   
-        //    }    
-        //    return null;
-        //}
-        //internal static void RecordCache_for_find_typeinfo(string searchname, Type val)
-        //{
-        //    var key= "GetFindInCache_" + searchname;
-        //    RecordCache(key,val);
-        //}
-        #endregion
-
     }
 }
