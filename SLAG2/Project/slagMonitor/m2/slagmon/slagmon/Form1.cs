@@ -149,7 +149,7 @@ namespace slagmon
         {
             cmdlist= new string[1] {cmd};
             var tokens = cmd.Split(' ');
-            if (tokens==null || tokens.Length<2 || tokens[0].ToLower()!="batch") return false;
+            if (tokens==null || tokens.Length<2 || tokens[0].ToLower()!="load" || !tokens[1].ToLower().EndsWith(".cmd") ) return false;
             try { 
                 cmdlist = File.ReadAllLines(Path.Combine(m_work_path, tokens[1]),Encoding.UTF8);
             } catch { return false; }

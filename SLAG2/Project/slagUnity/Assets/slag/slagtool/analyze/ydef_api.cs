@@ -150,6 +150,22 @@ namespace slagtool
             return __sx_members;
         }
 
+        private static Dictionary<int,object[]> __sx_dic;
+        public static Dictionary<int,object[]> get_sx_dic()
+        {
+            if (__sx_dic!=null) return __sx_dic;
+            __sx_dic = new Dictionary<int, object[]>();
+            var infos = get_syntax_list();
+
+            foreach(var i in infos)
+            {
+                var o = (object[])i.GetValue(null);
+                __sx_dic.Add((int)o[1],o);
+            }
+
+            return __sx_dic;
+        }
+
         private static List<object[]> __syntax_order;
         public static List<object[]> get_syntax_order()
         {

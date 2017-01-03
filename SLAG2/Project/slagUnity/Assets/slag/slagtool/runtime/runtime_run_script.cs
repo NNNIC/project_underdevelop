@@ -248,11 +248,6 @@ namespace slagtool.runtime
             };
             _findset(m_front_dic);
         }
-        //public void set(string name, object o) //defineと同じなので。
-        //{
-        //    name = name.ToUpper();
-        //    m_front_dic[name]=o;
-        //}
         public void find_and_set_array(string name, object index, object o)
         {
             if (index==null) util._error("NULL index is invalid");
@@ -373,7 +368,6 @@ namespace slagtool.runtime
                 YDEF_DEBUG.bRequestAbort = false;
                 throw new SystemException("Abort!");
             }
-
             if (v.type == YDEF.get_type(YDEF.sx_sentence))
             { 
                 if (YDEF_DEBUG.bEnable)
