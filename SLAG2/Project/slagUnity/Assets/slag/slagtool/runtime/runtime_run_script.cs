@@ -151,20 +151,23 @@ namespace slagtool.runtime
         public object get(string name)
         {
             name = name.ToUpper();
+
+            var bExist = false;//変数があるか?
+
             Func<Hashtable,object> _get = null;
             _get = (d)=> {
-                if (d.ContainsKey(name)) return d[name];
+                if (d.ContainsKey(name)) { bExist=true; return d[name];}
                 var p = d.ContainsKey(KEY_FUNCMARK) ?  m_root_dic : d[KEY_PARENT];
-                //if (p==null) util._error(name + " is not defined");
                 if (p==null) return null;
                 return _get((Hashtable)p);
             };
             var x = _get(m_front_dic);
-            if (x==null)
+            if (!bExist && m_func_dic.ContainsKey(name))
             {
+                bExist = true;
                 x = m_func_dic[name];//ファンクションのvlistを返す
             }
-            if (x==null) util._error(name + " is not defined");
+            if (!bExist) util._error(name + " is not defined");
 
             return x;
         }
@@ -228,7 +231,7 @@ namespace slagtool.runtime
             }
             return b;
         }
-        public void find_and_set(string name, object o)
+        public void find_and_set(string name, object o)//※setのみは define()
         {
             name = name.ToUpper();
             Action<Hashtable> _findset = null;
@@ -245,11 +248,11 @@ namespace slagtool.runtime
             };
             _findset(m_front_dic);
         }
-        public void set(string name, object o)
-        {
-            name = name.ToUpper();
-            m_front_dic[name]=o;
-        }
+        //public void set(string name, object o) //defineと同じなので。
+        //{
+        //    name = name.ToUpper();
+        //    m_front_dic[name]=o;
+        //}
         public void find_and_set_array(string name, object index, object o)
         {
             if (index==null) util._error("NULL index is invalid");
@@ -538,14 +541,14 @@ namespace slagtool.runtime
             if (v.type == YDEF.get_type(YDEF.sx_def_var_clause))
             {
                 var v0  = v.list_at(0);
-                nsb = run(v0,nsb.curnull());
+                nsb = run(v0,nsb.curnull()); //nsbのm_front_dicに宣言した変数が格納。
                 var name = nsb.get_string_cur();
 
                 var v2  = v.list_at(2);
                 if (v2!=null)
                 {
                     nsb  = run(v2,nsb.curnull());
-                    nsb.set(name,nsb.m_cur);
+                    nsb.find_and_set(name,nsb.m_cur);
                 }
                 return nsb;
             }

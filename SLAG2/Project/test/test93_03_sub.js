@@ -45,7 +45,7 @@ function _create_circle_text(go, strlist, radius, scale, zpos, color)
 
 function Create_big_frame()
 {
-	var frame = CreateCircle(3.5,50,true);
+	var frame = CreateCircle(3.5,80,true);
 	util_ChangeColor(frame,new UnityEngine.Color(164/255,164/255,164/255,1));
 
     _create_circle_notch(frame,3,12,new UnityEngine.Vector3(0.05,0.1,0.1),UnityEngine.Color.red);

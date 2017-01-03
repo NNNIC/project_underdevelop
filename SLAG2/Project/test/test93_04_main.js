@@ -13,11 +13,6 @@
    \      /
     \ 30 /
       ~~
-
-  var minf = CreateMinFrame(); 分計のフレーム作成
-  var secf = CreateSecFrame(); 秒系のフレーム作成
-  var minh = CreateMinHand() ; 分計の針
-  var sech = CreateSecHand() ; 秒計の針
 */
 
 //var secframe = CreateCircle(3.5,50,true);
@@ -50,4 +45,3 @@ function S_TIMERSTART(bFirst)
 
 var m_sm = StateManager();
 m_sm.Goto(S_INIT);
-

@@ -1,4 +1,8 @@
 "using UnityEngine";
 "using System";
 
-PrintLn("TEST2");
+var a = null;
+PrintLn(a);
+Dump(a);
+//var b = 0;
+//PrintLn(b);
