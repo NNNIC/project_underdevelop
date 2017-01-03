@@ -955,7 +955,7 @@ namespace slagtool.runtime
                         }
                         else if (str_1st == "-")
                         {
-                            nsb.m_cur = util.Calc_op(-1,nsb.m_cur,"*");
+                            nsb.m_cur = util.Calc_op(nsb.m_cur,-1,"*");
                         }
                         else if (str_1st == "!")
                         {

@@ -458,7 +458,7 @@ namespace slagtool
 
                     if (m_sample_start == null)
                     { 
-                        if (v.IsType(YDEF.sx_sentence)) continue;
+                        if (v.IsType(YDEF.sx_sentence) || v.IsType(YDEF.sx_sentence_list)) continue;
                         m_sample_start = i;
                         m_sample_end   = i;
                         continue;

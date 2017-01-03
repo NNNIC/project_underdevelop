@@ -1,56 +1,26 @@
 /*
-    test93 ストップウォッチ
-     
-     1. 1分計と2秒計
-　　　
-　　 2. ボタン２つ。
-     
-[START] [RESET]
-      __
-    /  0 \
-   /      \　　＜－－真ん中にもう一つの
-   |    15|   
-   \      /
-    \ 30 /
-      ~~
 
-   時計は上向き。
-   
-
-  var minf = CreateMinFrame(); 分計のフレーム作成
-  var secf = CreateSecFrame(); 秒系のフレーム作成
-  var minh = CreateMinHand() ; 分計の針
-  var sech = CreateSecHand() ; 秒計の針
-
-  var label_01 = CreateTxtObj("1"); //ラベル1
-  var label_02 = CreateTxtObj("2"); //ラベル2
-  
-  
-  var notch = CreateNotch(); //ノッチ（刻み）
-  
-  notch.Add();
 
 
 */
 
-//PrintLn("test93_01_libA");
-
-
-function CreateNotch()
+function CreateNotch(scale)
 {
     var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-    go.transform.localScale = new UnityEngine.Vector3(1,1,1);
+    go.transform.localScale = scale;//new UnityEngine.Vector3(1,1,1);
     return go;
 }
-function CreateTxtObj(s)
+function CreateTxtObj(s,scale)
 {
     var go = new UnityEngine.GameObject();
     var tm = go.AddComponent(typeof("UnityEngine.TextMesh"));
     tm.alignment = UnityEngine.TextAlignment.Center;
     tm.anchor    = UnityEngine.TextAnchor.MiddleCenter;
-    tm.characterSize = 0.2;
+    tm.characterSize = scale;//0.2;
     tm.fontSize = 64;
     tm.text = s;
+    
+    return go;
 }
 
 // ※円作成
@@ -160,5 +130,69 @@ function CreateCircle(radius,num_of_div,rev)
     
     var go = _CC_Create_GameObject(d);
     go.name = "Circle_div_"+num_of_div;
+    return go;
+}
+
+//針作成 CreateHand
+/*
+     W
+    >-< 
+        ^
+        |
+        | H
+        |
+        v  
+     o:origin     
+*/
+function _CH_CreateRectangleMesh(width,height)
+{
+    var verts   = new UnityEngine.Vector3[4];
+    var normals = new UnityEngine.Vector3[4];
+    var uv      = new UnityEngine.Vector2[4];
+    var tri     = new System.Int32[6];
+    
+    var hw = width  / 2;
+    var hh = height / 2;
+
+    verts[0] = new UnityEngine.Vector3(-hw, 0, 0);
+    verts[1] = new UnityEngine.Vector3(+hw, 0, 0);
+    verts[2] = new UnityEngine.Vector3(-hw, +hh * 2, 0);
+    verts[3] = new UnityEngine.Vector3(+hw, +hh * 2, 0);
+
+    for (var i = 0; i < normals.Length; i++) {
+        normals[i] = UnityEngine.Vector3.up;
+    }
+
+    uv[0] = new UnityEngine.Vector2(0, 0);
+    uv[1] = new UnityEngine.Vector2(1, 0);
+    uv[2] = new UnityEngine.Vector2(0, 1);
+    uv[3] = new UnityEngine.Vector2(1, 1);
+
+    tri[0] = 0;
+    tri[1] = 2;
+    tri[2] = 3;
+
+    tri[3] = 0;
+    tri[4] = 3;
+    tri[5] = 1;
+
+    var mesh  = new UnityEngine.Mesh();
+    mesh.vertices = verts;
+    mesh.triangles = tri;
+    mesh.uv = uv;
+    mesh.normals = normals;
+
+    return mesh;
+}
+function CreateHand(width,height,color)
+{
+    var go = new UnityEngine.GameObject();
+    var mr = go.AddComponent(typeof("UnityEngine.MeshRenderer"));
+    mr.material = new UnityEngine.Material(UnityEngine.Shader.Find("Unlit/Color"));
+    mr.material.SetColor("_Color",color);
+
+    var mf = go.AddComponent(typeof("UnityEngine.MeshFilter"));
+    mf.mesh = _CH_CreateRectangleMesh(width,height);
+
     return go;
 }

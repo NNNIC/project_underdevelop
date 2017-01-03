@@ -16,6 +16,7 @@ public class slagipc_unity_main : MonoBehaviour {
     void Awake()
     {
         V = this;
+        
     }
 
 	IEnumerator Start () {

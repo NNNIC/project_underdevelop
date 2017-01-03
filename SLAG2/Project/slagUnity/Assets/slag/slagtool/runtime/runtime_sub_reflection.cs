@@ -78,24 +78,24 @@ namespace slagtool.runtime
 
             bool bOk = true;
 
-            //全型一致検査
-            for(int i = 0; i<paramtypes.Length ; i++)
-            {
-                var p = paramtypes[i];
-                var f = pis[i].ParameterType;
+            ////全型一致検査
+            //for(int i = 0; i<paramtypes.Length ; i++)
+            //{
+            //    var p = paramtypes[i];
+            //    var f = pis[i].ParameterType;
 
-                if (p==null && !f.IsValueType) continue; //Null許容はＯＫ
-                if (p==f) continue;
-                if (__isFloat(p) && __isFloat(f)) continue;//フロート型はdouble/single許容
-                //if (util.IsNumeric(p) && util.IsNumeric(f)) continue;
-                if (p.IsSubclassOf(f)) continue; //ベース一致
+            //    if (p==null && !f.IsValueType) continue; //Null許容はＯＫ
+            //    if (p==f) continue;
+            //    if (__isFloat(p) && __isFloat(f)) continue;//フロート型はdouble/single許容
+            //    //if (util.IsNumeric(p) && util.IsNumeric(f)) continue;
+            //    if (p.IsSubclassOf(f)) continue; //ベース一致
 
-                bOk = false;
-                break;
-            }
-            if (bOk) return true;
+            //    bOk = false;
+            //    break;
+            //}
+            //if (bOk) return true;
             
-            bOk = true;
+            //bOk = true;
 
             //全数値型を同一とみなす
             for(int i = 0; i<paramtypes.Length ; i++)
