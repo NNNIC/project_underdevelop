@@ -1,8 +1,15 @@
 "using UnityEngine";
 "using System";
 
-var a = null;
-PrintLn(a);
+function func()
+{
+   return Cast(Int16,10);
+}
+
+var a = func();
 Dump(a);
+
+
+
 //var b = 0;
 //PrintLn(b);

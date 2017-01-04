@@ -61,6 +61,8 @@ namespace slagtool
 
         NULL    ,// null
 
+        RUNTYPE ,//preruntime時に判明した実行時タイプ用
+
         ERROR   = -1,
 
         MAX     = 255
@@ -106,17 +108,18 @@ namespace slagtool
         public static int OP7   = (int)TOKEN.OP7;         //             〃
         public static int OP11  = (int)TOKEN.OP11;        //             〃
         public static int OP12  = (int)TOKEN.OP12;        //             〃
-        //public static int OP14  = (int)TOKEN.OP14;        //             〃
+        //public static int OP14  = (int)TOKEN.OP14;      //             〃
         public static int INCOP = (int)TOKEN.INCOP;       //             〃
         public static int ASINOP= (int)TOKEN.ASINOP;      //             〃
         public static int PERIOD= (int)TOKEN.PERIOD;      //             〃
         public static int COMMA = (int)TOKEN.COMMA;       //             〃
 
         //特殊                                            //   　　　　　〃
-        public static int REST  = (int)TOKEN.REST;        //   　　　　　〃
-        public static int CMT   = (int)TOKEN.CMT;         //   　　　　　〃
-        public static int NULL  = (int)TOKEN.NULL;        //             〃
-        public static int ERROR = (int)TOKEN.ERROR;       //   　　　　　〃
+        public static int REST    = (int)TOKEN.REST;      //   　　　　　〃
+        public static int CMT     = (int)TOKEN.CMT;       //   　　　　　〃
+        public static int NULL    = (int)TOKEN.NULL;      //             〃
+        public static int RUNTYPE = (int)TOKEN.RUNTYPE;   //             〃
+        public static int ERROR   = (int)TOKEN.ERROR;     //   　　　　　〃
 
         //構文分析用
         public static int __OR__   = 300;

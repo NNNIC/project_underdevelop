@@ -3,31 +3,37 @@ using System.Collections;
 
 public class slagipc_unity_monoehaviour : MonoBehaviour {
 
-    public string m_startfunc;
-    public string m_updatefunc;
-    public string m_ondestroyfunc;
+    public string m_startFunc;
+    public string m_updateFunc;
+    public string m_onDestroyFunc;
+    public string m_onMouseUpAsButtonFunc;
 
 	// Use this for initialization
 	void Start () {
-        if (slagipc.cmd_sub.m_slag!=null && !string.IsNullOrEmpty(m_startfunc))
-        { 
-    	    slagipc.cmd_sub.m_slag.CallFunc(m_startfunc,new object[1] { gameObject });
-        }
+        callfunc(m_startFunc);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-        if (slagipc.cmd_sub.m_slag!=null && !string.IsNullOrEmpty(m_updatefunc))
-        { 
-    	    slagipc.cmd_sub.m_slag.CallFunc(m_updatefunc, new object[1] { gameObject });
-        }
+        callfunc(m_updateFunc);
 	}
 
     void OnDestroy()
     {
-        if (slagipc.cmd_sub.m_slag!=null && !string.IsNullOrEmpty(m_ondestroyfunc))
+        callfunc(m_onDestroyFunc);
+    }
+
+    void OnMouseUpAsButton()
+    {
+        callfunc(m_onMouseUpAsButtonFunc);
+    }
+    //-- util for this class
+    void callfunc(string funcname)
+    {
+        if (slagipc.cmd_sub.m_slag!=null && !string.IsNullOrEmpty(funcname))
         { 
-    	    slagipc.cmd_sub.m_slag.CallFunc(m_ondestroyfunc,new object[1] { gameObject });
+    	    slagipc.cmd_sub.m_slag.CallFunc(funcname,new object[1] { gameObject });
         }
     }
+
 }

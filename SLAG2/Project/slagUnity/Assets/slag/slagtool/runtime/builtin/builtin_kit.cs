@@ -23,7 +23,7 @@ namespace slagtool.runtime.builtin
         }
         public static string get_string_at(object[] ol,int n)
         {
-            if (ol==null || n < 0 || ol.Length<=n ) return null;
+            if (ol==null || n < 0 || ol.Length<=n || ol[n]==null ) return null;
             return ol[n].ToString();
         }
         public static string convert_escape(object o)

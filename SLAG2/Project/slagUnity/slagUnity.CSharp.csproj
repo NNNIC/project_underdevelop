@@ -92,6 +92,9 @@
     <Compile Include="Assets\slag\slagtool\analyze\ydef_do.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\yengine.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\yvalue.cs" />
+    <Compile Include="Assets\slag\slagtool\preruntime\preruntime__process.cs" />
+    <Compile Include="Assets\slag\slagtool\preruntime\preruntime_checktype.cs" />
+    <Compile Include="Assets\slag\slagtool\preruntime\preruntime_checktype_sub.cs" />
     <Compile Include="Assets\slag\slagtool\runtime\builtin\builtin_func.cs" />
     <Compile Include="Assets\slag\slagtool\runtime\builtin\builtin_kit.cs" />
     <Compile Include="Assets\slag\slagtool\runtime\builtin\functions\builtin_sysfunc.cs" />
@@ -109,7 +112,7 @@
   <ItemGroup>
     <None Include="Assets\Data\Font\aboutfont.txt" />
     <None Include="Assets\Resources\Shaders\SampleAlphaTex.shader" />
-    <None Include="Assets\slag\slagtool\__util__に外部アクセスを集める__.txt" />
+    <None Include="Assets\slag\slagtool\preruntime\メモ.txt" />
     <None Include="Assets\メモ.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

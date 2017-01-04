@@ -385,6 +385,10 @@ namespace slagtool
                 });
                 sys.error("This script is not executable. Check syntax at " + s);
             }
+
+            //最適化
+            executable_value_list = preruntime.process.Convert(executable_value_list);
+
             return executable_value_list;
         }
         internal static List<YVALUE> Compile(string src)
@@ -394,11 +398,5 @@ namespace slagtool
 
             return Compile(multiple_srces);
         }
-
-        //internal static void Run(List<YVALUE> executable_value_list)
-        //{
-        //    runtime.builtin.builtin_func.Init();
-        //    runtime.run_script.Run(executable_value_list[0]);
-        //}
     }
 }

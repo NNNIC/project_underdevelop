@@ -131,6 +131,17 @@ public class slagipc_unity_builtinfunc {
         return null;
     }
 
+    public static object F_AddBehaviour(bool bHelp, object[] ol, StateBuffer sb)
+    {
+        if (bHelp)
+        {
+            return "Add \"slagipc_unity_monobehaviour\" to the game object and return component." + NL +"ex) var bhv = AddBehaviour(go)";
+        }
+        kit.check_num_of_args(ol,1);
+        var go = (GameObject)ol[0];
+        return go.AddComponent<slagipc_unity_monoehaviour>();
+    }
+
     public static object F_SetStartCall(bool bHelp, object[] ol, StateBuffer sb)
     {
         if (bHelp)
@@ -142,7 +153,7 @@ public class slagipc_unity_builtinfunc {
         var go = (GameObject)ol[0];
         var sm = go.GetComponent<slagipc_unity_monoehaviour>();
         if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
-        sm.m_startfunc = kit.get_string_at(ol,1);
+        sm.m_startFunc = kit.get_string_at(ol,1);
         
         return null;
     }
@@ -157,7 +168,7 @@ public class slagipc_unity_builtinfunc {
         var go = (GameObject)ol[0];
         var sm = go.GetComponent<slagipc_unity_monoehaviour>();
         if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
-        sm.m_updatefunc = kit.get_string_at(ol,1);
+        sm.m_updateFunc = kit.get_string_at(ol,1);
         
         return null;
     }
@@ -172,7 +183,7 @@ public class slagipc_unity_builtinfunc {
         var go = (GameObject)ol[0];
         var sm = go.GetComponent<slagipc_unity_monoehaviour>();
         if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
-        sm.m_ondestroyfunc = kit.get_string_at(ol,1);
+        sm.m_onDestroyFunc = kit.get_string_at(ol,1);
         
         return null;
     }

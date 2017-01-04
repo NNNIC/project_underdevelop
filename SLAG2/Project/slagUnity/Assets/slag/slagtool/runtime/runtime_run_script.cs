@@ -1191,6 +1191,11 @@ namespace slagtool.runtime
                 nsb.m_cur = null;
                 return nsb;
             }
+            if (v.type == YDEF.RUNTYPE)
+            {
+                nsb.m_cur = v.o;
+                return nsb;
+            }
             return nsb;            
         }
     }

@@ -338,7 +338,7 @@ namespace slagtool
         }
         public YVALUE list_at(int n)
         {
-            if (n<0 || n>=list_size()) return null;
+            if (list==null || n<0 || n>=list_size()) return null;
             return list[n];
         }
         public int list_size()
