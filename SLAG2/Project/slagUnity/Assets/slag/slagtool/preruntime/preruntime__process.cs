@@ -83,17 +83,19 @@ namespace slagtool.preruntime
                 var vt =v.list_at(0);
                 vt = Checktype.ChangeIfType(vt, m_prefix_list);
                 v.list[0] = vt;
-                //if (vt.IsType(YDEF.NAME))
-                //{
-                //    var vname = vt.FindValueByTravarse(YDEF.NAME);
-                //    var type = Checktype.Check(vname.GetString(),m_prefix_list);
-                //    if (type!=null)
-                //    {
-                //        vname.type = YDEF.RUNTYPE;
-                //        vname.o = type;
-                //        vname.s = type.ToString();
-                //    }
-                //}
+
+                //リスト最後尾がfunc要素であれば、引数を対象に
+                var ve =   v.list_at(v.list.Count-1);
+                if (ve!=null && ve.IsType(YDEF.sx_func))
+                {
+                    var vf = ve.FindValueByTravarse(YDEF.sx_func);
+                    var v2 = vf.list_at(1);
+                    if (v2!=null)
+                    { 
+                        v2 = _convert(v2);
+                        vf.list[1] = v2;
+                    }
+                }
                 return v;
             }
             if (v.type == YDEF.get_type(YDEF.sx_def_func_clause))//ファンクション宣言節か？

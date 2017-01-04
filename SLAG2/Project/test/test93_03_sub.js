@@ -1,7 +1,7 @@
 /*
     TEST93 Sub
 */
-function _create_circle_notch(go,radius,num_of_div,scale,color)
+function _create_circle_notch(go,radius,num_of_div,scale,col)
 {
     var angle_div = 360 / num_of_div;
     var angle     = angle_div * UnityEngine.Mathf.Deg2Rad;
@@ -18,10 +18,10 @@ function _create_circle_notch(go,radius,num_of_div,scale,color)
         notch.transform.localPosition = new UnityEngine.Vector3(x*radius,y*radius,0);
         notch.transform.eulerAngles   = UnityEngine.Vector3.forward * (90 + angle_div*n);
         
-        util_ChangeColor(notch,color);
+        util_ChangeColor(notch,col);
     }
 }
-function _create_circle_text(go, strlist, radius, scale, zpos, color)
+function _create_circle_text(go, strlist, radius, scale, zpos, col)
 {
     var num_of_div = strlist.Count;
     var angle_div = 360 / num_of_div;

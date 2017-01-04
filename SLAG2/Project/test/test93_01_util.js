@@ -1,8 +1,9 @@
-//"using UnityEngine";
+"using UnityEngine";
 
-function util_ChangeColor(go,color)
+function util_ChangeColor(go,col)
 {
-    PrintLn(color);
-    var r = go.GetComponent(typeof(UnityEngine.Renderer));
-    r.material.SetColor("_Color", color);
+    PrintLn(col);
+    //var r = go.GetComponent(typeof(UnityEngine.Renderer));
+    var r = go.GetComponent(typeof(Renderer));
+    r.material.SetColor("_Color", col);
 }

@@ -32,14 +32,14 @@ function _CC_Create_GameObject(d)
 
     var mf = go.AddComponent(typeof ("UnityEngine.MeshFilter"));
 
-    var mesh = new UnityEngine.Mesh();
+    var me = new UnityEngine.Mesh();
 
-    mesh.vertices  = ToArray(UnityEngine.Vector3,        d.verts);
-    mesh.uv        = ToArray(UnityEngine.Vector2,        d.uvs);
-    mesh.normals   = ToArray(UnityEngine.Vector3,        d.nrms);
-    mesh.triangles = ToArray(System.Int32,               d.trs);
+    me.vertices  = ToArray(UnityEngine.Vector3,        d.verts);
+    me.uv        = ToArray(UnityEngine.Vector2,        d.uvs);
+    me.normals   = ToArray(UnityEngine.Vector3,        d.nrms);
+    me.triangles = ToArray(System.Int32,               d.trs);
 
-    mf.mesh = mesh;
+    mf.mesh = me;
 
     return go;
 }
@@ -176,20 +176,20 @@ function _CH_CreateRectangleMesh(width,height)
     tri[4] = 3;
     tri[5] = 1;
 
-    var mesh  = new UnityEngine.Mesh();
-    mesh.vertices = verts;
-    mesh.triangles = tri;
-    mesh.uv = uv;
-    mesh.normals = normals;
+    var me  = new UnityEngine.Mesh();
+    me.vertices = verts;
+    me.triangles = tri;
+    me.uv = uv;
+    me.normals = normals;
 
-    return mesh;
+    return me;
 }
-function CreateHand(width,height,color)
+function CreateHand(width,height,col)
 {
     var go = new UnityEngine.GameObject();
     var mr = go.AddComponent(typeof("UnityEngine.MeshRenderer"));
     mr.material = new UnityEngine.Material(UnityEngine.Shader.Find("Unlit/Color"));
-    mr.material.SetColor("_Color",color);
+    mr.material.SetColor("_Color",col);
 
     var mf = go.AddComponent(typeof("UnityEngine.MeshFilter"));
     mf.mesh = _CH_CreateRectangleMesh(width,height);
@@ -238,12 +238,12 @@ function _CB_CreateRectangleMesh(width,height)
 
     return mesh;
 }
-function CreateButton(width,height,color,click_func)
+function CreateButton(width,height,col,click_func)
 {
     var go = new UnityEngine.GameObject();
     var mr = go.AddComponent(typeof("UnityEngine.MeshRenderer"));
     mr.material = new UnityEngine.Material(UnityEngine.Shader.Find("Unlit/Color"));
-    mr.material.SetColor("_Color",color);
+    mr.material.SetColor("_Color",col);
     
     var mf = go.AddComponent(typeof("UnityEngine.MeshFilter"));
     mf.mesh = _CB_CreateRectangleMesh(width,height);

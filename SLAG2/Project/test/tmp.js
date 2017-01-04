@@ -2,15 +2,12 @@
  Tmp
 */
 
-function CREATE()
+"using UnityEngine";
+
+function util_ChangeColor(go,color)
 {
-    PrintLn("CREATE()");
+    PrintLn(color);
+    //var r = go.GetComponent(typeof(UnityEngine.Renderer));
+    var r = go.GetComponent(typeof(Renderer));
+    r.material.SetColor("_Color", color);
 }
-
-var m_hoge;
-
-function S_INIT(bFirst)
-{
-    PrintLn("S_INIT()");
-}
-
