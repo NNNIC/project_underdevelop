@@ -12,9 +12,16 @@ namespace slagipc
         {
             NONE,
             WD,     //Set Working Directory
+
             LOAD,   //Load FILENAME (.js or .txt)
             LOADRUN,//Load and run FILENAME (.js or .txt)
-            LOADBIN,//Store BASE64 binary
+            LOADBIN,//Load binary file
+            LOADBASE64, //Load Base64 file
+            SAVETMPBIN, //Save the current to tmp.bin
+            LOADTMPBIN, //Load tmp.bin
+            SAVETMPBASE64,//Save the current to tmp.base64
+            LOADTMPBASE64,//Load tmp.base64
+            
             RUN,    //Run
             STEP,   //Step in or out
             BP,     //Set breakpoint          
@@ -60,28 +67,35 @@ namespace slagipc
             string p1 = plist!=null && plist.Length>0 ? plist[0] : null;
             switch(cmd)
             {
-                case COMMAND.WD:      if (!string.IsNullOrEmpty(p1)) Set_WorkingDirectoy(p1);     break;
-                case COMMAND.LOAD:    if (plist!=null)
-                                      { 
-                                          if (plist.Length == 1) { cmd_sub.Load(m_workDir,p1);    break; }
-                                          if (plist.Length>1)    { cmd_sub.Load(m_workDir,plist); break; }
-                                      }
-                                      wk.SendWriteLine("file name was not specified.");
-                                      break;
-                case COMMAND.RUN:     cmd_sub.Run();                                              break;
-                case COMMAND.STEP:    break;
-                case COMMAND.BP:      cmd_sub.AddBreakPoint(plist);                               break;
-                case COMMAND.PRINT:   break;
-                case COMMAND.STOP:    cmd_sub.Stop();                                             break;
-                case COMMAND.RESUME:  break;
-                case COMMAND.TEST:    cmd_sub.Test();           break;
-                case COMMAND.DEBUG:   cmd_sub.Debug(p1);        break;
+                case COMMAND.WD:           if (!string.IsNullOrEmpty(p1)) Set_WorkingDirectoy(p1);     break;
+                case COMMAND.LOAD:         if (plist!=null)
+                                           { 
+                                               if (plist.Length == 1) { cmd_sub.Load(m_workDir,p1);    break; }
+                                               if (plist.Length>1)    { cmd_sub.Load(m_workDir,plist); break; }
+                                           }
+                                           wk.SendWriteLine("file name was not specified.");
+                                           break;
+
+                case COMMAND.SAVETMPBIN:   cmd_sub.SaveBin(m_workDir,"tmp.bin");                       break;
+                case COMMAND.SAVETMPBASE64:cmd_sub.SaveBase64(m_workDir,"tmp.base64");                 break;
+                case COMMAND.LOADTMPBIN:   cmd_sub.Load(m_workDir,"tmp.bin");                          break;
+                case COMMAND.LOADTMPBASE64:cmd_sub.Load(m_workDir,"tmp.base64");                       break;
+
+                case COMMAND.RUN:          cmd_sub.Run();                                              break;
+                case COMMAND.STEP:         break;
+                case COMMAND.BP:           cmd_sub.AddBreakPoint(plist);                               break;
+                case COMMAND.PRINT:        break;
+                case COMMAND.STOP:         cmd_sub.Stop();                                             break;
+                case COMMAND.RESUME:       break;
+                case COMMAND.TEST:         cmd_sub.Test();                                             break;
+                case COMMAND.DEBUG:        cmd_sub.Debug(p1);                                          break;
 
                 case COMMAND.RESET:
-                case COMMAND.QUIT:    cmd_sub.Reset();          break;
+                case COMMAND.QUIT:         cmd_sub.Reset();                                            break;
+                                                                                                     
+                case COMMAND.HELP:         cmd_sub.Help();                                             break;
 
-                case COMMAND.HELP:    cmd_sub.Help();           break;
-                default: wk.SendWriteLine("ignore:" + cmdbuff); break;
+                default:                   wk.SendWriteLine("ignore:" + cmdbuff); break;
             }
         }
 

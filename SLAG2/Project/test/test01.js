@@ -4,19 +4,19 @@
 
 PrintLn("### TEST 01 ###");
 
-var a=10;
+var $a=10;
 
-println( a );
+println( $a );
 
-var c =[1,2,3,4];
-Dump(c);
+var $c =[1,2,3,4];
+Dump($c);
 
-var d =["hoge","v",-1];
-Dump(d);
+var $d =["hoge","v",-1];
+Dump($d);
 
-for(var i = 0; i<100; i++)
+for(var $i = 0; $i<100; $i++)
 {
-    Print(i); Print(",");
+    Print($i); Print(",");
 }
 
 PrintLn();

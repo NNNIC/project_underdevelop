@@ -1064,6 +1064,8 @@ namespace slagtool.runtime
 
                     nsb = run(v.list_at(1),nsb.curnull());
 
+                    if (save!=null) save.o = nsb.m_cur;
+
                     nsb.m_pvitem = save;     //ポイント変数復帰
                 }
                 return nsb;

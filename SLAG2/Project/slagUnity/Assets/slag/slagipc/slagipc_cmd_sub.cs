@@ -88,7 +88,7 @@ namespace slagipc
                 return null;
             }
             var ext = Path.GetExtension(fullpath).ToUpper();
-            if (ext!=".JS" && ext!=".BIN")
+            if (ext!=".JS" && ext!=".BIN" && ext!=".BASE64")
             {
                 wk.SendWriteLine("ERROR:File name is not allowed");
                 return null;
@@ -109,7 +109,7 @@ namespace slagipc
                 }
                 catch(SystemException e)
                 {
-                    wk.SendWriteLine("-- EXCEPTION --");
+                    wk.SendWriteLine("-- 例外発生 --");
                     wk.SendWriteLine(e.Message);
                     wk.SendWriteLine("---------------");
                     return null;
@@ -125,6 +125,44 @@ namespace slagipc
             return m_slag;
         }
 
+        public static void SaveBin(string path, string file)
+        {
+            if (m_slag==null)
+            {
+                wk.SendWriteLine("データがありません");
+                return;
+            }
+            try { 
+                var fp = Path.Combine(path,file);
+                m_slag.SaveBin(Path.Combine(path,file));
+                wk.SendWriteLine("セーブしました ファイル:"+ fp);
+            } catch (SystemException e)
+            {
+                wk.SendWriteLine("-- 例外発生 --");
+                wk.SendWriteLine(e.Message);
+                wk.SendWriteLine("---------------");
+            }
+        }
+        public static void SaveBase64(string path, string file)
+        {
+            if (m_slag==null)
+            {
+                wk.SendWriteLine("データがありません");
+                return;
+            }
+            try { 
+                var fp = Path.Combine(path,file);
+                m_slag.SaveBase64(Path.Combine(path,file));
+                wk.SendWriteLine("セーブしました ファイル:"+ fp);
+            } catch (SystemException e)
+            {
+                wk.SendWriteLine("-- 例外発生 --");
+                wk.SendWriteLine(e.Message);
+                wk.SendWriteLine("---------------");
+            }
+        }
+
+
         public static void Run(slagtool.slag slag = null)
         {
             if (slag!=null) m_slag = slag;
@@ -139,7 +177,7 @@ namespace slagipc
                 } 
                 catch(SystemException e)
                 {
-                    wk.SendWriteLine("-- EXCEPTION --");
+                    wk.SendWriteLine("-- 例外発生 --");
                     wk.SendWriteLine(e.Message);
                     if (slagtool.YDEF_DEBUG.current_v!=null) wk.SendWriteLine("Stop at Line:" + slagtool.YDEF_DEBUG.current_v.get_dbg_line(true).ToString() );
                     wk.SendWriteLine("---------------");
