@@ -426,13 +426,46 @@ namespace slagtool.runtime
             return (number)o;
         }
 
+        #region call script function
+        internal static StateBuffer CallFunction(YVALUE fv,List<object> ol, StateBuffer sb)
+        {
+            var nsb = sb;
+            YDEF_DEBUG.funcCntSmp++;
+            nsb.set_funcwork();
+            {
+                var fvbk = util.normalize_func_bracket(fv.list_at(1).list_at(1)); //ファンクション定義部の引数部分
+                if (   fvbk.list.Count != ol.Count)
+                {
+                    util._error("number of arguments in valid.");
+                }
+                int n = 0;
+                if (fvbk!=null) for(int i = 0; i<fvbk.list.Count; i+=2)
+                {
+                    var varname = fvbk.list_at(i).GetString();//定義側の変数名
+                    object o = ol!=null && n < ol.Count ? ol[n] : null;
+                    nsb.define(varname, o);
+                    n++;
+                }
+                nsb = runtime.run_script.run(fv.list_at(2),nsb);
+                nsb.breaknone();
+            }
+            nsb.reset_funcwork();
+            YDEF_DEBUG.funcCntSmp--;
+
+            return nsb;
+        }
+        #endregion
+
+
+
         // Error
         internal static void _error(string cmt)
         {
             var s = cmt + "\n" + YDEF_DEBUG.RuntimeErrorInfo();
             throw new SystemException(s);
         }
-        internal static void Assert(bool condition)
+        //Assert
+        internal static void _assert(bool condition)
         {
 #if UNITY_5
             UnityEngine.Assertions.Assert.IsTrue(condition);

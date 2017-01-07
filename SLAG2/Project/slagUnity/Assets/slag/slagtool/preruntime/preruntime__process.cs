@@ -133,6 +133,14 @@ namespace slagtool.preruntime
                     var pv = nv.FindValueByTravarse(YDEF.sx_pointervar_clause);
                     pv = _convert(pv);
                 }
+                else if (nv.IsType(YDEF.sx_array_var))
+                {
+                    var av = nv.FindValueByTravarse(YDEF.sx_array_var);
+                    var namev = av.list_at(0);
+                    namev = Checktype.ChangeIfType(namev, m_prefix_list);
+                    av.list[0] = namev;
+                    av.list[1] = _convert(av.list[1]);
+                }
                 return v;
             }
             //if (v.type == YDEF.get_type(YDEF.sx_func))  ---- ポインタ値に属さない関数は内部または組込関数のみなので、評価外。

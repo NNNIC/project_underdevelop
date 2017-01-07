@@ -939,7 +939,7 @@ namespace slagtool.runtime
                         var v1 = v.list_at(1);
                         if (v1.IsType(YDEF.sx_pointervar_clause))
                         {
-                            var nv = v1.FindValueByTravarse(YDEF.get_type(YDEF.sx_pointervar_clause));
+                            var nv = v1.FindValueByTravarse(YDEF.sx_pointervar_clause);
                             if (nv != null)
                             {
                                 nsb = sub_pointervar_clause.run(nv, nsb.curnull(), PointervarMode.NEW);
@@ -947,8 +947,13 @@ namespace slagtool.runtime
                         }
                         else if (v1.IsType(YDEF.sx_func))
                         {
-                            var fv = v1.FindValueByTravarse(YDEF.get_type(YDEF.sx_func));
+                            var fv = v1.FindValueByTravarse(YDEF.sx_func);
                             nsb = sub_pointervar_clause.run_new_func(fv,nsb.curnull());
+                        }
+                        else if (v1.IsType(YDEF.sx_array_var))
+                        {
+                            var av = v1.FindValueByTravarse(YDEF.sx_array_var);
+                            nsb = sub_pointervar_clause.run_new_array_var(av,nsb.curnull());
                         }
                         return nsb;
                     }
@@ -1123,7 +1128,7 @@ namespace slagtool.runtime
                     }
                     util._error("function is not defined:" + name);
                 }
-
+#if obs
                 YDEF_DEBUG.funcCntSmp++;
                 nsb.set_funcwork();
                 {
@@ -1145,6 +1150,9 @@ namespace slagtool.runtime
                 }
                 nsb.reset_funcwork();
                 YDEF_DEBUG.funcCntSmp--;
+#endif
+                nsb = util.CallFunction(fv,ol,nsb);
+
                 return nsb;
             }
             if (v.type == YDEF.get_type(YDEF.sx_def_func_clause))

@@ -118,18 +118,18 @@ public class slagipc_unity_builtinfunc {
         return m_readtext;
     }
 
-    public static object F_HookUpdate(bool bHelp, object[] ol, StateBuffer sb)
-    {
-        if (bHelp)
-        {
-            return "Hook up a function with Update on monobehaviour." + NL +"ex) HookUpdate(\"function\"";
-        }
-        var f = kit.get_string_at(ol,0);
+    //public static object F_HookUpdate(bool bHelp, object[] ol, StateBuffer sb)
+    //{
+    //    if (bHelp)
+    //    {
+    //        return "Hook up a function with Update on monobehaviour." + NL +"ex) HookUpdate(\"function\"";
+    //    }
+    //    var f = kit.get_string_at(ol,0);
 
-        slagipc.cmd_sub.UpdateAddFunc(f);
+    //    slagipc.cmd_sub.UpdateAddFunc(f);
 
-        return null;
-    }
+    //    return null;
+    //}
 
     public static object F_AddBehaviour(bool bHelp, object[] ol, StateBuffer sb)
     {
@@ -137,56 +137,63 @@ public class slagipc_unity_builtinfunc {
         {
             return "Add \"slagipc_unity_monobehaviour\" to the game object and return component." + NL +"ex) var bhv = AddBehaviour(go)";
         }
-        kit.check_num_of_args(ol,1);
-        var go = (GameObject)ol[0];
+        GameObject go = null;
+        if (ol.Length==0)
+        {
+            go =  slagipc_unity_main.V.gameObject;
+        }
+        else if (ol[0] is GameObject)
+        {
+            go = (GameObject)ol[0];
+        }
         return go.AddComponent<slagipc_unity_monoehaviour>();
     }
 
-    public static object F_SetStartCall(bool bHelp, object[] ol, StateBuffer sb)
-    {
-        if (bHelp)
-        {
-            return "Set Start Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetStartCall(a,\"StartCall\");  ";
-        }
+    //public static object F_SetStartCall(bool bHelp, object[] ol, StateBuffer sb)
+    //{
+    //    if (bHelp)
+    //    {
+    //        return "Set Start Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetStartCall(a,\"StartCall\");  ";
+    //    }
 
-        kit.check_num_of_args(ol,2);
-        var go = (GameObject)ol[0];
-        var sm = go.GetComponent<slagipc_unity_monoehaviour>();
-        if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
-        sm.m_startFunc = kit.get_string_at(ol,1);
+    //    kit.check_num_of_args(ol,2);
+    //    var go = (GameObject)ol[0];
+    //    var sm = go.GetComponent<slagipc_unity_monoehaviour>();
+    //    if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
+    //    sm.m_startFunc = kit.get_string_at(ol,1);
         
-        return null;
-    }
-    public static object F_SetUpdateCall(bool bHelp, object[] ol, StateBuffer sb)
-    {
-        if (bHelp)
-        {
-            return "Set Update Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetUpdateCall(a,\"UpdateCall\");  ";
-        }
+    //    return null;
+    //}
+    //public static object F_SetUpdateCall(bool bHelp, object[] ol, StateBuffer sb)
+    //{
+    //    if (bHelp)
+    //    {
+    //        return "Set Update Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetUpdateCall(a,\"UpdateCall\");  ";
+    //    }
 
-        kit.check_num_of_args(ol,2);
-        var go = (GameObject)ol[0];
-        var sm = go.GetComponent<slagipc_unity_monoehaviour>();
-        if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
-        sm.m_updateFunc = kit.get_string_at(ol,1);
+    //    kit.check_num_of_args(ol,2);
+    //    var go = (GameObject)ol[0];
+    //    var sm = go.GetComponent<slagipc_unity_monoehaviour>();
+    //    if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
+    //    sm.m_updateFunc = kit.get_string_at(ol,1);
         
-        return null;
-    }
-    public static object F_SetOnDestroyCall(bool bHelp, object[] ol, StateBuffer sb)
-    {
-        if (bHelp)
-        {
-            return "Set OnDestroy Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetOnDestroyCall(a,\"OnDestroyCall\");  ";
-        }
+    //    return null;
+    //}
+    //public static object F_SetOnDestroyCall(bool bHelp, object[] ol, StateBuffer sb)
+    //{
+    //    if (bHelp)
+    //    {
+    //        return "Set OnDestroy Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetOnDestroyCall(a,\"OnDestroyCall\");  ";
+    //    }
 
-        kit.check_num_of_args(ol,2);
-        var go = (GameObject)ol[0];
-        var sm = go.GetComponent<slagipc_unity_monoehaviour>();
-        if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
-        sm.m_onDestroyFunc = kit.get_string_at(ol,1);
+    //    kit.check_num_of_args(ol,2);
+    //    var go = (GameObject)ol[0];
+    //    var sm = go.GetComponent<slagipc_unity_monoehaviour>();
+    //    if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
+    //    sm.m_onDestroyFunc = kit.get_string_at(ol,1);
         
-        return null;
-    }
+    //    return null;
+    //}
     #region ステートマシン
 #if obs
     public static object F_StateInit(bool bHelp, object[] ol, StateBuffer sb)
@@ -252,4 +259,73 @@ public class slagipc_unity_builtinfunc {
 
 #endif
     #endregion
+
+    public static object F_SendMsg(bool bHelp, object[] ol, StateBuffer sb)
+    {
+        if (bHelp)
+        {
+            return "GameObjectにメッセージを送る。メッセージ受信先が存在すれば指定関数を実行。"+NL+
+                   "フォーマット) SendMsg(GameObject,名前[,パラメータ・・・])";
+        }
+        GameObject go   = null;
+        if (ol.Length>0)
+        {
+            go   = (GameObject)ol[0];
+        }
+        List<object> plist=null;
+        if (ol.Length>1)
+        {
+            plist = new List<object>();
+            for(int i = 1; i<ol.Length; i++)
+            {
+                plist.Add(ol[i]);
+            }
+        }
+        if (plist==null)
+        {
+            util._error("SendMsgの引数が正しくありません");
+        }
+        go.SendMessage("SendMessageSocket",plist);
+
+        return null;
+    }
+
+    public static object F_GetObjectAtScreenPoint(bool bHelp, object[] ol, StateBuffer sb)
+    {
+        if (bHelp)
+        {
+            return "スクリーンポジションの位置にあるオブジェクトを返す"+NL+
+                   "フォーマット) GetObjectAtScreenPoint(Vector3[,Camera])" +NL+
+                   "例)　var go = GetObjectAtScreenPoint(new Vector3(100,100,0));";
+        }
+
+        Vector3 pos=Vector3.zero;
+        Camera cam = null;
+        if (ol.Length>=1 && ol[0] is Vector3)
+        {
+            pos = (Vector3)ol[0];
+            cam = Camera.main;
+        }
+        if (ol.Length>=2 && ol[1] is Camera)
+        {
+            cam = (Camera)ol[1];
+        }
+        if (cam==null)
+        {
+            util._error("GetObjectAtScreenPoint:引数が正しくありません");
+        }
+        
+        var ray = cam.ScreenPointToRay(pos);
+        RaycastHit hit;
+        if (Physics.Raycast(ray,out hit))
+        {
+            if (hit.collider!=null)
+            {
+                return hit.collider.gameObject;
+            }
+        }
+
+        return null;
+    }
+
 }

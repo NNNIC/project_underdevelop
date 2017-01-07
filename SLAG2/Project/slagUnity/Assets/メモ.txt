@@ -228,3 +228,30 @@ sx_expr -+-NEW
 現時点のパフォーマンス
 
 test54.js 前回:0.267sec  現在:0.169    差98msec <--------- GREAT!
+
+---
+
+ビルトインファンクションがない場合にエラーにならない。
+
+PlintLn(Time.time);  // PrintLn　が正しい。でもエラーなし！
+
+---
+
+エラーの出し方の統一か規定
+
+解析中
+ sys.error
+
+
+スクリプト内のファンクション
+ runtime.util.error
+
+スクリプト外のファンクション component内等
+ ?
+
+理論的にありえない
+ throw SystemException("unexpected");
+
+
+----
+

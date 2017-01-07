@@ -196,6 +196,41 @@ namespace slagtool
                 }
                 throw new SystemException("CallFunc : Not Found Function : " + funcname);
             }
+            return CallFunc(fv,param);
+
+            //if (fv!=null)
+            //{
+            //    var ol = param;
+            //    var numofparam= ol!=null ? ol.Length : 0;
+            //    m_statebuf.set_funcwork();
+            //    {
+            //        var fvbk = slagtool.runtime.util.normalize_func_bracket(fv.list_at(1).list_at(1)); //ファンクション定義部の引数部分
+            //        if (   fvbk.list.Count != numofparam)
+            //        {
+            //            slagtool.runtime.util._error("number of arguments in valid.");
+            //        }
+            //        int n = 0;
+            //        if (fvbk!=null) for(int i = 0; i<fvbk.list.Count; i+=2)
+            //        {
+            //            var varname = fvbk.list_at(i).GetString();//定義側の変数名
+            //            object o = ol!=null && n < ol.Length ? ol[n] : null;
+            //            m_statebuf.define(varname, o);
+            //            n++;
+            //        }
+            //        m_statebuf = run_script.run(fv.list_at(2),m_statebuf);
+            //        m_statebuf.breaknone();
+            //    }
+            //    m_statebuf.reset_funcwork();
+
+            //    return m_statebuf.m_cur;
+            //}
+
+            //throw new SystemException("CallFunc : Not Found The Function : " + funcname);
+        }
+        public object CallFunc(YVALUE func,object[] param=null)
+        {
+            m_curslag = this;
+            var fv = func;
             if (fv!=null)
             {
                 var ol = param;
@@ -223,8 +258,9 @@ namespace slagtool
                 return m_statebuf.m_cur;
             }
 
-            throw new SystemException("CallFunc : Not Found The Function : " + funcname);
+            throw new SystemException("CallFunc : ファンクションがありません : " + func.GetFunctionName());
         }
+
         #endregion
 
         #region 変数関連

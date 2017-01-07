@@ -86,9 +86,7 @@ namespace slagtool.runtime
         {
             var nsb = sb;
             var item = new PointervarItem(); //先行アイテム。中身なし
-            item.mode =  PointervarMode.GET;
-
-
+            item.mode =  PointervarMode.NEW;
 
             nsb.m_pvitem = item;
             
@@ -99,7 +97,21 @@ namespace slagtool.runtime
 
             return nsb;
         }
+        public static StateBuffer run_new_array_var(YVALUE v, StateBuffer sb)
+        {
+            var nsb = sb;
+            var item = new PointervarItem(); //先行アイテム。中身なし
+            item.mode = PointervarMode.NEW;
 
+            nsb.m_pvitem = item;
+
+            nsb = run_script.run(v,nsb.curnull());
+
+            nsb.m_cur = nsb.m_pvitem.o;
+            nsb.pvitemnull();
+
+            return nsb;
+        }
 
         public static StateBuffer run_name(YVALUE v, StateBuffer sb)
         {
@@ -161,9 +173,10 @@ namespace slagtool.runtime
                 {
                     var ti = (Type)vr.o;
                     item.o = runtime.sub_reflection.InstantiateType(ti,ol.ToArray());
+                    nsb.m_pvitem = item;
+                    return nsb;
                 }
-                nsb.m_pvitem = item;
-                return nsb;
+                throw new SystemException("unexpected");
             }
             var pretype = preobj.GetType();
             if (pretype == typeof(Literal))
@@ -171,6 +184,26 @@ namespace slagtool.runtime
                 var literal = (Literal)preobj;
                 item = ExecuteFunc(literal.s,name,ol,item);
                 nsb.m_pvitem =item;
+            }
+            else if (pretype == typeof(Hashtable))
+            {
+                var ht = (Hashtable)preobj;
+                var n  = name.ToUpper();
+                var funcobj = ht[n];
+                if (funcobj!=null)
+                {
+                    if (funcobj is YVALUE)
+                    {
+                        var fv = (YVALUE)funcobj;
+                        nsb.m_pvitem = null;
+                        nsb = util.CallFunction(fv,ol,nsb);
+                        item.o = nsb.m_cur;
+                        nsb.curnull();
+                        nsb.m_pvitem = item;
+                        return nsb;
+                    }
+                }
+                util._error("ハッシュテーブル内に関数がありません : " + name);
             }
             else
             {
@@ -201,11 +234,15 @@ namespace slagtool.runtime
             var preobj = item.o; 
             if (preobj == null)
             {
+                if (item.mode == PointervarMode.NEW && v.list_at(0).type == YDEF.RUNTYPE)
+                {
+                    var type = (Type)v.list_at(0).o;
+                    item = ExecuteArrayVar(type,index_o,item); // tbc
+                    nsb.m_pvitem = item;
+                    return nsb;
+                }
                 throw new SystemException("unexpected");
             }
-
-            //var ol = new List<Object>();
-            //ol.Add(index);
 
             var pretype = preobj.GetType();
             if (pretype == typeof(Literal))
@@ -217,6 +254,7 @@ namespace slagtool.runtime
             else
             {
                 item = ExecuteArrayVar(preobj,name,index_o,item); // tbc
+                nsb.m_pvitem =item;
             }
             return nsb;
         }
@@ -319,6 +357,16 @@ namespace slagtool.runtime
                 {
                     item.o =  Array.CreateInstance(ti, index);
                 }
+                return item;
+            }
+            throw new SystemException("unexpected");
+        }
+        private static PointervarItem ExecuteArrayVar(Type type,object index_o, PointervarItem item)
+        {
+            var index = (int)util.ToNumber(index_o);
+            if (item != null && item.mode == PointervarMode.NEW)
+            {
+                item.o =  Array.CreateInstance(type, index);
                 return item;
             }
             throw new SystemException("unexpected");

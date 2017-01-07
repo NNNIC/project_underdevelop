@@ -146,7 +146,7 @@ namespace slagtool.runtime
         #region オブジェクトのタイプ変換
         private static object[] ChangeObjs(object[] ol, ParameterInfo[] pis)
         {
-            util.Assert(ol!=null&&pis!=null&&ol.Length==pis.Length);
+            util._assert(ol!=null&&pis!=null&&ol.Length==pis.Length);
 
             for(int i = 0;i<pis.Length; i++)
             {
