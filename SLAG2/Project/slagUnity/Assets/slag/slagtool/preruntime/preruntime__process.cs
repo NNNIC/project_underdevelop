@@ -34,7 +34,7 @@ using slagtool;
           new HashTable()
            |
            |  1. 補完
-           |  
+           |
 
 */
 
@@ -70,7 +70,11 @@ namespace slagtool.preruntime
                     var tokens = s.Split(' ');
                     if (tokens.Length>=2 && tokens[0]=="using")
                     {
-                        m_prefix_list.Add(tokens[1]);//格納
+                        var a = tokens[1];
+                        if (!m_prefix_list.Contains(a))
+                        { 
+                            m_prefix_list.Add(a);//格納
+                        }
                     }
                 }
                 return v;
@@ -118,12 +122,23 @@ namespace slagtool.preruntime
                 var nv = v.list_at(1);
                 if (nv.IsType(YDEF.sx_func))
                 {
-                    var namev = nv.list_at(0);
+                    var fv = nv.FindValueByTravarse(YDEF.sx_func);
+                    var namev = fv.list_at(0);
                     namev = Checktype.ChangeIfType(namev, m_prefix_list);
-                    nv.list[0] = namev;
+                    fv.list[0] = namev;
+                    fv.list[1] = _convert(fv.list[1]);
+                }
+                else if (nv.IsType(YDEF.sx_pointervar_clause))
+                {
+                    var pv = nv.FindValueByTravarse(YDEF.sx_pointervar_clause);
+                    pv = _convert(pv);
                 }
                 return v;
             }
+            //if (v.type == YDEF.get_type(YDEF.sx_func))  ---- ポインタ値に属さない関数は内部または組込関数のみなので、評価外。
+            //{
+            //
+            //}
             if (v.type == YDEF.NAME)
             {
                 //タイプ名かを確認

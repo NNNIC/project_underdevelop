@@ -46,7 +46,7 @@ namespace slagtool.runtime.builtin
         {
             if (!m_bReady)
             {
-                m_categoryList.Insert(0,new CategoryData() { type = typeof(builtin_sysfunc), categoryname = "System" });
+                m_categoryList.Insert(0,new CategoryData() { type = typeof(builtin_sysfunc), categoryname = "システム" });
                 m_categoryList.ForEach(d=>RegisterFunctions(d));
                 m_bReady = true;
             }
@@ -62,7 +62,7 @@ namespace slagtool.runtime.builtin
                 var n = m.Name.ToUpper();
                 if (!n.StartsWith("F_")) continue;
                 n = n.Substring(2);
-                m_hash[n] = new item() { category = d.categoryname, name = m.Name.Substring(2), mi = m };
+                m_hash[n] = new item() { category = d.categoryname, name =n, mi = m };
             }
         }
 

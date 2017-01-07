@@ -4,10 +4,7 @@
 
 "using UnityEngine";
 
-function util_ChangeColor(go,color)
-{
-    PrintLn(color);
-    //var r = go.GetComponent(typeof(UnityEngine.Renderer));
-    var r = go.GetComponent(typeof(Renderer));
-    r.material.SetColor("_Color", color);
-}
+var $x = new Material(Shader.Find("Unlit/Color"));
+println($x);
+Dump($x);
+

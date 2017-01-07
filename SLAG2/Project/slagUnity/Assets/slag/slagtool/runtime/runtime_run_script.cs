@@ -936,10 +936,19 @@ namespace slagtool.runtime
                     }
                     else if (is_new_word)
                     {
-                        var nv = v.list[1].FindValueByTravarse(YDEF.get_type(YDEF.sx_pointervar_clause));
-                        if (nv!=null)
+                        var v1 = v.list_at(1);
+                        if (v1.IsType(YDEF.sx_pointervar_clause))
                         {
-                            nsb = sub_pointervar_clause.run(nv,nsb.curnull(),PointervarMode.NEW);
+                            var nv = v1.FindValueByTravarse(YDEF.get_type(YDEF.sx_pointervar_clause));
+                            if (nv != null)
+                            {
+                                nsb = sub_pointervar_clause.run(nv, nsb.curnull(), PointervarMode.NEW);
+                            }
+                        }
+                        else if (v1.IsType(YDEF.sx_func))
+                        {
+                            var fv = v1.FindValueByTravarse(YDEF.get_type(YDEF.sx_func));
+                            nsb = sub_pointervar_clause.run_new_func(fv,nsb.curnull());
                         }
                         return nsb;
                     }
@@ -1193,6 +1202,11 @@ namespace slagtool.runtime
             }
             if (v.type == YDEF.RUNTYPE)
             {
+                if (nsb.m_pvitem!=null)
+                {
+                    nsb = sub_pointervar_clause.run_runtype(v,nsb);
+                    return nsb;
+                }
                 nsb.m_cur = v.o;
                 return nsb;
             }

@@ -215,15 +215,15 @@ namespace slagipc
             int x = -1;
             if (!string.IsNullOrEmpty(p) && int.TryParse(p,out x) && x>=0 && x<=2)
             {
-                wk.SendWriteLine("Set Debug Mode : " + x);
-                slagtool.util.SetDebugMode(x);
+                wk.SendWriteLine("Set Debug Level : " + x);
+                slagtool.util.SetDebugLevel(x);
 #if UNITY_5
                 UnityEngine.Debug.logger.logEnabled = (x>0);
 #endif
             }
             else
             {
-                wk.SendWriteLine("Current Debug Mode : " + slagtool.util.GetDebugMode());
+                wk.SendWriteLine("Current Debug Level : " + slagtool.util.GetDebugLevel());
             }
         }
 

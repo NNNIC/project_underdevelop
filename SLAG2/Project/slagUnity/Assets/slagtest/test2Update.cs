@@ -42,7 +42,8 @@ public class test2Update : MonoBehaviour {
                 file += ".js";
             }
             var src  = File.ReadAllText(Path.Combine(m_folder,file),Encoding.UTF8);
-            slagtool.util.SetLogFunc(Log,LogLine,2);
+            slagtool.util.SetLogFunc(LogLine,Log);
+            slagtool.util.SetDebugLevel(2);
             slagtool.util.SetBuitIn(typeof(slagipc_unity_builtinfunc));
 
             m_slag = new slagtool.slag();

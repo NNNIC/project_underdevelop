@@ -12,6 +12,38 @@ using slagtool.runtime.builtin;
 
 namespace slagtool
 {
+    /// <summary>
+    /// 
+    /// slagクラス
+    /// 
+    /// [使い方]
+    /// 
+    /// 1. 準備 : ログ関数・ユーザ組込関数・ユーザ演算オペレーション関数登録・デバッグレベル設定
+    /// 
+    /// util.SetLogFunc((s)=>Debug.Log(s));  
+    /// util.SetBuitIn(ユーザ組込関数のクラス,説明);
+    /// util.SetCalcOp(ユーザ演算オペレーション関数);
+    /// util.SetDebugLevel({0|1|2});    0 - なし   2 - 厳密
+    /// 
+    /// 1. 基本形：ロード→実行→関数実行
+    /// 
+    /// var slag = new slag();
+    /// slag.Load(ファイル);   --- テキストファイル(.js), バイナリファイル(.bin), Base64ファイル(.base64)
+    /// slag.Run();            --- 実行
+    /// slag.CallFunc(関数名); --- 関数呼出し ※Run()前には実行不可。
+    /// 
+    /// 2. コンパイル→セーブ
+    /// 
+    /// var slag = new slag();
+    /// slag.Load("hoge.js");
+    /// slag.SaveBase64("hoge.base64");  または slag.SaveBun("hoge.bin");
+    /// 
+    /// 3. 複数テキストファイルロード
+    /// 
+    /// var slag = new slag();
+    /// slag.LoadJSFiles(new string[]{"hoge1.js","hoge2.js"});
+    /// 
+    /// </summary>
     public class slag
     {
         public static slag       m_curslag;
@@ -19,8 +51,6 @@ namespace slagtool
         public   Guid            m_guid;
         public   string[]        m_idlist;
 
-        //public   string        m_filename;
-            
         private  List<YVALUE>  m_exelist;
         private  StateBuffer   m_statebuf;
 
@@ -55,7 +85,7 @@ namespace slagtool
                         LoadBase64(b64txt);
                     }
                     break;
-                case ".bin":
+                case ".BIN":
                     {
                         var bin = File.ReadAllBytes(filename);
                         LoadBin(bin);
@@ -119,6 +149,12 @@ namespace slagtool
             m_curslag = this;
             var bytes = GetBin();
             File.WriteAllBytes(filename,bytes);
+        }
+        public void SaveBase64(string base64File)
+        {
+            m_curslag = this;
+            var src = GetBase64();
+            File.WriteAllText(base64File,src);
         }
         public byte[] GetBin()
         {
@@ -304,6 +340,7 @@ namespace slagtool
                 return ms.ToArray();
             }
         }
+
     }
     public class util {
 
@@ -321,20 +358,29 @@ namespace slagtool
 
 
         #region ログ設定
-        public static void SetLogFunc(Action<string> write, Action<string> writeline, int debugLevel=1 )
+        public static void SetLogFunc(Action<string> writeline, Action<string> write=null)
         {
             sys.m_conWrite = write;
             sys.m_conWriteLine = writeline;
-            sys.DEBUGLEVEL = debugLevel;
         }
         #endregion
+
+        #region デバッグレベル設定・取得
+        public static void SetDebugLevel(int debugLevel)
+        {
+            sys.DEBUGLEVEL = debugLevel;
+        }
+        public static int  GetDebugLevel()
+        {
+            return sys.DEBUGLEVEL;
+        }
+        #endregion
+
 
         public static void Error(string msg)
         {
             slagtool.runtime.util._error(msg);
         }
-        public static void SetDebugMode(int n) { sys.DEBUGLEVEL = n;    }
-        public static int  GetDebugMode()      { return sys.DEBUGLEVEL; }
     }
 
     internal class util_sub

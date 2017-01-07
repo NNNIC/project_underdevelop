@@ -4,44 +4,44 @@
 
 */
 
-function CreateNotch(scale)
+function CreateNotch($scale)
 {
-    var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-    go.transform.localScale = scale;//new UnityEngine.Vector3(1,1,1);
-    return go;
+    var $go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+    $go.transform.localScale = $scale;
+    return $go;
 }
 function CreateTxtObj(s,scale)
 {
-    var go = new UnityEngine.GameObject();
-    var tm = go.AddComponent(typeof("UnityEngine.TextMesh"));
-    tm.alignment = UnityEngine.TextAlignment.Center;
-    tm.anchor    = UnityEngine.TextAnchor.MiddleCenter;
-    tm.characterSize = scale;//0.2;
-    tm.fontSize = 64;
-    tm.text = s;
+    var $go = new GameObject();
+    var $tm = $go.AddComponent(typeof(TextMesh));
+    $tm.alignment = TextAlignment.Center;
+    $tm.anchor    = TextAnchor.MiddleCenter;
+    $tm.characterSize = scale;//0.2;
+    $tm.fontSize = 64;
+    $tm.text = s;
     
-    return go;
+    return $go;
 }
 
 // ※円作成
 function _CC_Create_GameObject(d)
 {
-    var go = new UnityEngine.GameObject();
-    var mr = go.AddComponent(typeof ("UnityEngine.MeshRenderer"));
-    mr.material = new UnityEngine.Material(UnityEngine.Shader.Find("Unlit/Color"));
+    var $go = new GameObject();
+    var $mr = $go.AddComponent(typeof(MeshRenderer));
+    $mr.material = new Material(Shader.Find("Unlit/Color"));
 
-    var mf = go.AddComponent(typeof ("UnityEngine.MeshFilter"));
+    var $mf = $go.AddComponent(typeof(MeshFilter));
 
-    var me = new UnityEngine.Mesh();
+    var $me = new Mesh();
 
-    me.vertices  = ToArray(UnityEngine.Vector3,        d.verts);
-    me.uv        = ToArray(UnityEngine.Vector2,        d.uvs);
-    me.normals   = ToArray(UnityEngine.Vector3,        d.nrms);
-    me.triangles = ToArray(System.Int32,               d.trs);
+    $me.vertices  = ToArray(Vector3,        d.verts);
+    $me.uv        = ToArray(Vector2,        d.uvs);
+    $me.normals   = ToArray(Vector3,        d.nrms);
+    $me.triangles = ToArray(System.Int32,   d.trs);
 
-    mf.mesh = me;
+    $mf.mesh = $me;
 
-    return go;
+    return $go;
 }
 function _CC_Add_Vertex(d,v0,v1,v2,uv0,uv1,uv2)
 {
@@ -128,9 +128,9 @@ function CreateCircle(radius,num_of_div,rev)
          }
     }
     
-    var go = _CC_Create_GameObject(d);
-    go.name = "Circle_div_"+num_of_div;
-    return go;
+    var $go = _CC_Create_GameObject(d);
+    $go.name = "Circle_div_"+num_of_div;
+    return $go;
 }
 
 //針作成 CreateHand
@@ -186,15 +186,15 @@ function _CH_CreateRectangleMesh(width,height)
 }
 function CreateHand(width,height,col)
 {
-    var go = new UnityEngine.GameObject();
-    var mr = go.AddComponent(typeof("UnityEngine.MeshRenderer"));
+    var $go = new UnityEngine.GameObject();
+    var mr = $go.AddComponent(typeof("UnityEngine.MeshRenderer"));
     mr.material = new UnityEngine.Material(UnityEngine.Shader.Find("Unlit/Color"));
     mr.material.SetColor("_Color",col);
 
-    var mf = go.AddComponent(typeof("UnityEngine.MeshFilter"));
+    var mf = $go.AddComponent(typeof("UnityEngine.MeshFilter"));
     mf.mesh = _CH_CreateRectangleMesh(width,height);
 
-    return go;
+    return $go;
 }
 
 //ボタン作成
@@ -240,19 +240,19 @@ function _CB_CreateRectangleMesh(width,height)
 }
 function CreateButton(width,height,col,click_func)
 {
-    var go = new UnityEngine.GameObject();
-    var mr = go.AddComponent(typeof("UnityEngine.MeshRenderer"));
+    var $go = new UnityEngine.GameObject();
+    var mr = $go.AddComponent(typeof("UnityEngine.MeshRenderer"));
     mr.material = new UnityEngine.Material(UnityEngine.Shader.Find("Unlit/Color"));
     mr.material.SetColor("_Color",col);
     
-    var mf = go.AddComponent(typeof("UnityEngine.MeshFilter"));
+    var mf = $go.AddComponent(typeof("UnityEngine.MeshFilter"));
     mf.mesh = _CB_CreateRectangleMesh(width,height);
     
-    var bc = go.AddComponent(typeof("UnityEngine.BoxCollider"));
+    var bc = $go.AddComponent(typeof("UnityEngine.BoxCollider"));
     
-    var bh = AddBehaviour(go);
+    var bh = AddBehaviour($go);
     
     bh.m_onMouseUpAsButtonFunc = click_func;
     
-    return go;
+    return $go;
 }

@@ -82,6 +82,25 @@ namespace slagtool.runtime
 
             return nsb;
         }
+        public static StateBuffer run_new_func(YVALUE v, StateBuffer sb) 
+        {
+            var nsb = sb;
+            var item = new PointervarItem(); //先行アイテム。中身なし
+            item.mode =  PointervarMode.GET;
+
+
+
+            nsb.m_pvitem = item;
+            
+            nsb = run_script.run(v,nsb.curnull());
+
+            nsb.m_cur = nsb.m_pvitem.o;
+            nsb.pvitemnull();
+
+            return nsb;
+        }
+
+
         public static StateBuffer run_name(YVALUE v, StateBuffer sb)
         {
             var nsb = sb;
@@ -135,9 +154,16 @@ namespace slagtool.runtime
             var nsb = sb;
             var item = nsb.m_pvitem;
             var preobj = item.o; //先行ロケーションアイテムの値
-            if (preobj == null)  //先行値がない場合は予想外
+            if (preobj == null)  //先行値がない場合はRUNTYPEがv内にある。
             {
-                throw new SystemException("unexpected");
+                var vr = v.FindValueByTravarse(YDEF.RUNTYPE);
+                if (vr!=null && vr.o is Type)
+                {
+                    var ti = (Type)vr.o;
+                    item.o = runtime.sub_reflection.InstantiateType(ti,ol.ToArray());
+                }
+                nsb.m_pvitem = item;
+                return nsb;
             }
             var pretype = preobj.GetType();
             if (pretype == typeof(Literal))
@@ -194,7 +220,14 @@ namespace slagtool.runtime
             }
             return nsb;
         }
-
+        public static StateBuffer run_runtype(YVALUE v, StateBuffer sb)
+        {
+            var nsb = sb;
+            var item = nsb.m_pvitem;
+            item.o = v.o;
+            nsb.m_pvitem = item;
+            return nsb;
+        }
         // -- tool for this class
         private static PointervarItem GetObj(string pre, string cur, PointervarItem item)
         {

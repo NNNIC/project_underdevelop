@@ -375,6 +375,7 @@ namespace slagtool
         static bool IsNameElement(char c, bool bNumberInclude = false)
         {
             if (c == '_') return true;
+            if (c == '$') return true;
             if (c >= 'a' && c <= 'z') return true;
             if (c >= 'A' && c <= 'Z') return true;
             if (bNumberInclude && ((c >= '0' && c <= '9'))) return true;
