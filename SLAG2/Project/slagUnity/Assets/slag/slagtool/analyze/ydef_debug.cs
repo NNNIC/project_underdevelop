@@ -140,8 +140,9 @@ namespace slagtool
             var v = l[0];
             var line = v.get_dbg_line(true);
             var col  = v.get_dbg_col(true);
+            var file = v.get_dbg_file();
 
-            sys.log( string.Format("Line:{0},Col:{1}",line,col),bForce);
+            sys.log( string.Format("Line:{0},Col:{1} in {2}",line,col,file),bForce);
         }
         #endregion
         #endregion

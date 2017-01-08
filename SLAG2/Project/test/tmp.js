@@ -2,25 +2,9 @@
  Tmp
 */
 
-"using UnityEngine";
-
-function $_hoge($go,$a)
+function Hoge($a)
 {
-    PrintLn("called! - " + $a + " at " + $go.name);
+    if ($a==1) $a=4;
 }
 
-function $_Update($go)
-{
-   if (Input.GetKeyDown(KeyCode.A))
-   {
-       PrintLn("A Key Down");
-       SendMsg($go,"touch","touched!!");
-   }
-}
-
-var $go = new GameObject("HOGE");
-var $bh = AddBehaviour($go);
-$bh.AddMsgFunc("touch",$_hoge);
-$bh.m_updateFunc = $_Update;
-
-
+Hoge(1);

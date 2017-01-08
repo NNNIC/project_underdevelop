@@ -434,7 +434,7 @@ namespace slagtool.runtime
             nsb.set_funcwork();
             {
                 var fvbk = util.normalize_func_bracket(fv.list_at(1).list_at(1)); //ファンクション定義部の引数部分
-                if (   fvbk.list.Count != ol.Count)
+                if (   ((fvbk.list.Count + 1) / 2) != ol.Count)
                 {
                     util._error("number of arguments in valid.");
                 }

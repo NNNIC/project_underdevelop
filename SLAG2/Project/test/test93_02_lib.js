@@ -242,7 +242,7 @@ function _CB_CreateRectangleMesh($width,$height)
 
 function _CB_Push($ht)
 {
-   if ($ht.pushed) return;
+   if ($ht.pushed) { return; }
    $ht.pushed = true;
    
    
