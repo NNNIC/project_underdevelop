@@ -239,19 +239,6 @@ function _CB_CreateRectangleMesh($width,$height)
     return $mesh;
 }
 
-
-function _CB_Push($ht)
-{
-   if ($ht.pushed) { return; }
-   $ht.pushed = true;
-   
-   
-   PrintLn("Pushed Button" + $ht.go.name);
-   
-   $ht.pushed = false;
-}
-
-
 function CreateButton($width,$height,$col)
 {
     var $go = new GameObject();
@@ -265,9 +252,5 @@ function CreateButton($width,$height,$col)
     
     var $bc = $go.AddComponent(typeof(BoxCollider));
 
-    var $ret = Hashtable();
-    $ret.go = $go;
-    $ret.pushed = false;
-    $ret.pushfunc = _CB_Push;    
     return $go;
 }

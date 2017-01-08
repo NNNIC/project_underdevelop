@@ -3,53 +3,38 @@ using System.Collections;
 using slagipc;
 using slagtool;
 
-public class slagipc_unity_statemanager : MonoBehaviour {
+/*
+    ステートマシンを提供
 
-#if obs
-    public class StateManager
+    スクリプト例:
+
+    function $_START(bFirst)   // 引数bFirst 初回のみtrueで呼ばれる
     {
-        string m_cur;
-        string m_next;
-
-        int    m_waitcnt;
-        float  m_waittime;
-
-        float  dbg_elapsedtime=0; //時間計測
-
-        public void Goto(string func)      { m_next     = func; }
-        public void WaitCount(int c)       { m_waitcnt  = c;    }
-        public void WaitTime(float time)   { m_waittime = time; }
-
-        public void Update(float deltaTime)
+        if (bFirst)
         {
-            if (m_waitcnt>0)
-            {
-                m_waitcnt--;
-                return;
-            }
-            if (m_waittime>0)
-            {
-                m_waittime -= deltaTime;
-                return;
-            }
-
-            bool bFirst = false;
-            if (m_next!=null)
-            {
-                if (m_cur!=null) wk.Log("!" + m_cur + " elapsed " + dbg_elapsedtime +" sec ! (wo synctime)");
-                dbg_elapsedtime = 0;
-                m_cur  = m_next;
-                m_next = null;
-                bFirst = true;
-            }
-            if (cmd_sub.m_slag!=null &&  m_cur!=null) {
-                var save = Time.realtimeSinceStartup;
-                cmd_sub.m_slag.CallFunc(m_cur,new object[1] { bFirst });
-                dbg_elapsedtime += Time.realtimeSinceStartup - save;
-            }
+            PrintLn("START");
+            $m_sm.Goto($_SECOND);            
+        }
+    }    
+    function $_SECOND(bFirst)
+    {
+        if (bFirst)
+        {
+            PrintLn("SECOND");
+        }
+        else
+        {
+            PrintLn("something");
         }
     }
-#else
+
+    var $m_sm = StateManager();   --- ステートマネージャを作成
+    $m_sm.Goto($_START);          --- $_STARTへ
+
+*/
+
+public class slagipc_unity_statemanager : MonoBehaviour {
+
     public class StateManager
     {
         YVALUE m_cur;
@@ -108,8 +93,6 @@ public class slagipc_unity_statemanager : MonoBehaviour {
             }
         }
     }
-
-#endif
 
     StateManager m_sm;
 

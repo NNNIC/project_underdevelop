@@ -1,7 +1,7 @@
 ﻿/*
     test93 ストップウォッチ
      
-     1. 1分計と2秒計
+     1. 12秒系計と4秒計
 　　　
 　　 2. ボタン２つ。
      
@@ -14,9 +14,6 @@
     \ 30 /
       ~~
 */
-
-//var secframe = CreateCircle(3.5,50,true);
-//util_ChangeColor(secframe,new UnityEngine.Color(164/255,164/255,164/255,1));
 
 
 function $_INIT($bFirst)

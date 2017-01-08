@@ -118,24 +118,13 @@ public class slagipc_unity_builtinfunc {
         return m_readtext;
     }
 
-    //public static object F_HookUpdate(bool bHelp, object[] ol, StateBuffer sb)
-    //{
-    //    if (bHelp)
-    //    {
-    //        return "Hook up a function with Update on monobehaviour." + NL +"ex) HookUpdate(\"function\"";
-    //    }
-    //    var f = kit.get_string_at(ol,0);
-
-    //    slagipc.cmd_sub.UpdateAddFunc(f);
-
-    //    return null;
-    //}
-
     public static object F_AddBehaviour(bool bHelp, object[] ol, StateBuffer sb)
     {
         if (bHelp)
         {
-            return "Add \"slagipc_unity_monobehaviour\" to the game object and return component." + NL +"ex) var bhv = AddBehaviour(go)";
+            return "slagipc_unity_monobehaviourコンポネントを追加" + NL +
+                   "フォーマット) var bhv = AddBehaviour([GameObject]);"+NL +
+                   "　　　　　　　GameObject指定がない場合、slag実行メインのGameObjectに追加";
         }
         GameObject go = null;
         if (ol.Length==0)
@@ -149,93 +138,14 @@ public class slagipc_unity_builtinfunc {
         return go.AddComponent<slagipc_unity_monoehaviour>();
     }
 
-    //public static object F_SetStartCall(bool bHelp, object[] ol, StateBuffer sb)
-    //{
-    //    if (bHelp)
-    //    {
-    //        return "Set Start Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetStartCall(a,\"StartCall\");  ";
-    //    }
-
-    //    kit.check_num_of_args(ol,2);
-    //    var go = (GameObject)ol[0];
-    //    var sm = go.GetComponent<slagipc_unity_monoehaviour>();
-    //    if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
-    //    sm.m_startFunc = kit.get_string_at(ol,1);
-        
-    //    return null;
-    //}
-    //public static object F_SetUpdateCall(bool bHelp, object[] ol, StateBuffer sb)
-    //{
-    //    if (bHelp)
-    //    {
-    //        return "Set Update Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetUpdateCall(a,\"UpdateCall\");  ";
-    //    }
-
-    //    kit.check_num_of_args(ol,2);
-    //    var go = (GameObject)ol[0];
-    //    var sm = go.GetComponent<slagipc_unity_monoehaviour>();
-    //    if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
-    //    sm.m_updateFunc = kit.get_string_at(ol,1);
-        
-    //    return null;
-    //}
-    //public static object F_SetOnDestroyCall(bool bHelp, object[] ol, StateBuffer sb)
-    //{
-    //    if (bHelp)
-    //    {
-    //        return "Set OnDestroy Call to the specified GameObject." + NL + "ex) var a=new GameObject(); SetOnDestroyCall(a,\"OnDestroyCall\");  ";
-    //    }
-
-    //    kit.check_num_of_args(ol,2);
-    //    var go = (GameObject)ol[0];
-    //    var sm = go.GetComponent<slagipc_unity_monoehaviour>();
-    //    if (sm==null) sm = go.AddComponent<slagipc_unity_monoehaviour>();
-    //    sm.m_onDestroyFunc = kit.get_string_at(ol,1);
-        
-    //    return null;
-    //}
     #region ステートマシン
-#if obs
-    public static object F_StateInit(bool bHelp, object[] ol, StateBuffer sb)
-    {
-        if (bHelp)
-        {
-            return "Initialize StateMachine and set the initial state." + NL + "format) StateInit(function name)";
-        }
-        var f = kit.get_string_at(ol,0);
-
-        slagctl.cmd_sub.StateInit(f);
-
-        return null;
-    }
-    public static object F_StateGoto(bool bHelp, object[] ol, StateBuffer sb)
-    {
-        if (bHelp)
-        {
-            return "Set New State";
-        }
-        var f = kit.get_string_at(ol,0);
-
-        slagctl.cmd_sub.StateGoto(f);
-
-        return null;
-    }
-    public static object F_StateWait(bool bHelp, object[] ol, StateBuffer sb)
-    {
-        if (bHelp) return "";
-
-        var f = kit.get_number_at(ol,0);
-        var c = f * 60.0f;
-        slagctl.cmd_sub.StateWaitCnt((int)c);
-        return null;
-    }
-#else
     public static object F_StateManager(bool bHelp, object[] ol, StateBuffer sb)
     {
         if (bHelp)
         {
-            return "Create new State Manager. ex) var sm = new StateManager(); or var sm=new StateManager(gameObject);" +NL+ 
-                   "If you set a Game Object as a parameter, the state manager will be belonged to the Game Object" ;
+            return "ステート管理作成" +NL+ 
+                   "フォーマット) var sm = StateManager([GameObject]);" + NL +
+                   "slagipc_unity_statemanagerクラスに詳細あり";
         }
 
         slagipc_unity_statemanager sm = null;
@@ -249,7 +159,7 @@ public class slagipc_unity_builtinfunc {
         }
         else
         {
-            util._error("StateManager has unknown parameter.");
+            util._error("StateManager関数のパラメータが不正です");
         }
 
         sm.Init();
@@ -257,7 +167,6 @@ public class slagipc_unity_builtinfunc {
         return sm;
     }
 
-#endif
     #endregion
 
     public static object F_SendMsg(bool bHelp, object[] ol, StateBuffer sb)
@@ -265,7 +174,8 @@ public class slagipc_unity_builtinfunc {
         if (bHelp)
         {
             return "GameObjectにメッセージを送る。メッセージ受信先が存在すれば指定関数を実行。"+NL+
-                   "フォーマット) SendMsg(GameObject,名前[,パラメータ・・・])";
+                   "フォーマット) SendMsg(GameObject,名前[,パラメータ・・・])" + NL +
+                   "slagipc_unity_monoehaviourクラス内に詳細あり ";
         }
         GameObject go   = null;
         if (ol.Length>0)

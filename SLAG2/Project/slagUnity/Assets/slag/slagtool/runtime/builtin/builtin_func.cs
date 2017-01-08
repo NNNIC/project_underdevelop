@@ -59,10 +59,10 @@ namespace slagtool.runtime.builtin
             }
             foreach (var m in d.type.GetMethods())
             {
-                var n = m.Name.ToUpper();
+                var n = m.Name;
                 if (!n.StartsWith("F_")) continue;
                 n = n.Substring(2);
-                m_hash[n] = new item() { category = d.categoryname, name =n, mi = m };
+                m_hash[n.ToUpper()] = new item() { category = d.categoryname, name =n, mi = m };
             }
         }
 
