@@ -1,137 +1,172 @@
 //
 // TEST 91
 //
-// �������ăQ�[��
+// 数字当てゲーム
 // Guess What number is.
 //
-// 3���̐����𓖂ĂĂ��������B
+// 3桁の数字を当ててください。
 
 
 var MAXTRY = 20;
 var NUM = 0;
 
-function Question()
+var s_number = 0;
+var s_try    = 0;
+var s_guess  = null;
+
+
+function S_Q_START(bFirst)
 {
-	NUM = NUM + 1;
+    if (bFirst) {
+        PrintLn("*START*");
 
-	// Select each digits of a number is unieque.
-	var number = 0;
-	while(true)
-	{
-		number = RandomInt(100,999);
-		var n3 =  number % 10;
-		var n2 =  ToInt(number / 10) % 10;
-		var n1 =  ToInt(number / 100);
-		
-		//Print("" + number + "\n");
+        NUM = NUM + 1;
 
-		if (n1!=n2 && n1!=n3 && n2!=n3)
-		{
-			break;
-		}
-	}
+        while (true) {
+            s_number = UnityEngine.Mathf.Floor(UnityEngine.Random.Range(100, 1000));
+            var n3 = s_number % 10;
+            var n2 = UnityEngine.Mathf.Floor(s_number / 10) % 10;
+            var n1 = UnityEngine.Mathf.Floor(s_number / 100);
 
-	Print("\n\n\n");
-	Print("-----------------------------\n");
-	Print("!! Question " + NUM + " !! \n");
-	Print("-----------------------------\n");
-	Sleep(0.5);
-	Print("There is a number between from 100 to 999.\n");
-	Print("Guess the number!\n\n");
-	Sleep(0.5);
+            //PrintLn(s_number);
 
-	for(var tri=0;tri<=MAXTRY;tri=tri+1)
-	{
-		if (tri==MAXTRY)
-		{
-			Print("You faild. Game Over!!\n");
-			return 1;
-		}
-		Print("### TRY " + (tri  + 1) + " ###\n");
+            if (n1!=n2 && n1!=n3 && n2!=n3)
+            {
+                break;
+            }
+        }
 
-		var n = 0;
-		while(true)
-		{
-			n = ToNumber(ReadLine("Your guess is >"));
-			if (n<100 || n>999) 
-			{
-				Print("Input is not correct.\n");
-				continue;
-			}
-			else
-			{
-				break;
-			}
-		}
+        Print("\n\n\n");
+        Print("-----------------------------\n");
+        Print("!! 問題　＃ " + NUM + " !! \n");
+        Print("-----------------------------\n");
 
-		//Print("===\n");
-		//Print("n=" + n + "\n");
-		//Print("number=" + number + "\n");
-		//Print("===\n");
+        m_sm.WaitTime(0.5);
+    }
+    else
+    {
+        Print("3桁の数字を当ててください。\n");
+        Print("それぞれの桁は異なる数字です。\n\n");
 
-		if (n == number)
-		{
-			Sleep(0.2);
-		    Print("\n");
-			Print("******************************************************\n");
-			Sleep(0.2);
-			Print("... Congraturations! Yes, the number is " + n + "\n");
-			Sleep(0.2);
-			Print("******************************************************\n\n");
-			Sleep(0.2);
-			return 0;						
-		}
-		else if (n > number)
-		{
-			Print("... The number is less than " + n + "\n");
-		}
-		else if (n < number)
-		{
-			Print("... The number is grater than " + n + "\n");
-		}
-		else 
-		{
-			Print("!! unexpected \n");
-		}
+        s_try = 0;
 
-		var n3 =  n % 10;
-		var n2 =  ToInt(n / 10) % 10;
-		var n1 =  ToInt(n / 100);
-
-		var nm3 = number % 10;
-		var nm2 = ToInt(number / 10) % 10;
-		var nm1 = ToInt(number / 100);
-
-		var rightplace = 0;
-		if (n3==nm3) {rightplace = rightplace +1;}
-		if (n2==nm2) {rightplace = rightplace +1;}
-		if (n1==nm1) {rightplace = rightplace +1;}
-
-		var anyplace = 0;
-		if (n1==nm2 || n1==nm3) {anyplace = anyplace + 1;}
-		if (n2==nm1 || n2==nm3) {anyplace = anyplace + 1;}
-		if (n3==nm2 || n3==nm1) {anyplace = anyplace + 1;}
-
-		Print("The digits of the number exist the same place : " + rightplace + "\n" );
-		Print("The digits of the number exist any place      : " + anyplace   + "\n" );
-	}
-	return 1;
+        m_sm.Goto(S_Q_TRY);
+    }
 }
 
-//
-//  Main
-//
-
-var NL="\n";
-
-Print(
-	 "##########################" + NL 
-	+"#  GUESS WAHT NUMBER IS  #" + NL
-	+"##########################" + NL
-);
-
-while(true)
+function S_Q_TRY( bFirst)
 {
-	var t = Question();
-	if (t==1) { break; }
+    if (bFirst)
+    {
+        if (s_try > MAXTRY)
+        {
+            Print("試行回数が規定を超えました!!\n");
+            StateGoto("S_Q_END");
+            return;
+        }
+        Print("### 試行 " + (s_try + 1) + " ###\n");
+
+        s_try++;
+
+        s_guess = null;
+        
+        m_sm.Goto(S_Q_INPUT);
+    }
 }
+
+function S_Q_INPUT(bFirst)
+{
+    if (bFirst)
+    {
+        ReadLineStart("３桁の数字を入力してください");
+    }
+    else
+    {
+        var s = ReadLineDone();
+        if (s != null) {
+            var n = ToNumber(s);
+            if (n < 100 || n > 999) {
+                Print("入力が正しくありません\n");
+                m_sm.Goto(S_Q_INPUT);
+            }
+            else {
+                s_guess = n;
+                m_sm.Goto(S_Q_CHECK);
+            }
+        }
+    }
+}
+
+function S_Q_CHECK(bFirst)
+{
+    if (bFirst)
+    {
+        if (s_guess == s_number) { 
+            m_sm.Goto(S_Q_CONGRATULATION);
+            return;
+        }
+        else if (s_guess > s_number)
+        {
+            Print("\n\n...答えは、" + s_guess + "より小さい数です\n\n");
+        }
+        else //if (s_guess < s_number)
+        {
+            Print("\n\n...答えは" + s_guess + "より大きい数です\n\n");
+        }
+        m_sm.WaitTime(1);
+    }
+    else
+    {
+        var n3 = s_guess % 10;
+        var n2 = UnityEngine.Mathf.Floor(s_guess / 10) % 10;
+        var n1 = UnityEngine.Mathf.Floor(s_guess / 100);
+
+        //PrintLn("s_guess.split=" + n1 + n2 + n3);
+
+        var nm3 = s_number % 10;
+        var nm2 = UnityEngine.Mathf.Floor(s_number / 10) % 10;
+        var nm1 = UnityEngine.Mathf.Floor(s_number / 100);
+
+        //PrintLn("s_number.split=" + nm1 + nm2 + nm3 + "\n");
+
+        var rightplace = 0;
+        if (n3 == nm3) { rightplace = rightplace + 1; }
+        if (n2 == nm2) { rightplace = rightplace + 1; }
+        if (n1 == nm1) { rightplace = rightplace + 1; }
+
+        var anyplace = 0;
+        if (n1 == nm2 || n1 == nm3) { anyplace = anyplace + 1; }
+        if (n2 == nm1 || n2 == nm3) { anyplace = anyplace + 1; }
+        if (n3 == nm2 || n3 == nm1) { anyplace = anyplace + 1; }
+
+        Print("数字と場所が一致した         : " + rightplace + "個\n\n");
+        Print("数字が一致したが場所が異なる : " + anyplace + "個\n\n\n\n");
+
+        m_sm.WaitTime(1);
+        m_sm.Goto(S_Q_TRY);
+    }
+}
+
+function S_Q_END(bFirst)
+{
+    if (bFirst)
+    {
+        PrintLn("*ゲーム終了*");
+    }
+}
+
+function S_Q_CONGRATULATION(bFirst)
+{
+    if (bFirst) {
+        Print("\n");
+        Print("******************************************************\n");
+        Print("... 祝　当たりです。答えは " + s_number + " です\n");
+        Print("******************************************************\n\n");
+
+        m_sm.Goto(S_Q_END);
+    }
+}
+
+var m_sm = StateManager();
+m_sm.Goto(S_Q_START);
+

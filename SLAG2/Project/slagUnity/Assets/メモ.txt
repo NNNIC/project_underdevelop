@@ -255,3 +255,12 @@ PlintLn(Time.time);  // PrintLn　が正しい。でもエラーなし！
 
 ----
 
+if 文があいまいのままだ。
+
+if (xx) for(var i = 0; i<100; i++) z+=i;
+
+
+[対策]
+_update_clause_values()を変更
+後ろから処理
+()ブラケットの後ろから取り出す。

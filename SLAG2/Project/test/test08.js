@@ -1,27 +1,42 @@
 //
-// TEST 08
+// test 08a
 //
 
-var s1 = "hoge";
-var s2 = "vv";
-
-println(s1 + s2 + "GG");
-
-//var x = 5 + 10 * 10;
 
 
-var s = ReadLine("Input>");
-
-Print("#input=" + s + "\n\n");
-
-
-for(var i=0; i<10; i=i+1)
+function S_START(bFirst)
 {
-	var n = RandomInt(8,9);
-	Print("" + i + "=");
-	Print(n);
-	Print("\n");
+    if (bFirst)
+    {
+        PrintLn("== START ==");
+        sm.Goto(S_READ);
+    }
 }
 
-Print("## END ##");
+function S_READ(bFirst)
+{
+    if (bFirst)
+    {
+        ReadLineStart("Input>");
+    }
+    else
+    {
+        var s = ReadLineDone();
+        if (s!=null)
+        {
+            sm.Goto(S_END);
+        }
+    }
+}
+
+function S_END(bFirst)
+{
+    if (bFirst)
+    {
+        PrintLn("== END ==");
+    }
+}
+
+var sm = StateManager();
+sm.Goto(S_START);
 

@@ -131,13 +131,8 @@ public class slagipc_unity_statemanager : MonoBehaviour {
 
     public void Goto(slagtool.YVALUE v)
     {
-        //Goto(v.GetFunctionName());
         m_sm.Goto(v);
     }
-    //public void Goto(string func)
-    //{
-    //    m_sm.Goto(func);
-    //}
 
     public void WaitCount(int cnt)
     {

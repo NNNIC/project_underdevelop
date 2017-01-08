@@ -2,14 +2,15 @@
 // TEST 04
 //  
 
-var sum =   0;
-for ( var i = 0; i<20; i=i+1) 
+var $sum =   0;
+for ( var $i = 0; $i<20; $i=$i+1) 
 {
-	sum = sum + i;
+	$sum = $sum + $i;
 	
-	if (i==10) { Println("break!!\n");  break;  }
+	Print($i.ToString()+",");
+	if ($i==10) break;
 }
-
-Println("total="+sum);
+PrintLn("");
+Println("total="+$sum);
 
 

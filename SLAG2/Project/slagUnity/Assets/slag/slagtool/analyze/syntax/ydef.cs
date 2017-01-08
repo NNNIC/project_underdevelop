@@ -208,34 +208,40 @@ namespace slagtool
                                                            __OR__,
                                                            "sx_if_clause","sx_elseif_clause",                                __MAKE__, YCODE.DO_ADD,0,1,
                                                            __OR__,
-                                                           IF,"sx_expr_bracket","sx_sentence_block",                         __MAKE__, YCODE.DO_NEW,0,1,2,
-                                                           __OR__,
-                                                           IF,"sx_expr_bracket","sx_expr_clause",                            __MAKE__, YCODE.DO_NEW,0,1,2,
+                                                           //IF,"sx_expr_bracket","sx_sentence_block",                         __MAKE__, YCODE.DO_NEW,0,1,2,
+                                                           //__OR__,
+                                                           //IF,"sx_expr_bracket","sx_expr_clause",                            __MAKE__, YCODE.DO_NEW,0,1,2,
+                                                           //__OR__,
+                                                           IF,"sx_expr_bracket","sx_sentence",                               __MAKE__, YCODE.DO_NEW,0,1,2,
                                                       };
         public static object[] sx_else_clause     =   { "sx_else_clause",
                                                        1022,
-                                                           ELSE,"sx_sentence_block",                                         __MAKE__, YCODE.DO_NEW,0,1,
-                                                           __OR__,
-                                                           ELSE,"sx_expr_clause",                                            __MAKE__, YCODE.DO_NEW,0,1,
+                                                           //ELSE,"sx_sentence_block",                                         __MAKE__, YCODE.DO_NEW,0,1,
+                                                           //__OR__,
+                                                           //ELSE,"sx_expr_clause",                                            __MAKE__, YCODE.DO_NEW,0,1,
+                                                           ELSE,"sx_sentence",                                               __MAKE__, YCODE.DO_NEW,0,1,
                                                       };
         public static object[] sx_elseif_clause   =   { "sx_elseif_clause",
                                                        1024,
-                                                           ELSE,IF,"sx_expr_bracket","sx_sentence_block",                    __MAKE__, YCODE.DO_NEW,0,1,2,3,
-                                                           __OR__,
-                                                           ELSE,IF,"sx_expr_bracket","sx_expr_clause",                       __MAKE__, YCODE.DO_NEW,0,1,2,3,
+                                                           //ELSE,IF,"sx_expr_bracket","sx_sentence_block",                    __MAKE__, YCODE.DO_NEW,0,1,2,3,
+                                                           //__OR__,
+                                                           //ELSE,IF,"sx_expr_bracket","sx_expr_clause",                       __MAKE__, YCODE.DO_NEW,0,1,2,3,
+                                                           ELSE,IF,"sx_expr_bracket","sx_sentence",                          __MAKE__, YCODE.DO_NEW,0,1,2,3,
                                                       };
 
         public static object[] sx_for_clause      =   { "sx_for_clause",
                                                        1025,
-                                                           FOR,"sx_for_bracket","sx_sentence_block",                         __MAKE__, YCODE.DO_NEW,0,1,2,
-                                                           __OR__,
-                                                           FOR,"sx_for_bracket","sx_expr_clause",                            __MAKE__, YCODE.DO_NEW,0,1,2,
+                                                           //FOR,"sx_for_bracket","sx_sentence_block",                         __MAKE__, YCODE.DO_NEW,0,1,2,
+                                                           //__OR__,
+                                                           //FOR,"sx_for_bracket","sx_expr_clause",                            __MAKE__, YCODE.DO_NEW,0,1,2,
+                                                           FOR,"sx_for_bracket","sx_sentence",                               __MAKE__, YCODE.DO_NEW,0,1,2,
                                                       };
         public static object[] sx_while_clause    =   { "sx_while_clause",
                                                        1026,
-                                                            WHILE,"sx_expr_bracket","sx_sentence_block",                     __MAKE__, YCODE.DO_NEW,0,1,2,
-                                                            __OR__,
-                                                            WHILE,"sx_expr_bracket","sx_expr_clause",                        __MAKE__, YCODE.DO_NEW,0,1,2
+                                                            //WHILE,"sx_expr_bracket","sx_sentence_block",                     __MAKE__, YCODE.DO_NEW,0,1,2,
+                                                            //__OR__,
+                                                            //WHILE,"sx_expr_bracket","sx_expr_clause",                        __MAKE__, YCODE.DO_NEW,0,1,2
+                                                            WHILE,"sx_expr_bracket","sx_sentence",                           __MAKE__, YCODE.DO_NEW,0,1,2
                                                       };
 
         public static object[] sx_switch_clause   =   { "sx_switch_clause",

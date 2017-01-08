@@ -4,7 +4,7 @@
 
 //var c = "a";
 
-var c = "d";
+var c = "b";
 
 switch(c)
 {

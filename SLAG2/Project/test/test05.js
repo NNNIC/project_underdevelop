@@ -9,7 +9,7 @@ while(a>=0)
 	sum=sum+a;
 
 
-	a=a-1;
+	a--;
 
 	PrintLn(a);
 }

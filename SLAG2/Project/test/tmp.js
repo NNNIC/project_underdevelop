@@ -2,9 +2,8 @@
  Tmp
 */
 
-function Hoge($a)
-{
-    if ($a==1) $a=4;
-}
+var $sum=0;
+for(var $i=0; $i<10; $i++) $sum+=$i; 
+PrintLn($sum);
 
-Hoge(1);
+

@@ -14,10 +14,6 @@ var s_number = 0;
 var s_try    = 0;
 var s_guess  = null;
 
-//StateInit("S_Q_START");
-
-var m_sm = StateManager();
-m_sm.Goto("S_Q_START");
 
 function S_Q_START(bFirst)
 {
@@ -32,7 +28,7 @@ function S_Q_START(bFirst)
             var n2 = UnityEngine.Mathf.Floor(s_number / 10) % 10;
             var n1 = UnityEngine.Mathf.Floor(s_number / 100);
 
-            PrintLn(s_number);
+            //PrintLn(s_number);
 
             if (n1!=n2 && n1!=n3 && n2!=n3)
             {
@@ -54,7 +50,7 @@ function S_Q_START(bFirst)
 
         s_try = 0;
 
-        m_sm.Goto("S_Q_TRY");
+        m_sm.Goto(S_Q_TRY);
     }
 }
 
@@ -72,7 +68,7 @@ function S_Q_TRY( bFirst)
         Print("### TRY " + (s_try + 1) + " ###\n");
         s_guess = null;
         
-        m_sm.Goto("S_Q_INPUT");
+        m_sm.Goto(S_Q_INPUT);
     }
 }
 
@@ -89,11 +85,11 @@ function S_Q_INPUT(bFirst)
             var n = ToNumber(s);
             if (n < 100 || n > 999) {
                 Print("Input is not correct.\n");
-                m_sm.Goto("S_Q_INPUT");
+                m_sm.Goto(S_Q_INPUT);
             }
             else {
                 s_guess = n;
-                m_sm.Goto("S_Q_CHECK");
+                m_sm.Goto(S_Q_CHECK);
             }
         }
     }
@@ -104,7 +100,7 @@ function S_Q_CHECK(bFirst)
     if (bFirst)
     {
         if (s_guess == s_number) { 
-            m_sm.Goto("S_Q_CONGRATULATION");
+            m_sm.Goto(S_Q_CONGRATULATION);
             return;
         }
         else if (s_guess > s_number)
@@ -145,7 +141,7 @@ function S_Q_CHECK(bFirst)
         Print("The digits of the number exist any place      : " + anyplace + "\n");
 
         m_sm.WaitTime(1);
-        m_sm.Goto("S_Q_TRY");
+        m_sm.Goto(S_Q_TRY);
     }
 }
 
@@ -165,6 +161,10 @@ function S_Q_CONGRATULATION(bFirst)
         Print("... Congraturations! Yes, the number is " + s_number + "\n");
         Print("******************************************************\n\n");
 
-        m_sm.Goto("S_Q_END");
+        m_sm.Goto(S_Q_END);
     }
 }
+
+var m_sm = StateManager();
+m_sm.Goto(S_Q_START);
+

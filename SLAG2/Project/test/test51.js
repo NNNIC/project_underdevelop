@@ -8,15 +8,10 @@
 
 */
 
-
-var go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
-SetUpdateCall(go,"Update");
-SetOnDestroyCall(go,"OnDestroy");
-
 var speed = 50;
 var cur = 0;
 
-function Update(obj)
+function $_Update(obj)
 {
     UnityEngine.Debug.Log(UnityEngine.Time.time);
     cur += speed / 10;
@@ -34,7 +29,15 @@ function Update(obj)
     if (bDel) { UnityEngine.Object.Destroy(obj); PrintLn("Destroy!");}
 }
 
-function OnDestroy(obj)
+function $_OnDestroy(obj)
 {
     PrintLn("OnDestroy called!");
 }
+
+var $go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
+
+var $m_bhv = AddBehaviour($go);
+
+$m_bhv.m_updateFunc    = $_Update;
+$m_bhv.m_onDestroyFunc = $_OnDestroy;
+

@@ -452,6 +452,7 @@ namespace slagtool
                     return true;
                 }
 
+#if obs
                 for(int i = 0; i<m_target.Count; i++)
                 {
                     var v = getval(i);
@@ -473,7 +474,26 @@ namespace slagtool
                         break;
                     }
                 }
-
+#else
+                for(int i = m_target.Count-1; i>=0; i--)
+                {
+                    var v = getval(i);
+                    if (m_sample_end==null)
+                    {
+                        if (v.s == ";")
+                        {
+                            m_sample_end  = i;
+                            m_sample_start = i;
+                        }
+                        continue;
+                    }
+                    if (v.IsType(YDEF.sx_sentence) || v.IsType(YDEF.sx_sentence_list) ||v.s==";")
+                    {
+                        break;
+                    }
+                    m_sample_start = i;
+                }
+#endif
                 if (m_sample_start!=null)
                 {
                     m_subtarget = new List<YVALUE>();
