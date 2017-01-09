@@ -273,4 +273,20 @@ AddBehaviour / StateManagerの引数ない場合おGameObjectが依存してい�
 
 ----
 
+※仕様変更
+Hashtableに設定した関数を呼び出すと第一引数は同関数が登録されていたHashtableを返す。
 
+var ht = Hashtable();
+ht.func = Hoge;
+
+ht.func()
+  |
+  call -  function Hoge($ht)
+          {
+          }
+
+ht.func($x)
+ |
+ call -   function Hoge($ht,$x)
+          {
+		  }

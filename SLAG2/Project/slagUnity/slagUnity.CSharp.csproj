@@ -113,6 +113,7 @@
     <None Include="Assets\Data\Font\aboutfont.txt" />
     <None Include="Assets\Resources\Shaders\SampleAlphaTex.shader" />
     <None Include="Assets\slag\slagtool\preruntime\メモ.txt" />
+    <None Include="Assets\カメラについて.txt" />
     <None Include="Assets\メモ.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />

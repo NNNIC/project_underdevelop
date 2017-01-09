@@ -190,13 +190,17 @@ namespace slagtool.runtime
                 var ht = (Hashtable)preobj;
                 var n  = name.ToUpper();
                 var funcobj = ht[n];
+                var nol = new LIST();
+                nol.Add(ht);
+                if (ol!=null) nol.AddRange(ol);
+
                 if (funcobj!=null)
                 {
                     if (funcobj is YVALUE)
                     {
                         var fv = (YVALUE)funcobj;
                         nsb.m_pvitem = null;
-                        nsb = util.CallFunction(fv,ol,nsb);
+                        nsb = util.CallFunction(fv,nol,nsb);
                         item.o = nsb.m_cur;
                         nsb.curnull();
                         nsb.m_pvitem = item;

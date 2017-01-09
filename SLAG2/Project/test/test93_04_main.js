@@ -15,6 +15,7 @@
       ~~
 */
 
+var $m_watch = new GameObject("Watch");
 
 function $_INIT($bFirst)
 {
@@ -28,6 +29,9 @@ function $_CREATE_BIG_FRAME($bFirst)
 {
     $m_big_frame = Create_big_frame();
     $m_big_hand  = Create_big_hand($m_big_frame);
+    
+    $m_big_frame.transform.parent = $m_watch.transform;
+    
     $m_sm.Goto($_CREATE_MINI_FRAME);
 }
 
@@ -41,7 +45,19 @@ function $_CREATE_MINI_FRAME($bFirst)
     
     $m_mini_frame.transform.localPosition += Vector3.back * 0.01;
     
-    $m_sm.Goto($_TIMERSTART);
+    $m_mini_frame.transform.parent = $m_watch.transform;
+
+    $m_sm.Goto($_TRANSFORM);
+}
+
+
+function $_TRANSFORM($bFirst)
+{
+    if ($bFirst)
+    {
+        $m_watch.transform.localScale = Vector3.one * 65;
+        $m_sm.Goto($_TIMERSTART);
+    }
 }
 
 var $m_elapsed;
