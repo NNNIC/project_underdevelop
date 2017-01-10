@@ -377,26 +377,29 @@ namespace slagtool.runtime
         }
         private static PointervarItem ExecuteArrayVar(object o, string cur, object index_o, PointervarItem item)
         {
+            if (index_o==null) throw new SystemException("index is null");
             var name = cur.ToUpper();
-            int index = (int)util.ToNumber(index_o); //(index_o!=null && index_o.GetType()==typeof(number)) ? (int)((number)index_o) : -1;
 
-            Type type = null;
+            int index = -1;
+            if (util.IsNumeric(index_o.GetType())) index = (int)util.ToNumber(index_o);
+
+            Type otype = null;
             if (o is Type)
             {
-                type = (Type)o;
+                otype = (Type)o;
             }
             object obj = null;
-            if (type!=null)
+            if (otype!=null)
             {
                 obj = null;
             }
             else
             {
-                type = o.GetType();
+                otype = o.GetType();
                 obj = o;
             }
 
-            if (type == typeof(Hashtable))
+            if (otype == typeof(Hashtable))
             {
                 var ht = (Hashtable)obj;
                 var val = ht[name];
@@ -430,14 +433,14 @@ namespace slagtool.runtime
                 }
 
             }
-            var mem1 = type.GetDefaultMembers();
-            var mem2 = type.GetMembers();
-            var find_mi = Array.Find(type.GetMembers(),mi=>mi.Name.ToUpper()==name);
+            var mem1 = otype.GetDefaultMembers();
+            var mem2 = otype.GetMembers();
+            var find_mi = Array.Find(otype.GetMembers(),mi=>mi.Name.ToUpper()==name);
             if (find_mi!=null)
             { 
                 if (find_mi.MemberType == MemberTypes.Property)
                 { 
-                    var pi = type.GetProperty(find_mi.Name);
+                    var pi = otype.GetProperty(find_mi.Name);
                     item.getter = ()=>  { return pi.GetValue(obj,new object[1] { index }); };
                     item.setter_parametertype = pi.PropertyType;
                     item.setter = (x)=> { pi.SetValue(obj,x,new object[1] {index });      };
@@ -445,17 +448,17 @@ namespace slagtool.runtime
                 }
                 if (find_mi.MemberType == MemberTypes.Field)
                 {
-                    var fi = type.GetField(find_mi.Name);
+                    var fi = otype.GetField(find_mi.Name);
                     item.getter = ()=>  {
                         var z = fi.GetValue(obj);
-                        if (type.IsArray)
+                        if (otype.IsArray)
                         {
                             var a = (Array)z;
                             return a.GetValue(index);
                         }
-                        if (type.IsGenericType && true)
+                        if (otype.IsGenericType && true)
                         {
-                            if (type is IList )
+                            if (otype is IList )
                             { 
                                 var a = (IList)z;
                                 return a[index];
@@ -465,14 +468,14 @@ namespace slagtool.runtime
                     };
                     item.setter = (x)=> {
                         var z = fi.GetValue(obj);
-                        if (type.IsArray)
+                        if (otype.IsArray)
                         {
                             var a = (Array)z;
                             a.SetValue(x,index);
                         }
-                        if (type.IsGenericType && true)
+                        if (otype.IsGenericType && true)
                         {
-                            if (type is IList )
+                            if (otype is IList )
                             { 
                                 var a = (IList)z;
                                 a[index]=x;

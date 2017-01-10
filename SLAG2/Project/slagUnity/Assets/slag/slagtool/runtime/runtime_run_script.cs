@@ -68,7 +68,7 @@ namespace slagtool.runtime
             if (a!=null)
             { 
                 var at =a.GetType();
-                if (setter_parametertype!=null && at!=setter_parametertype && !at.IsEnum)
+                if (setter_parametertype!=null && at!=setter_parametertype && !at.IsEnum && setter_parametertype != typeof(object))
                 {
                     a = Convert.ChangeType(a,setter_parametertype);
                 }
@@ -1027,7 +1027,7 @@ namespace slagtool.runtime
                 var name = v.list_at(0).GetString();
                 var array_index = v.list_at(1);
                 nsb = run(array_index.list_at(1),nsb.curnull());
-                if (nsb.m_cur==null || !util.IsNumeric(nsb.m_cur.GetType()))
+                if (nsb.m_cur==null ||  ( !(nsb.m_cur is String) && !util.IsNumeric(nsb.m_cur.GetType())) )
                 {
                     util._error("array_index is invalid." );
                 }

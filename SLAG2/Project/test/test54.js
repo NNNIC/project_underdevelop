@@ -145,32 +145,42 @@ function Circle_Create($radius,$num_of_div,$rev)
     return $go;
 }
 
+var $rg = new GameObject("root");
 
 var $g1 = Circle_Create(1, 3, true);
 $g1.name = "#1:" + $g1.name;
 $g1.transform.position = Vector3.up * 5 + Vector3.left * 2;
+$g1.transform.parent   = $rg.transform;
 
 var $g2 = Circle_Create(1, 4, true);
 $g2.name = "#1:" + $g2.name;
 $g2.transform.position = Vector3.up * 3 + Vector3.left * 2;
+$g2.transform.parent   = $rg.transform;
 
 var $g3 = Circle_Create(1, 5, true);
 $g3.name = "#3:" + $g3.name;
 $g3.transform.position = Vector3.up * 1 + Vector3.left * 2;
+$g3.transform.parent   = $rg.transform;
 
 var $g4 = Circle_Create(1, 6, true);
 $g4.name = "#4:" + $g4.name;
 $g4.transform.position = Vector3.up * (-1) + Vector3.left * 2;
+$g4.transform.parent   = $rg.transform;
 
 var $g5 = Circle_Create(1, 8, true);
 $g5.name = "#5:" + $g5.name;
 $g5.transform.position = Vector3.up * (-3) + Vector3.left * 2;
+$g5.transform.parent   = $rg.transform;
 
 var $g6 = Circle_Create(1, 20, true);
 $g6.name = "#6:" + $g6.name;
 $g6.transform.position = Vector3.up * (-5) + Vector3.left * 2;
+$g6.transform.parent   = $rg.transform;
 
 var $g7 = Circle_Create(2, 40, true);
 $g7.name = "#7:" + $g7.name;
 $g7.transform.position = Vector3.up * 0 + Vector3.left * (-1);
+$g7.transform.parent   = $rg.transform;
+
+$rg.transform.localScale = Vector3.one * 60;
 

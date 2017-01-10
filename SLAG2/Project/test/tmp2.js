@@ -1,15 +1,10 @@
 "using UnityEngine";
 "using System";
 
-function func()
-{
-   return Cast(Int16,10);
-}
+var ht=  Hashtable();
+ht.s = "TEST";
+var ht2 = Hashtable();
+ht2[ht.s] = 10;
 
-var a = func();
-Dump(a);
-
-
-
-//var b = 0;
-//PrintLn(b);
+Dump(ht2);
+Dump(ht2[ht.s]);

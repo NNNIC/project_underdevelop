@@ -8,33 +8,37 @@
 
 */
 
-var speed = 50;
-var cur = 0;
+"using UnityEngine";
 
-function $_Update(obj)
+var $speed = 50;
+var $cur = 0;
+
+function $_Update($bv)
 {
-    UnityEngine.Debug.Log(UnityEngine.Time.time);
-    cur += speed / 10;
-    obj.transform.localEulerAngles = new UnityEngine.Vector3(cur, 0, 0);
+    Debug.Log(Time.time);
+    $cur += $speed / 10;
+    $bv.transform.localEulerAngles = new Vector3($cur, 0, 0);
 
     
-    var bUp  = UnityEngine.Input.GetKey(UnityEngine.KeyCode.UpArrow);
-    var bDwn = UnityEngine.Input.GetKey(UnityEngine.KeyCode.DownArrow);
-    var bDel = UnityEngine.Input.GetKey(UnityEngine.KeyCode.Delete);
+    var $bUp  = Input.GetKey(KeyCode.UpArrow);
+    var $bDwn = Input.GetKey(KeyCode.DownArrow);
+    var $bDel = Input.GetKey(KeyCode.Delete);
 
-    if (bUp)  { speed++; Println(speed); }
+    if ($bUp)  { $speed++; Println($speed); }
     
-    if (bDwn) { speed--; Println(speed); }
+    if ($bDwn) { $speed--; Println($speed); }
 
-    if (bDel) { UnityEngine.Object.Destroy(obj); PrintLn("Destroy!");}
+    if ($bDel) { Object.Destroy($bv); PrintLn("Destroy!");}
 }
 
-function $_OnDestroy(obj)
+function $_OnDestroy($bv)
 {
     PrintLn("OnDestroy called!");
 }
 
-var $go = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
+var $go = GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
+
+$go.transform.localScale = Vector3.one * 50;
 
 var $m_bhv = AddBehaviour($go);
 

@@ -7,12 +7,14 @@ using slagtool.runtime.builtin;
 
 public class slagipc_unity_monoehaviour : MonoBehaviour {
 
-    [System.NonSerialized]    public YVALUE m_startFunc;
-    [System.NonSerialized]    public YVALUE m_updateFunc;
-    [System.NonSerialized]    public YVALUE m_onDestroyFunc;
-    [System.NonSerialized]    public YVALUE m_onMouseUpAsButtonFunc;
-    [System.NonSerialized]    public Hashtable m_hashtable;
+    [System.NonSerialized]    public  YVALUE m_startFunc;
+    [System.NonSerialized]    public  YVALUE m_updateFunc;
+    [System.NonSerialized]    public  YVALUE m_onDestroyFunc;
+    [System.NonSerialized]    public  YVALUE m_onMouseUpAsButtonFunc;
+    [System.NonSerialized]    private Hashtable m_msgfunctable;
 
+    public object    m_usrobj;                    //ユーザ用。必要に応じて使用してください。
+    public Hashtable m_usrtbl = new Hashtable();  //ユーザ用。必要に応じて使用してください。
 
 	void Start () {
         callfunc(m_startFunc);
@@ -53,9 +55,9 @@ public class slagipc_unity_monoehaviour : MonoBehaviour {
     */
     public void AddMsgFunc(string name, YVALUE func)
     {
-        if (m_hashtable==null) m_hashtable = new Hashtable();
+        if (m_msgfunctable==null) m_msgfunctable = new Hashtable();
         name = name.ToUpper();
-        m_hashtable[name] = func;
+        m_msgfunctable[name] = func;
     }
     public void SendMessageSocket(object o)
     {
@@ -70,12 +72,12 @@ public class slagipc_unity_monoehaviour : MonoBehaviour {
         {
             name = ol[0].ToString().ToUpper().Trim('\"');
 
-            if (m_hashtable == null || !m_hashtable.ContainsKey(name))
+            if (m_msgfunctable == null || !m_msgfunctable.ContainsKey(name))
             {
                 slagtool.sys.logline("関数登録がありません : " + name);
                 return;
             }
-            var func = m_hashtable[name];
+            var func = m_msgfunctable[name];
             if (func is YVALUE)
             {
                 ol.RemoveAt(0); //先頭のnameを削除
@@ -96,7 +98,7 @@ public class slagipc_unity_monoehaviour : MonoBehaviour {
             if (slagtool.sys.USETRY)
             {
                 try {  
-            	    slagipc.cmd_sub.m_slag.CallFunc(func,new object[1] { gameObject });
+            	    slagipc.cmd_sub.m_slag.CallFunc(func,new object[1] { this });
                 } catch (System.Exception e)
                 {
                     slagtool.sys.logline("--- 例外発生 ---");
@@ -106,7 +108,7 @@ public class slagipc_unity_monoehaviour : MonoBehaviour {
             }
             else
             {
-            	slagipc.cmd_sub.m_slag.CallFunc(func,new object[1] { gameObject });
+            	slagipc.cmd_sub.m_slag.CallFunc(func,new object[1] { this });
             }
         }
     }
@@ -129,7 +131,7 @@ public class slagipc_unity_monoehaviour : MonoBehaviour {
             ol.Add(o);
         }
         
-        ol.Insert(0,gameObject);
+        ol.Insert(0,this);
 
         var oary = ol.ToArray();
 

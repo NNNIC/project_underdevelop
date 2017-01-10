@@ -9,18 +9,18 @@ function $_hoge($go,$a)
     PrintLn("called! - " + $a + " at " + $go.name);
 }
 
-function $_Update($go)
+function $_Update($bv)
 {
    if (Input.GetKeyDown(KeyCode.A))
    {
        PrintLn("A Key Down");
-       SendMsg($go,"touch","touched!!");
+       SendMsg($bv.gameObject,"touch","touched!!");
    }
 }
 
 var $go = new GameObject("HOGE");
 var $bh = AddBehaviour($go);
-$bh.AddMsgFunc("touch",$_hoge); //メッセージ駆動関数登録
+$bh.AddMsgFunc("touch",$_hoge); //繝｡繝�繧ｻ繝ｼ繧ｸ鬧�蜍暮未謨ｰ逋ｻ骭ｲ
 $bh.m_updateFunc = $_Update;
 
 PrintLn("Push A Key!");

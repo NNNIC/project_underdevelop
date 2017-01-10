@@ -79,10 +79,10 @@
     <Compile Include="Assets\slag\slagipc\unity\builtin\commponent\slagipc_unity_statemanager.cs" />
     <Compile Include="Assets\slag\slagipc\unity\builtin\slagipc_unity_builtincalc_op.cs" />
     <Compile Include="Assets\slag\slagipc\unity\builtin\slagipc_unity_builtinfunc.cs" />
-    <Compile Include="Assets\slag\slagipc\unity\slagctl_unity_wk.cs" />
     <Compile Include="Assets\slag\slagipc\unity\slagipc_unity_main.cs" />
     <Compile Include="Assets\slag\slagipc\unity\slagipc_unity_resetscene.cs" />
     <Compile Include="Assets\slag\slagipc\unity\slagipc_unity_shaders.cs" />
+    <Compile Include="Assets\slag\slagipc\unity\slagipc_unity_wk.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\lex.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\ydef.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\yanalyzer.cs" />

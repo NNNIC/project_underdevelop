@@ -290,3 +290,8 @@ ht.func($x)
  call -   function Hoge($ht,$x)
           {
 		  }
+-----
+
+※仕様変更
+
+slagipc_monobehaviour の登録関数の引数を GameObjectから 自コンポネント(slagipc_monobehaviour)とする。

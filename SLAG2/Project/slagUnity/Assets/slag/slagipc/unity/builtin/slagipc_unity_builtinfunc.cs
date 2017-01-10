@@ -49,7 +49,7 @@ public class slagipc_unity_builtinfunc {
     {
         if (bHelp)
         {
-            return "Dump a variable." + NL +"ex)Dump(x);";
+            return "Dump a variable." + NL +"ex) Dump(x);";
         }
 
         if (ol==null) return "-null-";
@@ -73,18 +73,32 @@ public class slagipc_unity_builtinfunc {
             }
             return t;
         };
+        Func<Hashtable,string> join_hashtable = (l)=> {
+            string t = null;
+            foreach(var k in l.Keys)
+            {
+                if (t!=null) t+=",";
+                t+= k.ToString() + ":" + tostr(l[k]);
+            }
+            return t;
+        };
 
         tostr = (a) => {
             if (a==null) return "-null-";
-            if (a.GetType()==typeof(List<object>))
+            if (a is List<object>)
             {
                 var l = (List<object>)a;
-                return "(" + join_list(l) + ")";
+                return "[" + join_list(l) + "]";
             }
             if (a.GetType().IsArray)
             {
                 var l = (Array)a;
                 return "(" + join_array(l) +")";
+            }
+            if (a is Hashtable)
+            {
+                var l = (Hashtable)a;
+                return "{" + join_hashtable(l) + "}";
             }
             return a.ToString();
         };
@@ -236,6 +250,36 @@ public class slagipc_unity_builtinfunc {
         }
 
         return null;
+    }
+
+    public static object F_FromHexColor(bool bHelp, object[] ol, StateBuffer sb)
+    {
+        if (bHelp)
+        {
+            return "16進カラー文字列をColorへ変換する" +NL +
+                   "フォーマット) var col = FromHexColor(\"16進６桁または８桁\");" + NL +
+                   "例）var col = FromColor(\"ffc0cb\"); //ピンク" ;
+        }
+
+        kit.check_num_of_args(ol,1);
+
+        var s = kit.get_string_at(ol,0);
+
+        if (s==null || (s.Length!=6 && s.Length!=8)) util._error("FromHexColor:６桁または８桁の１６進文字列を指定してください");
+        var v = s.ToUpper().ToCharArray();
+        if (!Array.TrueForAll(v,n=>((n>='0' && n<='9')||(n>='A' && n<='F'))))
+        {
+            util._error("FromHexColor:１６進文字を指定してください");
+        }
+
+        byte r,g,b,a;
+
+        r = (byte)Convert.ToInt32(s.Substring(0,2),16);
+        g = (byte)Convert.ToInt32(s.Substring(2,2),16);
+        b = (byte)Convert.ToInt32(s.Substring(4,2),16);
+        a = (s.Length==8) ? (byte)Convert.ToInt32(s.Substring(5,2),16) : (byte)255;
+                    
+        return (Color)(new Color32(r,g,b,a));
     }
 
 }
