@@ -171,6 +171,11 @@ namespace slagtool
         #endregion
         public void Run()
         {
+            if (m_exelist==null || m_exelist.Count==0 )
+            {
+                return;
+            }
+
             m_curslag = this;
             m_statebuf = new StateBuffer();
             runtime.builtin.builtin_func.Init();

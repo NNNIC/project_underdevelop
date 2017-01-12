@@ -47,7 +47,7 @@ namespace slagtool
 
                 if (save_match_count == m_match_count)
                 {
-                    if (stopmatch_count>MATCHLIMIT-5)
+                    if (stopmatch_count==MATCHLIMIT-1)
                     {
                         sys.logline("it will be reached to the limit of match "); //for debug
                         sys.DEBUGLEVEL = 2;

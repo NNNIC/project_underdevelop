@@ -149,7 +149,7 @@ public class slagipc_unity_builtinfunc {
         {
             go = (GameObject)ol[0];
         }
-        return go.AddComponent<slagipc_unity_monoehaviour>();
+        return go.AddComponent<slagipc_unity_monobehaviour>();
     }
 
     #region ステートマシン

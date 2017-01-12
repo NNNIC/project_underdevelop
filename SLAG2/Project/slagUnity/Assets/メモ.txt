@@ -295,3 +295,13 @@ ht.func($x)
 ※仕様変更
 
 slagipc_monobehaviour の登録関数の引数を GameObjectから 自コンポネント(slagipc_monobehaviour)とする。
+
+-----
+
+※仕様変更
+
+ステートマネージャのステート関数の引数を２つに 
+
+function S_HOGE(bFirst,sm)   2番目の引数はステートマネージャ
+{
+}

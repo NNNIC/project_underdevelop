@@ -17,28 +17,28 @@
 
 var $m_watch = new GameObject("Watch");
 
-function $_INIT($bFirst)
+function $_INIT($bFirst,$sm)
 {
-    $m_sm.Goto($_CREATE_BIG_FRAME);
+    $sm.Goto($_CREATE_BIG_FRAME);
 }
 
 var $m_big_frame;
 var $m_big_hand;
 
-function $_CREATE_BIG_FRAME($bFirst)
+function $_CREATE_BIG_FRAME($bFirst,$sm)
 {
     $m_big_frame = Create_big_frame();
     $m_big_hand  = Create_big_hand($m_big_frame);
     
     $m_big_frame.transform.parent = $m_watch.transform;
     
-    $m_sm.Goto($_CREATE_MINI_FRAME);
+    $sm.Goto($_CREATE_MINI_FRAME);
 }
 
 var $m_mini_frame;
 var $m_mini_hand;
 
-function $_CREATE_MINI_FRAME($bFirst)
+function $_CREATE_MINI_FRAME($bFirst,$sm)
 {
     $m_mini_frame = Create_mini_frame();
     $m_mini_hand  = Create_mini_hand($m_mini_frame);
@@ -47,21 +47,21 @@ function $_CREATE_MINI_FRAME($bFirst)
     
     $m_mini_frame.transform.parent = $m_watch.transform;
 
-    $m_sm.Goto($_TRANSFORM);
+    $sm.Goto($_TRANSFORM);
 }
 
 
-function $_TRANSFORM($bFirst)
+function $_TRANSFORM($bFirst,$sm)
 {
     if ($bFirst)
     {
         $m_watch.transform.localScale = Vector3.one * 65;
-        $m_sm.Goto($_TIMERSTART);
+        $sm.Goto($_TIMERSTART);
     }
 }
 
 var $m_elapsed;
-function $_TIMERSTART($bFirst)
+function $_TIMERSTART($bFirst,$sm)
 {
     if ($bFirst)
     {

@@ -75,7 +75,7 @@
     <Compile Include="Assets\slag\slagipc\slagipc_cmd_sub.cs" />
     <Compile Include="Assets\slag\slagipc\slagipc_netcom.cs" />
     <Compile Include="Assets\slag\slagipc\slagipc_wk.cs" />
-    <Compile Include="Assets\slag\slagipc\unity\builtin\commponent\slagipc_unity_monoehaviour.cs" />
+    <Compile Include="Assets\slag\slagipc\unity\builtin\commponent\slagipc_unity_monobehaviour.cs" />
     <Compile Include="Assets\slag\slagipc\unity\builtin\commponent\slagipc_unity_statemanager.cs" />
     <Compile Include="Assets\slag\slagipc\unity\builtin\slagipc_unity_builtincalc_op.cs" />
     <Compile Include="Assets\slag\slagipc\unity\builtin\slagipc_unity_builtinfunc.cs" />

@@ -15,7 +15,7 @@ var s_try    = 0;
 var s_guess  = null;
 
 
-function S_Q_START(bFirst)
+function S_Q_START(bFirst,sm)
 {
     if (bFirst) {
         PrintLn("*START*");
@@ -41,7 +41,7 @@ function S_Q_START(bFirst)
         Print("!! 問題　＃ " + NUM + " !! \n");
         Print("-----------------------------\n");
 
-        m_sm.WaitTime(0.5);
+        sm.WaitTime(0.5);
     }
     else
     {
@@ -50,11 +50,11 @@ function S_Q_START(bFirst)
 
         s_try = 0;
 
-        m_sm.Goto(S_Q_TRY);
+        sm.Goto(S_Q_TRY);
     }
 }
 
-function S_Q_TRY( bFirst)
+function S_Q_TRY( bFirst,sm)
 {
     if (bFirst)
     {
@@ -70,11 +70,11 @@ function S_Q_TRY( bFirst)
 
         s_guess = null;
         
-        m_sm.Goto(S_Q_INPUT);
+        sm.Goto(S_Q_INPUT);
     }
 }
 
-function S_Q_INPUT(bFirst)
+function S_Q_INPUT(bFirst,sm)
 {
     if (bFirst)
     {
@@ -87,17 +87,17 @@ function S_Q_INPUT(bFirst)
             var n = ToNumber(s);
             if (n < 100 || n > 999) {
                 Print("入力が正しくありません\n");
-                m_sm.Goto(S_Q_INPUT);
+                sm.Goto(S_Q_INPUT);
             }
             else {
                 s_guess = n;
-                m_sm.Goto(S_Q_CHECK);
+                sm.Goto(S_Q_CHECK);
             }
         }
     }
 }
 
-function S_Q_CHECK(bFirst)
+function S_Q_CHECK(bFirst,sm)
 {
     if (bFirst)
     {
@@ -113,7 +113,7 @@ function S_Q_CHECK(bFirst)
         {
             Print("\n\n...答えは" + s_guess + "より大きい数です\n\n");
         }
-        m_sm.WaitTime(1);
+        sm.WaitTime(1);
     }
     else
     {
@@ -142,12 +142,12 @@ function S_Q_CHECK(bFirst)
         Print("数字と場所が一致した         : " + rightplace + "個\n\n");
         Print("数字が一致したが場所が異なる : " + anyplace + "個\n\n\n\n");
 
-        m_sm.WaitTime(1);
-        m_sm.Goto(S_Q_TRY);
+        sm.WaitTime(1);
+        sm.Goto(S_Q_TRY);
     }
 }
 
-function S_Q_END(bFirst)
+function S_Q_END(bFirst,sm)
 {
     if (bFirst)
     {
@@ -155,7 +155,7 @@ function S_Q_END(bFirst)
     }
 }
 
-function S_Q_CONGRATULATION(bFirst)
+function S_Q_CONGRATULATION(bFirst,sm)
 {
     if (bFirst) {
         Print("\n");

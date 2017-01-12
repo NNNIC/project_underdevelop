@@ -5,7 +5,7 @@ using slagtool;
 using slagtool.runtime;
 using slagtool.runtime.builtin;
 
-public class slagipc_unity_monoehaviour : MonoBehaviour {
+public class slagipc_unity_monobehaviour : MonoBehaviour {
 
     [System.NonSerialized]    public  YVALUE m_startFunc;
     [System.NonSerialized]    public  YVALUE m_updateFunc;

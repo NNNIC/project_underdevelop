@@ -2,25 +2,25 @@
  Test 12
 */
 
-function S_INIT(bFirst)
+function S_INIT(bFirst,sm)
 {
     if (bFirst)
     {
         PrintLn("S_INIT");
-        m_sm.Goto(S_SECOND);
+        sm.Goto(S_SECOND);
     }
 }
 
-function S_SECOND(bFirst)
+function S_SECOND(bFirst,sm)
 {
     if (bFirst)
     {
         PrintLn("S_SECOND");
-        m_sm.Goto(S_END);
+        sm.Goto(S_END);
     }
 }
 
-function S_END(bFirst)
+function S_END(bFirst,sm)
 {
 }
 
