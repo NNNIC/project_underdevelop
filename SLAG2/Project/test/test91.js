@@ -1,4 +1,4 @@
-//
+﻿//
 // TEST 91
 //
 // 数字当てゲーム
@@ -15,7 +15,7 @@ var s_try    = 0;
 var s_guess  = null;
 
 
-function S_Q_START(bFirst,sm)
+function S_Q_START(sm,bFirst)
 {
     if (bFirst) {
         PrintLn("*START*");
@@ -54,7 +54,7 @@ function S_Q_START(bFirst,sm)
     }
 }
 
-function S_Q_TRY( bFirst,sm)
+function S_Q_TRY(sm,bFirst)
 {
     if (bFirst)
     {
@@ -74,7 +74,7 @@ function S_Q_TRY( bFirst,sm)
     }
 }
 
-function S_Q_INPUT(bFirst,sm)
+function S_Q_INPUT(sm,bFirst)
 {
     if (bFirst)
     {
@@ -97,7 +97,7 @@ function S_Q_INPUT(bFirst,sm)
     }
 }
 
-function S_Q_CHECK(bFirst,sm)
+function S_Q_CHECK(sm,bFirst)
 {
     if (bFirst)
     {
@@ -147,7 +147,7 @@ function S_Q_CHECK(bFirst,sm)
     }
 }
 
-function S_Q_END(bFirst,sm)
+function S_Q_END(sm,bFirst)
 {
     if (bFirst)
     {
@@ -155,7 +155,7 @@ function S_Q_END(bFirst,sm)
     }
 }
 
-function S_Q_CONGRATULATION(bFirst,sm)
+function S_Q_CONGRATULATION(sm,bFirst)
 {
     if (bFirst) {
         Print("\n");

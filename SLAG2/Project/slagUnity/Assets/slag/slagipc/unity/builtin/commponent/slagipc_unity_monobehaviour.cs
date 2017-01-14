@@ -78,11 +78,16 @@ public class slagipc_unity_monobehaviour : MonoBehaviour {
                 return;
             }
             var func = m_msgfunctable[name];
-            if (func is YVALUE)
+            if (func!=null && func is YVALUE)
             {
                 ol.RemoveAt(0); //先頭のnameを削除
 
                 callfunc((YVALUE)func,ol);
+                return;
+            }
+            else
+            { 
+                slagtool.sys.logline("関数登録がNULLです : " + name);
                 return;
             }
         }

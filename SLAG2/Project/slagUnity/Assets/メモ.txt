@@ -302,6 +302,6 @@ slagipc_monobehaviour の登録関数の引数を GameObjectから 自コンポ�
 
 ステートマネージャのステート関数の引数を２つに 
 
-function S_HOGE(bFirst,sm)   2番目の引数はステートマネージャ
+function S_HOGE(sm,bFirst)   1番目の引数はステートマネージャ
 {
 }

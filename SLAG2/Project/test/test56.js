@@ -1,13 +1,13 @@
 /*
     TEST 56
 
-    ƒ{ƒ^ƒ“‚Q
+    ãƒœã‚¿ãƒ³ï¼’
 */
 
  "using UnityEngine";
  
 // ####################
-// # ƒ{ƒ^ƒ“ƒ}ƒl[ƒWƒƒ #
+// # ãƒœã‚¿ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ #
 function $__BM_Update($bhv)
 {
     if (!Input.GetMouseButtonDown(0)) return;
@@ -32,11 +32,11 @@ function ButtonManager()
     
     return $ht;
 }
-// # ƒ{ƒ^ƒ“ƒ}ƒl[ƒWƒƒ #
+// # ãƒœã‚¿ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ #
 // ####################
 
 // ###############
-// #ƒ{ƒ^ƒ“ƒp[ƒc #
+// #ãƒœã‚¿ãƒ³ãƒ‘ãƒ¼ãƒ„ #
 function $__CB_CreateTxtObj($s,$scale)
 {
     var $go = new GameObject($s);
@@ -89,11 +89,25 @@ function $__CB_CreateRectangleMesh($width,$height)
 
     return $mesh;
 }
-// #ƒ{ƒ^ƒ“ƒp[ƒc #
+function $__CB_CreateBox($width,$height)
+{
+    var $go = new GameObject();
+    var $mr = $go.AddComponent(typeof(MeshRenderer));
+    $mr.material = new Material(Shader.Find("Unlit/Color"));
+    $mr.material.SetColor("_Color",Color.yellow);
+    
+    var $mf  = $go.AddComponent(typeof(MeshFilter));
+    $mf.mesh = $__CB_CreateRectangleMesh($width,$height);
+    
+    var $bc = $go.AddComponent(typeof(BoxCollider));
+
+    return $go;
+}
+// #ãƒœã‚¿ãƒ³ãƒ‘ãƒ¼ãƒ„ #
 // ###############
 
 // ##############
-// #ƒx[ƒXƒ{ƒ^ƒ“#
+// #ãƒ™ãƒ¼ã‚¹ãƒœã‚¿ãƒ³#
 function $__CB_SetMsg($ht,$msg,$col)
 {
     var $tm =$ht.txgo.GetComponent(typeof(TextMesh));
@@ -111,24 +125,84 @@ function $__CB_SetClickFunc($ht,$func)
     $ht.bhv.AddMsgFunc("CLICK",$func);
 }
 
-// @ ƒfƒtƒHƒ‹ƒg‚ÌƒNƒŠƒbƒNŠÖ”
+// @ ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®ã‚¯ãƒªãƒƒã‚¯é–¢æ•°
 function $__CB_ClickTempFunc($bhv)
 {
-    PrintLn("ƒ{ƒ^ƒ“:"+$bhv.m_usrobj.id + "‚ªƒNƒŠƒbƒN‚³‚ê‚Ü‚µ‚½");
-    PrintLn("¦$ht.setClickFunc‚É‚Ä·‘Ö‚¦‚¹‚æ");
+    PrintLn("ãƒœã‚¿ãƒ³:"+$bhv.m_usrobj.id + "ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚Œã¾ã—ãŸ");
+    PrintLn("â€»$ht.setClickFuncã«ã¦å·®æ›¿ãˆã›ã‚ˆ");
 }
-// @ ƒ{ƒ^ƒ“ƒXƒe[ƒg
-function $__CB_STATE_A(bFirst)
+// @ ãƒœã‚¿ãƒ³ã‚¹ãƒ†ãƒ¼ãƒˆ
+function $__CB_ClickState_Func($bhv)
 {
+    //PrintLn("ãƒœã‚¿ãƒ³ON:"+$bhv.m_usrobj.id + "ãŒã‚¯ãƒªãƒƒã‚¯ã•ã‚Œã¾ã—ãŸ");
+    $ht = $bhv.m_usrobj;
+    $ht.sm.Goto($__CB_STATE_OFF);
 }
+function $__CB_STATE_ON($sm,$bFirst)
+{
+   if ($bfirst)
+   {
+       //PrintLn("STATE ON");
+       $ht = $sm.bhv.m_usrobj;
+       $ht.setmsg($ht.on_text,$ht.on_text_col);
+       $ht.setcol($ht.on_col);
+       $ht.setClickFunc($__CB_ClickState_Func);
+       
+   }
+}
+function $__CB_STATE_OFF($sm,$bFirst)
+{
+    if ($bFirst)
+    {
+        $ht.clickFunc();
+    
+        //PrintLn("STATE OFF");
+        $ht = $sm.bhv.m_usrobj;
+        $ht.setmsg($ht.off_text,$ht.off_text_col);
+        $ht.setcol($ht.off_col);
+        $ht.setClickFunc(null);
+        $sm.WaitTime(0.2);
+    }
+    else
+    {
+        $sm.Goto($__CB_STATE_ON);
+    }
+}
+// #ãƒ™ãƒ¼ã‚¹ãƒœã‚¿ãƒ³#
+// ##############
 
-function $__CB_CreateBaseButton($butman, $id, $width, $height)
+// ##############
+// # ãƒœã‚¿ãƒ³ä½œæˆ #
+/*
+ ã€€ã‚¯ãƒªãƒƒã‚¯ãƒœã‚¿ãƒ³
+
+   æ¦‚è¦ï¼šã‚¯ãƒªãƒƒã‚¯æ™‚ã«è‰²ãƒ»ãƒ†ã‚­ã‚¹ãƒˆãŒå¤‰æ›´ã•ã‚ŒæŒ‡å®šã®é–¢æ•°ã‚’å‘¼ã¶ã€‚
+   
+ã€€ ä½¿ã„æ–¹ï¼š
+   var $ht = hashtable();
+   
+   $ht.width       = 150;
+   $ht.height      =  50;
+   $ht.clickFunc   = $_ClickFunc;
+   
+   $ht.on_col      = Color.green;
+   $ht.on_text     = "ON";
+   $ht.on_text_col = Color.white;
+   
+   $ht.off_col     = Color.red;
+   $ht.off_text    = "OFF";
+   $ht.off_text_col= Color.red;
+   
+   var $but = CreateButton($butman, $id, $ht);  //$butman:ãƒœã‚¿ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ $id;ãƒ†ã‚­ã‚¹ãƒˆ
+   
+*/
+function CreateButton($butman, $id, $ht)
 {
-    var $ht          = Hashtable();
     $ht.id           = $id;
-    $ht.go           = $__CB_CreateBox($width,$height);
+    $ht.go           = $__CB_CreateBox($ht.width,$ht.height);
     $ht.go.name      = $id;
-    $ht.txgo         = $__CB_CreateTxtObj($id, 7);
+    $ht.txgo         = $__CB_CreateTxtObj("Text", 7);
+    $ht.txgo.transform.parent = $ht.go.transform;
 
     $ht.bhv          = AddBehaviour($ht.go);
     $ht.bhv.m_usrobj = $ht;
@@ -138,22 +212,36 @@ function $__CB_CreateBaseButton($butman, $id, $width, $height)
     $ht.setcol       = $__CB_SetColor;
     $ht.setClickFunc = $__CB_SetClickFunc;
 
+    $ht.setmsg("MSG",Color.white);
     $ht.setClickFunc($__CB_ClickTempFunc);
     
-    //ƒXƒe[ƒg
-    $ht.sm = StateManager();
-    
-
-
+    //ã‚¹ãƒ†ãƒ¼ãƒˆ
+    $ht.sm = StateManager($ht.go);
+    $ht.sm.Goto($__CB_STATE_ON);
 
     return $ht;
 }
 
-// #ƒx[ƒXƒ{ƒ^ƒ“#
-// ##############
-
-// ##############
-// # ƒ{ƒ^ƒ“ì¬ #
-function CreateButton($butman, $id, $width, $height)
+function $_ClickFunc($ht)
 {
+    PrintLn("Clicked!");
 }
+
+var $butman = ButtonManager();
+
+var $ht = hashtable();
+
+$ht.width       = 150;
+$ht.height      =  50;
+$ht.clickFunc   = $_ClickFunc;
+
+$ht.on_col      = Color.green;
+$ht.on_text     = "-ON-";
+$ht.on_text_col = Color.white;
+
+$ht.off_col     = Color.red;
+$ht.off_text    = "-OFF-";
+$ht.off_text_col= Color.black;
+
+var $but = CreateButton($butman, "test", $ht);  //$butman:ãƒœã‚¿ãƒ³ãƒãƒãƒ¼ã‚¸ãƒ£ $id;ãƒ†ã‚­ã‚¹ãƒˆ
+

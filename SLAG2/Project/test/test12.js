@@ -2,7 +2,7 @@
  Test 12
 */
 
-function S_INIT(bFirst,sm)
+function S_INIT(sm,bFirst)
 {
     if (bFirst)
     {
@@ -11,7 +11,7 @@ function S_INIT(bFirst,sm)
     }
 }
 
-function S_SECOND(bFirst,sm)
+function S_SECOND(sm,bFirst)
 {
     if (bFirst)
     {
@@ -20,7 +20,7 @@ function S_SECOND(bFirst,sm)
     }
 }
 
-function S_END(bFirst,sm)
+function S_END(sm,bFirst)
 {
 }
 

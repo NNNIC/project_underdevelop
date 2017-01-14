@@ -76,7 +76,7 @@ public class slagipc_unity_statemanager : MonoBehaviour {
                 if (sys.USETRY)
                 {
                     try {  
-            	        cmd_sub.m_slag.CallFunc(m_cur,new object[2] { bFirst,this });
+            	        cmd_sub.m_slag.CallFunc(m_cur,new object[2] { this, bFirst });
                     }
                     catch (System.Exception e)
                     {
@@ -87,15 +87,15 @@ public class slagipc_unity_statemanager : MonoBehaviour {
                 }
                 else
                 { 
-                    cmd_sub.m_slag.CallFunc(m_cur,new object[2] { bFirst,this });
+                    cmd_sub.m_slag.CallFunc(m_cur,new object[2] { this,bFirst });
                 }
                 dbg_elapsedtime += Time.realtimeSinceStartup - save;
             }
         }
         //便宜： GameObject、 本コンポネントやunity_monobehaviourが取得できる機能を提供
-        public slagipc_unity_statemanager   m_smco;
-        public GameObject                   m_go  {  get { return m_smco.gameObject; } }
-        public slagipc_unity_monobehaviour  m_bhv {  get { return m_smco.GetComponent<slagipc_unity_monobehaviour>();}  }
+        public slagipc_unity_statemanager   smco;
+        public GameObject                   go  {  get { return smco.gameObject; } }
+        public slagipc_unity_monobehaviour  bhv {  get { return smco.GetComponent<slagipc_unity_monobehaviour>();}  }
     }
 
     StateManager m_sm;
@@ -104,7 +104,7 @@ public class slagipc_unity_statemanager : MonoBehaviour {
         if (m_sm==null)
         {   
             m_sm = new StateManager();
-            m_sm.m_smco = this;
+            m_sm.smco = this;
         }
 	}
 

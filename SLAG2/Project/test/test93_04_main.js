@@ -17,7 +17,7 @@
 
 var $m_watch = new GameObject("Watch");
 
-function $_INIT($bFirst,$sm)
+function $_INIT($sm,$bFirst)
 {
     $sm.Goto($_CREATE_BIG_FRAME);
 }
@@ -25,7 +25,7 @@ function $_INIT($bFirst,$sm)
 var $m_big_frame;
 var $m_big_hand;
 
-function $_CREATE_BIG_FRAME($bFirst,$sm)
+function $_CREATE_BIG_FRAME($sm,$bFirst)
 {
     $m_big_frame = Create_big_frame();
     $m_big_hand  = Create_big_hand($m_big_frame);
@@ -38,7 +38,7 @@ function $_CREATE_BIG_FRAME($bFirst,$sm)
 var $m_mini_frame;
 var $m_mini_hand;
 
-function $_CREATE_MINI_FRAME($bFirst,$sm)
+function $_CREATE_MINI_FRAME($sm,$bFirst)
 {
     $m_mini_frame = Create_mini_frame();
     $m_mini_hand  = Create_mini_hand($m_mini_frame);
@@ -51,7 +51,7 @@ function $_CREATE_MINI_FRAME($bFirst,$sm)
 }
 
 
-function $_TRANSFORM($bFirst,$sm)
+function $_TRANSFORM($sm,$bFirst)
 {
     if ($bFirst)
     {
@@ -61,7 +61,7 @@ function $_TRANSFORM($bFirst,$sm)
 }
 
 var $m_elapsed;
-function $_TIMERSTART($bFirst,$sm)
+function $_TIMERSTART($sm,$bFirst)
 {
     if ($bFirst)
     {
