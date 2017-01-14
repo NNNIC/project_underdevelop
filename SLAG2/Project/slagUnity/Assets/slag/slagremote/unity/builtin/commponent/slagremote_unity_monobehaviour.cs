@@ -5,7 +5,7 @@ using slagtool;
 using slagtool.runtime;
 using slagtool.runtime.builtin;
 
-public class slagipc_unity_monobehaviour : MonoBehaviour {
+public class slagremote_unity_monobehaviour : MonoBehaviour {
 
     [System.NonSerialized]    public  YVALUE m_startFunc;
     [System.NonSerialized]    public  YVALUE m_updateFunc;
@@ -98,12 +98,12 @@ public class slagipc_unity_monobehaviour : MonoBehaviour {
     //-- util for this class
     void callfunc(YVALUE func)
     {
-        if (func!=null && slagipc.cmd_sub.m_slag!=null)
+        if (func!=null && slagremote.cmd_sub.m_slag!=null)
         { 
             if (slagtool.sys.USETRY)
             {
                 try {  
-            	    slagipc.cmd_sub.m_slag.CallFunc(func,new object[1] { this });
+            	    slagremote.cmd_sub.m_slag.CallFunc(func,new object[1] { this });
                 } catch (System.Exception e)
                 {
                     slagtool.sys.logline("--- 例外発生 ---");
@@ -113,7 +113,7 @@ public class slagipc_unity_monobehaviour : MonoBehaviour {
             }
             else
             {
-            	slagipc.cmd_sub.m_slag.CallFunc(func,new object[1] { this });
+            	slagremote.cmd_sub.m_slag.CallFunc(func,new object[1] { this });
             }
         }
     }
@@ -140,12 +140,12 @@ public class slagipc_unity_monobehaviour : MonoBehaviour {
 
         var oary = ol.ToArray();
 
-        if (func!=null && slagipc.cmd_sub.m_slag!=null)
+        if (func!=null && slagremote.cmd_sub.m_slag!=null)
         { 
             if (slagtool.sys.USETRY)
             {
                 try {  
-            	    slagipc.cmd_sub.m_slag.CallFunc(func,oary);
+            	    slagremote.cmd_sub.m_slag.CallFunc(func,oary);
                 } catch (System.Exception e)
                 {
                     slagtool.sys.logline("--- 例外発生 ---");
@@ -155,7 +155,7 @@ public class slagipc_unity_monobehaviour : MonoBehaviour {
             }
             else
             {
-            	slagipc.cmd_sub.m_slag.CallFunc(func,oary);
+            	slagremote.cmd_sub.m_slag.CallFunc(func,oary);
             }
         }
     }

@@ -29,7 +29,7 @@ public class simple : MonoBehaviour {
         
         slagtool.util.SetLogFunc(LogLine,Log);
         slagtool.util.SetDebugLevel(1);
-        slagtool.util.SetBuitIn(typeof(slagipc_unity_builtinfunc));
+        slagtool.util.SetBuitIn(typeof(slagremote_unity_builtinfunc));
 
         var slag = new slagtool.slag();
         slag.LoadSrc(src);

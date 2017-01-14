@@ -8,7 +8,7 @@ using slagtool.runtime;
 using slagtool.runtime.builtin;
 
 
-public class slagipc_unity_builtinfunc {
+public class slagremote_unity_builtinfunc {
     static string NL = Environment.NewLine;
 
     public static object F_Println(bool bHelp,object[] ol,StateBuffer sb)
@@ -143,13 +143,13 @@ public class slagipc_unity_builtinfunc {
         GameObject go = null;
         if (ol.Length==0)
         {
-            go =  slagipc_unity_main.V.gameObject;
+            go =  slagremote_unity_main.V.gameObject;
         }
         else if (ol[0] is GameObject)
         {
             go = (GameObject)ol[0];
         }
-        return go.AddComponent<slagipc_unity_monobehaviour>();
+        return go.AddComponent<slagremote_unity_monobehaviour>();
     }
 
     #region ステートマシン
@@ -162,14 +162,14 @@ public class slagipc_unity_builtinfunc {
                    "slagipc_unity_statemanagerクラスに詳細あり";
         }
 
-        slagipc_unity_statemanager sm = null;
+        slagremote_unity_statemanager sm = null;
         if (ol.Length == 0)
         {
-            sm = slagipc_unity_main.V.gameObject.AddComponent<slagipc_unity_statemanager>();
+            sm = slagremote_unity_main.V.gameObject.AddComponent<slagremote_unity_statemanager>();
         }
         else if (ol[0] is GameObject)
         {
-            sm = ((GameObject)ol[0]).AddComponent<slagipc_unity_statemanager>();
+            sm = ((GameObject)ol[0]).AddComponent<slagremote_unity_statemanager>();
         }
         else
         {

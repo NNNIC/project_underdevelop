@@ -6,7 +6,7 @@ using slagtool;
     Unity 依存　計算
 */
 
-public class slagipc_unity_builtincalc_op {
+public class slagremote_unity_builtincalc_op {
 
     public static object Calc_op(object a, object b, string op)
     {

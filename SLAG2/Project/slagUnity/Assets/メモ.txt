@@ -305,3 +305,21 @@ slagipc_monobehaviour の登録関数の引数を GameObjectから 自コンポ�
 function S_HOGE(sm,bFirst)   1番目の引数はステートマネージャ
 {
 }
+
+-----
+
+debug 1 --- analyze    - 表示なし
+　　　      run        - bp可能 
+            exception  - 表示のみでUnity停止なし
+            call失敗   - 表示
+            ポインタ値 - nullワーニング
+debug 2 --- analyze    - 表示あり
+            run        - bp可能
+            exception  - Unityエラー停止
+            call失敗   - 表示
+            ポインタ値 - null停止
+            
+-----
+
+
+

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
-using slagipc;
+using slagremote;
 using slagtool;
 
 /*
@@ -33,7 +33,7 @@ using slagtool;
 
 */
 
-public class slagipc_unity_statemanager : MonoBehaviour {
+public class slagremote_unity_statemanager : MonoBehaviour {
 
     public class StateManager
     {
@@ -93,9 +93,9 @@ public class slagipc_unity_statemanager : MonoBehaviour {
             }
         }
         //便宜： GameObject、 本コンポネントやunity_monobehaviourが取得できる機能を提供
-        public slagipc_unity_statemanager   smco;
+        public slagremote_unity_statemanager   smco;
         public GameObject                   go  {  get { return smco.gameObject; } }
-        public slagipc_unity_monobehaviour  bhv {  get { return smco.GetComponent<slagipc_unity_monobehaviour>();}  }
+        public slagremote_unity_monobehaviour  bhv {  get { return smco.GetComponent<slagremote_unity_monobehaviour>();}  }
     }
 
     StateManager m_sm;

@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class slagipc_unity_resetscene : MonoBehaviour {
+public class slagremote_unity_resetscene : MonoBehaviour {
 
     // Use this for initialization
     IEnumerator Start()

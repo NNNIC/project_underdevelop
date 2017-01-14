@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Threading;
-using slagipc;
+using slagremote;
 using UnityEngine.SceneManagement;
 
 
-public class slagipc_unity_main : MonoBehaviour {
+public class slagremote_unity_main : MonoBehaviour {
 
-    public static slagipc_unity_main V; //veridical pointer ... self pointer
+    public static slagremote_unity_main V; //veridical pointer ... self pointer
     public static netcomm m_netcomm;
 
     bool m_bReqAbort;
@@ -34,10 +34,10 @@ public class slagipc_unity_main : MonoBehaviour {
 
         slagtool.util.SetLogFunc(wk.SendWriteLine,wk.SendWrite);
         slagtool.util.SetDebugLevel(0);
-        slagtool.util.SetBuitIn(typeof(slagipc_unity_builtinfunc));
-        slagtool.util.SetCalcOp(slagipc_unity_builtincalc_op.Calc_op);
+        slagtool.util.SetBuitIn(typeof(slagremote_unity_builtinfunc));
+        slagtool.util.SetCalcOp(slagremote_unity_builtincalc_op.Calc_op);
 
-        slagipc.cmd.init();
+        slagremote.cmd.init();
 
         while(true)
         {
@@ -52,7 +52,7 @@ public class slagipc_unity_main : MonoBehaviour {
             {
                 continue;
             }
-            slagipc.cmd.execute(cmd);
+            slagremote.cmd.execute(cmd);
         }
         m_bEnd = true;
     }
@@ -60,7 +60,7 @@ public class slagipc_unity_main : MonoBehaviour {
     void Update()
     {
         if (!m_bReqAbort) wk.Update();
-        if (!m_bReqAbort) slagipc.cmd_sub.UpdateExec();
+        if (!m_bReqAbort) slagremote.cmd_sub.UpdateExec();
     }
 
     void Reset()
