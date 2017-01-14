@@ -33,7 +33,7 @@ function _create_circle_text($go, $strlist, $radius, $scale, $zpos, $col)
         $obj.transform.parent = $go.transform;
         
         var $a = - $angle * $n + 90*Mathf.Deg2Rad;
-        PrintLn($a);
+        //PrintLn($a);
         var $x = Mathf.Cos($a);
         var $y = Mathf.Sin($a);
         
@@ -91,3 +91,101 @@ function Create_mini_hand($go)
 }
 // # CREATE MINI FRAME #
 // #####################
+
+// ############################
+// # CREATE START/STOP BUTTON #
+
+function $_StartStopClickFunc($ht)
+{
+    //PrintLn("Start/Stop Button");
+    
+    if ($ht.mode == "START")
+    {
+        $ht = $_StartStopClick_mode_STOP($ht);
+    }
+    else if ($ht.mode == "STOP")
+    {
+        $ht = $_StartStopClick_mode_START($ht);
+    }
+}
+function $_StartStopClick_mode_START($ht)
+{
+    $ht.on_col      = Color.green;
+    $ht.on_text     = "stop";
+    $ht.on_text_col = Color.white;
+
+    $ht.off_col     = Color.red;
+    $ht.off_text    = "STOP";
+    $ht.off_text_col= Color.black;
+    
+    $ht.mode = "START";
+    return $ht;
+}
+function $_StartStopClick_mode_STOP($ht)
+{
+    $ht.on_col      = Color.green;
+    $ht.on_text     = "start";
+    $ht.on_text_col = Color.white;
+
+    $ht.off_col     = Color.red;
+    $ht.off_text    = "START";
+    $ht.off_text_col= Color.black;
+    
+    $ht.mode = "STOP";
+    return $ht;
+}
+
+function Create_start_stop_button($butman)
+{
+    var $ht = hashtable();
+
+    $ht.width       = 150;
+    $ht.height      = 50;
+    $ht.clickFunc   = $_StartStopClickFunc;
+
+    $ht = $_StartStopClick_mode_START($ht);
+    
+    var $but = CreateButton($butman, "START-STOP-Button", $ht);  //$butman:ボタンマネージャ
+
+    $but.go.transform.localPosition = new Vector3(-115,275,0);
+    
+    return $but;
+}
+
+function Set_Stop($butman)
+{
+    
+}
+
+function $_ResetClickFunc($ht)
+{
+    $ht.mode = "RESET";
+    Dump($ht);
+    //PrintLn("RESET CLIKED!");
+}
+function Create_reset_button($butman)
+{
+    var $ht = hashtable();
+
+    $ht.width       = 150;
+    $ht.height      = 50;
+    $ht.clickFunc   = $_ResetClickFunc;
+
+    $ht.on_col      = Color.green;
+    $ht.on_text     = "reset";
+    $ht.on_text_col = Color.white;
+
+    $ht.off_col     = Color.red;
+    $ht.off_text    = "RESET";
+    $ht.off_text_col= Color.black;
+    
+    var $but = CreateButton($butman, "RESET-Button", $ht);  //$butman:ボタンマネージャ $id;テキスト
+
+    $but.go.transform.localPosition = new Vector3(115,275,0);
+    
+    return $but;
+}
+// # CREATE START/STOP BUTTON #
+// ############################
+
+

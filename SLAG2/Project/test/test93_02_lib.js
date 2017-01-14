@@ -197,6 +197,7 @@ function CreateHand(width,height,col)
     return $go;
 }
 
+/*
 //ボタン作成
 function _CB_CreateRectangleMesh($width,$height)
 {
@@ -254,3 +255,4 @@ function CreateButton($width,$height,$col)
 
     return $go;
 }
+*/

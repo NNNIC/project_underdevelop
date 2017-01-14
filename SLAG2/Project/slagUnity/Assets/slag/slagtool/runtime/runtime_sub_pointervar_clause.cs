@@ -37,7 +37,7 @@ namespace slagtool.runtime
                 if (i<size-1 && item.o == null) { //最後尾前のnull確認。 最後尾のNULLは容認。
                     if (sys.DEBUGMODE)
                     {
-                        sys.logline("Null Pointer, but ignored at line:" + v.get_dbg_line(true) +".");
+                        sys.logline("Null Pointer, but ignored at line:" + v.get_dbg_line(true) +" file:" + v.get_dbg_file());
                     }
 
                     break;                               //最近の流行りを取り入れてnullだったら後ろは処理しない

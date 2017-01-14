@@ -56,6 +56,20 @@ function $_TRANSFORM($sm,$bFirst)
     if ($bFirst)
     {
         $m_watch.transform.localScale = Vector3.one * 65;
+        $sm.Goto($_SETBUTTONS);
+    }
+}
+
+var $butman;
+var $startstop_button;
+var $reset_button;
+function $_SETBUTTONS($sm,$bFirst)
+{
+    if ($bFirst)
+    {
+        $butman = ButtonManager();
+        $startstop_button = Create_start_stop_button($butman);
+        $reset_button = Create_reset_button($butman);
         $sm.Goto($_TIMERSTART);
     }
 }
@@ -68,7 +82,16 @@ function $_TIMERSTART($sm,$bFirst)
         $m_elapsed = 0;
         return;
     }
-    $m_elapsed += Time.deltaTime;
+    
+    if ($startstop_button.mode != "STOP")
+    {
+        $m_elapsed += Time.deltaTime;
+    }
+    if ($reset_button.mode == "RESET")
+    {
+        $reset_button.mode = "";
+        $m_elapsed = 0;
+    }
     
     var $angle_big = (360/4) * $m_elapsed;
     
@@ -78,29 +101,60 @@ function $_TIMERSTART($sm,$bFirst)
     $m_mini_hand.transform.localEulerAngles = Vector3.back * $angle_mini;
 }
 
-
 var $m_sm = StateManager();
 $m_sm.Goto($_INIT);
 
 
 //---
 
-var $btn = CreateButton(1,1,Color.white);
-$btn.transform.localPosition += Vector3.up * 4.2;
+//var $btn = CreateButton(1,1,Color.white);
+//$btn.transform.localPosition += Vector3.up * 4.2;
 
+//var $butman = ButtonManager();
+//var $startstop_button = Create_start_stop_button($butman);
+
+/*
+function $_ClickFunc($ht)
+{
+    PrintLn("Clicked!");
+}
+
+var $butman = ButtonManager();
+
+var $ht = hashtable();
+
+$ht.width       = 150;
+$ht.height      = 50;
+$ht.clickFunc   = $_ClickFunc;
+
+$ht.on_col      = Color.green;
+$ht.on_text     = "-ON-";
+$ht.on_text_col = Color.white;
+
+$ht.off_col     = Color.red;
+$ht.off_text    = "-OFF-";
+$ht.off_text_col= Color.black;
+
+var $but = CreateButton($butman, "test", $ht);  //$butman:ボタンマネージャ $id;テキスト
+*/
+
+
+
+/*
 function $_UpdateCheckTouch($go)
 {
     if (!Input.GetMouseButtonDown(0)) {return;}
     
     var $pos = Input.mousePosition;
-    Dump($pos);
+    //Dump($pos);
     var $hitgo = GetObjectAtScreenPoint($pos);
     
     if ($hitgo!=null)
     {
-        Dump($hitgo);
+        //Dump($hitgo);
     }
 }
 
 var $m_bhv = AddBehaviour();
 $m_bhv.m_updateFunc = $_UpdateCheckTouch;
+*/
