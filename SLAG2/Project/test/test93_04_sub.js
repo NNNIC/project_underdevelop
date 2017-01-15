@@ -152,15 +152,10 @@ function Create_start_stop_button($butman)
     return $but;
 }
 
-function Set_Stop($butman)
-{
-    
-}
-
 function $_ResetClickFunc($ht)
 {
     $ht.mode = "RESET";
-    Dump($ht);
+    //Dump($ht);
     //PrintLn("RESET CLIKED!");
 }
 function Create_reset_button($butman)

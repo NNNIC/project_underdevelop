@@ -8,15 +8,15 @@ using slagtool;
 
     スクリプト例:
 
-    function $_START(bFirst)   // 引数bFirst 初回のみtrueで呼ばれる
+    function $_START(sm,bFirst)   // smは StateManager, bFirstはbooleanで初回のみtrueで呼ばれる
     {
         if (bFirst)
         {
             PrintLn("START");
-            $m_sm.Goto($_SECOND);            
+            sm.Goto($_SECOND);            
         }
     }    
-    function $_SECOND(bFirst)
+    function $_SECOND(sm,bFirst)
     {
         if (bFirst)
         {
@@ -46,8 +46,8 @@ public class slagremote_unity_statemanager : MonoBehaviour {
         float  dbg_elapsedtime=0; //時間計測
 
         public void Goto(YVALUE func)      { m_next     = func; }
-        public void WaitCount(int c)       { m_waitcnt  = c;    }
-        public void WaitTime(float time)   { m_waittime = time; }
+        public void WaitCount(int c)       { m_waitcnt  = c;    }   //カウント分待つ
+        public void WaitTime(float time)   { m_waittime = time; }   //指定時間（秒）待つ
 
         public void Update(float deltaTime)
         {
