@@ -36,7 +36,7 @@ namespace slagtool.runtime.builtin
         {
             var o = get_ol_at(ol,n);
             if (o==null) return number.NaN;
-            if (o.GetType()==typeof(number)) return (number)o;
+            if (util.IsNumeric(o.GetType())) return util.ToNumber(o);
             number x;
             if (number.TryParse(o.ToString(),out x))
             {

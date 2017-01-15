@@ -38,7 +38,7 @@ function S_Q_START(sm,bFirst)
 
         Print("\n\n\n");
         Print("-----------------------------\n");
-        Print("!! 問題　＃ " + NUM + " !! \n");
+        Print("  !!   #  問題　＃  !! \n");
         Print("-----------------------------\n");
 
         sm.WaitTime(0.5);
@@ -139,8 +139,8 @@ function S_Q_CHECK(sm,bFirst)
         if (n2 == nm1 || n2 == nm3) { anyplace = anyplace + 1; }
         if (n3 == nm2 || n3 == nm1) { anyplace = anyplace + 1; }
 
-        Print("数字と場所が一致した         : " + rightplace + "個\n\n");
-        Print("数字が一致したが場所が異なる : " + anyplace + "個\n\n\n\n");
+        Print("数字と場所が一致       : " + rightplace + "個\n\n");
+        Print("異なる場所の数字と一致 : " + anyplace + "個\n\n\n\n");
 
         sm.WaitTime(1);
         sm.Goto(S_Q_TRY);

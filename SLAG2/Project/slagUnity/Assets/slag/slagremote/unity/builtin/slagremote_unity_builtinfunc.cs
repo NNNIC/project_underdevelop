@@ -15,7 +15,7 @@ public class slagremote_unity_builtinfunc {
     {
         if (bHelp)
         {
-            return "Print a string with break line." + NL + "ex)PrintLn(\"hoge!\");";
+            return "改行付き表示。例) PrintLn(\"hoge!\");";
         }
         
         var s = "";
@@ -34,7 +34,7 @@ public class slagremote_unity_builtinfunc {
     {
         if (bHelp)
         {
-            return "Print a string." + NL + "ex)Print(\"hoge!\");";
+            return "表示。 例) Print(\"hoge!\");";
         }
         kit.check_num_of_args(ol,1);
         var o = kit.get_ol_at(ol,0);
@@ -49,7 +49,7 @@ public class slagremote_unity_builtinfunc {
     {
         if (bHelp)
         {
-            return "Dump a variable." + NL +"ex) Dump(x);";
+            return "変数のDump。 例) Dump(x);";
         }
 
         if (ol==null) return "-null-";
@@ -118,7 +118,7 @@ public class slagremote_unity_builtinfunc {
     static string m_readtext;
     public static object F_ReadLineStart(bool bHelp, object[] ol, StateBuffer sb)
     {
-        if (bHelp) return "";
+        if (bHelp) return "GUI入力開始";
 
         m_readtext = null;
         var label = kit.get_string_at(ol,0);
@@ -127,7 +127,7 @@ public class slagremote_unity_builtinfunc {
     }
     public static object F_ReadLineDone(bool bHelp, object[] ol, StateBuffer sb)
     {
-        if (bHelp) return "";
+        if (bHelp) return "GUI入力取得";
 
         return m_readtext;
     }
@@ -136,7 +136,7 @@ public class slagremote_unity_builtinfunc {
     {
         if (bHelp)
         {
-            return "slagipc_unity_monobehaviourコンポネントを追加" + NL +
+            return "slagremote_unity_monobehaviourコンポネントを追加" + NL +
                    "フォーマット) var bhv = AddBehaviour([GameObject]);"+NL +
                    "　　　　　　　GameObject指定がない場合、slag実行メインのGameObjectに追加";
         }
@@ -157,9 +157,9 @@ public class slagremote_unity_builtinfunc {
     {
         if (bHelp)
         {
-            return "ステート管理作成" +NL+ 
+            return "ステート管理作成。" +NL+ 
                    "フォーマット) var sm = StateManager([GameObject]);" + NL +
-                   "slagipc_unity_statemanagerクラスに詳細あり";
+                   "slagremote_unity_statemanagerクラスに詳細あり";
         }
 
         slagremote_unity_statemanager sm = null;
@@ -189,7 +189,7 @@ public class slagremote_unity_builtinfunc {
         {
             return "GameObjectにメッセージを送る。メッセージ受信先が存在すれば指定関数を実行。"+NL+
                    "フォーマット) SendMsg(GameObject,名前[,パラメータ・・・])" + NL +
-                   "slagipc_unity_monoehaviourクラス内に詳細あり ";
+                   "slagremote_unity_monoehaviourクラス内に詳細あり ";
         }
         GameObject go   = null;
         if (ol.Length>0)

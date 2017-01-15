@@ -11,131 +11,45 @@ namespace slagtool.runtime.builtin
     {
         static string NL = kit.NL;
 
-        #region システム
-        public static object F_Sleep(bool bHelp, object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Sleep for the specified time."+NL+"Format: Sleep(sec)";
-            }
+        //#region システム
+        //public static object F_Sleep(bool bHelp, object[] ol,StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "指定時間Sleepする。　フォーマット) Sleep(sec)";
+        //    }
 
-            kit.check_num_of_args(ol,1);
+        //    kit.check_num_of_args(ol,1);
 
-            var x = kit.get_number_at(ol,0);
-            if (!number.IsNaN(x))
-            { 
-                x = x * 1000.0f;
-            }
-            else
-            {
-                x = 1000;
-            }
-            System.Threading.Thread.Sleep((int)x);
+        //    var x = kit.get_number_at(ol,0);
+        //    if (!number.IsNaN(x))
+        //    { 
+        //        x = x * 1000.0f;
+        //    }
+        //    else
+        //    {
+        //        x = 1000;
+        //    }
+        //    System.Threading.Thread.Sleep((int)x);
 
-            return null;
-        }
-        #endregion
+        //    return null;
+        //}
+        //#endregion
 
         public static object F_Hashtable(bool bHelp, object[] ol,StateBuffer sb)
         {
             if (bHelp)
             {
-                return "Create new hashtable." +NL + "ex) var t = hashtable();  t.a = 123; t.b=234;";
+                return "新規ハッシュテーブルの作成。" +NL + "例) var t = hashtable();  t.a = 123; t.b=234;";
             }
             return new System.Collections.Hashtable();
         }
-#if obs
-#region コンソール/デバッグ
-        public static object F_Print(bool bHelp,object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Print a string." + NL + "ex)Print(\"hoge!\");";
-            }
-            kit.check_num_of_args(ol,1);
-            var o = kit.get_ol_at(ol,0);
-            var s = kit.convert_escape(o);
-            sys.log(s);
-            UnityEngine.Debug.Log(s);
-            return null;
-        }
-        public static object F_Println(bool bHelp,object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Print a string with line break" + NL + "ex)PrintIn(\"hoge!!\");";
-            }
-            kit.check_num_of_args(ol,1);
-            var o = kit.get_ol_at(ol,0);
-            sys.logline(kit.convert_escape(o));
-            return null;
-        }
-        public static object F_Dump(bool bHelp,object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Dump a variable." + NL +"ex)Dump(x);";
-            }
-
-            if (ol==null) return "-null-";
-
-            Func<object,string> tostr = null;
-            Func<List<object>,string> join = (l)=> {
-                string t= null;
-                foreach(var e in l)
-                {
-                    if (t!=null) t+=",";
-                    t+= tostr(e);
-                }
-                return t;
-            };
-
-            tostr = (a) => {
-                if (a==null) return "-null-";
-                if (a.GetType()==typeof(List<object>))
-                {
-                    var l = (List<object>)a;
-                    return "(" + join(l) + ")";
-                }
-                return a.ToString();
-            };
-
-            string s = null;
-            foreach(var o in ol)
-            {
-                if (s!=null) s+=",";
-                s += tostr(o);
-            }
-
-            sys.logline(s);
-            UnityEngine.Debug.Log(s);
-
-            return s;
-        }
-        public static object F_ReadLine(bool bHelp, object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Read a line from console." + NL + "ex)var a = ReadLine(\"Input>\")";
-            }
-
-            kit.check_num_of_args(ol,1);
-            var s = kit.get_ol_at(ol,0);
-            Console.Write(s);
-
-            var line = Console.ReadLine();
-
-            return line;
-        }
-#endregion
-#endif
-
 #region 変換
         public static object F_ToNumber(bool bHelp, object[] ol,StateBuffer sb=null)
         {
             if (bHelp)
             {
-                return "Convert a string to a number." + NL + "ex)var a = ToNumber(\"123\");";
+                return "文字列またはNumber以外数値型の値をNumber型の数値に変換。" + NL + "例)var a = ToNumber(\"123\");";
             }
 
             kit.check_num_of_args(ol,1);
@@ -151,7 +65,7 @@ namespace slagtool.runtime.builtin
         {
             if (bHelp)
             {
-                return "Convert to type";
+                return "タイプ型を取得。例)var t = typeof(System.Int32);";
             }
 
             kit.check_num_of_args(ol,1);
@@ -165,7 +79,7 @@ namespace slagtool.runtime.builtin
         {
             if (bHelp)
             {
-                return "Cast the object to the specified type. ex)var i = Cast(\"System.Int16\",j);  or Cast(type,j); ";
+                return "値を指定タイプへキャスト。 例)var i = Cast(\"System.Int16\",j);  または Cast(type,j); ";
             }
 
             kit.check_num_of_args(ol,2);
@@ -189,9 +103,10 @@ namespace slagtool.runtime.builtin
         {
             if (bHelp)
             {
-                return "Make the array to the specific type array." +NL + 
-                       "Format: var new_l1 = ToArray(\"System.Int16\",l);" + NL +
-                       "        var type = typeof(\"System.Int16\"); var new_l2 = ToArray(\"System.Int16\",l);";
+                return "配列要素を指定タイプの要素へ変換する。" +NL + 
+                       "フォーマット) var new_l1 = ToArray(\"System.Int16\",l);" + NL +
+                       "        var type = typeof(\"System.Int16\"); var new_l2 = ToArray(\"System.Int16\",l);" + NL +
+                       "補足: 返還後は C#での Array<タイプ>へ変換される。";
             }
             kit.check_num_of_args(ol,2);
 
@@ -245,50 +160,50 @@ namespace slagtool.runtime.builtin
 #endregion
 
 #region 数値操作
-        public static object F_RandomInt(bool bHelp,object[] ol,StateBuffer sb) // 引数 0 -- 最少数  1 -- 最大数
-        {
-            if (bHelp)
-            {
-                return "Get a random integer." + NL + "format: RandomInt(min, max)";
-            }
+        //public static object F_RandomInt(bool bHelp,object[] ol,StateBuffer sb) // 引数 0 -- 最少数  1 -- 最大数
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Get a random integer." + NL + "format: RandomInt(min, max)";
+        //    }
 
-            kit.check_num_of_args(ol,2);
+        //    kit.check_num_of_args(ol,2);
 
-            var min = kit.get_number_at(ol,0);
-            var max = kit.get_number_at(ol,1);
-            var diff = max - min;
+        //    var min = kit.get_number_at(ol,0);
+        //    var max = kit.get_number_at(ol,1);
+        //    var diff = max - min;
 
-            var r = new System.Random(DateTime.Now.Millisecond);
-            var i = r.Next((int)diff+1);
+        //    var r = new System.Random(DateTime.Now.Millisecond);
+        //    var i = r.Next((int)diff+1);
            
-            return (number)(min + i);
-        }
-        public static object F_ToInt(bool bHelp,object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Conver a number to an integer number.";
-            }
+        //    return (number)(min + i);
+        //}
+        //public static object F_ToInt(bool bHelp,object[] ol,StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Conver a number to an integer number.";
+        //    }
 
-            kit.check_num_of_args(ol,1);
+        //    kit.check_num_of_args(ol,1);
 
-            var x = kit.get_number_at(ol,0);
-            if (!number.IsNaN(x))
-            {
-                var i = (int)x;
-                return (number)i;
-            }
-            return 0;
-        }
-        public static object F_Float(bool bHelp,object[] ol, StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Cast number to float.";
-            }
-            var x = kit.get_number_at(ol,0);
-            return (float)x;
-        }
+        //    var x = kit.get_number_at(ol,0);
+        //    if (!number.IsNaN(x))
+        //    {
+        //        var i = (int)x;
+        //        return (number)i;
+        //    }
+        //    return 0;
+        //}
+        //public static object F_Float(bool bHelp,object[] ol, StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Cast number to float.";
+        //    }
+        //    var x = kit.get_number_at(ol,0);
+        //    return (float)x;
+        //}
         //public static object F_CastInt32(bool bHelp,object[] ol, StateBuffer sb)
         //{
         //    if (bHelp)
@@ -298,236 +213,236 @@ namespace slagtool.runtime.builtin
         //    var x = kit.get_number_at(ol,0);
         //    return (System.Int32)x;
         //}
-        public static object F_Int(bool bHelp,object[] ol, StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Cast numner to int";
-            }
-            var x = kit.get_number_at(ol,0);
-            return (System.Int32)x;
-        }
+        //public static object F_Int(bool bHelp,object[] ol, StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Cast numner to int";
+        //    }
+        //    var x = kit.get_number_at(ol,0);
+        //    return (System.Int32)x;
+        //}
 #endregion
 
 #region 文字列操作
-        public static object F_Substring(bool bHelp, object[] ol, StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Substring. see c# string.substring.";
-            }
+        //public static object F_Substring(bool bHelp, object[] ol, StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Substring. see c# string.substring.";
+        //    }
 
-            if (ol==null) return null;
-            if (ol.Length==2)
-            {
-                var s = ol[0].ToString();
-                var n = kit.get_number_at(ol,1);
-                return s.Substring((int)n);
-            }
-            else if (ol.Length==3)
-            {
-                var s = ol[0].ToString();
-                var n = kit.get_number_at(ol,1);
-                var c = kit.get_number_at(ol,2);
-                return s.Substring((int)n,(int)c);
-            }
+        //    if (ol==null) return null;
+        //    if (ol.Length==2)
+        //    {
+        //        var s = ol[0].ToString();
+        //        var n = kit.get_number_at(ol,1);
+        //        return s.Substring((int)n);
+        //    }
+        //    else if (ol.Length==3)
+        //    {
+        //        var s = ol[0].ToString();
+        //        var n = kit.get_number_at(ol,1);
+        //        var c = kit.get_number_at(ol,2);
+        //        return s.Substring((int)n,(int)c);
+        //    }
 
-            kit.error("Substring syntax error");
+        //    kit.error("Substring syntax error");
 
-            return null;
-        }
+        //    return null;
+        //}
 
 #endregion
 
 #region 配列操作
-        public static object F_ListSize(bool bHelp,object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Get size of the list.";
-            }
-            kit.check_num_of_args(ol,1);
+        //public static object F_ListSize(bool bHelp,object[] ol,StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Get size of the list.";
+        //    }
+        //    kit.check_num_of_args(ol,1);
 
-            var list = kit.get_list_at(ol,0);
-            if (list!=null)
-            { 
-                return (number)list.Count;
-            }
-            return (number)0;
-        }
-        public static object F_ListCombine(bool bHelp, object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Combine list or element." + NL +"ex) var a = ListCombine((1,2),(3,4));";
-            }
+        //    var list = kit.get_list_at(ol,0);
+        //    if (list!=null)
+        //    { 
+        //        return (number)list.Count;
+        //    }
+        //    return (number)0;
+        //}
+        //public static object F_ListCombine(bool bHelp, object[] ol,StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Combine list or element." + NL +"ex) var a = ListCombine((1,2),(3,4));";
+        //    }
 
-            var nl = new List<object>();
-            if (ol!=null) for(int i = 0; i<ol.Length; i++)
-            {
-                var al = kit.get_list_at(ol,i);
-                if (al!=null)
-                {
-                    nl.AddRange(al);
-                }
-                else
-                {
-                    var o = kit.get_ol_at(ol,i);
-                    if (o!=null)
-                    {
-                        nl.Add(o);
-                    }
-                }
-            }
-            return (object)nl;
-        }
-        public static object F_ListSelectRandom(bool bHelp,object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Select a elemenet in the list at random" + NL + "var a = ListSelectRandom(1,2,3);";
-            }
+        //    var nl = new List<object>();
+        //    if (ol!=null) for(int i = 0; i<ol.Length; i++)
+        //    {
+        //        var al = kit.get_list_at(ol,i);
+        //        if (al!=null)
+        //        {
+        //            nl.AddRange(al);
+        //        }
+        //        else
+        //        {
+        //            var o = kit.get_ol_at(ol,i);
+        //            if (o!=null)
+        //            {
+        //                nl.Add(o);
+        //            }
+        //        }
+        //    }
+        //    return (object)nl;
+        //}
+        //public static object F_ListSelectRandom(bool bHelp,object[] ol,StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Select a elemenet in the list at random" + NL + "var a = ListSelectRandom(1,2,3);";
+        //    }
 
-            kit.check_num_of_args(ol,1);
+        //    kit.check_num_of_args(ol,1);
 
-            var list = kit.get_list_at(ol,0);
-            if (list!=null)
-            { 
-                var rand = new Random(DateTime.Now.Millisecond);
-                var n = rand.Next();
-                var a = n % list.Count;
+        //    var list = kit.get_list_at(ol,0);
+        //    if (list!=null)
+        //    { 
+        //        var rand = new Random(DateTime.Now.Millisecond);
+        //        var n = rand.Next();
+        //        var a = n % list.Count;
              
-                return list[a];
-            }
-            return null;
-        }
-        public static object F_ListRemove(bool bHelp,object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Remove a element from a list." + NL + "Format: var l = ListRemove(list,element);";
-            }
-            kit.check_num_of_args(ol,2);
+        //        return list[a];
+        //    }
+        //    return null;
+        //}
+        //public static object F_ListRemove(bool bHelp,object[] ol,StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Remove a element from a list." + NL + "Format: var l = ListRemove(list,element);";
+        //    }
+        //    kit.check_num_of_args(ol,2);
 
-            var list = kit.get_list_at(ol,0);
-            var s    = kit.get_ol_at(ol,1);
-            if (list==null || s==null) return null;
-            list.Remove(s);
+        //    var list = kit.get_list_at(ol,0);
+        //    var s    = kit.get_ol_at(ol,1);
+        //    if (list==null || s==null) return null;
+        //    list.Remove(s);
 
-            return list;
-        }
-        public static object F_ListShuffle(bool bHelp,object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Shuffle a list.";
-            }
-            kit.check_num_of_args(ol,1);
+        //    return list;
+        //}
+        //public static object F_ListShuffle(bool bHelp,object[] ol,StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Shuffle a list.";
+        //    }
+        //    kit.check_num_of_args(ol,1);
 
-            var list = kit.get_list_at(ol,0);
-            if (list!=null)
-            { 
-                var nl = new List<object>();
-                var rand = new Random();
-                if (list!=null)
-                { 
-                    while(list.Count>0)
-                    {
-                        var n = rand.Next() % list.Count;
-                        var s = list[n];
-                        list.RemoveAt(n);
-                        nl.Add(s);
-                    }
-                }
-                return nl;
-            }
-            return null;
-        }
-        public static object F_ListAt(bool bHelp, object[] ol,StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Get a element at the number of the list.";
-            }
+        //    var list = kit.get_list_at(ol,0);
+        //    if (list!=null)
+        //    { 
+        //        var nl = new List<object>();
+        //        var rand = new Random();
+        //        if (list!=null)
+        //        { 
+        //            while(list.Count>0)
+        //            {
+        //                var n = rand.Next() % list.Count;
+        //                var s = list[n];
+        //                list.RemoveAt(n);
+        //                nl.Add(s);
+        //            }
+        //        }
+        //        return nl;
+        //    }
+        //    return null;
+        //}
+        //public static object F_ListAt(bool bHelp, object[] ol,StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Get a element at the number of the list.";
+        //    }
 
-            kit.check_num_of_args(ol,2);
+        //    kit.check_num_of_args(ol,2);
 
-            var list = kit.get_list_at(ol,0);
-            var n    = kit.get_number_at(ol,1);
-            if (list!=null && !number.IsNaN(n) && n < list.Count)
-            {
-                return list[(int)n];
-            }
-            return null;
-        }
-        public static object F_ListSort(bool bHelp, object[] ol, StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "Sort the list";
-            }
+        //    var list = kit.get_list_at(ol,0);
+        //    var n    = kit.get_number_at(ol,1);
+        //    if (list!=null && !number.IsNaN(n) && n < list.Count)
+        //    {
+        //        return list[(int)n];
+        //    }
+        //    return null;
+        //}
+        //public static object F_ListSort(bool bHelp, object[] ol, StateBuffer sb)
+        //{
+        //    if (bHelp)
+        //    {
+        //        return "Sort the list";
+        //    }
 
-            var src = kit.get_list_at(ol,0);
-            if (src==null) kit.error("ListSort arg is not valid.");
-            var l = new List<object>(src);
-            if (l.Count>0 && l[0].GetType()==typeof(number))
-            {
-                l.Sort((a,b)=> (int)Math.Ceiling((number)a - (number)b));
-            }
-            else
-            { 
-                l.Sort((a,b)=>string.Compare(a.ToString(),b.ToString()));
-            }
-            return l;
-        }
+        //    var src = kit.get_list_at(ol,0);
+        //    if (src==null) kit.error("ListSort arg is not valid.");
+        //    var l = new List<object>(src);
+        //    if (l.Count>0 && l[0].GetType()==typeof(number))
+        //    {
+        //        l.Sort((a,b)=> (int)Math.Ceiling((number)a - (number)b));
+        //    }
+        //    else
+        //    { 
+        //        l.Sort((a,b)=>string.Compare(a.ToString(),b.ToString()));
+        //    }
+        //    return l;
+        //}
 #endregion
 
-#region Assembley
-        public static object F_GetAllAsm(bool bHelp, object[] ol, StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "";
-            }
-            foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
-            {
-                Console.WriteLine(asm.FullName);
-            }
-            return null;
-        }
-        public static object F_FindType(bool bHelp, object[] ol, StateBuffer sb)
-        {
-            if (bHelp)
-            {
-                return "";
-            }
+//#region Assembley
+//        public static object F_GetAllAsm(bool bHelp, object[] ol, StateBuffer sb)
+//        {
+//            if (bHelp)
+//            {
+//                return "";
+//            }
+//            foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
+//            {
+//                Console.WriteLine(asm.FullName);
+//            }
+//            return null;
+//        }
+//        public static object F_FindType(bool bHelp, object[] ol, StateBuffer sb)
+//        {
+//            if (bHelp)
+//            {
+//                return "";
+//            }
 
-            var _type      = kit.get_string_at(ol,0).ToUpper();
-#if nounity
-            foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
-            {
-                foreach(var ti in asm.DefinedTypes)
-                {
-                    if (ti.FullName.ToUpper() == _type)
-                    {
-                        Console.WriteLine("Found Type:" + ti.ToString());
+//            var _type      = kit.get_string_at(ol,0).ToUpper();
+//#if nounity
+//            foreach(var asm in System.AppDomain.CurrentDomain.GetAssemblies())
+//            {
+//                foreach(var ti in asm.DefinedTypes)
+//                {
+//                    if (ti.FullName.ToUpper() == _type)
+//                    {
+//                        Console.WriteLine("Found Type:" + ti.ToString());
 
-                        var typ = ti.AsType();
+//                        var typ = ti.AsType();
 
-                        foreach(var m in ti.GetMethods())
-                        {
-                            Console.WriteLine(m.ToString());
-                        }
+//                        foreach(var m in ti.GetMethods())
+//                        {
+//                            Console.WriteLine(m.ToString());
+//                        }
 
-                        return ti.AsType();
-                    }
-                }
-            }
-#endif
-            return null;
-        }
+//                        return ti.AsType();
+//                    }
+//                }
+//            }
+//#endif
+//            return null;
+//        }
 
-#endregion
+//#endregion
 
     }
 }

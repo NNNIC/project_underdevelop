@@ -132,6 +132,8 @@ namespace slagmon
                         { 
                             textBox1_log.AppendText("Send Command : " + i + Environment.NewLine);
 
+                            _if_help_add(i);
+
                             m_pipe.Write(i, "unity");
 
                             _loadScriptWhenCmdHas(i);
@@ -154,6 +156,29 @@ namespace slagmon
                 cmdlist = File.ReadAllLines(Path.Combine(m_work_path, tokens[1]),Encoding.UTF8);
             } catch { return false; }
             return true;
+        }
+        private void _if_help_add(string i)
+        {
+            if (i.ToUpper()!="HELP") return;
+
+            var NL  =  Environment.NewLine;
+            var msg =        "# モニターコマンド #" 
+                      + NL + ": load  : ファイルロード。 ファイル：*.js|*.bin|*.base64|*.cmd"
+                      + NL + ": run   : 実行"
+                      + NL + ": reset : リセット"
+                      + NL + ": debug : デバッグモード表示または指定。引数 0,1,2"
+                      + NL + ": bp    : ブレイクポインタ表示または設定。"
+                      + NL + ": step  : ステップ実行"
+                      + NL + ": wd    : ワーキングディレクトリ表示または指定。 引数を指定すると設定"
+                      + NL + ": savetmpbin   : [セーブテスト] tmp.bin作成"
+                      + NL + ": savetmpbase64: [セーブテスト] tmp.base64作成"
+                      + NL + ": loadtmpbin   : [セーブテスト] tmp.bin読込"
+                      + NL + ": loadtmpbase64: [セーブテスト] tmp.base64読込"
+                      + NL + "";
+
+
+            textBox1_log.AppendText(msg);
+
         }
 
 

@@ -11,7 +11,10 @@ public class guiDisplay : MonoBehaviour
     void Start()
     {
         V = this;
+
+        WriteLine("slag monitor からコマンドを入力して下さい。"+Environment.NewLine);
     }
+
 
     void OnGUI()
     {
