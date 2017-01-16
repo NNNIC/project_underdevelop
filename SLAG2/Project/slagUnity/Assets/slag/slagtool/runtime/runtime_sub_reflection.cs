@@ -58,7 +58,18 @@ namespace slagtool.runtime
             {
                 cache_util.RecordCache(name,type,paramtypes,find_m);
                 var p2 = ChangeObjs(parameters,find_m.GetParameters());
-                return find_m.Invoke(obj,p2);
+                if (obj==null && !find_m.IsStatic)
+                { 
+                    if (name == "TOSTRING")
+                    {
+                        return type.ToString();
+                    }
+                    throw new System.Exception("methods requires class pointer but it's null.");
+                }
+                else
+                { 
+                    return find_m.Invoke(obj,p2);
+                }
             }
 
             throw new SystemException("Cannot find method : " + type + "." + name + "(API is none or parameter typs not match.)");

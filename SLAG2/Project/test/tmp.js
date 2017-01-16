@@ -3,11 +3,10 @@
  TMP.JS
 
 */
+"using UnityEngine";
 
-function Hoge()
-{
-    PrintLn("Called Hoge!");
-}
+var t = typeof(Renderer);
+PrintLn(t.toString());
+PrintLn(t);
 
-var $f = Hoge;
-$f();
+
