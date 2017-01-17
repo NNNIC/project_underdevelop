@@ -64,8 +64,9 @@ Hashtable $ht = util_create_msgobj(string msg, Color col);
           $ht.setmsg(string msg);     // メッセージ変更
           $ht.blink(bool onoff);      // 点滅
           $ht.setcol(Color col);      // 色
-          $ht.setbgsize(int x, int y);// ＢＧのサイズを指定
-          $ht.setcol(Color col);      // ＢＧ色 (透明も可能)
+          $ht.setbgsize(int x);       // ＢＧの横サイズを指定
+　　　　　$ht.setbgsize_reset();      // ＢＧのサイズをリセット（現文字）
+          $ht.setbgcol(Color col);    // ＢＧ色 (透明も可能)
           $ht.go  --- GameObject;
           $ht.bhv --- slagremote_unity_monobehaviour
 

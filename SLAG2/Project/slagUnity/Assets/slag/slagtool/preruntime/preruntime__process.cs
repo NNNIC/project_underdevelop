@@ -88,6 +88,7 @@ namespace slagtool.preruntime
                 vt = Checktype.ChangeIfType(vt, m_prefix_list);
                 v.list[0] = vt;
 
+#if obs
                 //リスト最後尾がfunc要素であれば、引数を対象に
                 var ve =   v.list_at(v.list.Count-1);
                 if (ve!=null && ve.IsType(YDEF.sx_func))
@@ -100,6 +101,23 @@ namespace slagtool.preruntime
                         vf.list[1] = v2;
                     }
                 }
+#endif
+                //リスト中にfunc要素があれば、引数を対象に。
+                for(int i = 0; i<v.list_size(); i++)
+                {
+                    var ve = v.list_at(i);
+                    if (ve!=null && ve.IsType(YDEF.sx_func))
+                    {
+                        var vf = ve.FindValueByTravarse(YDEF.sx_func);
+                        var v2 = vf.list_at(1);
+                        if (v2!=null)
+                        { 
+                            v2 = _convert(v2);
+                            vf.list[1] = v2;
+                        }
+                    }
+                }
+
                 return v;
             }
             if (v.type == YDEF.get_type(YDEF.sx_def_func_clause))//ファンクション宣言節か？
@@ -111,7 +129,9 @@ namespace slagtool.preruntime
             }
             if (v.type == YDEF.get_type(YDEF.sx_def_var_clause))//変数宣言節か？
             {
-                //宣言名は対象とせず、アサイン値があれば対象へ
+                //  宣言名は対象とせず、アサイン値があれば対象へ
+                //var pv = v.list_at(0);
+                //if (pv!=null) _convert(pv);
                 var nv = v.list_at(2);
                 if (nv!=null) _convert(nv);
                 return v;

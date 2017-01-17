@@ -94,8 +94,10 @@ public class slagremote_unity_statemanager : MonoBehaviour {
         }
         //便宜： GameObject、 本コンポネントやunity_monobehaviourが取得できる機能を提供
         public slagremote_unity_statemanager   smco;
-        public GameObject                   go  {  get { return smco.gameObject; } }
+        public GameObject                      go  {  get { return smco.gameObject; } }
         public slagremote_unity_monobehaviour  bhv {  get { return smco.GetComponent<slagremote_unity_monobehaviour>();}  }
+        //便宜: ユーザオブジェ 
+        public object usr;  
     }
 
     StateManager m_sm;

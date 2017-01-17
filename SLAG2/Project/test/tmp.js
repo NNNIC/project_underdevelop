@@ -5,8 +5,6 @@
 */
 "using UnityEngine";
 
-var t = typeof(Renderer);
-PrintLn(t.toString());
-PrintLn(t);
 
-
+var $go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+$go.GetComponent(typeof(Renderer)).material = new Material(Shader.Find("Unlit/Color"));
