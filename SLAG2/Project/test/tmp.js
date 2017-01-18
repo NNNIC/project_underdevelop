@@ -6,5 +6,13 @@
 "using UnityEngine";
 
 
-var $go = GameObject.CreatePrimitive(PrimitiveType.Quad);
-$go.GetComponent(typeof(Renderer)).material = new Material(Shader.Find("Unlit/Color"));
+function $_HOGE($sm, $bFirst)
+{
+    var i = $sm.usrobj;
+    PrintLn(i);
+}
+
+var sm = statemanager();
+sm.usrobj = 1;
+sm.goto($_HOGE);
+

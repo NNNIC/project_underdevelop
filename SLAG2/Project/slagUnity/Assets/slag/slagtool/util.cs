@@ -168,7 +168,37 @@ namespace slagtool
             var bytes = GetBin();
             return Convert.ToBase64String(bytes);
         }
+                [System.Serializable]
+        public class SaveFormat
+        {
+            public Guid guid;
+            public string[] ids;
+            public List<YVALUE> list;
+        }
+
+        private SaveFormat deserialize(byte[] bin)
+        {
+            var bf = new BinaryFormatter();
+            using (var ms = new MemoryStream(bin))
+            {
+                return (SaveFormat)bf.Deserialize(ms);
+            }
+        }
+        private byte[] serialize(List<YVALUE> list, Guid guid, string[] ids)
+        {
+            var d = new SaveFormat();
+            d.guid = guid;
+            d.ids = ids;
+            d.list = list;
+            var bf = new BinaryFormatter();
+            using (var ms = new MemoryStream())
+            {
+                bf.Serialize(ms, d);
+                return ms.ToArray();
+            }
+        }
         #endregion
+
         public void Run()
         {
             if (m_exelist==null || m_exelist.Count==0 )
@@ -184,6 +214,8 @@ namespace slagtool
             run_script.run(m_exelist[0], m_statebuf);
             Debug.Log(Time.realtimeSinceStartup - save);
         }
+
+
         #region 関数関連
         public bool ExistFunc(string funcname)
         {
@@ -372,36 +404,18 @@ namespace slagtool
         }
         #endregion
 
-        [System.Serializable]
-        public class SaveFormat
+        #region デバッグ
+        public string GetFileName(int id, bool base1=false)
         {
-            public Guid guid;
-            public string[] ids;
-            public List<YVALUE> list;
-        }
+            id = base1 ? id-- : id;
 
-        private SaveFormat deserialize(byte[] bin)
-        {
-            var bf = new BinaryFormatter();
-            using (var ms = new MemoryStream(bin))
+            if (id>=0 && m_idlist!=null && id < m_idlist.Length)
             {
-                return (SaveFormat)bf.Deserialize(ms);
+                return m_idlist[id];
             }
+            return null;
         }
-        private byte[] serialize(List<YVALUE> list, Guid guid, string[] ids)
-        {
-            var d = new SaveFormat();
-            d.guid = guid;
-            d.ids = ids;
-            d.list = list;
-            var bf = new BinaryFormatter();
-            using (var ms = new MemoryStream())
-            {
-                bf.Serialize(ms, d);
-                return ms.ToArray();
-            }
-        }
-
+        #endregion
     }
     public class util
     {

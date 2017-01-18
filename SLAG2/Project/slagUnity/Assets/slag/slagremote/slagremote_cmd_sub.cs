@@ -167,7 +167,7 @@ namespace slagremote
         {
             if (slag!=null) m_slag = slag;
 
-            UpdateClear();
+            //UpdateClear();
             var sw = new System.Diagnostics.Stopwatch();
             sw.Start();
             if (slagtool.sys.USETRY)
@@ -198,7 +198,150 @@ namespace slagremote
             UnityEngine.GameObject.Find("slgctl_main").SendMessage("Reset");
         }
 
-        public static void AddBreakPoint(string[] plist) //p0 = line , p1 = fileid   
+        #region BP
+        public static int? m_curFild_id=null; //base 0
+        public static void BP(string[] plist)
+        {
+            var NL = Environment.NewLine;
+
+            if (plist==null||plist.Length==0)
+            {
+                BP_List();
+                return;
+            }
+
+            var p0 = plist[0].ToLower();
+            string p1 = plist.Length > 1 ? plist[1].ToLower() : null;
+            if (Array.FindIndex(new string[] {"h","help"}, i=>i==p0) >= 0)
+            {
+                var helpmsg = 
+                                "bp - ブレイクポインタのリスト表示                         " + NL +
+                                "bp c|clear|r|reset - ブレイクポインタのクリア             " + NL +
+                                "bp d NUM - NUM行のブレイクポインタ削除                    " + NL +
+                                "bp NUM - カレントファイルのnum行目にブレイクポインタ設定  " + NL +
+                                "bp f FID - file FIDのファイルに変更                       " + NL +
+                                "bp f - BP設定対象のファイル名表示                         " + NL +
+                                "                                                          " + NL +
+                                "bpを設定すると debug 1も同時設定される。                  " + NL ;
+
+                wk.SendWriteLine(helpmsg);
+                return;
+            }
+
+            if (Array.FindIndex(new string[] {"c","clear","r","reset" }, i=>i==p0) >=0)
+            {
+                slagtool.YDEF_DEBUG.ResetAllBreakpoints();
+                wk.SendWriteLine("全てのブレイクポイントをクリアしました。");
+                return;
+            }
+
+            if (p0 == "d" && !string.IsNullOrEmpty(p1))
+            {
+                var num = intparse(p1);
+                if (num==null||(int)num<=0)
+                {
+                    wk.SendWriteLine("削除の行番号が不正です。");
+                    return;
+                }
+                int dnum = (int)num - 1;
+                var b = slagtool.YDEF_DEBUG.DelBreakpoint(dnum,(m_curFild_id!=null ? (int)m_curFild_id: 0));
+                if (b)
+                {
+                    wk.SendWriteLine("削除しました。");
+                }
+                else
+                {
+                    wk.SendWriteLine("削除の入力が不正です。");
+                }
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(p0))
+            {
+                var num = intparse(p0);
+                if (num==null||(int)num<=0)
+                {
+                    wk.SendWriteLine("設定行番号が不正です。");
+                    return;
+                }
+                int dnum = (int)num - 1;
+                var fileid = (int)(m_curFild_id!=null ? (int)m_curFild_id: 0);
+                var file = m_slag.GetFileName(fileid);
+                if (file == null)
+                {
+                    wk.SendWriteLine("設定ファイルが不正です。");
+                    return;
+                }
+
+                slagtool.YDEF_DEBUG.AddBreakpoint(dnum,fileid);
+                wk.SendWriteLine("設定しました。");
+
+                if (slagtool.sys.DEBUGLEVEL==0)
+                {
+                    slagtool.sys.DEBUGLEVEL=1;
+                    wk.SendWriteLine("デバッグレベル１を設定しました。");
+                }
+
+                return;
+            }
+
+            if (p0=="f" && !string.IsNullOrEmpty(p1))
+            {
+                var num = intparse(p0);
+                if (num==null || (int)num<=0)
+                {
+                    wk.SendWriteLine("ファイルＩＤが不正です。");
+                    return;
+                }
+                int dnum = (int)num - 1;
+                var file = m_slag.GetFileName(dnum);
+                if (file==null)
+                {
+                    wk.SendWriteLine("ファイルＩＤが不正です。");
+                    return;
+                }
+                wk.SendWriteLine("カレントファイル(" + num + "):" + file );
+                m_curFild_id = dnum;
+                return;
+            }
+            if (p0=="f" && string.IsNullOrEmpty(p1))
+            {
+                int dnum = m_curFild_id!=null ? (int)m_curFild_id : 0;
+                var file = m_slag.GetFileName(dnum);
+                if (file==null)
+                {
+                    wk.SendWriteLine("ファイルが取得できません。");
+                    return;
+                }
+                wk.SendWriteLine("カレントファイル(" + (dnum+1) + "):" + file );
+            }
+
+        }
+        private static void BP_List()
+        {
+            if (slagtool.YDEF_DEBUG.breakpoints==null || slagtool.YDEF_DEBUG.breakpoints.Count==0)
+            {
+                wk.SendWriteLine("ブレイクポインタは設定されていません。");
+                return;
+            }
+            var keylist = new List<int>(slagtool.YDEF_DEBUG.breakpoints.Keys);
+            keylist.Sort();
+            foreach(var k in keylist)
+            {
+                if (slagtool.YDEF_DEBUG.breakpoints[k]==null||slagtool.YDEF_DEBUG.breakpoints[k].Count==0) continue;
+                var file = m_slag.GetFileName(k);
+                wk.SendWriteLine("====" + (k+1).ToString("00") + ":" + file );
+                var lines = new List<int>(slagtool.YDEF_DEBUG.breakpoints[k]);
+                lines.Sort();
+                for(int n = 0; n<lines.Count;n++)
+                {
+                    wk.SendWriteLine("Line:" + (lines[n]+1));
+                }
+                wk.SendWriteLine("===");
+            }
+        }
+
+        private static void AddBreakPoint(string[] plist) //p0 = line , p1 = fileid   
         {
             int line   = -1;
             int fileid = -1;
@@ -225,6 +368,7 @@ namespace slagremote
                 wk.SendWriteLine("Breakpoint needs parameters");
             }
         }
+        #endregion
 
         #region STOP and RESUME
         public static void Stop()
@@ -270,6 +414,18 @@ namespace slagremote
             var s = slagtool.runtime.builtin.builtin_func.Help();
             wk.SendWriteLine(s);
         }
+
+        //--- tool for this class
+        private static int? intparse(string s)
+        {
+            int n;
+            if (int.TryParse(s, out n))
+            {
+                return n;
+            }
+            return null;
+        }
+
 
         //-- Update用
         private static List<string> m_updateFunc;

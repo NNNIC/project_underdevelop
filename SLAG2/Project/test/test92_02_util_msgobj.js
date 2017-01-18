@@ -14,13 +14,14 @@ function _util_create_msgobj_setbgcol($ht,$col){
     $ht.bggo.GetComponent(typeof(Renderer)).material.SetColor("_Color",$col); 
 }
 // ステート
-function _util_create_msgobj_$_IDLE($sm,$bFirst) {}
+function _util_create_msgobj_$_IDLE($sm,$bFirst) { /*PrintLn("IDLE");*/}
 function _util_create_msgobj_$_BLINK_OFF($sm,$bFirst) {
-    if (bFirst)
+    //PrintLn("OFF");
+    if ($bFirst)
     {
-        var $ht = $sm.usr;
-        $ht.child.setenable(false);
-        $sm.WaitTime(0.5);
+        var $ht = $sm.usrobj;
+        $ht.child.SetActive(false);
+        $sm.WaitTime(0.2);
     }
     else
     {
@@ -28,11 +29,12 @@ function _util_create_msgobj_$_BLINK_OFF($sm,$bFirst) {
     }
 }
 function _util_create_msgobj_$_BLINK_ON($sm,$bFirst) {
-    if (bFirst)
+    //PrintLn("ON");
+    if ($bFirst)
     {
-        var $ht = $sm.usr;
-        $ht.child.setenable(true);
-        $sm.WaitTime(0.5);
+        var $ht = $sm.usrobj;
+        $ht.child.SetActive(true);
+        $sm.WaitTime(0.2);
     }
     else
     {
@@ -40,9 +42,9 @@ function _util_create_msgobj_$_BLINK_ON($sm,$bFirst) {
     }
 }
 function _util_create_msgobj_$_BLINK_STOP($sm,$bFirst) {
-    if (bFirst)
+    if ($bFirst)
     {
-        $ht.child.setenable(true);
+        $ht.child.SetActive(true);
         $sm.Goto(_util_create_msgobj_$_IDLE);
     }
 }
@@ -81,8 +83,8 @@ function util_create_msgobj($msg)
     $ht.bggo.transform.localScale = new Vector3($bo.size.x,$bo.size.y,1);
     
     //statemachine
-    $ht.sm     = StateManager($ht.go);
-    $ht.sm.usr = $ht;
+    $ht.sm        = StateManager($ht.go);
+    $ht.sm.usrobj = $ht;
     $ht.sm.Goto(_util_create_msgobj_$_IDLE);
     
     //api

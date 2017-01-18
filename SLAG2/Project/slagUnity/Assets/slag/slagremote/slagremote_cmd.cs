@@ -51,7 +51,7 @@ namespace slagremote
 
             switch (cmd)
             {
-                case COMMAND.BP:    cmd_sub.AddBreakPoint(plist);      return null; 
+                case COMMAND.BP:    cmd_sub.BP(plist);      return null; 
                 case COMMAND.STEP:  cmd_sub.Step(p1);                  return null;
                 case COMMAND.RESUME:cmd_sub.Resume();                  return null;
                 case COMMAND.QUIT:  break;
@@ -83,7 +83,7 @@ namespace slagremote
 
                 case COMMAND.RUN:          cmd_sub.Run();                                              break;
                 case COMMAND.STEP:         break;
-                case COMMAND.BP:           cmd_sub.AddBreakPoint(plist);                               break;
+                case COMMAND.BP:           cmd_sub.BP(plist);                               break;
                 case COMMAND.PRINT:        break;
                 case COMMAND.STOP:         cmd_sub.Stop();                                             break;
                 case COMMAND.RESUME:       break;

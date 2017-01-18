@@ -37,6 +37,8 @@ public class slagremote_unity_statemanager : MonoBehaviour {
 
     public class StateManager
     {
+        public slagremote_unity_statemanager owner;
+
         YVALUE m_cur;
         YVALUE m_next;
 
@@ -76,7 +78,7 @@ public class slagremote_unity_statemanager : MonoBehaviour {
                 if (sys.USETRY)
                 {
                     try {  
-            	        cmd_sub.m_slag.CallFunc(m_cur,new object[2] { this, bFirst });
+            	        cmd_sub.m_slag.CallFunc(m_cur,new object[2] { owner, bFirst });
                     }
                     catch (System.Exception e)
                     {
@@ -87,17 +89,16 @@ public class slagremote_unity_statemanager : MonoBehaviour {
                 }
                 else
                 { 
-                    cmd_sub.m_slag.CallFunc(m_cur,new object[2] { this,bFirst });
+                    cmd_sub.m_slag.CallFunc(m_cur,new object[2] { owner,bFirst });
                 }
                 dbg_elapsedtime += Time.realtimeSinceStartup - save;
             }
         }
         //便宜： GameObject、 本コンポネントやunity_monobehaviourが取得できる機能を提供
-        public slagremote_unity_statemanager   smco;
-        public GameObject                      go  {  get { return smco.gameObject; } }
-        public slagremote_unity_monobehaviour  bhv {  get { return smco.GetComponent<slagremote_unity_monobehaviour>();}  }
-        //便宜: ユーザオブジェ 
-        public object usr;  
+        //public GameObject go { get { return smco.gameObject; } }
+        //public slagremote_unity_monobehaviour bhv { get { return smco.GetComponent<slagremote_unity_monobehaviour>(); } }
+        ////便宜: ユーザオブジェ 
+        //public object usrobj;
     }
 
     StateManager m_sm;
@@ -106,7 +107,7 @@ public class slagremote_unity_statemanager : MonoBehaviour {
         if (m_sm==null)
         {   
             m_sm = new StateManager();
-            m_sm.smco = this;
+            m_sm.owner = this;
         }
 	}
 
@@ -133,4 +134,10 @@ public class slagremote_unity_statemanager : MonoBehaviour {
     {
         m_sm.WaitTime(time);
     }
+    //便宜： GameObject、 本コンポネントやunity_monobehaviourが取得できる機能を提供
+    //public slagremote_unity_statemanager   smco;
+    //public GameObject                      go  {  get { return smco.gameObject; } }
+    public slagremote_unity_monobehaviour  bhv {  get { return GetComponent<slagremote_unity_monobehaviour>();}  }
+    //便宜: ユーザオブジェ 
+    public object usrobj;
 }

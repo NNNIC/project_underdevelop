@@ -210,15 +210,17 @@ namespace slagtool
                 breakpoints.Add(file_id,linelist);
             }
         }
-        public static void DelBreakpoint(int line, int file_id)
+        public static bool DelBreakpoint(int line, int file_id)
         {
-            if (breakpoints==null) return;
-            if (!breakpoints.ContainsKey(file_id)) return;
+            if (breakpoints==null) return false;
+            if (!breakpoints.ContainsKey(file_id)) return false;
             var list = breakpoints[file_id];
             if (list.Contains(line))
             {
                 list.Remove(line);
+                return true;
             }
+            return false;
         }
         public static void ResetAllBreakpoints()
         {
