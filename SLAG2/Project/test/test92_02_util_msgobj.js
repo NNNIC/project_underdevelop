@@ -44,12 +44,14 @@ function _util_create_msgobj_$_BLINK_ON($sm,$bFirst) {
 function _util_create_msgobj_$_BLINK_STOP($sm,$bFirst) {
     if ($bFirst)
     {
+        var $ht = $sm.usrobj;
         $ht.child.SetActive(true);
         $sm.Goto(_util_create_msgobj_$_IDLE);
     }
 }
 
 function _util_create_msgobj_blink($ht,$enable) {
+    $ht.sm.WaitCancel();
     if ($enable)
     {
         $ht.sm.Goto(_util_create_msgobj_$_BLINK_OFF);
@@ -97,6 +99,8 @@ function util_create_msgobj($msg)
     return $ht;
 }
 
+// 単体テスト
+/*
 var utilmsg_$ht = util_create_msgobj("test");
 
 utilmsg_$ht.setmsg("hoge!!");
@@ -104,4 +108,39 @@ utilmsg_$ht.setcol(Color.red);
 utilmsg_$ht.setbgsize(200);
 utilmsg_$ht.setbgsize_reset();
 utilmsg_$ht.setbgcol(Color.black);
-utilmsg_$ht.blink(true);
+
+
+function $_test1($sm,$bFirst)
+{
+    if ($bFirst)
+    {
+        utilmsg_$ht.blink(true);
+    }
+    else
+    {
+        if (Input.Input.anyKeyDown)
+        {
+           $sm.WaitTime(0.5);
+           $sm.Goto($_test2);
+        }
+    }
+}
+function $_test2($sm,$bFirst)
+{
+    if ($bFirst)
+    {
+        utilmsg_$ht.blink(false);
+    }
+    else
+    {
+        if (Input.Input.anyKeyDown)
+        {
+           $sm.WaitTime(0.5);
+           $sm.Goto($_test1);
+        }
+    }
+}
+
+var $sm = StateManager();
+$sm.Goto($_test1);
+*/

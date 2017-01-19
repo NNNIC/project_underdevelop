@@ -50,6 +50,7 @@ public class slagremote_unity_statemanager : MonoBehaviour {
         public void Goto(YVALUE func)      { m_next     = func; }
         public void WaitCount(int c)       { m_waitcnt  = c;    }   //カウント分待つ
         public void WaitTime(float time)   { m_waittime = time; }   //指定時間（秒）待つ
+        public void WaitCancel()           {m_waitcnt = 0; m_waittime=0; } //待ち中断
 
         public void Update(float deltaTime)
         {
@@ -133,6 +134,11 @@ public class slagremote_unity_statemanager : MonoBehaviour {
     public void WaitTime(float time)
     {
         m_sm.WaitTime(time);
+    }
+
+    public void WaitCancel()
+    {
+        m_sm.WaitCancel();
     }
     //便宜： GameObject、 本コンポネントやunity_monobehaviourが取得できる機能を提供
     //public slagremote_unity_statemanager   smco;
