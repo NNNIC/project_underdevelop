@@ -6,9 +6,9 @@
 function _util_create_msgobj_setmsg($ht,$msg)  { $ht.textmesh.text  = $msg;} 
 function _util_create_msgobj_setcol($ht,$col)  { $ht.textmesh.color = $col;}
 function _util_create_msgobj_setbgsize($ht,$w) { $ht.bggo.transform.localScale = new Vector3($w,$ht.bggo.transform.localScale.y,1);}
-function _util_create_msgobj_setbgsize_reset($ht){ 
+function _util_create_msgobj_setbgsize_reset($ht,$scale){ 
     var $bo = $ht.txtgo.GetComponent(typeof(Renderer)).bounds;
-    $ht.bggo.transform.localScale = new Vector3($bo.size.x,$bo.size.y,1);
+    $ht.bggo.transform.localScale = new Vector3($bo.size.x * $scale,$bo.size.y * $scale,1);
 }
 function _util_create_msgobj_setbgcol($ht,$col){ 
     $ht.bggo.GetComponent(typeof(Renderer)).material.SetColor("_Color",$col); 
@@ -106,7 +106,7 @@ var utilmsg_$ht = util_create_msgobj("test");
 utilmsg_$ht.setmsg("hoge!!");
 utilmsg_$ht.setcol(Color.red);
 utilmsg_$ht.setbgsize(200);
-utilmsg_$ht.setbgsize_reset();
+utilmsg_$ht.setbgsize_reset(1);
 utilmsg_$ht.setbgcol(Color.black);
 
 

@@ -191,7 +191,7 @@ function CreateButton($butman, $id, $ht)
     return $ht;
 }
 
-// 単体テスト 
+/* 単体テスト 
 function $_ClickFunc($ht)
 {
     PrintLn("Clicked!");
@@ -215,5 +215,5 @@ $ht.off_text    = "-OFF-";
 $ht.off_text_col= Color.black;
 
 var $but = CreateButton($butman, "test", $ht);  //$butman:ボタンマネージャ $id;テキスト
-
+*/
 

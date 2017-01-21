@@ -212,7 +212,7 @@ namespace slagremote
 
             var p0 = plist[0].ToLower();
             string p1 = plist.Length > 1 ? plist[1].ToLower() : null;
-            if (Array.FindIndex(new string[] {"h","help"}, i=>i==p0) >= 0)
+            if (Array.FindIndex(new string[] {"?","h","help"}, i=>i==p0) >= 0)
             {
                 var helpmsg = 
                                 "bp - ブレイクポインタのリスト表示                         " + NL +
@@ -256,6 +256,37 @@ namespace slagremote
                 return;
             }
 
+
+            if (p0=="f" && !string.IsNullOrEmpty(p1))
+            {
+                var num = intparse(p1);
+                if (num==null || (int)num<=0)
+                {
+                    wk.SendWriteLine("ファイルＩＤが不正です。");
+                    return;
+                }
+                int dnum = (int)num - 1;
+                var file = m_slag.GetFileName(dnum);
+                if (file==null)
+                {
+                    wk.SendWriteLine("ファイルＩＤが不正です。");
+                    return;
+                }
+                wk.SendWriteLine("カレントファイル(" + num + "):" + file );
+                m_curFild_id = dnum;
+                return;
+            }
+            if (p0=="f" && string.IsNullOrEmpty(p1))
+            {
+                int dnum = m_curFild_id!=null ? (int)m_curFild_id : 0;
+                var file = m_slag.GetFileName(dnum);
+                if (file==null)
+                {
+                    wk.SendWriteLine("ファイルが取得できません。");
+                    return;
+                }
+                wk.SendWriteLine("カレントファイル(" + (dnum+1) + "):" + file );
+            }
             if (!string.IsNullOrEmpty(p0))
             {
                 var num = intparse(p0);
@@ -284,38 +315,6 @@ namespace slagremote
 
                 return;
             }
-
-            if (p0=="f" && !string.IsNullOrEmpty(p1))
-            {
-                var num = intparse(p0);
-                if (num==null || (int)num<=0)
-                {
-                    wk.SendWriteLine("ファイルＩＤが不正です。");
-                    return;
-                }
-                int dnum = (int)num - 1;
-                var file = m_slag.GetFileName(dnum);
-                if (file==null)
-                {
-                    wk.SendWriteLine("ファイルＩＤが不正です。");
-                    return;
-                }
-                wk.SendWriteLine("カレントファイル(" + num + "):" + file );
-                m_curFild_id = dnum;
-                return;
-            }
-            if (p0=="f" && string.IsNullOrEmpty(p1))
-            {
-                int dnum = m_curFild_id!=null ? (int)m_curFild_id : 0;
-                var file = m_slag.GetFileName(dnum);
-                if (file==null)
-                {
-                    wk.SendWriteLine("ファイルが取得できません。");
-                    return;
-                }
-                wk.SendWriteLine("カレントファイル(" + (dnum+1) + "):" + file );
-            }
-
         }
         private static void BP_List()
         {
