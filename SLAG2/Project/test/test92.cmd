@@ -1,1 +1,0 @@
-load test92_01_util_common.js test92_02_util_msgobj.js

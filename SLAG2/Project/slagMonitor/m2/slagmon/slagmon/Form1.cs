@@ -119,6 +119,7 @@ namespace slagmon
                 if (!string.IsNullOrWhiteSpace(cmd))
                 {
 
+#if obs
                     string[] cmdlist = null;
                     bool bBatch = _get_cmdlist_if_batch(cmd, out cmdlist);
                     if (bBatch)
@@ -144,18 +145,55 @@ namespace slagmon
                     {
                         textBox1_log.AppendText("---------------------" +  Environment.NewLine);
                     }
+#endif
+                    string newcmd = null;
+                    if (_get_load_inc(cmd,out newcmd))
+                    {
+                        textBox1_log.AppendText("[展開 :" + cmd + "]" + Environment.NewLine);
+                        cmd = newcmd;
+                    }
+                    textBox1_log.AppendText("Send Command : " + cmd + Environment.NewLine);
+
+                    _if_help_add(cmd);
+
+                    m_pipe.Write(cmd, "unity");
+
+                    _loadScriptWhenCmdHas(cmd);
                 }
             }
         }
-        private bool _get_cmdlist_if_batch(string cmd, out string[] cmdlist)
+        //private bool _get_cmdlist_if_batch(string cmd, out string[] cmdlist)
+        //{
+        //    cmdlist= new string[1] {cmd};
+        //    var tokens = cmd.Split(' ');
+        //    if (tokens==null || tokens.Length<2 || tokens[0].ToLower()!="load" || !tokens[1].ToLower().EndsWith(".cmd") ) return false;
+        //    try { 
+        //        cmdlist = File.ReadAllLines(Path.Combine(m_work_path, tokens[1]),Encoding.UTF8);
+        //    } catch { return false; }
+        //    return true;
+        //}
+        private bool _get_load_inc(string cmd, out string ncmd)
         {
-            cmdlist= new string[1] {cmd};
+            ncmd = null;
+
+            string[] readlist = null;
             var tokens = cmd.Split(' ');
-            if (tokens==null || tokens.Length<2 || tokens[0].ToLower()!="load" || !tokens[1].ToLower().EndsWith(".cmd") ) return false;
+            if (tokens==null || tokens.Length<2 || tokens[0].ToLower()!="load" || !tokens[1].ToLower().EndsWith(".inc") ) return false;
             try { 
-                cmdlist = File.ReadAllLines(Path.Combine(m_work_path, tokens[1]),Encoding.UTF8);
+                readlist = File.ReadAllLines(Path.Combine(m_work_path, tokens[1]),Encoding.UTF8);
             } catch { return false; }
-            return true;
+
+            if (readlist==null || readlist.Length==0) return false;
+
+            foreach(var l in readlist)
+            {
+                var nl = l.Trim();
+                if (string.IsNullOrWhiteSpace(nl) || nl.StartsWith("//") ) continue;
+                ncmd = ncmd==null ? "load " : (ncmd + " ");
+                ncmd += nl;
+            }
+
+            return ncmd!=null;
         }
         private void _if_help_add(string i)
         {
@@ -163,7 +201,7 @@ namespace slagmon
 
             var NL  =  Environment.NewLine;
             var msg =        "# モニターコマンド #" 
-                      + NL + ": load  : ファイルロード。 ファイル：*.js|*.bin|*.base64|*.cmd"
+                      + NL + ": load  : ファイルロード。 ファイル：*.js|*.bin|*.base64|*.inc"
                       + NL + ": run   : 実行"
                       + NL + ": reset : リセット"
                       + NL + ": debug : デバッグモード表示または指定。引数 0,1,2"

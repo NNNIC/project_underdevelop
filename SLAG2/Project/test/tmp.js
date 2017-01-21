@@ -5,14 +5,8 @@
 */
 "using UnityEngine";
 
+var $go = new GameObject();
+UnityEngine.Object.DestroyImmediate($go);
 
-function $_HOGE($sm, $bFirst)
-{
-    var i = $sm.usrobj;
-    PrintLn(i);
-}
 
-var sm = statemanager();
-sm.usrobj = 1;
-sm.goto($_HOGE);
 

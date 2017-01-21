@@ -41,7 +41,7 @@ public class slagremote_unity_monobehaviour : MonoBehaviour {
 
         スクリプト
 
-        function $_hoge()
+        function $_hoge($bhv) //引数bhvは本クラス
         {
             PrintLn("called");
         }

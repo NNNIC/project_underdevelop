@@ -14,3 +14,32 @@ function util_CreateTextObj($s)
     return $go;
 }
 
+// ####################
+// # ボタンマネージャ #
+function $__BM_Update($bhv)
+{
+    if (!Input.GetMouseButtonDown(0)) return;
+    
+    var $pos = Input.mousePosition;
+    //Dump($pos);
+    var $hitgo = GetObjectAtScreenPoint($pos);
+    
+    if ($hitgo!=null)
+    {
+       //Dump($hitgo);
+       SendMsg($hitgo,"CLICK");
+    }
+}
+function util_buttonManager()
+{
+    var $ht     = Hashtable();
+    $ht.go      = new GameObject("ButtonManager");
+    $ht.bhv     = AddBehaviour($ht.go);
+    
+    $ht.bhv.m_updateFunc = $__BM_Update;
+    $ht.list    = [];
+    
+    return $ht;
+}
+// # ボタンマネージャ #
+// ####################

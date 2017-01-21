@@ -209,7 +209,7 @@ public class slagremote_unity_builtinfunc {
         {
             util._error("SendMsgの引数が正しくありません");
         }
-        go.SendMessage("SendMessageSocket",plist);
+        go.SendMessage("SendMessageSocket",plist,SendMessageOptions.DontRequireReceiver);
 
         return null;
     }

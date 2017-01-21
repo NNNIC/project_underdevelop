@@ -1,4 +1,4 @@
-/*
+﻿/*
    カード背景作成
    
    <-  80 ->
@@ -8,9 +8,11 @@
    |       |  v
    +-------+---
 */
-
+var util_create_cardback_texture_$tex = null;
 function util_create_cardback_texture()
 {
+    if (util_create_cardback_texture_$tex!=null) return util_create_cardback_texture_$tex;
+
     var $w = 256;
     var $h = 256;
     
@@ -35,22 +37,28 @@ function util_create_cardback_texture()
     }
     
     $tex.Apply(false,false);
+
+    util_create_cardback_texture_$tex = $tex;
+    
     return $tex;
 }
 
 function util_create_cardback_obj()
 {
     var $go  = GameObject.CreatePrimitive(PrimitiveType.Quad);
+    $go.name = "back";
     var $rdr = $go.GetComponent(typeof(Renderer));
     $rdr.material = new Material(Shader.Find("Unlit/Texture"));
     var $tex = util_create_cardback_texture();
     $rdr.material.SetTexture("_MainTex",$tex);
     $go.transform.localScale=new Vector3(80,100,1);
     
+    var $cdr = $go.GetComponent(typeof(MeshCollider));
+    UnityEngine.Object.DestroyImmediate($cdr);
+    
     return $go;
 }
 
 //単体テスト
-
-var $go = util_create_cardback_obj();
+//var $go = util_create_cardback_obj();
 
