@@ -26,7 +26,8 @@ function util_create_cardfront_obj($mark,$num) //out: gameobj /in: $mark = "h","
     $rdr.material = new Material(Shader.Find("Unlit/Texture"));
     
     var $png = null;
-    switch($mark)
+    var $m = $mark.substring(0,1);
+    switch($m)
     {
     case "h": $png = "heart";   break;
     case "d": $png = "diamond"; break;

@@ -18,6 +18,7 @@ namespace slagmon
 
         Queue<string> m_log;
         FilePipe m_pipe;
+        public int?     m_focus;//デバッグ用フォーカスライン
 
         public Form1()
         {
@@ -54,6 +55,13 @@ namespace slagmon
         private void WriteLog(string s)
         {
             textBox1_log.AppendText(s + System.Environment.NewLine);
+            if (s.Contains("[SS$L"))
+            {
+                var begin = s.IndexOf("[SS$L");
+                var end   = s.IndexOf("]",begin+5);
+                var wd = s.Substring(begin,end-begin+1);
+                util.Jump(this,wd);
+            }
         }
         private void WriteVar(string s)
         {
@@ -95,6 +103,44 @@ namespace slagmon
                 }
             }
 
+            //フォーカス
+            try { 
+                if (m_focus!=null)
+                {
+                    var line = (int)m_focus + 1;
+                    m_focus = null;
+                    var text = textBox2_src.Text;
+
+                    int  cur = 0;
+                    int? focus_index=null;
+                    for(var idx=0; idx < text.Length;idx++)
+                    {
+                        if (cur == line)
+                        {
+                            focus_index = idx;
+                            break;
+                        }
+
+                        if (text[idx] == '\n')
+                        {
+                            cur++;
+                        }
+                    }
+                    if (focus_index!=null)
+                    {
+                        var begin = (int)focus_index;
+                        var end   = text.IndexOf('\n',begin + 1);
+                        if (begin>=0 && end>=begin)
+                        {
+                            textBox2_src.Select(begin,end-begin);
+                            textBox2_src.Focus();                       
+                        }
+                    }
+                }
+            } catch (SystemException ec)
+            {
+                System.Diagnostics.Debug.WriteLine(ec.Message);
+            }
         }
         private void textBox3_input_KeyPress(object sender, KeyPressEventArgs e)
         {

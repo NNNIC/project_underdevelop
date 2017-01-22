@@ -1,4 +1,4 @@
-/*
+﻿/*
 
    オッズパネル
    
@@ -16,12 +16,12 @@
 */
 var HD_ONEPAIR   =  1;
 var HD_TWOPAIR   =  2;
-var HD_THREECARDS=  4;
-var HD_FULLHOUSE =  8;
-var HD_FOURCARDS = 16;
-var HD_STRAIGHT  = 32;
-var HD_FLUSH     = 64;
-var HD_SF        =128;
+var HD_THREECARDS=  3;
+var HD_FULLHOUSE =  4;
+var HD_FOURCARDS =  5;
+var HD_STRAIGHT  =  6;
+var HD_FLUSH     =  7;
+var HD_SF        =  8;
 
 var oddspc_$ht = null;
 
@@ -34,7 +34,7 @@ function oddspc_createPanel__create_lineobj($num, $hand, $odds, $parentgo)
     $ht.oddsobj = util_create_msgobj($odds.ToString());
     $ht.odds    = $odds;
     
-    //
+    //位置
     var $y = 350 - 30 * $num;
     
     $ht.handobj.go.transform.parent = $ht.go.transform;
@@ -44,6 +44,14 @@ function oddspc_createPanel__create_lineobj($num, $hand, $odds, $parentgo)
     $ht.oddsobj.go.transform.parent = $ht.go.transform;
     $ht.oddsobj.go.transform.localPosition = new Vector3(135,$y,0);
     $ht.oddsobj.go.transform.localScale = Vector3.one * 0.7;
+    
+    //色
+    $ht.handobj.setcol(Color.white);
+    $ht.handobj.setbgcol(Color.black);
+    
+    $ht.oddsobj.setcol(Color.white);
+    $ht.oddsobj.setbgcol(Color.black);
+    
     
     return $ht;
 }
@@ -61,6 +69,8 @@ function oddspc_createPanel__blink($lineobj,$onoff)
     $ht.handobj.blink($onoff);
     $ht.oddsobj.blink($onoff);
 }
+
+// public
 
 function oddspc_createPanel()
 {
@@ -92,18 +102,32 @@ function oddspc_set_blink($num)
 {
     switch($num)
     {
-    case 1:     oddspc_createPanel__blink(oddspc_$ht.onepair,   true);   break;
-    case 2:     oddspc_createPanel__blink(oddspc_$ht.twopair,   true);   break;
-    case 4:     oddspc_createPanel__blink(oddspc_$ht.threecards,true);   break;
-    case 8:     oddspc_createPanel__blink(oddspc_$ht.fullhouse, true);   break;
-    case 16:    oddspc_createPanel__blink(oddspc_$ht.fourcards, true);   break;
-    case 32:    oddspc_createPanel__blink(oddspc_$ht.straight,  true);   break;
-    case 64:    oddspc_createPanel__blink(oddspc_$ht.flush,     true);   break;
-    case 128:   oddspc_createPanel__blink(oddspc_$ht.straightflush,true);   break;
+    case HD_ONEPAIR:    oddspc_createPanel__blink(oddspc_$ht.onepair,   true);   break;
+    case HD_TWOPAIR:    oddspc_createPanel__blink(oddspc_$ht.twopair,   true);   break;
+    case HD_THREECARDS: oddspc_createPanel__blink(oddspc_$ht.threecards,true);   break;
+    case HD_FULLHOUSE:  oddspc_createPanel__blink(oddspc_$ht.fullhouse, true);   break;
+    case HD_FOURCARDS:  oddspc_createPanel__blink(oddspc_$ht.fourcards, true);   break;
+    case HD_STRAIGHT:   oddspc_createPanel__blink(oddspc_$ht.straight,  true);   break;
+    case HD_FLUSH:      oddspc_createPanel__blink(oddspc_$ht.flush,     true);   break;
+    case HD_SF:         oddspc_createPanel__blink(oddspc_$ht.straightflush,true);   break;
+    }
+
+    if ($num==null)
+    {
+        oddspc_createPanel__blink(oddspc_$ht.onepair,      false);         
+        oddspc_createPanel__blink(oddspc_$ht.twopair,      false);         
+        oddspc_createPanel__blink(oddspc_$ht.threecards,   false);         
+        oddspc_createPanel__blink(oddspc_$ht.fullhouse,    false);         
+        oddspc_createPanel__blink(oddspc_$ht.fourcards,    false);         
+        oddspc_createPanel__blink(oddspc_$ht.straight,     false);         
+        oddspc_createPanel__blink(oddspc_$ht.flush,        false);         
+        oddspc_createPanel__blink(oddspc_$ht.straightflush,false);      
     }
 }
 
+// 単体試験
 oddspc_createPanel();
 oddspc_set_credits(2);
-oddspc_set_blink(HD_FLUSH);
+//oddspc_set_blink(HD_FLUSH);
 oddspc_set_blink(HD_FULLHOUSE);
+

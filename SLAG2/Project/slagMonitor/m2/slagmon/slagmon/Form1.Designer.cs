@@ -262,7 +262,7 @@
         private System.Windows.Forms.Button buttonFolder;
         private System.Windows.Forms.TextBox textBoxVar;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBoxFiles;
+        public System.Windows.Forms.ComboBox comboBoxFiles;
     }
 }
 

@@ -95,6 +95,41 @@ namespace slagmon
             {
                 ;
             }
+        }                 
+                                                       //      0123456
+        public static void Jump(Form1 form, string wd) //wd = "[SS$L:6,F:1]"
+        {
+            System.Diagnostics.Debug.WriteLine(wd);
+
+            try { 
+                var nwd = wd.Substring(4).TrimEnd(']'); // L:6,F:1
+                var tokens = nwd.Split(',');
+                if (tokens.Length!=2) return;
+
+           
+                int line = 0;
+                {
+                    var w = tokens[0]; //"L:6"
+                    line = int.Parse(w.Substring(2));
+                    line --;
+                }
+                int fid = 0;
+                {
+                    var w = tokens[1]; //F:1
+                    fid = int.Parse(w.Substring(2));
+                    fid --;
+                }
+
+                form.comboBoxFiles.SelectedIndex = fid;
+
+                form.m_focus = line;
+
+            } catch (SystemException e)
+            {
+               System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            
+
         }
     }
 }

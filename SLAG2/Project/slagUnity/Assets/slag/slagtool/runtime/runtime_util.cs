@@ -104,6 +104,9 @@ namespace slagtool.runtime
         {
             if (v.IsType(YDEF.sx_case_clause))
             {
+                // ok!  なんでもＯＫとする。
+
+#if obs
                 var expr = v.list_at(1);                
                 if (expr.IsType(YDEF.QSTR) || expr.IsType(YDEF.NUM))
                 {
@@ -113,6 +116,7 @@ namespace slagtool.runtime
                 {
                     _error("unexpected case sentence");
                 }
+#endif
             }
             else if (v.IsType(YDEF.sx_default_clause))
             {
@@ -234,7 +238,7 @@ namespace slagtool.runtime
             return null;                 
         }
 
-        #region calc numeric ... for optimize
+#region calc numeric ... for optimize
         private static object _calc_numeric(object a, object b, string op)
         {
             var atype = a.GetType();
@@ -390,7 +394,7 @@ namespace slagtool.runtime
             _error("unexpected number operaion:" + op);
             return null;
         }
-        #endregion
+#endregion
 
         internal static bool IsNumeric(Type type)
         {
@@ -426,7 +430,7 @@ namespace slagtool.runtime
             return (number)o;
         }
 
-        #region call script function
+#region call script function
         internal static StateBuffer CallFunction(YVALUE fv,List<object> ol, StateBuffer sb)
         {
             var nsb = sb;
@@ -454,7 +458,7 @@ namespace slagtool.runtime
 
             return nsb;
         }
-        #endregion
+#endregion
 
 
 

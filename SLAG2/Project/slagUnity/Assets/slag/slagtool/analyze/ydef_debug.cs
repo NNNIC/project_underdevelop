@@ -301,9 +301,25 @@ namespace slagtool
 
             string s = null;
 
-            s += "Error at line:" + (current_v.get_dbg_line(true)) + " in File:" + file;
+            s += "Error at line:" + (current_v.get_dbg_line(true)) + " in File:" + file + NL + RuntimeSyncInfo();
              
             return s;            
+        }
+        #endregion
+
+        #region runtime sync source info
+        public static string RuntimeSyncInfo() //デバッガ同期用
+        {
+            if (current_v==null) return null;
+            int line, fileid;
+            current_v.get_dbg_id_line(out fileid,out line);
+            if (fileid>=0 && line>=0)
+            { 
+                fileid++;
+                line ++;
+                return "[SS$L:"+line + ",F:" + fileid +"]";
+            }
+            return null;
         }
         #endregion
     }

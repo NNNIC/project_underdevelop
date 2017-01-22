@@ -30,5 +30,13 @@ test92_05_util_cardobj.js
 test92_06_util_button.js
 
 // オッズパネル
+// * oddspc_createPanel()
+// * oddspc_set_credits($credits)
+// * oddspc_set_blink($num)
 
 test92_07_oddspc.js
+
+// カードパネル
+
+test92_08_cardpc.js
+

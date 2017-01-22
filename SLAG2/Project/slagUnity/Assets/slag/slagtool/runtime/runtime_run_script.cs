@@ -408,6 +408,7 @@ namespace slagtool.runtime
                         YDEF_DEBUG.bPausing = true;
 
                         sys.logline(string.Format("@Stop at Line:{0} in Src:{1}", dbgline + 1, dbgfile_id +1));
+                        sys.logline(YDEF_DEBUG.RuntimeSyncInfo());
                         YDEF_DEBUG.DumpCurrentVariables(sb);
 
                         float limit = UnityEngine.Time.realtimeSinceStartup + CFG.PAUSELIMIT;
