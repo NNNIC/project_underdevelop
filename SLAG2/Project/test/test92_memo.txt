@@ -60,7 +60,7 @@ cardpc_xxx   -- カードパネル制御
 msgpc_xxx    -- メッセージパネル制御
 
 // util --汎用API
-Hashtable $ht = util_create_msgobj(string msg, Color col);
+Hashtable $ht = util_create_msgobj(string msg);
           $ht.setmsg(string msg);      // メッセージ変更
           $ht.blink(bool onoff);       // 点滅
           $ht.setcol(Color col);       // 色
@@ -127,7 +127,7 @@ var g_$stock[52] -- マークと数字のペア13x4個
 
 1.　Bed
 MP
-　　　0  [BET]   <-- 掛金
+　　BET:　0 Credits  [ADD]   <-- 掛金
     
     [ START ]    <-- 開始ボタン   
 

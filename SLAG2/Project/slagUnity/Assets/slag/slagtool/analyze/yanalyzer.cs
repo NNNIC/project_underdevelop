@@ -14,7 +14,7 @@ namespace slagtool
         //  構文解析は構文の優先順位順に対象データの走査を繰り返す。
         //  走査は括弧（丸括弧、波カッコ）内と区分けした要素を優先的に行う。
         //  
-        const int LOOPMAX = 10000;
+        const int LOOPMAX = 50000;
 
         static int m_match_count; //文法パターンが一致した回数。この回数が止まるとエラーとする。
         const int MATCHLIMIT = 100; //m_match_countの停止許容
@@ -33,7 +33,8 @@ namespace slagtool
 
             for(int loop = 0; loop<=LOOPMAX; loop++)
             {
-                if (loop == LOOPMAX) sys.error("Analyze LoopMax:1"); 
+                if (loop == LOOPMAX)
+                    sys.error("Analyze LoopMax:1"); 
 
                 var save_match_count = m_match_count; 
 

@@ -1,4 +1,4 @@
-// test 92 ポーカーゲーム
+﻿// test 92 ポーカーゲーム
 
 // 共通
 // * function util_CreateTextObj($s)
@@ -39,4 +39,8 @@ test92_07_oddspc.js
 // カードパネル
 
 test92_08_cardpc.js
+
+// メッセージパネル
+
+test92_09_msgpc.js
 

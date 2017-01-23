@@ -73,6 +73,7 @@
             this.textBox2_src.Size = new System.Drawing.Size(379, 328);
             this.textBox2_src.TabIndex = 1;
             this.textBox2_src.WordWrap = false;
+            this.textBox2_src.KeyDown += new System.Windows.Forms.KeyEventHandler(this.textBox2_src_KeyDown);
             // 
             // textBox3_input
             // 
@@ -248,7 +249,6 @@
         #endregion
 
         private System.Windows.Forms.TextBox textBox1_log;
-        private System.Windows.Forms.TextBox textBox2_src;
         private System.Windows.Forms.TextBox textBox3_input;
         private System.Windows.Forms.Label label1_log;
         private System.Windows.Forms.Label label2_source;
@@ -263,6 +263,7 @@
         private System.Windows.Forms.TextBox textBoxVar;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.ComboBox comboBoxFiles;
+        public System.Windows.Forms.TextBox textBox2_src;
     }
 }
 

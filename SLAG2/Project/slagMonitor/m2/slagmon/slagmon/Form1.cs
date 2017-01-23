@@ -35,6 +35,8 @@ namespace slagmon
 
             m_pipe = new FilePipe("mon");
             m_pipe.Start();
+
+           
         }
 
         private void Form1_Resize(object sender, EventArgs e)
@@ -129,11 +131,12 @@ namespace slagmon
                     if (focus_index!=null)
                     {
                         var begin = (int)focus_index;
-                        var end   = text.IndexOf('\n',begin + 1);
+                        var end   = text.IndexOf(':',begin + 1);
                         if (begin>=0 && end>=begin)
                         {
                             textBox2_src.Select(begin,end-begin);
-                            textBox2_src.Focus();                       
+                            textBox2_src.Focus();  
+                            textBox2_src.ScrollToCaret();                     
                         }
                     }
                 }
@@ -258,7 +261,10 @@ namespace slagmon
                       + NL + ": savetmpbase64: [セーブテスト] tmp.base64作成"
                       + NL + ": loadtmpbin   : [セーブテスト] tmp.bin読込"
                       + NL + ": loadtmpbase64: [セーブテスト] tmp.base64読込"
-                      + NL + "";
+                      + NL + ":[ ショートカット ]" 
+                      + NL + ": F6   : Step over (ソース画面)  "
+                      + NL + ": F6   : Step in   (ソース画面)  "
+                      + NL + "" + NL;
 
 
             textBox1_log.AppendText(msg);
@@ -273,6 +279,7 @@ namespace slagmon
         private void Form1_Load(object sender, EventArgs e)
         {
             textBox3_input.AppendText(">");
+            Text = "slag monitior - work dir: " + m_work_path;
             
         }
 
@@ -378,5 +385,17 @@ namespace slagmon
             catch { }
         }
 
+        private void textBox2_src_KeyDown(object sender, KeyEventArgs e)
+        {
+
+            if (e.KeyCode == Keys.F6)
+            {
+                m_pipe.Write("step", "unity");
+            }
+            if (e.KeyCode == Keys.F7)
+            {
+                m_pipe.Write("step i", "unity");
+            }
+        }
     }
 }
