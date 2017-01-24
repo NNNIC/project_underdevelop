@@ -44,3 +44,7 @@ test92_08_cardpc.js
 
 test92_09_msgpc.js
 
+// ラウンドコントローラ
+
+test92_10_rdc.js
+

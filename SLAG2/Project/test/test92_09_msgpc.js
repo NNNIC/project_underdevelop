@@ -11,7 +11,17 @@ function msgpc_createPanel__betline($ht)
 // bet add button
 function msgpc_createPanel__addbetbutton_$_ClickFunc($ht)
 {
-    PrintLn("Add Button Clicked");
+    var owner_$ht = $ht.owner;
+    if (!owner_$ht.event_addPushed)
+    {
+        owner_$ht.event_addPushed = true;
+        owner_$ht.event_on        = true;
+        PrintLn("ADD Button Clicked");
+    }
+    else 
+    {
+        PrintLn("ADD Button Clicked (Already pushed)");
+    }
 }
 function msgpc_createPanel__addbutton($ht)
 {
@@ -27,6 +37,8 @@ function msgpc_createPanel__addbutton($ht)
     but$ht.off_col     = Color.blue;
     but$ht.off_text    = "ADD";
     but$ht.off_text_col= Color.red;
+    
+    but$ht.owner       = $ht;
 
     $ht.addbutton = CreateButton($ht.butman,"Add",but$ht);
     
@@ -36,7 +48,18 @@ function msgpc_createPanel__addbutton($ht)
 // start buton
 function msgpc_createPanel__startbutton_$_ClickFunc($ht)
 {
-    PrintLn("START Button Clicked");
+    var owner_$ht = $ht.owner;
+    
+    if (!owner_$ht.event_startPushed)
+    {
+        owner_$ht.event_startPushed = true;
+        owner_$ht.event_on          = true;
+        PrintLn("START Button Clicked");
+    }
+    else
+    {
+        PrintLn("START Button Clicked(Already pushed)");
+    }
 }
 function msgpc_createPanel__startbutton($ht)
 {
@@ -52,6 +75,8 @@ function msgpc_createPanel__startbutton($ht)
     but$ht.off_col     = Color.blue;
     but$ht.off_text    = "START";
     but$ht.off_text_col= Color.red;
+
+    but$ht.owner       = $ht;
 
     $ht.startbutton = CreateButton($ht.butman,"START",but$ht);
     
@@ -80,7 +105,18 @@ function msgpc_createPanel__centerline($ht)
 // call button  call/chane 共用
 function msgpc_createPanel__callbutton_$_ClickFunc($ht)
 {
-    PrintLn("CALL Button Clicked");
+    var owner_$ht =  $ht.owner;
+    
+    if (!owner_$ht.event_callPushed)
+    {
+        owner_$ht.event_callPushed = true;
+        owner_$ht.event_on         = true;
+        PrintLn("CALL Button Clicked");
+    }
+    else 
+    {
+        PrintLn("CALL Button Clicked (Already pushed)");
+    }
 }
 function msgpc_createPanel__callbutton($ht)
 {
@@ -97,6 +133,8 @@ function msgpc_createPanel__callbutton($ht)
     but$ht.off_text    = "CALL";
     but$ht.off_text_col= Color.red;
 
+    but$ht.owner       = $ht;
+
     $ht.callbutton = CreateButton($ht.butman,"CALL",but$ht);
     
     $ht.callbutton.go.transform.parent = $ht.go.transform;
@@ -104,6 +142,13 @@ function msgpc_createPanel__callbutton($ht)
     $ht.callbutton.go.transform.localposition = Vector3.up * -250;
 }
 
+function msgpc_createPanel__event_reset($ht)
+{
+    $ht.event_addPushed   = false;
+    $ht.event_startPushed = false;
+    $ht.event_callPushed  = false;
+    $ht.event_on          = false;
+}
 
 var msgpc_$ht;
 
@@ -129,7 +174,11 @@ function msgpc_createPanel()
     msgpc_$ht.centerline.go.SetActive(false);
     
     msgpc_createPanel__callbutton(msgpc_$ht);
+    msgpc_$ht.callbutton.go.SetActive(false);
+    
+    //イベント
+    msgpc_$ht.reset = msgpc_createPanel__event_reset;
+    msgpc_$ht.reset();
 }
 
-
-msgpc_createPanel();
+//msgpc_createPanel();

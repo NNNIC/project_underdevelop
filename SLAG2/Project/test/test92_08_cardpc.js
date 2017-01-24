@@ -27,6 +27,7 @@ function cardpc_deal($pos/*場所*/, $mark, $num)
     return $ht;
 }
 
+/* 単体試験
 cardpc_createPanel();
 var $ht0 = cardpc_deal(0,"heart",1);
 var $ht1 = cardpc_deal(1,"heart",13);
@@ -39,3 +40,4 @@ $ht1.flip(true);
 $ht2.flip(true);
 $ht3.flip(true);
 $ht4.flip(true);
+*/

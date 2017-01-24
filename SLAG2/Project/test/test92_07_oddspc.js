@@ -126,8 +126,8 @@ function oddspc_set_blink($num)
 }
 
 // 単体試験
-oddspc_createPanel();
-oddspc_set_credits(2);
+//oddspc_createPanel();
+//oddspc_set_credits(2);
 //oddspc_set_blink(HD_FLUSH);
-oddspc_set_blink(HD_FULLHOUSE);
+//oddspc_set_blink(HD_FULLHOUSE);
 

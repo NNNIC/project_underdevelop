@@ -105,10 +105,12 @@ Hashtable cardpc_deal($pos/*場所*/, $mark, $num)     --- 1枚配る
 // メッセージパネル制御
 Hashtable $ht = msgpc_CreatePanel(Phase);  --- メッセージパネル作成
           $ht.Callback =                   --- 変更があったときに呼ばれる
-          $ht.betChanged                   --- ベットに変更があった
-          $ht.startPushed
-          $ht.callPushed
-          $ht.changePushed
+          $ht.event_betPushed              --- ベットボタンが押された
+          $ht.event_startPushed            --- スタートボタンが押された
+          $ht.event_callPushed             --- コールボタンが押された
+          $ht.event_on                     --- 何かイベントがあった。
+          $ht.event_reset()                --- 全イベントクリア
+          
 
 // Globals;
 
