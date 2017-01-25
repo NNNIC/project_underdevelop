@@ -75,8 +75,8 @@ Hashtable $ht = util_create_card(cardmark mark,int num);
           $ht.bhv --- slagremote_unity_monobehaviour
           $ht.clickFunc           --- クリック時のファンクション
           $ht.flip(bool showhide) --- フリップ
-          $ht.setSelect();        --- セレクトモード
-          $ht.setStrong();        --- 強調
+          $ht.setSelect(bool);    --- セレクトモード
+          $ht.setStrong(bool);    --- 強調
 
 // round control --ラウンド制御
 var rdc_$sm = StateManager();
@@ -100,6 +100,8 @@ function rdc_$_Result($sm,$bFirst);    --- 結果
 // カードパネル制御
 　　　　　cardpc_$ht = cardpc_CreatePanel();         --- カードパネル作成
 Hashtable cardpc_deal($pos/*場所*/, $mark, $num)     --- 1枚配る
+          cardpc_$ht.event_touched;                  --- タッチされたカードオブジェクト
+          cardpc_$ht.event_reset();                  --- イベントクリア
           
 
 // メッセージパネル制御

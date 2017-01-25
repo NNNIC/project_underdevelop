@@ -102,7 +102,7 @@ function msgpc_createPanel__centerline($ht)
     $ht.centerline.go.name = "CENTER";
 }
 
-// call button  call/chane 共用
+// call button  call
 function msgpc_createPanel__callbutton_$_ClickFunc($ht)
 {
     var owner_$ht =  $ht.owner;
@@ -141,13 +141,55 @@ function msgpc_createPanel__callbutton($ht)
     
     $ht.callbutton.go.transform.localposition = Vector3.up * -250;
 }
+// change button
+function msgpc_createPanel__changebutton_$_ClickFunc($ht)
+{
+    var owner_$ht =  $ht.owner;
+    
+    if (!owner_$ht.event_changePushed)
+    {
+        owner_$ht.event_changePushed = true;
+        owner_$ht.event_on         = true;
+        PrintLn("CHANGE Button Clicked");
+    }
+    else 
+    {
+        PrintLn("CHANGE Button Clicked (Already pushed)");
+    }
+}
+function msgpc_createPanel__changebutton($ht)
+{
+    var but$ht =Hashtable();
+    but$ht.width       = 300;
+    but$ht.height      =  50;
+    but$ht.clickFunc   = msgpc_createPanel__changebutton_$_ClickFunc;
+   
+    but$ht.on_col      = Color.green;
+    but$ht.on_text     = "change";
+    but$ht.on_text_col = Color.white;
+   
+    but$ht.off_col     = Color.blue;
+    but$ht.off_text    = "CHANGE";
+    but$ht.off_text_col= Color.red;
 
+    but$ht.owner       = $ht;
+
+    $ht.changebutton   = CreateButton($ht.butman,"CHANGE",but$ht);
+    
+    $ht.changebutton.go.transform.parent = $ht.go.transform;
+    
+    $ht.changebutton.go.transform.localposition = Vector3.up * -250;
+}
+
+
+//
 function msgpc_createPanel__event_reset($ht)
 {
-    $ht.event_addPushed   = false;
-    $ht.event_startPushed = false;
-    $ht.event_callPushed  = false;
-    $ht.event_on          = false;
+    $ht.event_addPushed    = false;
+    $ht.event_startPushed  = false;
+    $ht.event_callPushed   = false;
+    $ht.event_changePushed = false;
+    $ht.event_on           = false;
 }
 
 var msgpc_$ht;
@@ -175,6 +217,9 @@ function msgpc_createPanel()
     
     msgpc_createPanel__callbutton(msgpc_$ht);
     msgpc_$ht.callbutton.go.SetActive(false);
+
+    msgpc_createPanel__changebutton(msgpc_$ht);
+    msgpc_$ht.changebutton.go.SetActive(false);
     
     //イベント
     msgpc_$ht.reset = msgpc_createPanel__event_reset;

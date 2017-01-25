@@ -8,12 +8,31 @@ function cardpc_createPanel__createpostion($num, $parentgo)
     $go.transform.parent = $parentgo.transform;
     $go.transform.localPosition = new Vector3(-187 + 93 * $num, 0, 0);
 }
+function cardpc_createPanel__event_reset($ht)
+{
+    cardpc_$ht.event_touched = null;
+}
 function cardpc_createPanel()
 {
     cardpc_$ht = Hashtable();
     cardpc_$ht.go = new GameObject("cardpc");
     
     for(var $i = 0; $i<5; $i++) cardpc_createPanel__createpostion($i,cardpc_$ht.go);
+    
+    cardpc_$ht.event_touched =null;
+    cardpc_$ht.event_reset=cardpc_createPanel__event_reset;
+}
+function cardpc_deal_card_clicked($ht)
+{
+    if (cardpc_$ht.event_touched==null)
+    {
+        PrintLn("Clicked:" + $ht.go.name);
+        cardpc_$ht.event_touched = $ht.go;
+    }
+    else
+    {
+        PrintLn("Clicked(Already):" + $ht.go.name);
+    }
 }
 function cardpc_deal($pos/*場所*/, $mark, $num) 
 {
@@ -23,9 +42,11 @@ function cardpc_deal($pos/*場所*/, $mark, $num)
     var postr = cardpc_$ht.go.transform.find("pos" + $pos);
     $ht.go.transform.parent = postr;
     $ht.go.transform.localPosition = Vector3.zero;
+    $ht.setClickFunc(cardpc_deal_card_clicked);
     
     return $ht;
 }
+
 
 /* 単体試験
 cardpc_createPanel();

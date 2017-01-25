@@ -29,22 +29,25 @@ test92_05_util_cardobj.js
 
 test92_06_util_button.js
 
-// オッズパネル
+// オッズパネルコントローラ
 // * oddspc_createPanel()
 // * oddspc_set_credits($credits)
 // * oddspc_set_blink($num)
 
 test92_07_oddspc.js
 
-// カードパネル
+// カードパネルコントローラ
 
 test92_08_cardpc.js
 
-// メッセージパネル
+// メッセージパネルコントローラ
 
 test92_09_msgpc.js
 
+// カードマネージャ
+
+test92_10_cm.js
+
 // ラウンドコントローラ
 
-test92_10_rdc.js
-
+test92_11_rdc.js

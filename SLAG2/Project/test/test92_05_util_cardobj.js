@@ -12,8 +12,9 @@ function util_create_card_$_clicked_dummy($bhv)
 {
     PrintLn("TEST Clicked " + $bhv.go.name);
 }
-function util_create_card_$_set_clickfunc($bhv,$func)
+function util_create_card_$_set_clickfunc($ht,$func)
 {
+    var $bhv = $ht.bhv;
     $bhv.AddMsgFunc("CLICK",$func);
 }
 function util_create_card_$_flip($bhv,$faceOrBack)
@@ -34,6 +35,10 @@ function util_create_card_$_flip($bhv,$faceOrBack)
         $frgo.SetActive(false);
         $bkgo.SetActive(true);           
     }
+}
+function  util_create_card_$_getFlip($bhv)
+{
+    return $bhv.frgo.activeself;
 }
 function util_create_card_$_setSelect($bhv, $onoff)
 {
@@ -71,6 +76,7 @@ function util_create_card($mark, $num)
     $ht.flip         = util_create_card_$_flip;
     $ht.setSelect    = util_create_card_$_setSelect;
     $ht.setStrong    = util_create_card_$_setStrong;
+    $ht.getFlip      = util_create_card_$_getFlip;
     
     return $ht;
 }
