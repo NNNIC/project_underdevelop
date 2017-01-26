@@ -222,8 +222,8 @@ function msgpc_createPanel()
     msgpc_$ht.changebutton.go.SetActive(false);
     
     //イベント
-    msgpc_$ht.reset = msgpc_createPanel__event_reset;
-    msgpc_$ht.reset();
+    msgpc_$ht.event_reset = msgpc_createPanel__event_reset;
+    msgpc_$ht.event_reset();
 }
 
 //msgpc_createPanel();

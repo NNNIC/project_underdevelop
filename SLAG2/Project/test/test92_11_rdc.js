@@ -29,7 +29,7 @@ function rdc_$_WaitStart($sm, $bFirst)
         msgpc_$ht.totalline.setmsg("TOTAL: " + g_$coins + " C.");
         msgpc_$ht.addbutton.go.SetActive(true);
         msgpc_$ht.startbutton.go.SetActive(true);
-        msgpc_$ht.reset();
+        msgpc_$ht.event_reset();
     }
     else
     {
@@ -44,6 +44,8 @@ function rdc_$_WaitStart($sm, $bFirst)
                 msgpc_$ht.totalline.setmsg("TOTAL: " + g_$coins + " C.");
                 
                 oddspc_set_credits(g_$bet);
+                
+                msgpc_$ht.event_reset();
             }
             else if (msgpc_$ht.event_startPushed)
             {
@@ -61,10 +63,12 @@ function rdc_$_WaitStart($sm, $bFirst)
                 msgpc_$ht.addbutton.go.SetActive(false);
                 msgpc_$ht.startbutton.go.SetActive(false);
                 
+                msgpc_$ht.event_reset();
+                
                 $sm.WaitTime(0.2);
                 $sm.Goto(rdc_$_Deal_1);
+                return;
             }
-            msgpc_$ht.reset();
         }
     }
 }
@@ -76,6 +80,8 @@ function rdc_$_Deal_1($sm, $bFirst)
          g_$stock = cm_create_stock();
          //cm_shuffle(g_$stock);
          g_$hands = cm_get_fivecards(g_$stock);
+         //var t = g_$stock[0];
+         //PrintLn("---->"+t[0] + "," + t[1]  );
          
          g_$hands_htlist = [];
          for(var $i = 0; $i<5; $i++)
@@ -93,7 +99,7 @@ function rdc_$_Open_1($sm, $bFirst)
     if ($bFirst)
     {
         PrintLn("OPEN_1");
-        g_$stock = cm_create_stock();
+        //g_$stock = cm_create_stock();
         
         for(var $i = 0;$i < 5; $i++)
         {
@@ -122,6 +128,7 @@ function rdc_$_Change($sm, $bFirst)
             //msgpc_$ht.centerline.go.SetActive(true);
             msgpc_$ht.callbutton.go.SetActive(true);
         }
+        msgpc_$ht.event_reset();
     }
     else
     {
@@ -155,6 +162,23 @@ function rdc_$_Change($sm, $bFirst)
                     }
                 }
             }
+            return;
+        }
+        if (msgpc_$ht.event_on)
+        {
+            if (msgpc_$ht.event_callPushed)
+            {
+                msgpc_$ht.event_reset();
+                $sm.Goto(rdc_$_Call);
+                return;
+            }
+            if (msgpc_$ht.event_changePushed)
+            {
+                msgpc_$ht.event_reset();
+                $sm.Goto(rdc_$_Open_2);
+                return;
+            }
+            
         }
     }
 }
@@ -163,9 +187,47 @@ function rdc_$_Open_2($sm,$bFirst)
     if ($bFirst)
     {
         PrintLn("Open_2");
+        msgpc_$ht.callbutton.go.SetActive(false);
+        msgpc_$ht.changebutton.go.SetActive(false);
+        for(var $i = 0; $i<5; $i++)
+        {
+            var $ht = g_$hands_htlist[$i];
+            if ($ht.GetFlip()==false)
+            {
+                $ht.go.SetActive(false);
+        
+                //var t = g_$stock[0];
+                //PrintLn("---->"+ t[0] + "," + t[1]  );
+        
+                var $cd = cm_get_onecard(g_$stock);
+                
+                var $ht2 = cardpc_deal($i, $cd[0], $cd[1]);
+                g_$hands_htlist[$i] = $ht2;
+                $ht = g_$hands_htlist[$i];
+            }
+        
+            $ht.flip(true);
+        }
+        $sm.Goto(rdc_$_Call);
     }
 }
-
+function rdc_$_Call($sm,$bFirst)
+{
+    if ($bFirst)
+    {
+        PrintLn("Call");
+        
+        var $hands = [];
+        for(var $i = 0; $i<5; $i++)
+        {
+            var $ht = g_$hands_htlist[$i];
+            $hands.Add([$ht.mark,$ht.num]);
+        }
+        
+        var $result = cm_get_result($hands);
+        PrintLn($result);
+    }
+}
 var rdc_$sm = StateManager();
 rdc_$sm.Goto(rdc_$_Init);
 

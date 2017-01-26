@@ -44,6 +44,9 @@ function cardpc_deal($pos/*場所*/, $mark, $num)
     $ht.go.transform.localPosition = Vector3.zero;
     $ht.setClickFunc(cardpc_deal_card_clicked);
     
+    $ht.mark = $mark;
+    $ht.num  = $num;
+    
     return $ht;
 }
 
