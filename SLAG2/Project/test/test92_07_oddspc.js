@@ -23,6 +23,15 @@ var HD_STRAIGHT  =  6;
 var HD_FLUSH     =  7;
 var HD_SF        =  8;
 
+var ODDS_ONEPAIR   =   2;
+var ODDS_TWOPAIR   =  10;
+var ODDS_THREECARDS=  20;
+var ODDS_FULLHOUSE = 300;
+var ODDS_FOURCARDS =1000;
+var ODDS_STRAIGHT  = 100;
+var ODDS_FLUSH     = 200;
+var ODDS_SF        =5000;
+
 var oddspc_$ht = null;
 
 function oddspc_createPanel__create_lineobj($num, $hand, $odds, $parentgo)
@@ -59,8 +68,9 @@ function oddspc_createPanel__set_credits($lineobj,$credits)
 {
     var $ht   = $lineobj;
     var $odds = $ht.odds;
+    $ht.gain = $odds * $credits;
     
-    $ht.oddsobj.setmsg(($odds * $credits).ToString());
+    $ht.oddsobj.setmsg($ht.gain.ToString());
     $ht.oddsobj.setbgsize_reset(1.4);
 }
 function oddspc_createPanel__blink($lineobj,$onoff)
@@ -76,14 +86,14 @@ function oddspc_createPanel()
 {
     oddspc_$ht = Hashtable();
     oddspc_$ht.go = new GameObject("oddspc");
-    oddspc_$ht.onepair       = oddspc_createPanel__create_lineobj(0,"ONE PAIR",        2, oddspc_$ht.go);
-    oddspc_$ht.twopair       = oddspc_createPanel__create_lineobj(1,"TWO PAIR",        4, oddspc_$ht.go);
-    oddspc_$ht.threecards    = oddspc_createPanel__create_lineobj(2,"THREE CARDS",    10, oddspc_$ht.go);
-    oddspc_$ht.fourcards     = oddspc_createPanel__create_lineobj(3,"FOUR CARDS",     50, oddspc_$ht.go);
-    oddspc_$ht.fullhouse     = oddspc_createPanel__create_lineobj(4,"FULL HOUSE",     50, oddspc_$ht.go);
-    oddspc_$ht.straight      = oddspc_createPanel__create_lineobj(5,"STRAIGHT",       50, oddspc_$ht.go);
-    oddspc_$ht.flush         = oddspc_createPanel__create_lineobj(6,"FLUSH",          50, oddspc_$ht.go);
-    oddspc_$ht.straightflush = oddspc_createPanel__create_lineobj(7,"STRAIGHT FLUSH", 200,oddspc_$ht.go);
+    oddspc_$ht.onepair       = oddspc_createPanel__create_lineobj(0,"ONE PAIR",       ODDS_ONEPAIR   , oddspc_$ht.go);
+    oddspc_$ht.twopair       = oddspc_createPanel__create_lineobj(1,"TWO PAIR",       ODDS_TWOPAIR   , oddspc_$ht.go);
+    oddspc_$ht.threecards    = oddspc_createPanel__create_lineobj(2,"THREE CARDS",    ODDS_THREECARDS, oddspc_$ht.go);
+    oddspc_$ht.fourcards     = oddspc_createPanel__create_lineobj(3,"FOUR CARDS",     ODDS_FOURCARDS , oddspc_$ht.go);
+    oddspc_$ht.fullhouse     = oddspc_createPanel__create_lineobj(4,"FULL HOUSE",     ODDS_FULLHOUSE , oddspc_$ht.go);
+    oddspc_$ht.straight      = oddspc_createPanel__create_lineobj(5,"STRAIGHT",       ODDS_STRAIGHT  , oddspc_$ht.go);
+    oddspc_$ht.flush         = oddspc_createPanel__create_lineobj(6,"FLUSH",          ODDS_FLUSH     , oddspc_$ht.go);
+    oddspc_$ht.straightflush = oddspc_createPanel__create_lineobj(7,"STRAIGHT FLUSH", ODDS_SF        ,oddspc_$ht.go);
 }
 
 function oddspc_set_credits($credits)

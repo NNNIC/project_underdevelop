@@ -5,6 +5,7 @@ var g_$coins; //所持コイン
 var g_$stock; //札山
 var g_$hands; //手札
 var g_$hands_htlist;//手札カードハッシュテーブルリスト
+var g_$gain;  //儲け
 
 function rdc_$_Init($sm, $bFirst)
 {
@@ -216,18 +217,46 @@ function rdc_$_Call($sm,$bFirst)
     if ($bFirst)
     {
         PrintLn("Call");
+
+        msgpc_$ht.callbutton.go.SetActive(false);
+        msgpc_$ht.changebutton.go.SetActive(false);
         
         var $hands = [];
         for(var $i = 0; $i<5; $i++)
         {
             var $ht = g_$hands_htlist[$i];
+            $ht.setSelect(false); 
             $hands.Add([$ht.mark,$ht.num]);
         }
-        
         var $result = cm_get_result($hands);
         PrintLn($result);
+        
+        g_$gain = 0;
+        switch($result)
+        {
+        case "ONEPAIR":       g_$gain = oddspc_$ht.onepair.gain;       oddspc_set_blink(HD_ONEPAIR);   break;
+        case "TWOPAIR":       g_$gain = oddspc_$ht.twopair.gain;       oddspc_set_blink(HD_TWOPAIR);   break;
+        case "THREECARDS":    g_$gain = oddspc_$ht.threecards.gain;    oddspc_set_blink(HD_THREECARDS);break;
+        case "FOURCARDS":     g_$gain = oddspc_$ht.fourcards.gain;     oddspc_set_blink(HD_FOURCARDS); break;
+        case "FULLHOUSE":     g_$gain = oddspc_$ht.fullhouse.gain;     oddspc_set_blink(HD_FULLHOUSE); break;
+        case "STRAIGHT":      g_$gain = oddspc_$ht.straight.gain;      oddspc_set_blink(HD_STRAIGHT);  break;
+        case "FLUSH":         g_$gain = oddspc_$ht.flush.gain;         oddspc_set_blink(HD_FLUSH);     break;
+        case "STRAIGHTFLASH": g_$gain = oddspc_$ht.straightflush.gain; oddspc_set_blink(HD_SF);        break;
+        }
+        if (g_$gain != 0)
+        {
+            $sm.Goto(rdc_$_PAY);
+        }
     }
 }
+function rdc_$_PAY($sm,$bFirst)
+{
+    if ($bFirst)
+    {
+    }
+}
+
+
 var rdc_$sm = StateManager();
 rdc_$sm.Goto(rdc_$_Init);
 
