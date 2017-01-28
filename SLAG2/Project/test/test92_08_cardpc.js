@@ -6,7 +6,7 @@ function cardpc_createPanel__createpostion($num, $parentgo)
 {
     var $go = new GameObject("pos" + $num);
     $go.transform.parent = $parentgo.transform;
-    $go.transform.localPosition = new Vector3(-187 + 93 * $num, 0, 0);
+    $go.transform.localPosition = new Vector3(-187 + 93 * $num, 25, 0);
 }
 function cardpc_createPanel__event_reset($ht)
 {
@@ -14,6 +14,12 @@ function cardpc_createPanel__event_reset($ht)
 }
 function cardpc_createPanel()
 {
+    if (cardpc_$ht!=null)
+    {
+        UnityEngine.Object.Destroy(cardpc_$ht.go);
+        cardpc_$ht = null;
+    }
+
     cardpc_$ht = Hashtable();
     cardpc_$ht.go = new GameObject("cardpc");
     
@@ -26,12 +32,12 @@ function cardpc_deal_card_clicked($ht)
 {
     if (cardpc_$ht.event_touched==null)
     {
-        PrintLn("Clicked:" + $ht.go.name);
+        //PrintLn("Clicked:" + $ht.go.name);
         cardpc_$ht.event_touched = $ht.go;
     }
     else
     {
-        PrintLn("Clicked(Already):" + $ht.go.name);
+        //PrintLn("Clicked(Already):" + $ht.go.name);
     }
 }
 function cardpc_deal($pos/*場所*/, $mark, $num) 

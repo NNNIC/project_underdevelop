@@ -10,7 +10,7 @@ Hashtable $ht = util_create_card(cardmark mark,int num);
 */
 function util_create_card_$_clicked_dummy($bhv)
 {
-    PrintLn("TEST Clicked " + $bhv.go.name);
+    //PrintLn("TEST Clicked " + $bhv.go.name);
 }
 function util_create_card_$_set_clickfunc($ht,$func)
 {

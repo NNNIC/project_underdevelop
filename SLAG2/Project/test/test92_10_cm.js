@@ -29,6 +29,21 @@ function cm_create_stock()
     }
     return $stock;
 }
+function cm_shuffle($stock)
+{
+    //Dump($stock);
+
+    var tmp = [];
+    while($stock.count>0)
+    {
+        var n = Cast(int, UnityEngine.Random.Range(0,$stock.count-1));
+        tmp.Add($stock[n]);
+        $stock.RemoveAt(n);
+    }
+    for(var $i=0;$i<tmp.Count;$i++) $stock.Add(tmp[$i]);
+    
+    //Dump($stock);
+}
 function cm_get_fivecards($stock)
 {
     var $hand = [];
@@ -66,7 +81,7 @@ function cm_get_result__sort_by_num($h)
         }
     }
     //確認
-    Dump($h);
+    //Dump($h);
     
     return $h;
 }
@@ -212,4 +227,34 @@ function cm_get_result($hands)
     }
     
     return "NONE";
+}
+function cm_emphasis($hand,$htlist)
+{
+    if ($hand=="ONEPAIR" || $hand=="TWOPAIR" || $hand=="THREECARDS" || $hand=="FOURCARDS" )
+    {
+        for(var i = 0; i<4; i++)
+        {
+            for(var j = i+1; j<5; j++)
+            {
+                var a = $htlist[i];
+                var b = $htlist[j];
+                if (a.num==b.num)
+                {
+                    a.SetStrong(true);
+                    b.SetStrong(true);
+                }
+            }
+        }
+        return;
+    }
+    if ($hand!="NONE")
+    {
+        for(var i=0;i<5;i++)
+        {
+            //$htlist[i].SetStrong(true);
+            var $a = $htlist[i];
+            $a.SetStrong(true);
+        }
+        return;
+    }
 }

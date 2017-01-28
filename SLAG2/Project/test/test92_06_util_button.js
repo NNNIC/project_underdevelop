@@ -91,8 +91,8 @@ function $__CB_SetClickFunc($ht,$func)
 // @ デフォルトのクリック関数
 function $__CB_ClickTempFunc($bhv)
 {
-    PrintLn("ボタン:"+$bhv.m_usrobj.id + "がクリックされました");
-    PrintLn("※$ht.setClickFuncにて差替えせよ");
+    //PrintLn("ボタン:"+$bhv.m_usrobj.id + "がクリックされました");
+    //PrintLn("※$ht.setClickFuncにて差替えせよ");
 }
 // @ ボタンステート
 function $__CB_ClickState_Func($bhv)

@@ -687,7 +687,7 @@ namespace slagtool.runtime
                     if (b)
                     {
                         nsb = run(vc,nsb.curnull());
-                        if (nsb.m_breakType == BREAKTYPE.BREAK)
+                        if (nsb.m_breakType == BREAKTYPE.BREAK || nsb.m_breakType == BREAKTYPE.RETURN)
                         {
                             nsb.breaknone();
                             break;

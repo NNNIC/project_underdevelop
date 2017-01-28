@@ -6,7 +6,7 @@ function msgpc_createPanel__betline($ht)
     $ht.betline = util_create_msgobj("BET : X CREDITS");
     $ht.betline.go.name="BET";
     $ht.betline.go.transform.parent = $ht.go.transform;
-    $ht.betline.go.transform.localposition = Vector3.up * -110;
+    $ht.betline.go.transform.localposition = Vector3.up * -90;
 }
 // bet add button
 function msgpc_createPanel__addbetbutton_$_ClickFunc($ht)
@@ -16,11 +16,11 @@ function msgpc_createPanel__addbetbutton_$_ClickFunc($ht)
     {
         owner_$ht.event_addPushed = true;
         owner_$ht.event_on        = true;
-        PrintLn("ADD Button Clicked");
+        //PrintLn("ADD Button Clicked");
     }
     else 
     {
-        PrintLn("ADD Button Clicked (Already pushed)");
+        //PrintLn("ADD Button Clicked (Already pushed)");
     }
 }
 function msgpc_createPanel__addbutton($ht)
@@ -54,11 +54,11 @@ function msgpc_createPanel__startbutton_$_ClickFunc($ht)
     {
         owner_$ht.event_startPushed = true;
         owner_$ht.event_on          = true;
-        PrintLn("START Button Clicked");
+        //PrintLn("START Button Clicked");
     }
     else
     {
-        PrintLn("START Button Clicked(Already pushed)");
+        //PrintLn("START Button Clicked(Already pushed)");
     }
 }
 function msgpc_createPanel__startbutton($ht)
@@ -111,11 +111,11 @@ function msgpc_createPanel__callbutton_$_ClickFunc($ht)
     {
         owner_$ht.event_callPushed = true;
         owner_$ht.event_on         = true;
-        PrintLn("CALL Button Clicked");
+        //PrintLn("CALL Button Clicked");
     }
     else 
     {
-        PrintLn("CALL Button Clicked (Already pushed)");
+        //PrintLn("CALL Button Clicked (Already pushed)");
     }
 }
 function msgpc_createPanel__callbutton($ht)
@@ -150,11 +150,11 @@ function msgpc_createPanel__changebutton_$_ClickFunc($ht)
     {
         owner_$ht.event_changePushed = true;
         owner_$ht.event_on         = true;
-        PrintLn("CHANGE Button Clicked");
+        //PrintLn("CHANGE Button Clicked");
     }
     else 
     {
-        PrintLn("CHANGE Button Clicked (Already pushed)");
+        //PrintLn("CHANGE Button Clicked (Already pushed)");
     }
 }
 function msgpc_createPanel__changebutton($ht)
@@ -180,6 +180,45 @@ function msgpc_createPanel__changebutton($ht)
     
     $ht.changebutton.go.transform.localposition = Vector3.up * -250;
 }
+// NEW GAME BUTTON
+function msgpc_createPanel__newbutton_$_ClickFunc($ht)
+{
+    var owner_$ht =  $ht.owner;
+    
+    if (!owner_$ht.event_newPushed)
+    {
+        owner_$ht.event_newPushed = true;
+        owner_$ht.event_on         = true;
+        //PrintLn("NEW GAME Button Clicked");
+    }
+    else 
+    {
+        //PrintLn("NEW GAME Button Clicked (Already pushed)");
+    }
+}
+function msgpc_createPanel__newbutton($ht)
+{
+    var but$ht =Hashtable();
+    but$ht.width       = 300;
+    but$ht.height      =  50;
+    but$ht.clickFunc   = msgpc_createPanel__newbutton_$_ClickFunc;
+   
+    but$ht.on_col      = Color.green;
+    but$ht.on_text     = "new game";
+    but$ht.on_text_col = Color.white;
+   
+    but$ht.off_col     = Color.blue;
+    but$ht.off_text    = "NEW GAME";
+    but$ht.off_text_col= Color.red;
+
+    but$ht.owner       = $ht;
+
+    $ht.newbutton   = CreateButton($ht.butman,"NEWGAME",but$ht);
+    
+    $ht.newbutton.go.transform.parent = $ht.go.transform;
+    
+    $ht.newbutton.go.transform.localposition = Vector3.up * -250;
+}
 
 
 //
@@ -189,6 +228,7 @@ function msgpc_createPanel__event_reset($ht)
     $ht.event_startPushed  = false;
     $ht.event_callPushed   = false;
     $ht.event_changePushed = false;
+    $ht.event_newPushed    = false;
     $ht.event_on           = false;
 }
 
@@ -221,6 +261,9 @@ function msgpc_createPanel()
     msgpc_createPanel__changebutton(msgpc_$ht);
     msgpc_$ht.changebutton.go.SetActive(false);
     
+    msgpc_createPanel__newbutton(msgpc_$ht);
+    msgpc_$ht.newbutton.go.SetActive(false);
+
     //イベント
     msgpc_$ht.event_reset = msgpc_createPanel__event_reset;
     msgpc_$ht.event_reset();

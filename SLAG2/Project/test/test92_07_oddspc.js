@@ -27,10 +27,10 @@ var ODDS_ONEPAIR   =   2;
 var ODDS_TWOPAIR   =  10;
 var ODDS_THREECARDS=  20;
 var ODDS_FULLHOUSE = 300;
-var ODDS_FOURCARDS =1000;
+var ODDS_FOURCARDS = 400;
 var ODDS_STRAIGHT  = 100;
 var ODDS_FLUSH     = 200;
-var ODDS_SF        =5000;
+var ODDS_SF        = 800;
 
 var oddspc_$ht = null;
 
