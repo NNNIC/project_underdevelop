@@ -109,37 +109,40 @@ namespace slagmon
             try { 
                 if (m_focus!=null)
                 {
-                    var line = (int)m_focus + 1;
+                    util.FocusSrc(this,(int)m_focus);
                     m_focus = null;
-                    var text = textBox2_src.Text;
-
-                    int  cur = 0;
-                    int? focus_index=null;
-                    for(var idx=0; idx < text.Length;idx++)
-                    {
-                        if (cur == line)
-                        {
-                            focus_index = idx;
-                            break;
-                        }
-
-                        if (text[idx] == '\n')
-                        {
-                            cur++;
-                        }
-                    }
-                    if (focus_index!=null)
-                    {
-                        var begin = (int)focus_index;
-                        var end   = text.IndexOf(':',begin + 1);
-                        if (begin>=0 && end>=begin)
-                        {
-                            textBox2_src.Select(begin,end-begin);
-                            textBox2_src.Focus();  
-                            textBox2_src.ScrollToCaret();                     
-                        }
-                    }
                 }
+                //    var line = (int)m_focus + 1;
+                //    m_focus = null;
+                //    var text = textBox2_src.Text;
+
+                //    int  cur = 0;
+                //    int? focus_index=null;
+                //    for(var idx=0; idx < text.Length;idx++)
+                //    {
+                //        if (cur == line)
+                //        {
+                //            focus_index = idx;
+                //            break;
+                //        }
+
+                //        if (text[idx] == '\n')
+                //        {
+                //            cur++;
+                //        }
+                //    }
+                //    if (focus_index!=null)
+                //    {
+                //        var begin = (int)focus_index;
+                //        var end   = text.IndexOf(':',begin + 1);
+                //        if (begin>=0 && end>=begin)
+                //        {
+                //            textBox2_src.Select(begin,end-begin);
+                //            textBox2_src.Focus();  
+                //            textBox2_src.ScrollToCaret();                     
+                //        }
+                //    }
+                //}
             } catch (SystemException ec)
             {
                 System.Diagnostics.Debug.WriteLine(ec.Message);

@@ -47,7 +47,9 @@ public class slagremote_unity_main : MonoBehaviour {
      
             if (m_bReqAbort) break;
 
-            var cmd = m_netcomm.GetCmd();
+            var cmd = slagremote.cmd.GetNextCmd();
+            if (cmd==null) cmd = m_netcomm.GetCmd();
+            
             if (cmd==null)
             {
                 continue;

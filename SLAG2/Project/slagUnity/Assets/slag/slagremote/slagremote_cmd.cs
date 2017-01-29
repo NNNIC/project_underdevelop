@@ -41,6 +41,14 @@ namespace slagremote
             netcomm.PreProcessCmd = preexecute;
         }
         
+        private static string m_nextcmd = null;
+        public static string GetNextCmd()
+        {
+            var s = m_nextcmd;
+            m_nextcmd = null;
+            return s;
+        }
+
         public static string preexecute(string cmdbuf)        //※UnityAPI使用不可
         {
             if (!slagtool.YDEF_DEBUG.bPausing) return cmdbuf; //ポーズ外・・通過。
@@ -52,9 +60,13 @@ namespace slagremote
             switch (cmd)
             {
                 case COMMAND.BP:    cmd_sub.BP(plist);      return null; 
-                case COMMAND.STEP:  cmd_sub.Step(p1);                  return null;
-                case COMMAND.RESUME:cmd_sub.Resume();                  return null;
-                case COMMAND.QUIT:  break;
+                case COMMAND.STEP:  cmd_sub.Step(p1);       return null;
+
+                case COMMAND.RUN:
+                case COMMAND.RESUME:cmd_sub.Resume();       return null;
+
+                case COMMAND.QUIT:
+                case COMMAND.RESET: cmd_sub.BP(new string[1] {"c"});  cmd_sub.Resume(); m_nextcmd = "reset";  return null;
             }
 
             return cmdbuf;

@@ -195,9 +195,12 @@ namespace slagremote
         public static void Reset()
         {
             m_updateFunc = null;
+
+            slagtool.YDEF_DEBUG.ResetAllBreakpoints();//BPクリア
+            slagtool.YDEF_DEBUG.bPausing = false;     //ポーズOFF
+
             UnityEngine.GameObject.Find("slgctl_main").SendMessage("Reset");
         }
-
         #region BP
         public static int? m_curFild_id=null; //base 0
         public static void BP(string[] plist)

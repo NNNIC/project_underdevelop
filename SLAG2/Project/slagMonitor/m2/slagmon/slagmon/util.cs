@@ -95,7 +95,8 @@ namespace slagmon
             {
                 ;
             }
-        }                 
+        }
+        #region Jump    
                                                        //      0123456
         public static void Jump(Form1 form, string wd) //wd = "[SS$L:6,F:1]"
         {
@@ -128,8 +129,63 @@ namespace slagmon
             {
                System.Diagnostics.Debug.WriteLine(e.Message);
             }
-            
-
         }
+        #endregion
+
+        #region Focus Source
+        static int? m_changedIndex = null;
+        public static void FocusSrc(Form1 form, int focusline)
+        {
+            var text = form.textBox2_src.Text;
+
+            if (m_changedIndex!=null)
+            {   
+                var ci = (int)m_changedIndex;
+                if (text.Length > ci && text[ci]=='>')
+                {
+                    var tmptext = new StringBuilder(form.textBox2_src.Text);   //var tmptext = form.textBox2_src.Text;
+                    tmptext[ci] = ':';
+                    form.textBox2_src.Text = tmptext.ToString();
+                    text = form.textBox2_src.Text;
+                }
+            }
+
+            var line = focusline + 1;
+
+            int  cur = 0;
+            int? focus_index=null;
+            for(var idx=0; idx < text.Length;idx++)
+            {
+                if (cur == line)
+                {
+                    focus_index = idx;
+                    break;
+                }
+
+                if (text[idx] == '\n')
+                {
+                    cur++;
+                }
+            }
+            if (focus_index!=null)
+            {
+                var begin = (int)focus_index;
+                var end   = text.IndexOf(':',begin + 1);
+                if (begin>=0 && end>=begin)
+                {
+                    m_changedIndex = end;
+                    
+                    //form.textBox2_src.Text[end] = '>'; --- 割り当て不可！
+                    var tmptext = new StringBuilder(form.textBox2_src.Text); 
+                    tmptext[end] = '>';
+                    form.textBox2_src.Text = tmptext.ToString();
+
+                    form.textBox2_src.Select(begin,(end+1)-begin);
+                    form.textBox2_src.Focus();  
+                    form.textBox2_src.ScrollToCaret();              
+                }
+            }
+        }
+        #endregion
     }
 }
