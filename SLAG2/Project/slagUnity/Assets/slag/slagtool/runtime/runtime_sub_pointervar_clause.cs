@@ -176,6 +176,28 @@ namespace slagtool.runtime
                     nsb.m_pvitem = item;
                     return nsb;
                 }
+                var fv = (YVALUE)nsb.get_func(name);
+                if (fv!=null)
+                {
+                    nsb.m_pvitem = null;
+                    nsb = util.CallFunction(fv,ol,nsb.curnull());
+                    item.o = nsb.m_cur;
+                    nsb.m_pvitem = item;
+                    return nsb;
+                }
+                else
+                {
+                    if (builtin.builtin_func.IsFunc(name))
+                    {
+                        nsb.m_pvitem = null;
+                        nsb.m_cur = builtin.builtin_func.Run(name,ol.ToArray(),nsb.curnull());
+                        item.o= nsb.m_cur;
+                        nsb.m_pvitem = item;
+                        return nsb;
+                    }
+                    //util._error("function is not defined:" + name);
+                }
+
                 throw new SystemException("unexpected");
             }
             var pretype = preobj.GetType();
@@ -266,6 +288,53 @@ namespace slagtool.runtime
                 nsb.m_pvitem =item;
             }
             return nsb;
+        }
+        public static StateBuffer run_array_value(StateBuffer sb, YVALUE v, object index_o)
+        {
+            var nsb = sb;
+            nsb = run_script.run(v,nsb);
+            var item = nsb.m_pvitem;
+            if (item.getter!=null) item.o = item.getter();
+            if (item.o!=null)
+            {
+                if (item.o.GetType().IsArray)
+                {
+                    var i = (int)util.ToNumber(index_o);
+                    var a = (Array)item.o;
+                    item.o = a.GetValue(i);
+
+                    nsb.m_pvitem = item;
+                    return nsb;
+                }
+                if (item.o.GetType() == typeof(LIST))
+                {
+                    var i = (int)util.ToNumber(index_o);
+                    var l = (LIST)item.o;
+                    item.o = l[i];
+
+                    nsb.m_pvitem = item;
+                    return nsb;
+                }
+                if (item.o.GetType() == typeof(Hashtable))
+                {
+                    var ht = (Hashtable)item.o;
+                    item.o = ht[index_o];
+
+                    nsb.m_pvitem = item;
+                    return nsb;
+                }
+                if (item.o is string)
+                {
+                    var i = (int)util.ToNumber(index_o);
+                    var s = (string)item.o;
+                    item.o = s[i];
+
+                    nsb.m_pvitem = item;
+                    return nsb;
+                }
+            }
+            util._error("unexpected");
+            return null;
         }
         public static StateBuffer run_runtype(YVALUE v, StateBuffer sb)
         {

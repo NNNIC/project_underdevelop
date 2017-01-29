@@ -991,7 +991,9 @@ namespace slagtool.runtime
                         if (save_pvitem!=null)
                         {
                             nsb.m_pvitem = save_pvitem;
-                            nsb = sub_pointervar_clause.run_array_var(v,nsb,null,index_o);
+                            //nsb = sub_pointervar_clause.run_name(v.list_at(0),nsb);
+                            
+                            nsb = sub_pointervar_clause.run_array_value(nsb,v.list_at(0),index_o);
                             return nsb;
                         }
 
