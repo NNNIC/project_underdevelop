@@ -977,6 +977,9 @@ namespace slagtool.runtime
                     }
                     else if (is_2nd_arrayindex) // ex) A[1]
                     {
+                        var save_pvitem = nsb.m_pvitem;
+                        nsb.pvitemnull();
+
                         var array_index = v.list_at(1);
                         nsb = run(array_index.list_at(1),nsb.curnull());
                         if (nsb.m_cur==null ||  ( !(nsb.m_cur is String) && !util.IsNumeric(nsb.m_cur.GetType())) )
@@ -984,6 +987,13 @@ namespace slagtool.runtime
                             util._error("array_index is invalid." );
                         }
                         var index_o = nsb.m_cur;
+
+                        if (save_pvitem!=null)
+                        {
+                            nsb.m_pvitem = save_pvitem;
+                            nsb = sub_pointervar_clause.run_array_var(v,nsb,null,index_o);
+                            return nsb;
+                        }
 
                         nsb = run(v.list_at(0),nsb.curnull()); //値を取得
                         object ret = null;

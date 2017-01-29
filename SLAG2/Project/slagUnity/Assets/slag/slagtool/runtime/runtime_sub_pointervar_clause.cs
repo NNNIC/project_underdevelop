@@ -245,7 +245,12 @@ namespace slagtool.runtime
                     nsb.m_pvitem = item;
                     return nsb;
                 }
-                throw new SystemException("unexpected");
+
+                item.o =nsb.get(name,index_o);
+                nsb.m_pvitem = item;
+                return nsb;
+
+                //throw new SystemException("unexpected");
             }
 
             var pretype = preobj.GetType();
