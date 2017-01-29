@@ -176,35 +176,49 @@ namespace slagtool.runtime
             if (index == null) util._error("null index is invalid");
 
             var v = get(name);
-            if (v!=null)
+            
+            object ret = null;
+            if (util.GetValueInArray(out ret, v, index, name))
             {
-                var t = v.GetType();
-                if (t==typeof(LIST) || t.IsArray)
-                { 
-                    var i = (int)util.ToNumber(index);
-                    if (t==typeof(LIST))
-                    {
-                        var l = (LIST)v;
-                        if (i < 0 || i >= l.Count)  util._error( name + "["+index+"] is out of range");
-                        return l[i];
-                    }
-                    else
-                    {
-                        var l = (Array)v;
-                        if (i<0 || i >= l.Length)   util._error( name + "["+index+"] is out of range");
-                        return l.GetValue(i);
-                    }
-                }
-                if (t==typeof(Hashtable))
-                {
-                    var ht = (Hashtable)v;
-                    if (ht.ContainsKey(index))
-                    {
-                        return ht[index];
-                    }
-                    return null;
-                }
+                return ret;
             }
+            //if (v!=null)
+            //{
+            //    var t = v.GetType();
+            //    if (t==typeof(LIST) || t.IsArray)
+            //    { 
+            //        var i = (int)util.ToNumber(index);
+            //        if (t==typeof(LIST))
+            //        {
+            //            var l = (LIST)v;
+            //            if (i < 0 || i >= l.Count)  util._error( name + "["+index+"] is out of range");
+            //            return l[i];
+            //        }
+            //        else
+            //        {
+            //            var l = (Array)v;
+            //            if (i<0 || i >= l.Length)   util._error( name + "["+index+"] is out of range");
+            //            return l.GetValue(i);
+            //        }
+            //    }
+            //    if (t==typeof(Hashtable))
+            //    {
+            //        var ht = (Hashtable)v;
+            //        if (ht.ContainsKey(index))
+            //        {
+            //            return ht[index];
+            //        }
+            //        return null;
+            //    }
+            //    if (t==typeof(string))
+            //    {
+            //        var i = (int)util.ToNumber(index);
+            //        var l = (string)v;
+            //        if (i<0 || i >= l.Length)   util._error( name + "["+index+"] is out of range");
+            //        return l[i];                        
+            //    }
+            //}
+
             util._error(name +"[" + index + "] cannot be found");
             return null;
         }
@@ -839,6 +853,9 @@ namespace slagtool.runtime
                     var is_2nd_icnop = (vlist1.type == YDEF.INCOP);
                     var is_new_word  = (vlist0.type == YDEF.NEW);
 
+                    var is_2nd_arrayindex     = vlist1.IsType(YDEF.sx_array_index);
+                    var is_2nd_arrayindex_seq = vlist1.IsType(YDEF.sx_array_index_seq); 
+
                     if (is_1st_incop)
                     {
                         if (vlist1.IsType(YDEF.NAME))
@@ -957,6 +974,28 @@ namespace slagtool.runtime
                             nsb = sub_pointervar_clause.run_new_array_var(av,nsb.curnull());
                         }
                         return nsb;
+                    }
+                    else if (is_2nd_arrayindex) // ex) A[1]
+                    {
+                        var array_index = v.list_at(1);
+                        nsb = run(array_index.list_at(1),nsb.curnull());
+                        if (nsb.m_cur==null ||  ( !(nsb.m_cur is String) && !util.IsNumeric(nsb.m_cur.GetType())) )
+                        {
+                            util._error("array_index is invalid." );
+                        }
+                        var index_o = nsb.m_cur;
+
+                        nsb = run(v.list_at(0),nsb.curnull()); //値を取得
+                        object ret = null;
+                        if (util.GetValueInArray(out ret,nsb.m_cur,index_o,"?"))
+                        {
+                            nsb.m_cur = ret;
+                            return nsb;
+                        }
+                        else
+                        {
+                            util._error("array value is unexpected" );
+                        }
                     }
                     else
                     { 

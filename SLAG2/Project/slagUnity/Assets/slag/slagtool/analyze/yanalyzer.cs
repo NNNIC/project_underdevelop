@@ -757,7 +757,7 @@ namespace slagtool
                 {
                     if (slagtool.sys.DEBUGLEVEL==1)
                     { 
-                        sys.logline("match ..." + ": list[" + i + "] " + ts.ToString());
+                        //sys.logline("match ..." + ": list[" + i + "] " + ts.ToString());
                     }
                     else
                     {

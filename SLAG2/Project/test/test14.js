@@ -1,6 +1,8 @@
 /*
 
- TMP.JS
+ TEST.JS
+ 
+ 配列
 
 */
 //"using UnityEngine";

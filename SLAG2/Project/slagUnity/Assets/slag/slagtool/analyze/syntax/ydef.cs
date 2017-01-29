@@ -313,6 +313,8 @@ namespace slagtool
                                                              "sx_expr_bracket",                            __MAKE__, YCODE.DO_NEW, 0,
                                                              __OR__,
                                                              "sx_array_index",                             __MAKE__, YCODE.DO_NEW, 0,
+                                                             //__OR__,
+                                                             //"sx_array_index_seq",                         __MAKE__, YCODE.DO_NEW, 0,
                                                              __OR__,
                                                              "sx_func",                                    __MAKE__, YCODE.DO_NEW, 0,
                                                              __OR__,
@@ -351,6 +353,10 @@ namespace slagtool
                                                              "+", "sx_expr",                               __MAKE__, YCODE.DO_NEW, 0, 1,
                                                              __OR__,
                                                              "!", "sx_expr",                               __MAKE__, YCODE.DO_NEW, 0, 1,
+                                                             __OR__,
+                                                             "sx_expr","sx_array_index",                   __MAKE__, YCODE.DO_NEW, 0, 1,
+                                                             __OR__,
+                                                             "sx_expr","sx_array_index_seq",               __MAKE__, YCODE.DO_NEW, 0, 1,
                                                       };
 
         public static object[] sx_expr_bracket     =  { "sx_expr_bracket",
@@ -384,24 +390,30 @@ namespace slagtool
         public static object[] sx_array_var        =  { "sx_array_var",
                                                        1057,
                                                             NAME,"sx_array_index",                         __MAKE__, YCODE.DO_NEW, 0,1,
+                                                            __OR__,
+                                                            NAME,"sx_array_index_seq",                     __MAKE__, YCODE.DO_NEW, 0,1,
                                                       };
-
+        public static object[] sx_array_index_seq  =  { "sx_array_index_seq",
+                                                       1058,  
+                                                         "sx_array_index","sx_array_index",                __MAKE__, YCODE.DO_NEW, 0,1,
+                                                         __OR__,
+                                                         "sx_array_index_seq","sx_array_index",            __MAKE__, YCODE.DO_ADD, 0,1,
+                                                      };
         public static object[] sx_array_index      =  { "sx_array_index",
-                                                       1058,
+                                                       1059,
                                                             "[","sx_expr","]",                             __MAKE__, YCODE.DO_NEW, 0,1,2,
                                                             __OR__,
                                                             "[","sx_param_list","]",                       __MAKE__, YCODE.DO_NEW, 0,1,2,
                                                             __OR__,
                                                             "[","]",                                       __MAKE__, YCODE.DO_NEW, 0,1
                                                       };
-        
         public static object[] sx_func             =  { "sx_func",
-                                                       1059,
+                                                       1060,
                                                             NAME, "sx_expr_bracket",                       __MAKE__, YCODE.DO_NEW, 0,1,
                                                       };
 
         public static object[] sx_for_bracket     =   { "sx_for_bracket",
-                                                       1060,
+                                                       1061,
                                                             "(","sx_def_var_clause","sx_expr_clause","sx_expr",")",           __MAKE__, YCODE.DO_NEW,0,1,2,3,4,
                                                             __OR__,
                                                             "(","sx_def_var_clause","sx_expr_clause","sx_assign_expr",")",    __MAKE__, YCODE.DO_NEW,0,1,2,3,4,

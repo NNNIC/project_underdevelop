@@ -430,7 +430,7 @@ namespace slagtool.runtime
             return (number)o;
         }
 
-#region call script function
+        #region call script function
         internal static StateBuffer CallFunction(YVALUE fv,List<object> ol, StateBuffer sb)
         {
             var nsb = sb;
@@ -458,7 +458,55 @@ namespace slagtool.runtime
 
             return nsb;
         }
-#endregion
+        #endregion
+
+        # region 配列の値取得
+        internal static bool GetValueInArray(out object ret, object v, object index, string cmtname=null/*コメント用名前*/)
+        {
+            ret = null;
+            if (v!=null)
+            {
+                var t = v.GetType();
+                if (t==typeof(LIST) || t.IsArray)
+                { 
+                    var i = (int)util.ToNumber(index);
+                    if (t==typeof(LIST))
+                    {
+                        var l = (LIST)v;
+                        if (i < 0 || i >= l.Count)  util._error( cmtname + "["+index+"] is out of range");
+                        ret = l[i];
+                        return true;
+                    }
+                    else
+                    {
+                        var l = (Array)v;
+                        if (i<0 || i >= l.Length)   util._error( cmtname + "["+index+"] is out of range");
+                        ret = l.GetValue(i);
+                        return true;
+                    }
+                }
+                if (t==typeof(Hashtable))
+                {
+                    var ht = (Hashtable)v;
+                    if (ht.ContainsKey(index))
+                    {
+                        ret = ht[index];
+                    }
+                    ret = null;
+                    return true;
+                }
+                if (t==typeof(string))
+                {
+                    var i = (int)util.ToNumber(index);
+                    var l = (string)v;
+                    if (i<0 || i >= l.Length)   util._error( cmtname + "["+index+"] is out of range");
+                    ret = l[i];                        
+                    return true;
+                }
+            }
+            return false;          
+        }
+        #endregion
 
 
 
