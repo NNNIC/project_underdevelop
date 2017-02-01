@@ -27,7 +27,7 @@ function rdc_$_Init($sm, $bFirst)
         msgpc_createPanel(); //メッセージパネル作成
         
         g_$bet   = 0;
-        g_$total = 1;
+        g_$total = 10;
 
         //oddspc_set_credits(g_$bet);
         $sm.Goto(rdc_$_WaitStart);
@@ -324,7 +324,7 @@ function rdc_$_GAMEOVER($sm,$bFirst)
         msgpc_$ht.newbutton.go.SetActive(false);
 
         g_$bet = 0;
-        g_$total = 100;
+        g_$total = 10;
         //oddspc_set_credits(g_$bet);
         //oddspc_set_blink(null);
         cardpc_createPanel(); //再実行　内部でリニューアル

@@ -88,6 +88,7 @@
     <Compile Include="Assets\slag\slagremote\slagremote_netcom.cs" />
     <Compile Include="Assets\slag\slagremote\slagremote_wk.cs" />
     <Compile Include="Assets\slag\slagremote\unity\builtin\commponent\slagremote_unity_monobehaviour.cs" />
+    <Compile Include="Assets\slag\slagremote\unity\builtin\commponent\slagremote_unity_root.cs" />
     <Compile Include="Assets\slag\slagremote\unity\builtin\commponent\slagremote_unity_statemanager.cs" />
     <Compile Include="Assets\slag\slagremote\unity\builtin\slagremote_unity_builtincalc_op.cs" />
     <Compile Include="Assets\slag\slagremote\unity\builtin\slagremote_unity_builtinfunc.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Assets\slag\slagtool\sys.cs" />
     <Compile Include="Assets\slag\slagtool\util.cs" />
     <Compile Include="Assets\slagtest\guiDisplay.cs" />
+    <Compile Include="Assets\slagtest\playslag.cs" />
     <Compile Include="Assets\slagtest\simple.cs" />
     <Compile Include="Assets\slagtest\test2Update.cs" />
   </ItemGroup>

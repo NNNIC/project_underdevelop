@@ -23,14 +23,14 @@ var HD_STRAIGHT  =  6;
 var HD_FLUSH     =  7;
 var HD_SF        =  8;
 
-var ODDS_ONEPAIR   =   2;
-var ODDS_TWOPAIR   =  10;
-var ODDS_THREECARDS=  20;
-var ODDS_FULLHOUSE = 300;
-var ODDS_FOURCARDS = 400;
-var ODDS_STRAIGHT  = 100;
-var ODDS_FLUSH     = 200;
-var ODDS_SF        = 800;
+var ODDS_ONEPAIR   =   1;
+var ODDS_TWOPAIR   =   4;
+var ODDS_THREECARDS=  10;
+var ODDS_FULLHOUSE = 100;
+var ODDS_FOURCARDS = 200;
+var ODDS_STRAIGHT  =  50;
+var ODDS_FLUSH     = 100;
+var ODDS_SF        = 400;
 
 var oddspc_$ht = null;
 

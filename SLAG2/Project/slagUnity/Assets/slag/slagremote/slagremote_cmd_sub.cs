@@ -8,7 +8,11 @@ namespace slagremote
 {
     public class cmd_sub
     {
-        public static slagtool.slag m_slag;
+        public static slagtool.slag m_slag
+        {
+            set { slagremote_unity_root.SLAG = value;   }
+            get { return slagremote_unity_root.SLAG;     }
+        }
 
         public static slagtool.slag Load(string path, string[] files)
         {

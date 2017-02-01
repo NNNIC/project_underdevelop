@@ -143,7 +143,7 @@ public class slagremote_unity_builtinfunc {
         GameObject go = null;
         if (ol.Length==0)
         {
-            go =  slagremote_unity_main.V.gameObject;
+            go = slagremote_unity_root.V.gameObject;
         }
         else if (ol[0] is GameObject)
         {
@@ -165,7 +165,7 @@ public class slagremote_unity_builtinfunc {
         slagremote_unity_statemanager sm = null;
         if (ol.Length == 0)
         {
-            sm = slagremote_unity_main.V.gameObject.AddComponent<slagremote_unity_statemanager>();
+            sm = slagremote_unity_root.V.gameObject.AddComponent<slagremote_unity_statemanager>();
         }
         else if (ol[0] is GameObject)
         {
