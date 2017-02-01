@@ -1,9 +1,15 @@
 slag
   |--- slagunity
-  |--- slagremote
+  |    |--- Data
+  |    |--- Resources
+  |    |--- cmn
+  |    |--- Editor
+  |    |--- slagremote
+  |    |--- slagtest
+  |
   |--- slagtool
-       |--- analyze
-       |--- runtime
+  |    |--- analyze
+  |    |--- runtime
 
  slagunity.Init();
  slag = slagunity.Create();

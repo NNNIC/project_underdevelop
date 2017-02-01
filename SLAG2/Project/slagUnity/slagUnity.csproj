@@ -52,9 +52,6 @@
     <Reference Include="UnityEngine">
       <HintPath>Library\UnityAssemblies\UnityEngine.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
@@ -70,9 +67,6 @@
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine.VR">
       <HintPath>Library\UnityAssemblies\UnityEngine.VR.dll</HintPath>
     </Reference>
@@ -81,21 +75,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\slag\cmn\FilePipe.cs" />
-    <Compile Include="Assets\slag\cmn\StateManager.cs" />
-    <Compile Include="Assets\slag\slagremote\slagremote_cmd.cs" />
-    <Compile Include="Assets\slag\slagremote\slagremote_cmd_sub.cs" />
-    <Compile Include="Assets\slag\slagremote\slagremote_netcom.cs" />
-    <Compile Include="Assets\slag\slagremote\slagremote_wk.cs" />
-    <Compile Include="Assets\slag\slagremote\unity\builtin\commponent\slagremote_unity_monobehaviour.cs" />
-    <Compile Include="Assets\slag\slagremote\unity\builtin\commponent\slagremote_unity_root.cs" />
-    <Compile Include="Assets\slag\slagremote\unity\builtin\commponent\slagremote_unity_statemanager.cs" />
-    <Compile Include="Assets\slag\slagremote\unity\builtin\slagremote_unity_builtincalc_op.cs" />
-    <Compile Include="Assets\slag\slagremote\unity\builtin\slagremote_unity_builtinfunc.cs" />
-    <Compile Include="Assets\slag\slagremote\unity\slagremote_unity_main.cs" />
-    <Compile Include="Assets\slag\slagremote\unity\slagremote_unity_resetscene.cs" />
-    <Compile Include="Assets\slag\slagremote\unity\slagremote_unity_shaders.cs" />
-    <Compile Include="Assets\slag\slagremote\unity\slagremote_unity_wk.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\lex.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\syntax\ydef.cs" />
     <Compile Include="Assets\slag\slagtool\analyze\yanalyzer.cs" />
@@ -118,17 +97,33 @@
     <Compile Include="Assets\slag\slagtool\runtime\runtime_util.cs" />
     <Compile Include="Assets\slag\slagtool\sys.cs" />
     <Compile Include="Assets\slag\slagtool\util.cs" />
-    <Compile Include="Assets\slagtest\guiDisplay.cs" />
-    <Compile Include="Assets\slagtest\playslag.cs" />
-    <Compile Include="Assets\slagtest\simple.cs" />
-    <Compile Include="Assets\slagtest\test2Update.cs" />
+    <Compile Include="Assets\slag\slagunity\cmn\FilePipe.cs" />
+    <Compile Include="Assets\slag\slagunity\cmn\StateManager.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\slagremote_cmd.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\slagremote_cmd_sub.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\slagremote_netcom.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\slagremote_wk.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\unity\builtin\commponent\slagremote_unity_monobehaviour.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\unity\builtin\commponent\slagremote_unity_root.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\unity\builtin\commponent\slagremote_unity_statemanager.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\unity\builtin\slagremote_unity_builtincalc_op.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\unity\builtin\slagremote_unity_builtinfunc.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\unity\slagremote_unity_main.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\unity\slagremote_unity_resetscene.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\unity\slagremote_unity_shaders.cs" />
+    <Compile Include="Assets\slag\slagunity\slagremote\unity\slagremote_unity_wk.cs" />
+    <Compile Include="Assets\slag\slagunity\slagtest\guiDisplay.cs" />
+    <Compile Include="Assets\slag\slagunity\slagtest\playslag.cs" />
+    <Compile Include="Assets\slag\slagunity\slagtest\playslagreset.cs" />
+    <Compile Include="Assets\slag\slagunity\slagtest\simple.cs" />
+    <Compile Include="Assets\slag\slagunity\slagtest\test2Update.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Data\Font\aboutfont.txt" />
-    <None Include="Assets\Resources\Shaders\SampleAlphaTex.shader" />
     <None Include="Assets\slag\slagtool\preruntime\%E3%83%A1%E3%83%A2.txt" />
-    <None Include="Assets\%E3%82%AB%E3%83%A1%E3%83%A9%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.txt" />
-    <None Include="Assets\%E3%83%A1%E3%83%A2.txt" />
+    <None Include="Assets\slag\slagunity\Data\Font\aboutfont.txt" />
+    <None Include="Assets\slag\slagunity\Resources\Shaders\SampleAlphaTex.shader" />
+    <None Include="Assets\slag\slagunity\%E3%82%AB%E3%83%A1%E3%83%A9%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.txt" />
+    <None Include="Assets\slag\slagunity\%E3%83%A1%E3%83%A2.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

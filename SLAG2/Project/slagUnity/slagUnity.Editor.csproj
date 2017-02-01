@@ -55,9 +55,6 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Advertisements">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Advertisements.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.Advertisements">
       <HintPath>Library\UnityAssemblies\UnityEditor.Advertisements.dll</HintPath>
     </Reference>
@@ -100,9 +97,6 @@
     <Reference Include="UnityEngine.HoloLens">
       <HintPath>Library\UnityAssemblies\UnityEngine.HoloLens.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Purchasing">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Purchasing.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor.VR">
       <HintPath>Library\UnityAssemblies\UnityEditor.VR.dll</HintPath>
     </Reference>
@@ -129,14 +123,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\slag\Editor\slageditortool.cs" />
+    <Compile Include="Assets\slag\slagunity\Editor\slageditortool.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Data\Font\aboutfont.txt" />
-    <None Include="Assets\Resources\Shaders\SampleAlphaTex.shader" />
     <None Include="Assets\slag\slagtool\preruntime\%E3%83%A1%E3%83%A2.txt" />
-    <None Include="Assets\%E3%82%AB%E3%83%A1%E3%83%A9%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.txt" />
-    <None Include="Assets\%E3%83%A1%E3%83%A2.txt" />
+    <None Include="Assets\slag\slagunity\Data\Font\aboutfont.txt" />
+    <None Include="Assets\slag\slagunity\Resources\Shaders\SampleAlphaTex.shader" />
+    <None Include="Assets\slag\slagunity\%E3%82%AB%E3%83%A1%E3%83%A9%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.txt" />
+    <None Include="Assets\slag\slagunity\%E3%83%A1%E3%83%A2.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
