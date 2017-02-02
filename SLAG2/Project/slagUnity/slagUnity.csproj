@@ -120,7 +120,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\slag\slagtool\preruntime\%E3%83%A1%E3%83%A2.txt" />
-    <None Include="Assets\slag\slagunity\Data\Font\aboutfont.txt" />
     <None Include="Assets\slag\slagunity\Resources\Shaders\SampleAlphaTex.shader" />
     <None Include="Assets\slag\slagunity\%E3%82%AB%E3%83%A1%E3%83%A9%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.txt" />
     <None Include="Assets\slag\slagunity\%E3%83%A1%E3%83%A2.txt" />
