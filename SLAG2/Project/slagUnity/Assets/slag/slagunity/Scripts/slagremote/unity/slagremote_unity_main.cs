@@ -33,11 +33,15 @@ public class slagremote_unity_main : MonoBehaviour {
         m_netcomm.Start();
 
         slagtool.util.SetLogFunc(wk.SendWriteLine,wk.SendWrite);
-        slagtool.util.SetDebugLevel(0);
-        slagtool.util.SetBuitIn(typeof(slagunity_builtinfunc));
-        slagtool.util.SetCalcOp(slagunity_builtincalc_op.Calc_op);
+        //slagtool.util.SetDebugLevel(0);
+        //slagtool.util.SetBuitIn(typeof(slagunity_builtinfunc));
+        //slagtool.util.SetCalcOp(slagunity_builtincalc_op.Calc_op);
 
         slagremote.cmd.init();
+
+        yield return null;
+
+        guiDisplay.WriteLine("slag monitor からコマンドを入力して下さい。"+System.Environment.NewLine);
 
         while(true)
         {
