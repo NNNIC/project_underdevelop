@@ -29,9 +29,9 @@ public class simple : MonoBehaviour {
         
         slagtool.util.SetLogFunc(LogLine,Log);
         slagtool.util.SetDebugLevel(1);
-        slagtool.util.SetBuitIn(typeof(slagremote_unity_builtinfunc));
+        slagtool.util.SetBuitIn(typeof(slagunity_builtinfunc));
 
-        var slag = new slagtool.slag();
+        var slag = new slagtool.slag(this);
         slag.LoadSrc(src);
 
         DumpAllLog();

@@ -34,8 +34,8 @@ public class slagremote_unity_main : MonoBehaviour {
 
         slagtool.util.SetLogFunc(wk.SendWriteLine,wk.SendWrite);
         slagtool.util.SetDebugLevel(0);
-        slagtool.util.SetBuitIn(typeof(slagremote_unity_builtinfunc));
-        slagtool.util.SetCalcOp(slagremote_unity_builtincalc_op.Calc_op);
+        slagtool.util.SetBuitIn(typeof(slagunity_builtinfunc));
+        slagtool.util.SetCalcOp(slagunity_builtincalc_op.Calc_op);
 
         slagremote.cmd.init();
 
@@ -62,7 +62,7 @@ public class slagremote_unity_main : MonoBehaviour {
     void Update()
     {
         if (!m_bReqAbort) wk.Update();
-        if (!m_bReqAbort) slagremote.cmd_sub.UpdateExec();
+        //if (!m_bReqAbort) slagremote.cmd_sub.UpdateExec();
     }
 
     void Reset()

@@ -53,7 +53,7 @@ public class slageditortool : MonoBehaviour {
 
         string savefolder = Application.dataPath + "/slag/slagunity/Resources/bin";
 
-        slagtool.slag slag = new slagtool.slag();
+        slagtool.slag slag = new slagtool.slag(null);
         foreach(var f in list)
         {
             if (Path.GetExtension(f)==".inc")

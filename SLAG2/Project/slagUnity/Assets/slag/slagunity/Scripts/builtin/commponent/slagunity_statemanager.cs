@@ -33,11 +33,12 @@ using slagtool;
 
 */
 
-public class slagremote_unity_statemanager : MonoBehaviour {
+public class slagunity_statemanager : MonoBehaviour {
 
     public class StateManager
     {
-        public slagremote_unity_statemanager owner;
+        public slagunity_statemanager m_owner  { get; private set;           }
+        public slagtool.slag          m_slag { get {return m_owner.m_slag; } }
 
         YVALUE m_cur;
         YVALUE m_next;
@@ -51,6 +52,11 @@ public class slagremote_unity_statemanager : MonoBehaviour {
         public void WaitCount(int c)       { m_waitcnt  = c;    }   //カウント分待つ
         public void WaitTime(float time)   { m_waittime = time; }   //指定時間（秒）待つ
         public void WaitCancel()           {m_waitcnt = 0; m_waittime=0; } //待ち中断
+
+        public void Init(slagunity_statemanager owner)
+        {
+            m_owner = owner;
+        }
 
         public void Update(float deltaTime)
         {
@@ -74,12 +80,12 @@ public class slagremote_unity_statemanager : MonoBehaviour {
                 m_next = null;
                 bFirst = true;
             }
-            if (cmd_sub.m_slag!=null &&  m_cur!=null) {
+            if (m_slag!=null &&  m_cur!=null) {
                 var save = Time.realtimeSinceStartup;
                 if (sys.USETRY)
                 {
                     try {  
-            	        cmd_sub.m_slag.CallFunc(m_cur,new object[2] { owner, bFirst });
+            	       m_slag.CallFunc(m_cur,new object[2] { m_owner, bFirst });
                     }
                     catch (System.Exception e)
                     {
@@ -90,31 +96,34 @@ public class slagremote_unity_statemanager : MonoBehaviour {
                 }
                 else
                 { 
-                    cmd_sub.m_slag.CallFunc(m_cur,new object[2] { owner,bFirst });
+                    m_slag.CallFunc(m_cur,new object[2] { m_owner,bFirst });
                 }
                 dbg_elapsedtime += Time.realtimeSinceStartup - save;
             }
         }
         //便宜： GameObject、 本コンポネントやunity_monobehaviourが取得できる機能を提供
         //public GameObject go { get { return smco.gameObject; } }
-        //public slagremote_unity_monobehaviour bhv { get { return smco.GetComponent<slagremote_unity_monobehaviour>(); } }
+        //public slagunity_monobehaviour bhv { get { return smco.GetComponent<slagunity_monobehaviour>(); } }
         ////便宜: ユーザオブジェ 
         //public object usrobj;
     }
 
     StateManager m_sm;
+    public slagtool.slag m_slag {get;private set; }
 
-	public void Init () {
+	public void Init (slagtool.slag slag) {
+        m_slag = slag;
+
         if (m_sm==null)
         {   
             m_sm = new StateManager();
-            m_sm.owner = this;
+            m_sm.Init(this);
         }
 	}
 
     void Start()
     {
-        Init();
+        //Init();
     }
 	
 	void Update () {
@@ -140,10 +149,7 @@ public class slagremote_unity_statemanager : MonoBehaviour {
     {
         m_sm.WaitCancel();
     }
-    //便宜： GameObject、 本コンポネントやunity_monobehaviourが取得できる機能を提供
-    //public slagremote_unity_statemanager   smco;
-    //public GameObject                      go  {  get { return smco.gameObject; } }
-    public slagremote_unity_monobehaviour  bhv {  get { return GetComponent<slagremote_unity_monobehaviour>();}  }
+    public slagunity_monobehaviour  bhv {  get { return GetComponent<slagunity_monobehaviour>();}  }
     //便宜: ユーザオブジェ 
     public object usrobj;
 }

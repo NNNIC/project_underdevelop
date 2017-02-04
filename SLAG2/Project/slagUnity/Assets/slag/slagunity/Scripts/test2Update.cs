@@ -44,9 +44,9 @@ public class test2Update : MonoBehaviour {
             var src  = File.ReadAllText(Path.Combine(m_folder,file),Encoding.UTF8);
             slagtool.util.SetLogFunc(LogLine,Log);
             slagtool.util.SetDebugLevel(2);
-            slagtool.util.SetBuitIn(typeof(slagremote_unity_builtinfunc));
+            slagtool.util.SetBuitIn(typeof(slagunity_builtinfunc));
 
-            m_slag = new slagtool.slag();
+            m_slag = new slagtool.slag(this);
             m_slag.LoadSrc(src);
 
             //m_proc = slagtool.util.CreateProcess();

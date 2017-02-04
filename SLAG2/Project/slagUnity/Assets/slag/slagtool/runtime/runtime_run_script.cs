@@ -85,6 +85,8 @@ namespace slagtool.runtime
 
     public class StateBuffer
     {
+        public slagtool.slag  m_slag;             //本バッファを所有するslag
+
         public Hashtable      m_root_dic;         //ルート
         public Hashtable      m_front_dic;        //フロント
         public Hashtable      m_func_dic;         //ファンクション格納
@@ -101,8 +103,10 @@ namespace slagtool.runtime
         public const string KEY_FUNCTION = "!FUNCTION!";
         public const string KEY_FUNCMARK = "!FUNCWORK!"; //ファンクション実行時のワークエリア。
 
-        public StateBuffer()
+        public StateBuffer(slag ownerslag)
         {
+            m_slag     = ownerslag;
+
             m_root_dic = new Hashtable();
             m_root_dic[KEY_PARENT] = null;
             m_front_dic = m_root_dic;
@@ -364,13 +368,13 @@ namespace slagtool.runtime
 
     public class run_script
     {
-        public static void Run(YVALUE v)
-        {
-            YDEF_DEBUG.bPausing = false;
-            YDEF_DEBUG.stoppedLine = -1;
-            var buf  = new StateBuffer();
-            var nbuf = run(v,buf);
-        }
+        //public static void Run(YVALUE v)
+        //{
+        //    YDEF_DEBUG.bPausing = false;
+        //    YDEF_DEBUG.stoppedLine = -1;
+        //    var buf  = new StateBuffer(null);
+        //    var nbuf = run(v,buf);
+        //}
 
         public static StateBuffer run(YVALUE v, StateBuffer sb)
         {

@@ -5,7 +5,9 @@ using slagtool;
 using slagtool.runtime;
 using slagtool.runtime.builtin;
 
-public class slagremote_unity_monobehaviour : MonoBehaviour {
+public class slagunity_monobehaviour : MonoBehaviour {
+
+    public slagtool.slag  m_slag {get;private set; }
 
     [System.NonSerialized]    public  YVALUE m_startFunc;
     [System.NonSerialized]    public  YVALUE m_updateFunc;
@@ -15,6 +17,11 @@ public class slagremote_unity_monobehaviour : MonoBehaviour {
 
     public object    m_usrobj;                    //ユーザ用。必要に応じて使用してください。
     public Hashtable m_usrtbl = new Hashtable();  //ユーザ用。必要に応じて使用してください。
+
+    public void Init(slagtool.slag slag)
+    {
+        m_slag = slag;
+    }
 
 	void Start () {
         callfunc(m_startFunc);
@@ -98,12 +105,12 @@ public class slagremote_unity_monobehaviour : MonoBehaviour {
     //-- util for this class
     void callfunc(YVALUE func)
     {
-        if (func!=null && slagremote.cmd_sub.m_slag!=null)
+        if (func!=null && m_slag!=null)
         { 
             if (slagtool.sys.USETRY)
             {
                 try {  
-            	    slagremote.cmd_sub.m_slag.CallFunc(func,new object[1] { this });
+            	    m_slag.CallFunc(func,new object[1] { this });
                 } catch (System.Exception e)
                 {
                     slagtool.sys.logline("--- 例外発生 ---");
@@ -113,7 +120,7 @@ public class slagremote_unity_monobehaviour : MonoBehaviour {
             }
             else
             {
-            	slagremote.cmd_sub.m_slag.CallFunc(func,new object[1] { this });
+            	m_slag.CallFunc(func,new object[1] { this });
             }
         }
     }
@@ -140,12 +147,12 @@ public class slagremote_unity_monobehaviour : MonoBehaviour {
 
         var oary = ol.ToArray();
 
-        if (func!=null && slagremote.cmd_sub.m_slag!=null)
+        if (func!=null && m_slag!=null)
         { 
             if (slagtool.sys.USETRY)
             {
                 try {  
-            	    slagremote.cmd_sub.m_slag.CallFunc(func,oary);
+            	    m_slag.CallFunc(func,oary);
                 } catch (System.Exception e)
                 {
                     slagtool.sys.logline("--- 例外発生 ---");
@@ -155,9 +162,8 @@ public class slagremote_unity_monobehaviour : MonoBehaviour {
             }
             else
             {
-            	slagremote.cmd_sub.m_slag.CallFunc(func,oary);
+            	m_slag.CallFunc(func,oary);
             }
         }
     }
-
 }

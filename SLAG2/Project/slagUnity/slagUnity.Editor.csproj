@@ -130,6 +130,7 @@
     <None Include="Assets\slag\slagunity\Resources\Shaders\SampleAlphaTex.shader" />
     <None Include="Assets\slag\slagunity\%E3%82%AB%E3%83%A1%E3%83%A9%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6.txt" />
     <None Include="Assets\slag\slagunity\%E3%83%A1%E3%83%A2.txt" />
+    <None Include="Assets\slag\%E3%81%8A%E8%AA%AD%E3%81%BF%E3%81%8F%E3%81%A0%E3%81%95%E3%81%84.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

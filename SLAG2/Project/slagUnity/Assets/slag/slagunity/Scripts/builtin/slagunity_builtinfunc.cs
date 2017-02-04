@@ -8,7 +8,7 @@ using slagtool.runtime;
 using slagtool.runtime.builtin;
 
 
-public class slagremote_unity_builtinfunc {
+public class slagunity_builtinfunc {
     static string NL = Environment.NewLine;
 
     public static object F_Println(bool bHelp,object[] ol,StateBuffer sb)
@@ -136,20 +136,30 @@ public class slagremote_unity_builtinfunc {
     {
         if (bHelp)
         {
-            return "slagremote_unity_monobehaviourコンポネントを追加" + NL +
+            return "slagunity_monobehaviourコンポネントを追加" + NL +
                    "フォーマット) var bhv = AddBehaviour([GameObject]);"+NL +
                    "　　　　　　　GameObject指定がない場合、slag実行メインのGameObjectに追加";
         }
         GameObject go = null;
         if (ol.Length==0)
         {
-            go = slagremote_unity_root.V.gameObject;
+            if (sb.m_slag!=null&& sb.m_slag.m_owner!=null && sb.m_slag.m_owner is slagunity && ((slagunity)sb.m_slag.m_owner).m_root!=null)
+            {
+                go = ((slagunity)sb.m_slag.m_owner).m_root.gameObject;
+            }
+            else        //slagunity_root.V.gameObject;
+            {
+                throw new SystemException("slagの初期化時のownerを確認せよ");
+            }
         }
         else if (ol[0] is GameObject)
         {
             go = (GameObject)ol[0];
         }
-        return go.AddComponent<slagremote_unity_monobehaviour>();
+        var mono = go.AddComponent<slagunity_monobehaviour>();
+        mono.Init(sb.m_slag);
+
+        return mono;
     }
 
     #region ステートマシン
@@ -159,24 +169,34 @@ public class slagremote_unity_builtinfunc {
         {
             return "ステート管理作成。" +NL+ 
                    "フォーマット) var sm = StateManager([GameObject]);" + NL +
-                   "slagremote_unity_statemanagerクラスに詳細あり";
+                   "slagunity_statemanagerクラスに詳細あり";
         }
 
-        slagremote_unity_statemanager sm = null;
+        slagunity_statemanager sm = null;
         if (ol.Length == 0)
         {
-            sm = slagremote_unity_root.V.gameObject.AddComponent<slagremote_unity_statemanager>();
+            GameObject go = null;
+            if (sb.m_slag!=null&& sb.m_slag.m_owner!=null && sb.m_slag.m_owner is slagunity && ((slagunity)sb.m_slag.m_owner).m_root!=null)
+            {
+                go = ((slagunity)sb.m_slag.m_owner).m_root.gameObject;
+            }
+            else
+            {
+                throw new SystemException("slagの初期化時のownerを確認せよ");
+            }
+            sm = go.AddComponent<slagunity_statemanager>();
+            sm.Init(sb.m_slag);
         }
         else if (ol[0] is GameObject)
         {
-            sm = ((GameObject)ol[0]).AddComponent<slagremote_unity_statemanager>();
+            sm = ((GameObject)ol[0]).AddComponent<slagunity_statemanager>();
         }
         else
         {
             util._error("StateManager関数のパラメータが不正です");
         }
 
-        sm.Init();
+        sm.Init(sb.m_slag);
 
         return sm;
     }
@@ -189,7 +209,7 @@ public class slagremote_unity_builtinfunc {
         {
             return "GameObjectにメッセージを送る。メッセージ受信先が存在すれば指定関数を実行。"+NL+
                    "フォーマット) SendMsg(GameObject,名前[,パラメータ・・・])" + NL +
-                   "slagremote_unity_monoehaviourクラス内に詳細あり ";
+                   "slagunity_monoehaviourクラス内に詳細あり ";
         }
         GameObject go   = null;
         if (ol.Length>0)

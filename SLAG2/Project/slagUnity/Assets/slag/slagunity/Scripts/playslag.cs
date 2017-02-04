@@ -11,7 +11,8 @@ public class playslag : MonoBehaviour {
     Action       m_guiFunc;
 
     List<string> files = null;
-    slagtool.slag m_slag;
+    //slagtool.slag m_slag;
+    slagunity m_slagunity;
 
 	void Start () {
         m_sm = new StateManager();
@@ -35,14 +36,17 @@ public class playslag : MonoBehaviour {
             files = new List<string>();
             Array.ForEach(fileinfos,f=> { files.Add(f.FullName); Debug.Log(f.Name); });
 
-            slagtool.util.SetDebugLevel(0);
-            slagtool.util.SetBuitIn(typeof(slagremote_unity_builtinfunc));
-            slagtool.util.SetCalcOp(slagremote_unity_builtincalc_op.Calc_op);
+            //slagtool.util.SetDebugLevel(0);
+            //slagtool.util.SetBuitIn(typeof(slagunity_builtinfunc));
+            //slagtool.util.SetCalcOp(slagunity_builtincalc_op.Calc_op);
 
-            m_slag = new slagtool.slag();
+            //m_slag = new slagtool.slag(this);
 
-            slagremote_unity_root.SLAG = m_slag;
+            //slagunity_root.SLAG = m_slag;
             
+
+            m_slagunity = slagunity.Create(gameObject);
+
             m_sm.Goto(S_TESTMENU);
         }
     }
@@ -68,8 +72,8 @@ public class playslag : MonoBehaviour {
             if (GUILayout.Button(fn,gh))
             {
                 var bytes = Resources.Load<TextAsset>("bin/" + fn).bytes;
-                m_slag.LoadBin(bytes);
-                m_slag.Run();
+                m_slagunity.LoadBin(bytes);
+                m_slagunity.Run();
                 m_sm.Goto(S_PLAYING);
             }
         }

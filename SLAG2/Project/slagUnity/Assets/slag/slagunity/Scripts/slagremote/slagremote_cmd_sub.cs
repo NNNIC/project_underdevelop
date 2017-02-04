@@ -8,16 +8,19 @@ namespace slagremote
 {
     public class cmd_sub
     {
-        public static slagtool.slag m_slag
-        {
-            set { slagremote_unity_root.SLAG = value;   }
-            get { return slagremote_unity_root.SLAG;     }
-        }
+        public static slagunity m_slagunity;
+
+        //public static slagtool.slag m_slag
+        //{
+        //    set { slagunity_root.SLAG = value;   }
+        //    get { return slagunity_root.SLAG;     }
+        //}
 
         public static slagtool.slag Load(string path, string[] files)
         {
-            m_slag = null;
-            m_slag = new slagtool.slag();
+            //m_slag = null;
+            //m_slag = new slagtool.slag(null);
+            m_slagunity = slagunity.Create(slagremote_unity_main.V.gameObject);
 
             var fullpath_files = new List<string>();
             for (var i = 0; i<files.Length; i++)
@@ -52,8 +55,11 @@ namespace slagremote
             {
                 try
                 {
-                    m_slag = new slagtool.slag();
-                    m_slag.LoadJSFiles(fullpath_files.ToArray());
+                    //m_slag = new slagtool.slag(null);
+                    //m_slag.LoadJSFiles(fullpath_files.ToArray());
+
+                    m_slagunity = slagunity.Create(slagremote_unity_main.V.gameObject);
+                    m_slagunity.LoadJSFiles(fullpath_files.ToArray());
                 }
                 catch(SystemException e)
                 {
@@ -65,12 +71,14 @@ namespace slagremote
             }
             else
             {
-                m_slag = new slagtool.slag();
-                m_slag.LoadJSFiles(fullpath_files.ToArray());
+                //m_slag = new slagtool.slag(null);
+                //m_slag.LoadJSFiles(fullpath_files.ToArray());
+                m_slagunity = slagunity.Create(slagremote_unity_main.V.gameObject);
+                m_slagunity.LoadJSFiles(fullpath_files.ToArray());
             }
             wk.SendWriteLine("Loaded.");
 
-            return m_slag;
+            return  m_slagunity.m_slag;
         }
 
         public static slagtool.slag Load(string path, string file)
@@ -102,14 +110,16 @@ namespace slagremote
                 wk.SendWriteLine("ERROR:File does not exist!");
             }
 
-            m_slag = null;
+            m_slagunity = null;
 
             if (slagtool.sys.USETRY)
             {
                 try
                 {
-                    m_slag = new slagtool.slag();
-                    m_slag.LoadFile(fullpath);
+                    //m_slag = new slagtool.slag(null);
+                    //m_slag.LoadFile(fullpath);
+                    m_slagunity = slagunity.Create(slagremote_unity_main.V.gameObject);
+                    m_slagunity.LoadFile(fullpath);
                 }
                 catch(SystemException e)
                 {
@@ -121,24 +131,26 @@ namespace slagremote
             }
             else
             {
-                m_slag = new slagtool.slag();
-                m_slag.LoadFile(fullpath);
+                //m_slag = new slagtool.slag(null);
+                //m_slag.LoadFile(fullpath);
+                m_slagunity = slagunity.Create(slagremote_unity_main.V.gameObject);
+                m_slagunity.LoadFile(fullpath);
             }
             wk.SendWriteLine("Loaded.");
 
-            return m_slag;
+            return m_slagunity.m_slag;
         }
 
         public static void SaveBin(string path, string file)
         {
-            if (m_slag==null)
+            if (m_slagunity==null || m_slagunity.m_slag==null)
             {
                 wk.SendWriteLine("データがありません");
                 return;
             }
             try { 
                 var fp = Path.Combine(path,file);
-                m_slag.SaveBin(Path.Combine(path,file));
+                m_slagunity.m_slag.SaveBin(Path.Combine(path,file));
                 wk.SendWriteLine("セーブしました ファイル:"+ fp);
             } catch (SystemException e)
             {
@@ -149,14 +161,14 @@ namespace slagremote
         }
         public static void SaveBase64(string path, string file)
         {
-            if (m_slag==null)
+            if (m_slagunity==null || m_slagunity.m_slag==null)
             {
                 wk.SendWriteLine("データがありません");
                 return;
             }
             try { 
                 var fp = Path.Combine(path,file);
-                m_slag.SaveBase64(Path.Combine(path,file));
+                m_slagunity.m_slag.SaveBase64(Path.Combine(path,file));
                 wk.SendWriteLine("セーブしました ファイル:"+ fp);
             } catch (SystemException e)
             {
@@ -167,9 +179,9 @@ namespace slagremote
         }
 
 
-        public static void Run(slagtool.slag slag = null)
+        public static void Run()
         {
-            if (slag!=null) m_slag = slag;
+            //if (slag!=null) m_slag = slag;
 
             //UpdateClear();
             var sw = new System.Diagnostics.Stopwatch();
@@ -177,7 +189,7 @@ namespace slagremote
             if (slagtool.sys.USETRY)
             {
                 try { 
-                    m_slag.Run();
+                    m_slagunity.m_slag.Run();
                 } 
                 catch(SystemException e)
                 {
@@ -189,7 +201,7 @@ namespace slagremote
             }
             else
             {
-                m_slag.Run();
+                m_slagunity.m_slag.Run();
             }
             sw.Stop();
             wk.SendWriteLine("! The program exection time : " + ((float)sw.ElapsedMilliseconds / 1000f).ToString("F3") + "sec !");
@@ -273,7 +285,7 @@ namespace slagremote
                     return;
                 }
                 int dnum = (int)num - 1;
-                var file = m_slag.GetFileName(dnum);
+                var file = m_slagunity.m_slag.GetFileName(dnum);
                 if (file==null)
                 {
                     wk.SendWriteLine("ファイルＩＤが不正です。");
@@ -286,7 +298,7 @@ namespace slagremote
             if (p0=="f" && string.IsNullOrEmpty(p1))
             {
                 int dnum = m_curFild_id!=null ? (int)m_curFild_id : 0;
-                var file = m_slag.GetFileName(dnum);
+                var file = m_slagunity.m_slag.GetFileName(dnum);
                 if (file==null)
                 {
                     wk.SendWriteLine("ファイルが取得できません。");
@@ -304,7 +316,7 @@ namespace slagremote
                 }
                 int dnum = (int)num - 1;
                 var fileid = (int)(m_curFild_id!=null ? (int)m_curFild_id: 0);
-                var file = m_slag.GetFileName(fileid);
+                var file = m_slagunity.m_slag.GetFileName(fileid);
                 if (file == null)
                 {
                     wk.SendWriteLine("設定ファイルが不正です。");
@@ -335,7 +347,7 @@ namespace slagremote
             foreach(var k in keylist)
             {
                 if (slagtool.YDEF_DEBUG.breakpoints[k]==null||slagtool.YDEF_DEBUG.breakpoints[k].Count==0) continue;
-                var file = m_slag.GetFileName(k);
+                var file = m_slagunity.m_slag.GetFileName(k);
                 wk.SendWriteLine("====" + (k+1).ToString("00") + ":" + file );
                 var lines = new List<int>(slagtool.YDEF_DEBUG.breakpoints[k]);
                 lines.Sort();
@@ -475,14 +487,14 @@ namespace slagremote
         {
             //if (m_sm!=null) m_sm.Update();
 
-            if (m_slag==null) return;
+            if (m_slagunity.m_slag==null) return;
             if (m_updateFunc==null) return;
 
             var s = new System.Diagnostics.Stopwatch();
             s.Start();
             foreach (var f in m_updateFunc)
             {
-                m_slag.CallFunc(f);
+                m_slagunity.m_slag.CallFunc(f);
             }
             s.Stop();
         }
@@ -516,7 +528,7 @@ namespace slagremote
                     m_next = null;
                     bFirst = true;
                 }
-                if (m_slag!=null &&  m_cur!=null) m_slag.CallFunc(m_cur,new object[1] { bFirst });
+                if (m_slagunity.m_slag!=null &&  m_cur!=null) m_slagunity.m_slag.CallFunc(m_cur,new object[1] { bFirst });
             }
         }
     }
