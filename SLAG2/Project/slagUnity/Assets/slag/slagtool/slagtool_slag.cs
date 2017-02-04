@@ -50,7 +50,6 @@ namespace slagtool
 
         public object m_owner; //本クラスを所有するオブジェクト
 
-        public Guid m_guid;
         public string[] m_idlist;
 
         private List<YVALUE> m_exelist;
@@ -60,7 +59,6 @@ namespace slagtool
         {
             m_curslag = this;
             m_owner   = owner;
-            m_guid = System.Guid.NewGuid();
         }
 
         #region ロード&セーブ
@@ -135,7 +133,6 @@ namespace slagtool
         {
             m_curslag = this;
             var d = deserialize(bin);
-            m_guid = d.guid;
             m_idlist = d.ids;
             m_exelist = d.list;
         }
@@ -163,7 +160,7 @@ namespace slagtool
         public byte[] GetBin()
         {
             m_curslag = this;
-            return serialize(m_exelist, m_guid, m_idlist);
+            return serialize(m_exelist, m_idlist);
         }
         public string GetBase64()
         {
@@ -171,10 +168,10 @@ namespace slagtool
             var bytes = GetBin();
             return Convert.ToBase64String(bytes);
         }
-                [System.Serializable]
+
+        [System.Serializable]
         public class SaveFormat
         {
-            public Guid guid;
             public string[] ids;
             public List<YVALUE> list;
         }
@@ -187,10 +184,10 @@ namespace slagtool
                 return (SaveFormat)bf.Deserialize(ms);
             }
         }
-        private byte[] serialize(List<YVALUE> list, Guid guid, string[] ids)
+        private byte[] serialize(List<YVALUE> list, string[] ids)
         {
             var d = new SaveFormat();
-            d.guid = guid;
+            
             d.ids = ids;
             d.list = list;
             var bf = new BinaryFormatter();

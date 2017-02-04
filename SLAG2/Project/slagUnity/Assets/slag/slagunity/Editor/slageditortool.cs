@@ -16,7 +16,7 @@ public class slageditortool : MonoBehaviour {
         Process.Start(path);
     }
 
-    [MenuItem("slag/compile test files")]
+    [MenuItem("slag/test/コンパイル結果をリソースBINへ出力")]
     static void CompileTestFiles()
     {
         string   wd  = "N:/Project/test";
@@ -53,41 +53,101 @@ public class slageditortool : MonoBehaviour {
 
         string savefolder = Application.dataPath + "/slag/slagunity/Resources/bin";
 
-        slagtool.slag slag = new slagtool.slag(null);
+        //slagtool.slag slag = new slagtool.slag(null);
+        var slag = slagunity.Create(null,false);
         foreach(var f in list)
         {
-            if (Path.GetExtension(f)==".inc")
+            slag.LoadFile(Path.Combine(wd,f));
+            slag.SaveBin(Path.Combine(savefolder,Path.GetFileNameWithoutExtension(f) + ".bytes"));
+
+            UnityEngine.Debug.Log("Compiled .. "+ Path.GetFileNameWithoutExtension(f) + ",checksum:" + slag.GetMD5());
+        }
+    }
+
+    #region 外部コンパイル実行
+
+
+    [MenuItem("slag/test/バッチ実行テスト")]
+    /// <summary>
+    /// Unityバッチ起動によるコンパイル実行
+    /// 実行前に次の環境変数を定義
+    ///  "FILELIST"  ---- ソースファイル名リストを格納したテキストファイル。改行区切り。
+    ///  "SRCDIR"    ---- ソースファイルの格納ディレクトリ (デフォルト：N:\Project\Test)
+    ///  "DSTDIR"    ---- 出力ディレクトリ（デフォルト：N:\Project\Test\out）
+    ///  "DSTEXT"    ---- 出力ファイルの拡張子
+    ///  　　　　　　　　 "bin"または"bytes"を指定するとバイナリを出力
+    ///  　　　　　　　　 "base64"または"txt"を指定するとBase64テキスト出力
+    ///  　　　　　　　　 (デフォルト：bin)
+    /// </summary>
+    public static void COMPILE()
+    {
+        var filelist = System.Environment.GetEnvironmentVariable("FILELIST");
+
+        var srcdir   = System.Environment.GetEnvironmentVariable("SRCDIR");
+        if (string.IsNullOrEmpty(srcdir)) srcdir = "N:/Project/Test";
+
+        var dstdir   = System.Environment.GetEnvironmentVariable("DSTDIR");
+        if (string.IsNullOrEmpty(dstdir)) dstdir = "N:/Project/Test/out";
+
+        var dstext   = System.Environment.GetEnvironmentVariable("DSTEXT");
+        if (string.IsNullOrEmpty(dstext)) dstext = "bin";
+
+        bool bCompileBinOrBase64 =false;
+        dstext = dstext.ToLower();
+        switch(dstext)
+        {
+            case "bin":
+            case "bytes":   bCompileBinOrBase64 = true; break;
+            case "base64":
+            case "txt":     bCompileBinOrBase64 = false; break;
+            default:
+                throw new System.Exception("DSTEXTを確認せよ");
+        }
+
+        try
+        {
+            compile(bCompileBinOrBase64,filelist,srcdir,dstdir,dstext);
+        }
+        catch(System.Exception e)
+        {
+            UnityEngine.Debug.Log(e.Message);
+        }
+    }
+    private static void compile(bool bCompileBinOrBase64, string filelist, string srcdir, string dstdir, string dstext)
+    {
+        var list = File.ReadAllLines(filelist,Encoding.UTF8);
+        foreach(var l in list)
+        {
+            var s = l.Trim();
+            if (string.IsNullOrEmpty(s) || s.StartsWith("//"))
+            {
+                continue;
+            }
+
+            var path = Path.Combine(srcdir,s);
+            if (!File.Exists(path))
             { 
-                var filelist = convert_inc(Path.Combine(wd,f));
-                slag.LoadJSFiles(filelist);
+                UnityEngine.Debug.Log("ファイルが存在しない:" + path);
+                continue;
+            }
+
+            var slag = slagunity.Create(null,false);
+
+            slag.LoadFile(path);
+
+            var dstpath = Path.Combine(dstdir, Path.GetFileNameWithoutExtension(path) + "." + dstext);
+
+            if (bCompileBinOrBase64)
+            {
+                slag.SaveBin(dstpath);
             }
             else
             {
-                slag.LoadFile(Path.Combine(wd,f));
+                slag.SaveBase64(dstpath);
             }
 
-            slag.SaveBin(Path.Combine(savefolder,Path.GetFileNameWithoutExtension(f) + ".bytes"));
-
-            UnityEngine.Debug.Log("Compiled .. "+ Path.GetFileNameWithoutExtension(f));
+            UnityEngine.Debug.Log("Compiled .. "+ Path.GetFileNameWithoutExtension(path) + ",checksum:" + slag.GetMD5());
         }
     }
-    static string[] convert_inc(string f)
-    {
-        List<string> filelist = new List<string>();
-
-        string[] readlist = null;
-        try { 
-            readlist = File.ReadAllLines(f,Encoding.UTF8);
-        } catch { return null; }
-
-        if (readlist==null || readlist.Length==0) return null;
-
-        foreach(var l in readlist)
-        {
-            var nl = l.Trim();
-            if (string.IsNullOrEmpty(nl) || nl.StartsWith("//") ) continue;
-            filelist.Add(Path.Combine(Path.GetDirectoryName(f),nl));
-        }
-        return filelist.ToArray();
-    }
+    #endregion
 }

@@ -112,37 +112,6 @@ namespace slagmon
                     util.FocusSrc(this,(int)m_focus);
                     m_focus = null;
                 }
-                //    var line = (int)m_focus + 1;
-                //    m_focus = null;
-                //    var text = textBox2_src.Text;
-
-                //    int  cur = 0;
-                //    int? focus_index=null;
-                //    for(var idx=0; idx < text.Length;idx++)
-                //    {
-                //        if (cur == line)
-                //        {
-                //            focus_index = idx;
-                //            break;
-                //        }
-
-                //        if (text[idx] == '\n')
-                //        {
-                //            cur++;
-                //        }
-                //    }
-                //    if (focus_index!=null)
-                //    {
-                //        var begin = (int)focus_index;
-                //        var end   = text.IndexOf(':',begin + 1);
-                //        if (begin>=0 && end>=begin)
-                //        {
-                //            textBox2_src.Select(begin,end-begin);
-                //            textBox2_src.Focus();  
-                //            textBox2_src.ScrollToCaret();                     
-                //        }
-                //    }
-                //}
             } catch (SystemException ec)
             {
                 System.Diagnostics.Debug.WriteLine(ec.Message);
@@ -170,34 +139,6 @@ namespace slagmon
 
                 if (!string.IsNullOrWhiteSpace(cmd))
                 {
-
-#if obs
-                    string[] cmdlist = null;
-                    bool bBatch = _get_cmdlist_if_batch(cmd, out cmdlist);
-                    if (bBatch)
-                    {
-                        textBox1_log.AppendText("--- [Start Batch] ---" +  Environment.NewLine);
-                    }
-                    
-                    foreach(var i in cmdlist)
-                    { 
-                        if (!string.IsNullOrWhiteSpace(i))
-                        { 
-                            textBox1_log.AppendText("Send Command : " + i + Environment.NewLine);
-
-                            _if_help_add(i);
-
-                            m_pipe.Write(i, "unity");
-
-                            _loadScriptWhenCmdHas(i);
-                        }
-                    }
-
-                    if (bBatch)
-                    {
-                        textBox1_log.AppendText("---------------------" +  Environment.NewLine);
-                    }
-#endif
                     string newcmd = null;
                     if (_get_load_inc(cmd,out newcmd))
                     {
@@ -214,16 +155,6 @@ namespace slagmon
                 }
             }
         }
-        //private bool _get_cmdlist_if_batch(string cmd, out string[] cmdlist)
-        //{
-        //    cmdlist= new string[1] {cmd};
-        //    var tokens = cmd.Split(' ');
-        //    if (tokens==null || tokens.Length<2 || tokens[0].ToLower()!="load" || !tokens[1].ToLower().EndsWith(".cmd") ) return false;
-        //    try { 
-        //        cmdlist = File.ReadAllLines(Path.Combine(m_work_path, tokens[1]),Encoding.UTF8);
-        //    } catch { return false; }
-        //    return true;
-        //}
         private bool _get_load_inc(string cmd, out string ncmd)
         {
             ncmd = null;
@@ -350,7 +281,7 @@ namespace slagmon
         private void _loadScriptWhenCmdHas(string cmd)
         {
             if (string.IsNullOrWhiteSpace(cmd)) return;
-                        var tokens = cmd.Split(' ');
+            var tokens = cmd.Split(' ');
             if (tokens[0].Trim().ToUpper()=="LOAD" && tokens.Length>=2)
             {
                 comboBoxFiles.Items.Clear();
@@ -370,16 +301,21 @@ namespace slagmon
                 {
                     var filename = comboBoxFiles.Items[index].ToString().Substring(3);
                     var path = @"N:\Project\test\" + filename;
+                    textBox2_src.Text = null;
+
                     if (File.Exists(path))
                     {
-                        textBox2_src.Text = null;
-                        var lines = File.ReadAllLines(path,Encoding.UTF8);
-                        for(int i = 0; i<lines.Length; i++)
-                        {
-                            if (textBox2_src.Text!=null) textBox2_src.Text += Environment.NewLine;
-                            textBox2_src.Text += (i+1).ToString("0000") + " : " + lines[i];
+                        var ext = Path.GetExtension(path).ToLower();
+                        if (ext==".js")
+                        { 
+                            var lines = File.ReadAllLines(path,Encoding.UTF8);
+                            for(int i = 0; i<lines.Length; i++)
+                            {
+                                if (textBox2_src.Text!=null) textBox2_src.Text += Environment.NewLine;
+                                textBox2_src.Text += (i+1).ToString("0000") + " : " + lines[i];
+                            }
                         }
-
+                        
                         //textBox2_src.Text = File.ReadAllText(path,Encoding.UTF8);
                         comboBoxFiles.SelectedIndex = index;
                     }

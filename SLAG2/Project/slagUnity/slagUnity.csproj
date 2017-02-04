@@ -117,7 +117,6 @@
     <Compile Include="Assets\slag\slagunity\Scripts\slagremote\unity\slagremote_unity_shaders.cs" />
     <Compile Include="Assets\slag\slagunity\Scripts\slagremote\unity\slagremote_unity_wk.cs" />
     <Compile Include="Assets\slag\slagunity\Scripts\slagunity.cs" />
-    <Compile Include="Assets\slag\slagunity\Scripts\test2Update.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\slag\slagtool\preruntime\%E3%83%A1%E3%83%A2.txt" />

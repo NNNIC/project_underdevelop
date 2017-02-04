@@ -28,13 +28,14 @@ function $_Update($bv)
     
     if ($bDwn) { $speed--; Println($speed); }
 
-    if ($bDel) { Object.Destroy($bv); PrintLn("Destroy!");}
+    if ($bDel) { UnityEngine.Object.Destroy($bv.gameobject); PrintLn("Destroy!");}
 }
 
 function $_OnDestroy($bv)
 {
     PrintLn("OnDestroy called!");
 }
+
 
 var $go = GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube);
 
@@ -44,4 +45,8 @@ var $m_bhv = AddBehaviour($go);
 
 $m_bhv.m_updateFunc    = $_Update;
 $m_bhv.m_onDestroyFunc = $_OnDestroy;
+
+PrintLn("Up key   --- speed++");
+PrintLn("Down key --- speed--");
+PrintLn("Del key  --- delete");
 

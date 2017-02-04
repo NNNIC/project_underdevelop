@@ -182,7 +182,7 @@ public class slagunity_builtinfunc {
             }
             else
             {
-                throw new SystemException("slagの初期化時のownerを確認せよ");
+                throw new SystemException("slag初期化時のownerを確認せよ");
             }
             sm = go.AddComponent<slagunity_statemanager>();
             sm.Init(sb.m_slag);

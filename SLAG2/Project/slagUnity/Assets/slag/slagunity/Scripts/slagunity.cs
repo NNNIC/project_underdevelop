@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 
 public class slagunity {
@@ -12,7 +14,7 @@ public class slagunity {
 
     #region Initialization
     bool m_bInitialized = false;
-    public void Init(GameObject go)
+    public void Init(GameObject go,bool bCompileOnly=false)
     {
         if (m_bInitialized) return;
 
@@ -28,21 +30,54 @@ public class slagunity {
 
         m_slag = new slagtool.slag(this);
 
-        m_root = go.GetComponent<slagunity_root>();
-        if (m_root==null)
+        if (!bCompileOnly)
         { 
-           m_root = go.AddComponent<slagunity_root>();
+            if (go!=null)
+            { 
+                m_root = go.GetComponent<slagunity_root>();
+                if (m_root==null)
+                { 
+                   m_root = go.AddComponent<slagunity_root>();
+                }
+            }
         }
     }
 #endregion
 
     /// <summary>
     /// 指定パスよりロード
-    /// ファイル：*.js | *.bin | *.base64
+    /// ファイル：*.js | *.bin | *.base64 | *.inc
     /// </summary>
     public void LoadFile(string path)
     {
-        m_slag.LoadFile(path);
+        if (Path.GetExtension(path).ToLower()==".inc")
+        { 
+            var filelist = convert_inc(path);
+            m_slag.LoadJSFiles(filelist);
+        }
+        else
+        { 
+            m_slag.LoadFile(path);
+        }
+    }
+    string[] convert_inc(string f)
+    {
+        List<string> filelist = new List<string>();
+
+        string[] readlist = null;
+        try { 
+            readlist = File.ReadAllLines(f,Encoding.UTF8);
+        } catch { return null; }
+
+        if (readlist==null || readlist.Length==0) return null;
+
+        foreach(var l in readlist)
+        {
+            var nl = l.Trim();
+            if (string.IsNullOrEmpty(nl) || nl.StartsWith("//") ) continue;
+            filelist.Add(Path.Combine(Path.GetDirectoryName(f),nl));
+        }
+        return filelist.ToArray();
     }
     /// <summary>
     /// 拡張子JSファイル（複数）をロード
@@ -102,6 +137,26 @@ public class slagunity {
     }
     
     /// <summary>
+    /// チェックサム(MD5)を取得
+    /// </summary>
+    public string GetMD5()
+    {
+        //ref http://dobon.net/vb/dotnet/string/md5.html
+        var bytes = GetBin();
+        var md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+        var bs = md5.ComputeHash(bytes);
+        md5.Clear();
+
+        var result = new System.Text.StringBuilder();
+        foreach(var b in bs)
+        {
+            result.Append(b.ToString("x2"));
+        }
+
+        return result.ToString();
+    }
+
+    /// <summary>
     /// 実行
     /// </summary>
     public void Run()
@@ -130,12 +185,10 @@ public class slagunity {
     /// <summary>
     /// 生成
     /// </summary>
-    public static slagunity Create(GameObject go)
+    public static slagunity Create(GameObject go,bool bCompileOnly=false)
     {
         var p = new slagunity();
-        p.Init(go);
+        p.Init(go,bCompileOnly);
         return p;
     }
-
-
 }

@@ -78,6 +78,8 @@ namespace slagremote
             }
             wk.SendWriteLine("Loaded.");
 
+            wk.SendWriteLine("Checksum:" + m_slagunity.GetMD5());
+
             return  m_slagunity.m_slag;
         }
 
@@ -137,6 +139,8 @@ namespace slagremote
                 m_slagunity.LoadFile(fullpath);
             }
             wk.SendWriteLine("Loaded.");
+
+            wk.SendWriteLine("Checksum:" + m_slagunity.GetMD5());
 
             return m_slagunity.m_slag;
         }
