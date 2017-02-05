@@ -3,14 +3,16 @@
  TMP.JS
 
 */
-//"using UnityEngine";
 
-function $get()
-{
-    return "0123";
-}
+var $i = Cast(int,1);
+PrintLn($i);
+PrintLn($i.GetType());
 
-var $n = $get()[0].ToString();
+$i += 4;
+PrintLn($i);
+PrintLn($i.GetType());
 
-PrintLn($n);
+$i = Cast(uint,10);
+PrintLn($i);
+PrintLn($i.GetType());
 
