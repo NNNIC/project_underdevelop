@@ -76,6 +76,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\scripts\Arrow.cs" />
+    <Compile Include="Assets\scripts\test.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\memo.txt" />

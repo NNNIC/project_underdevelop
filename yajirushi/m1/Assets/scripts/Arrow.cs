@@ -24,8 +24,10 @@ public class Arrow {
 
         public int        tmp_index; //メッシュ作成時に使用の一時的インデックス
 
-        public vertex(string name, float x, float y, float z)
+        public vertex(string iname, float x, float y, float z)
         {
+            name = iname;
+
             v = new Vector3(x,y,z);
 
             bone0 = null; //未定義
@@ -160,6 +162,7 @@ public class Arrow {
                 parent = bone_list[bone_list.Count-1].name;
             }
             var bone = new bone(name,type,parent,org);
+            bone_list.Add(bone);
         }
 
         public void SetWeight(string poligon, string bone0)
@@ -185,7 +188,7 @@ public class Arrow {
             return bone_list.Find(i=>i.name == name);
         }
 
-        public void SKINNEDMESH_createBones(out Transform[] bones, out Matrix4x4[] bindPoses)
+        public void SKINNEDMESH_createBones(Transform transform,  out Transform[] bones, out Matrix4x4[] bindPoses)
         {
             var tf_list = new List<Transform>();
             var bp_list = new List<Matrix4x4>();
@@ -196,14 +199,13 @@ public class Arrow {
                 var go   = new GameObject(b.name);
                 var tr   = go.transform;
                 tr.localRotation = Quaternion.identity;
+                tr.position = b.org;
 
                 b.tmp_tr = tr;
-                if (b.parent!=null)
-                {
-                    tr.parent = FindBone(b.name).tmp_tr;
-                    tr.localPosition = b.org - tr.parent.position;
-                    bp = tr.worldToLocalMatrix;
-                }
+                tr.parent = (b.parent!=null) ?  FindBone(b.parent).tmp_tr : transform;
+
+                tr.localPosition = b.org - tr.parent.position;
+                bp = tr.worldToLocalMatrix * transform.localToWorldMatrix;
                 
                 tf_list.Add(tr);
                 bp_list.Add(bp);
@@ -273,7 +275,7 @@ public class Arrow {
         pol.AddTriIndex(a,b,c);
         pol.AddTriIndex(c,d,a);
 
-        return null;
+        return pol;
     }
     /// <summary>
     /// 
@@ -371,6 +373,8 @@ public class Arrow {
 
         skin.AddBone(name, bone.TYPE.ROOT_SHAFT,0);
 
+        skin.SetWeight(name,name);
+
         skin.lenght += len;
 
         return skin;
@@ -383,9 +387,10 @@ public class Arrow {
         var joint_shaft_name = id + "_jointshaft";
 
         //Create Joint poligons
-        var joint_1st_pol   = POL_CreateRectangles_1xN(joint_1st_name, width,base_len,org, each_divnum);
-        var joint_2nd_pol   = POL_CreateRectangles_1xN(joint_2nd_name, width,base_len,org+=base_len,each_divnum);
-        var joint_shuft_pol = POL_CreateRectangle(joint_shaft_name, width,base_len,org+=base_len*2);
+        var joint_1st_pol   = POL_CreateRectangles_1xN(joint_1st_name, width,base_len,org         , each_divnum);
+        var joint_2nd_pol   = POL_CreateRectangles_1xN(joint_2nd_name, width,base_len,org+base_len,each_divnum);
+
+        var joint_shuft_pol = POL_CreateRectangle(joint_shaft_name, width,base_len, org+base_len*2 );
 
         skin.AddPoligon(joint_1st_pol);  //0
         skin.AddPoligon(joint_2nd_pol);  //1
@@ -477,12 +482,26 @@ public class Arrow {
         // assign bone weight
         mesh.boneWeights = bwlist.ToArray();
 
+        Transform[] bones;
+        Matrix4x4[] bindPoses;
 
-
-
-
-
-
-        return m;
+        skin.SKINNEDMESH_createBones( go.transform, out bones, out bindPoses);
+        mesh.bindposes = bindPoses;
+        rend.bones = bones;
+        rend.sharedMesh = mesh;
     }
+
+    //---
+    public static GameObject CreateTest()
+    {
+        var p = new Arrow();
+        var skin = p.CreateUniversalArrowSkin(0.5f,1,10,1);
+        
+        var go = new GameObject("TEST");
+        p.CreateMesh(skin,go);
+
+        return go;
+    }
+
+
 }
