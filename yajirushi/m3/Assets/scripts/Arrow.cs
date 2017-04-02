@@ -14,8 +14,22 @@ public class Arrow {
     //
     public class vertex
     {
-        public string     name;        //名前
-        public string     poligonname; //所属ポリゴン名
+        #region 名前
+        private List<string> names = new List<string>();
+        public string name {
+            get {  return names.Count>0 ? names[names.Count-1] : null; } // 最後に登録したものを返す
+            set {  if (!names.Contains(value)) { names.Add(value); }   } // ユニークのみ
+        }
+        public bool   name_contains(string s) { return names.Contains(s);   }
+        public bool   names_have_startsWith(string s)
+        {
+            foreach(var n in names)
+            {
+                if (n.StartsWith(s)) return true;
+            }
+            return false;
+        }
+        #endregion
 
         public Vector3    v;       //座標
         public string     bone0;   //所属ボーン0
@@ -26,10 +40,9 @@ public class Arrow {
 
         public int        tmp_index; //メッシュ作成時に使用の一時的インデックス
 
-        public vertex(string poligon_name, string vertex_name, float x, float y, float z)
+        public vertex(string i_name,  float x, float y, float z)
         {
-            name        = vertex_name;
-            poligonname = poligon_name;
+            name = i_name;
 
             v = new Vector3(x,y,z);
 
@@ -42,7 +55,7 @@ public class Arrow {
 
     public class poligon
     {
-        public Dictionary<string,vertex> vertex_dic   = new Dictionary<string, vertex>();    //頂点リスト
+        public List<vertex> vertex_list   = new List<vertex>();    //頂点リスト
 
         public struct trindex {public Vector3 idx0, idx1, idx2; }                            //３角形情報を頂点で管理（※インデックスではない）
         public List<trindex>  tri_index_list= new List<trindex>();                           //トライアングルインデックス
@@ -71,22 +84,28 @@ public class Arrow {
         }
         #endregion
 
-        private string _key(string vertexname) { return _tmpsaved_poligonname + ">" + vertexname;  }
-        private string _key(string poligonname,string vertexname) { return poligonname + ">" + vertexname;  }
+        private string _makename(string vertexname) { return _tmpsaved_poligonname + ">" + vertexname;  }
+        private string _makename(string poligonname,string vertexname) { return poligonname + ">" + vertexname;  }
 
         public void AddVertex(string vertexname, float x, float y, float z)
         {
             if (_tmpsaved_poligonname==null) throw new SystemException();
-            foreach(var p in vertex_dic)
+            bool bFound = false;
+            for(var i =0; i<vertex_list.Count; i++)
             {
-                var b = IsEqualVector3(p.Value.v, new Vector3(x,y,z));
+                var v = vertex_list[i];
+                var b = IsEqualVector3(v.v, new Vector3(x,y,z));
                 if (b)
                 {
-                    vertex_dic.Remove(p.Key);
+                    v.name = _makename(vertexname); //名前を変える　（内部にてhistory保存）
+                    bFound = true;
                     break;
                 }
             }
-            vertex_dic.Add(_key(vertexname), new vertex(_tmpsaved_poligonname,vertexname, x,y,z));
+            if (!bFound)
+            {
+                vertex_list.Add(new vertex(_makename(vertexname), x,y,z));
+            }
         }
 
         public void AddTriIndex(string n1, string n2, string n3)
@@ -97,18 +116,20 @@ public class Arrow {
         //検索
         public vertex FindVertex(string vertexname)
         {
-            var key = _key(vertexname);
-            if (vertex_dic.ContainsKey(key))
+            var key = _makename(vertexname);
+            foreach(var v in vertex_list)
             {
-                return vertex_dic[key];
+                if (v.name_contains(key))
+                {
+                    return v;
+                }
             }
             return null;
         }
         public vertex FindVertex(Vector3 pos)
         {
-            foreach(var k in vertex_dic.Keys)
+            foreach(var v in vertex_list)
             {
-                var v = vertex_dic[k];
                 if (IsEqualVector3 (v.v, pos)) return v;
             }
             return null;
@@ -122,15 +143,24 @@ public class Arrow {
             }
             return v.v;
         }
-        public List<vertex> CollectVertex(string poligonname)
+        public List<vertex> CollectVertex(string poligonname,bool bLatestOnly=true)
         {
             var list = new List<vertex>();
-            var nullkeyname = _key(poligonname,"");
-            foreach(var k in vertex_dic.Keys)
+            var nullkeyname = _makename(poligonname,"");
+            foreach(var v in vertex_list)
             {
-                if (k.StartsWith(nullkeyname))
+                bool b=false;
+                if (bLatestOnly)
                 {
-                    list.Add(vertex_dic[k]);
+                    b = v.name.StartsWith(nullkeyname);
+                }
+                else
+                {
+                    b = v.names_have_startsWith(nullkeyname);
+                }
+                if (b)
+                {
+                    list.Add(v);
                 }
             }
             return list;
@@ -148,9 +178,8 @@ public class Arrow {
         {
             var index = mesh_vertex_list.Count;
             var tmp_list = new List<vertex>();
-            foreach(var p in vertex_dic)
+            foreach(var vtx in vertex_list)
             {
-                var vtx = p.Value;
                 vtx.tmp_index = index++;
                 tmp_list.Add(vtx); 
                 mesh_vertex_list.Add(vtx.v); //頂点
@@ -248,9 +277,37 @@ public class Arrow {
                 v.bone0 = bone0;
             }
         }
-        public void SetWeight(string poligon, string bone0, string bone1)
+        public void SetWeight(string poligon0,  string bone0, string poligon1,string bone1, float org_z, float bone_len)
         {
-            SetWeight(poligon,bone0); //暫定
+            // poligon0はbone0の配下で、orgでbone1の影響が0.5
+            // poligon1はbone1の配下で、orgでbone0の影響が0.5 
+            var poligon0_verlist = pol.CollectVertex(poligon0);
+            var poligon1_verlist = pol.CollectVertex(poligon1);
+
+            Func<float,float> _linea = (f)=>0.5f + 0.5f * f;
+            Func<float,float> _x2    = (f)=>0.5f + 0.5f * f * f;
+            Func<float,float> _x3    = (f)=>0.5f + 0.5f * f * f * f;
+            Func<float,float> _xa    = (f)=> {
+                var a = 0.5f + 0.5f * f * 2;
+                if (a<1) return a;
+                return 1;
+            };
+            Func<float,float> _sin = (f)=>0.5f + 0.5f * Mathf.Sin(Mathf.PI / 2 * f);
+
+            Action<List<vertex>,string,string> _setw = (list,bn0,bn1) => {
+                foreach(var v in list)
+                {
+                    v.bone0 = bn0;
+                    v.bone1 = bn1;
+
+                    var dz = Mathf.Abs(v.v.z - org_z) / bone_len;
+                    v.weight0 = _sin(dz); //_xa(dz);//_x3(dz);//_linea(dz);//0.5f + 0.5f * dz;
+                    v.weight1 = 1.0f - v.weight0;
+                }
+            };
+
+            _setw(poligon0_verlist,bone0,bone1);
+            _setw(poligon1_verlist,bone1,bone0);
         }
 
         //検索
@@ -483,8 +540,8 @@ public class Arrow {
         skin.AddBone(joint_shaft_name, bone.TYPE.JOINT_2ND,org + base_len * 2);
 
         //Set Weight
-        skin.SetWeight(joint_1st_name,joint_1st_name,joint_2nd_name);
-        skin.SetWeight(joint_2nd_name,joint_2nd_name,joint_1st_name);
+        skin.SetWeight(joint_1st_name,joint_1st_name,joint_2nd_name,joint_2nd_name,org+base_len,base_len);
+        //skin.SetWeight(joint_2nd_name,joint_2nd_name,joint_1st_name);
         skin.SetWeight(joint_shaft_name,joint_shaft_name);
 
         skin.lenght += base_len * 3;
@@ -526,7 +583,7 @@ public class Arrow {
 
         skin     = SKIN_2_addJointSkin(skin,"j2",line_width, base_len,skin.lenght,base_divnum); 
 
-        skin     = SKIN_3_addArrowRootSkin(skin,arrow_width,base_len,base_len, skin.lenght);      
+        skin     = SKIN_3_addArrowRootSkin(skin,arrow_width,base_len,line_width, skin.lenght);      
 
         skin     = SKIN_4_addArrowHeadSkin(skin, skin.lenght);
 
@@ -584,7 +641,7 @@ public class Arrow {
     public static GameObject CreateTest1()
     {
         var p = new Arrow();
-        var skin = p.CreateUniversalArrowSkin(0.5f,1,1,1);
+        var skin = p.CreateUniversalArrowSkin(0.5f,1,10,1);
         
         var go = new GameObject("TEST1");
         p.CreateMesh(skin,go);
