@@ -2,8 +2,199 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using ArrowTool;
 
-public class Arrow {
+// 矢印作成
+// 取り扱いを簡単にするため１ファイルに集約
+
+[ExecuteInEditMode]
+public class Arrow : MonoBehaviour
+{
+    public enum TYPE
+    {
+        NONE,
+
+        ONEWAY,
+
+        TURN_L,
+        TURN_R,
+
+        U_TURN_R,
+        U_TURN_L,
+
+        S_TURN_R,
+        S_TURN_L
+    }
+
+    public class control
+    {
+        public Transform  m_head;
+
+        private Vector3 m_save_head;
+
+        StateManager m_sm;
+
+        public void Update()
+        {
+            if (m_sm==null) {
+                m_sm = new StateManager();
+                m_sm.Goto(S_IDLE);
+            }
+            m_sm.Update();
+        }
+
+        //ステート
+        public  float m_rhreshold_time = 2;
+        private float m_stay_time;
+        private void S_IDLE(bool bFirst)
+        {
+            if (bFirst)
+            {
+                m_stay_time = 0;
+                return;
+            }
+            if (Util.IsEqualVector3(m_head.position,m_save_head))
+            {
+                m_stay_time += Time.deltaTime;
+                if (m_stay_time > m_rhreshold_time)
+                {
+                    m_sm.Goto(S_MOVE);
+                    return;
+                }
+            }
+            else
+            {
+                m_save_head = m_head.position;
+                m_sm.Goto(S_IDLE);
+            }
+        }
+        private void S_MOVE(bool bFirst)
+        {
+            if (bFirst)
+            {
+                Move();
+                return;
+            }
+            if (!Util.IsEqualVector3(m_head.position,m_save_head))
+            {
+                m_sm.Goto(S_IDLE);
+            }       
+        }
+        //
+        private void Move()
+        {
+            Debug.Log("!!" + Time.time);
+        }
+    }
+
+    public float m_shuft_width  = 0.4f;
+    public float m_unit_len     = 1.0f;
+    public int   m_curve_divnum = 10;
+    public float m_arrow_width   = 1.3f;
+
+    private TYPE __type;
+    public  TYPE  m_type;
+    private GameObject m_go;
+
+    private control m_control;
+    
+    private void Update()
+    {
+        if (__type != m_type)
+        {
+            __type = m_type;
+            if (m_go!=null)
+            {
+                m_control = null;
+                GameObject.DestroyImmediate(m_go);
+                m_go = null;
+            }
+            return;
+        }
+
+        if (m_type!= TYPE.NONE && m_go==null)
+        {
+            m_go = ArrowMaker.CreateArrowSub(__type,m_shuft_width,m_unit_len,m_curve_divnum,m_arrow_width);
+            m_go.transform.parent = transform;
+            m_go.transform.localEulerAngles = Vector3.zero;
+            m_go.transform.localScale       = Vector3.one;
+            m_go.transform.localPosition    = Vector3.zero;
+        }        
+    }
+
+}
+
+// ------------------------------------------------ 以下、矢印作成 --------------------------------------------
+
+namespace ArrowTool
+{
+    public class StateManager 
+    {
+        Action<bool> m_curstate;
+        Action<bool> m_nextstate;
+    
+        //リクエスト
+        public void Goto(Action<bool> func) 
+        { 
+            m_nextstate = func;  
+        }
+    
+        //更新
+        public void Update()
+        {
+            if (m_nextstate!=null)
+            {
+                m_curstate = m_nextstate;
+                m_nextstate = null;
+                m_curstate(true);
+            }
+            else
+            {
+                if (m_curstate!=null) m_curstate(false);
+            }
+        }
+    }
+    public class Util
+    {
+        public static bool IsEqualVector3(Vector3 v1, Vector3 v2)
+        {
+            float epsiron = 0.0005f;  //floatの有効桁は6桁
+            var dx = Mathf.Abs(v1.x - v2.x);
+            var dy = Mathf.Abs(v1.y - v2.y);
+            var dz = Mathf.Abs(v1.z - v2.z);
+
+            return (dx<epsiron && dy<epsiron && dz<epsiron);
+        }
+
+        public static Transform FindNode(GameObject go, string name)
+        {
+            Transform found = null;
+            Action<Transform> _traverse = null;
+            _traverse = (t)=> {
+                if (found==null)
+                {
+                    if (t.name==name)
+                    {
+                        found = t;
+                        return;
+                    }
+
+                    for(int i = 0; i<t.childCount; i++)
+                    {
+                        _traverse(t.GetChild(i));
+                    }
+                }
+            };
+
+            _traverse(go.transform);
+
+            return found;
+        }
+    }
+}
+
+
+public class ArrowMaker {
     //
     // 方針：頂点などを記号化した状態のままのデータ構造として、扱いやすい形で
     //       
@@ -69,18 +260,6 @@ public class Arrow {
         public struct trindex {public Vector3 idx0, idx1, idx2; }                            //３角形情報を頂点で管理（※インデックスではない）
         public List<trindex>  tri_index_list= new List<trindex>();                           //トライアングルインデックス
 
-        #region ポジション一致
-        private bool IsEqualVector3(Vector3 v1, Vector3 v2)
-        {
-            float epsiron = 0.0005f;  //floatの有効桁は6桁
-            var dx = Mathf.Abs(v1.x - v2.x);
-            var dy = Mathf.Abs(v1.y - v2.y);
-            var dz = Mathf.Abs(v1.z - v2.z);
-
-            return (dx<epsiron && dy<epsiron && dz<epsiron);
-        }
-        #endregion
-
         #region 利用時に便宜
         private string  _tmpsaved_poligonname;                                               //利用時に便宜
         public void     Begin(string poligonname)
@@ -106,7 +285,7 @@ public class Arrow {
             for(var i =0; i<vertex_list.Count; i++)
             {
                 var v = vertex_list[i];
-                var b = IsEqualVector3(v.v, vec3);
+                var b = Util.IsEqualVector3(v.v, vec3);
                 if (b)
                 {
                     v.name = _makename(vertexname); //名前を変える　（内部にてhistory保存）
@@ -142,7 +321,7 @@ public class Arrow {
         {
             foreach(var v in vertex_list)
             {
-                if (IsEqualVector3 (v.v, pos)) return v;
+                if (Util.IsEqualVector3 (v.v, pos)) return v;
             }
             return null;
         }
@@ -315,30 +494,12 @@ public class Arrow {
     #endregion
 
     #region ポリゴン作成
-    //                     繰り返し
-    //               [<-----------------]
-    // root   rs       j1     j2     js    ar       ah
-    // bone0->bone1-> bone2->bone3->bone4->bone5->bone6
-    //
-    // Ｚ方向へ
-    // xz平面の2次平面に描画
-    // root と arrow-headは、長さ０で所属するメッシュはない。ポイントとして利用
-    // よって矢印の全長は
-    // 繰り返しｘ０(直線0)　 --- 3 
-    // 繰り返しｘ１(曲ｘ１)  --- 3+3 = 6
-    // 繰り返しｘ２(曲ｘ２)  --- 3+3x2 = 9
-    // 繰り返しｘn(曲ｘn)    --- 3+3xn
-    // 
-    // shaftの部分が伸長
-    // 
-    // 曲がるときは、joint-outerに接続するjoint-innerがy軸 +/- 90度まで傾く
-    // 
     // 矢印の種類
     //
-    //  ストレート 
-    //  直角       
-    //  汎用(Uターン/S字)  構造が同じなので
-    //  カスタム
+    //  一方向
+    //  直角―右・左       
+    //  Uターンー右・左
+    //  Ｓターンー右・左
     //  
 
     /// <summary>
@@ -356,27 +517,6 @@ public class Arrow {
     /// </summary>
     private poligon POL_CreateRectangle(poligon pol, string poligon_name, float width, float len, Vector3 org, float angle_y)
     {
-        //pol.Begin(poligon_name);
-        //{
-        //    var a = "a";
-        //    var b = "b";
-        //    var c = "c";
-        //    var d = "d";
-
-        //    var wh = width / 2.0f;
-
-        //    pol.AddVertex(a,-wh,0,org);
-        //    pol.AddVertex(b,-wh,0,org + len);
-        //    pol.AddVertex(c, wh,0,org + len);
-        //    pol.AddVertex(d, wh,0,org);
-
-        //    pol.AddTriIndex(a,b,c);
-        //    pol.AddTriIndex(c,d,a);
-
-        //    pol.End();
-        //}
-        //return pol;
-
         pol.Begin(poligon_name);
         {
             var a = "a";
@@ -606,8 +746,8 @@ public class Arrow {
     }
     #endregion
 
-    #region スキン作成用
-    private Skin SKIN_createRoot(float width) 
+    #region スキンパーツ作成用
+    private Skin SKINPARTS_createRoot(float width) 
     {
         var skin = new Skin();
 
@@ -619,7 +759,7 @@ public class Arrow {
 
         return skin;
     }
-    private Skin SKIN_addShaft(Skin skin, string id, float len)
+    private Skin SKINPARTS_addShaft(Skin skin, string id, float len)
     {
         var name    = id + "_shaft";
         var width   = skin.shaft_width;
@@ -636,7 +776,7 @@ public class Arrow {
 
         return skin;
     }
-    private Skin SKIN_addCurve90(Skin skin, string id, float radius, int divnum, bool bRev)
+    private Skin SKINPARTS_addCurve90(Skin skin, string id, float radius, int divnum, bool bRev)
     {
         var name    = id + "_curve90";
         var width   = skin.shaft_width;
@@ -663,9 +803,8 @@ public class Arrow {
         }
         
         return skin;
-    }
-  
-    private Skin SKIN_addArrowRoot(Skin skin, float width, float len)
+    }  
+    private Skin SKINPARTS_addArrowRoot(Skin skin, float width, float len)
     {
         var name       = "arrow";
         var shaftwidth = skin.shaft_width;
@@ -682,9 +821,9 @@ public class Arrow {
 
         return skin;
     }
-    private Skin SKIN_addArrowHead(Skin skin)
+    private Skin SKINPARTS_addArrowHead(Skin skin)
     {
-        var name       = "arrow_head";
+        var name       = "head";
         var org        = skin.next_org;
         var angle_y    = skin.next_angle_y;
 
@@ -696,76 +835,144 @@ public class Arrow {
     }
     #endregion
 
+    #region スキン作成
     //一方向矢印のスキン作成
-    public Skin Create_OneWayArrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    private Skin CreateSkin_OneWay_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
     {
-        var skin = SKIN_createRoot(shaft_width);
+        var skin = SKINPARTS_createRoot(shaft_width);
 
-        skin = SKIN_addShaft(skin,"shaft",unit_len);
+        skin = SKINPARTS_addShaft(skin,"shaft",unit_len);
 
-        skin = SKIN_addArrowRoot(skin,arrow_width,unit_len);
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
 
-        skin = SKIN_addArrowHead(skin);
+        skin = SKINPARTS_addArrowHead(skin);
 
         return skin;
     }
 
     //右方向矢印のスキン作成
-    public Skin Create_RightCurveArrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    private Skin CreateSkin_Curve_R_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
     {
-        var skin = SKIN_createRoot(shaft_width);
+        var skin = SKINPARTS_createRoot(shaft_width);
 
-        skin = SKIN_addShaft(skin,"shaft1",unit_len);
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
 
-        skin = SKIN_addCurve90(skin,"curve1",1,10,false);
+        skin = SKINPARTS_addCurve90(skin,"curve1",1,10,false);
 
-        skin = SKIN_addShaft(skin,"shaft2",unit_len);
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
 
-        skin = SKIN_addArrowRoot(skin,arrow_width,unit_len);
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
 
-        skin = SKIN_addArrowHead(skin);
+        skin = SKINPARTS_addArrowHead(skin);
+
+        return skin;
+    }
+    //左方向矢印のスキン作成
+    private Skin CreateSkin_Curve_L_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",1,10,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
+
+        return skin;
+    }
+    //Ｕターン右用のスキン作成
+    private Skin CreateSkin_U_Turn_R_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",1,10,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve2",1,10,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
+
+        return skin;
+    }
+    //Uターン左用のスキン作成
+    private Skin CreateSkin_U_Turn_L_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",1,10,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve2",1,10,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
+
+        return skin;
+    }
+    //Sターン右用のスキン作成
+    private Skin CreateSkin_S_Turn_R_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",1,10,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve2",1,10,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
+
+        return skin;
+    }
+    //Sターン左用のスキン作成
+    private Skin CreateSkin_S_Turn_L_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",1,10,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve2",1,10,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
 
         return skin;
     }
 
-    public Skin Create_LeftCurveArrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
-    {
-        var skin = SKIN_createRoot(shaft_width);
+    #endregion
 
-        skin = SKIN_addShaft(skin,"shaft1",unit_len);
-
-        skin = SKIN_addCurve90(skin,"curve1",1,10,true);
-
-        skin = SKIN_addShaft(skin,"shaft2",unit_len);
-
-        skin = SKIN_addArrowRoot(skin,arrow_width,unit_len);
-
-        skin = SKIN_addArrowHead(skin);
-
-        return skin;
-    }
-    public Skin Create_UTurnArrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
-    {
-        var skin = SKIN_createRoot(shaft_width);
-
-        skin = SKIN_addShaft(skin,"shaft1",unit_len);
-
-        skin = SKIN_addCurve90(skin,"curve1",1,10,false);
-
-        skin = SKIN_addShaft(skin,"shaft2",unit_len);
-
-        skin = SKIN_addCurve90(skin,"curve2",1,10,false);
-
-        skin = SKIN_addShaft(skin,"shaft3",unit_len);
-
-        skin = SKIN_addArrowRoot(skin,arrow_width,unit_len);
-
-        skin = SKIN_addArrowHead(skin);
-
-        return skin;
-    }
-
-    public void CreateMesh(Skin skin, GameObject go)
+    #region スキンからメッシュ生成
+    private void CreateMesh(Skin skin, GameObject go)
     {
         // ref https://docs.unity3d.com/jp/540/ScriptReference/Mesh-bindposes.html
 
@@ -798,58 +1005,36 @@ public class Arrow {
         rend.bones = bones;
         rend.sharedMesh = mesh;
     }
+    #endregion
 
-    //---
-    public static GameObject CreateOneWay()
+    #region 公開
+    
+    public static GameObject CreateArrowSub(Arrow.TYPE type,float shuft_width, float unit_len, int curve_divnum, float arrow_width)
     {
-        var p = new Arrow();
-        var skin = p.Create_OneWayArrow(0.5f,1,10,1);
-        
-        var go = new GameObject("ONE WAY");
-        p.CreateMesh(skin,go);
+        var p  = new ArrowMaker();
+        var go = new GameObject(type.ToString());
+        Skin skin = null;
 
+        switch(type)
+        {
+            case Arrow.TYPE.ONEWAY:   skin =  p.CreateSkin_OneWay_Arrow  (shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.TURN_R:   skin =  p.CreateSkin_Curve_R_Arrow (shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.TURN_L:   skin =  p.CreateSkin_Curve_L_Arrow (shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.U_TURN_R: skin =  p.CreateSkin_U_Turn_R_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.U_TURN_L: skin =  p.CreateSkin_U_Turn_L_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.S_TURN_R: skin =  p.CreateSkin_S_Turn_R_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.S_TURN_L: skin =  p.CreateSkin_S_Turn_L_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+        }
+        p.CreateMesh(skin,go);
         return go;
     }
-    public static GameObject CreateRightCurve()
-    {
-        var p = new Arrow();
-        var skin = p.Create_RightCurveArrow(0.5f,1,10,1);
-        
-        var go = new GameObject("RIGHT CURVE");
-        p.CreateMesh(skin,go);
 
+    public static GameObject CreateArrow(Arrow.TYPE type)
+    {
+        var go = new GameObject("ARROW");
+        var ac = go.AddComponent<Arrow>();
+        ac.m_type = type;
         return go;
     }
-    public static GameObject CreateLeftCurve()
-    {
-        var p = new Arrow();
-        var skin = p.Create_LeftCurveArrow(0.5f,1,10,1);
-        
-        var go = new GameObject("LEFT CURVE");
-        p.CreateMesh(skin,go);
-
-        return go;
-    }
-    public static GameObject CreateUTern()
-    {
-        var p = new Arrow();
-        var skin = p.Create_UTurnArrow(0.5f,1,10,1);
-        
-        var go = new GameObject("U TERN");
-        p.CreateMesh(skin,go);
-
-        return go;
-    }
-    //public static GameObject CreateTest2()
-    //{
-    //    var p = new Arrow();
-    //    var skin = p.CreateOneWayArrowSkin(0.5f,1,1);
-        
-    //    var go = new GameObject("TEST2");
-    //    p.CreateMesh(skin,go);
-
-    //    return go;
-    //}
-
-
+    #endregion
 }
