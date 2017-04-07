@@ -60,10 +60,18 @@ public class Arrow : MonoBehaviour
             }
             if (Util.IsEqualVector3(m_head.position,m_save_head))
             {
-                m_stay_time += Time.deltaTime;
-                if (m_stay_time > m_threshold_time)
+                if (Application.isPlaying)
                 {
-                    m_sm.Goto(S_MOVE);
+                    m_stay_time += Time.deltaTime;
+                    if (m_stay_time > m_threshold_time)
+                    {
+                        m_sm.Goto(S_MOVE);
+                        return;
+                    }
+                }
+                else
+                {
+                    m_sm.Goto(S_MOVE); //実行していない場合は待つことなく遷移
                     return;
                 }
             }
