@@ -25,9 +25,14 @@ public class Arrow : MonoBehaviour
         S_TURN_R,
         S_TURN_L
     }
-
+    
+    [Serializable]
     public class control
     {
+        public  Arrow      m_owner; 
+        private GameObject m_owner_go   { get { return m_owner.m_go; } }
+        private TYPE       m_owner_type { get { return m_owner.m_type; } set { m_owner.m_type = value; } }
+
         public Transform  m_head;
 
         private Vector3 m_save_head;
@@ -44,7 +49,7 @@ public class Arrow : MonoBehaviour
         }
 
         //ステート
-        public  float m_rhreshold_time = 2;
+        public  float m_threshold_time = 0.1f;
         private float m_stay_time;
         private void S_IDLE(bool bFirst)
         {
@@ -56,7 +61,7 @@ public class Arrow : MonoBehaviour
             if (Util.IsEqualVector3(m_head.position,m_save_head))
             {
                 m_stay_time += Time.deltaTime;
-                if (m_stay_time > m_rhreshold_time)
+                if (m_stay_time > m_threshold_time)
                 {
                     m_sm.Goto(S_MOVE);
                     return;
@@ -83,7 +88,69 @@ public class Arrow : MonoBehaviour
         //
         private void Move()
         {
-            Debug.Log("!!" + Time.time);
+            m_save_head = m_head.position;
+
+            var local_pos = m_owner_go.transform.InverseTransformPoint(m_head.position);
+            Debug.Log("!!" + local_pos);
+            
+            if (m_owner_type== TYPE.ONEWAY)
+            {
+                //Ｚ値のみ反映
+                var target_z = local_pos.z - m_owner.m_unit_len; //矢部分長さ
+                target_z = Mathf.Clamp(target_z,0,float.MaxValue);
+
+                var arrow_tr = Util.FindNode(m_owner_go,"arrow");
+                arrow_tr.localPosition = Util.Vector3_ModZ(arrow_tr.localPosition,target_z);
+                
+                //絶対値で修正
+                m_head.transform.position = m_save_head;
+
+                return;
+            }
+            if (m_owner_type== TYPE.TURN_R || m_owner_type == TYPE.TURN_L)
+            {
+                //x値が"arrow"のzに影響 
+                var target_x = Mathf.Abs(local_pos.x) - m_owner.m_unit_len * 2;
+                target_x = Mathf.Clamp(target_x,0,float.MaxValue);
+                
+                var arrow_tr = Util.FindNode(m_owner_go,"arrow");                
+                arrow_tr.localPosition=Util.Vector3_ModZ(arrow_tr.localPosition,target_x);
+
+                //z値が"curve1_curve90"に影響
+                var target_z = local_pos.z - m_owner.m_unit_len;
+                target_z = Mathf.Clamp(target_z,0,float.MaxValue);
+
+                var curve1_tr = Util.FindNode(m_owner_go,"curve1_curve90");
+                curve1_tr.localPosition=Util.Vector3_ModZ(curve1_tr.localPosition,target_z);
+
+                //絶対値で修正
+                m_head.transform.position = m_save_head;
+
+                return;
+            }
+            //if (m_owner_type== TYPE.TURN_L)
+            //{
+            //    //x値が"arrow"のzに影響 
+            //    var target_x = Mathf.Abs(local_pos.x) - m_owner.m_unit_len * 2;
+            //    target_x = Mathf.Clamp(target_x,0,float.MaxValue);
+                
+            //    var arrow_tr = Util.FindNode(m_owner_go,"arrow");                
+            //    arrow_tr.localPosition=Util.Vector3_ModZ(arrow_tr.localPosition,target_x);
+
+            //    //z値が"curve1_curve90"に影響
+            //    var target_z = local_pos.z - m_owner.m_unit_len;
+            //    target_z = Mathf.Clamp(target_z,0,float.MaxValue);
+
+            //    var curve1_tr = Util.FindNode(m_owner_go,"curve1_curve90");
+            //    curve1_tr.localPosition=Util.Vector3_ModZ(curve1_tr.localPosition,target_z);
+
+            //    //絶対値で修正
+            //    m_head.transform.position = m_save_head;
+
+            //    return;
+            //}
+
+           
         }
     }
 
@@ -94,6 +161,8 @@ public class Arrow : MonoBehaviour
 
     private TYPE __type;
     public  TYPE  m_type;
+
+    public float m_start_angle_y = 0;
     private GameObject m_go;
 
     private control m_control;
@@ -116,10 +185,16 @@ public class Arrow : MonoBehaviour
         {
             m_go = ArrowMaker.CreateArrowSub(__type,m_shuft_width,m_unit_len,m_curve_divnum,m_arrow_width);
             m_go.transform.parent = transform;
-            m_go.transform.localEulerAngles = Vector3.zero;
+            m_go.transform.localEulerAngles = Vector3.up * m_start_angle_y;
             m_go.transform.localScale       = Vector3.one;
             m_go.transform.localPosition    = Vector3.zero;
-        }        
+
+            m_control = new control();
+            m_control.m_owner = this;
+            m_control.m_head = Util.FindNode(m_go,"head");
+        }
+ 
+        if (m_control!=null) m_control.Update();       
     }
 
 }
@@ -189,6 +264,11 @@ namespace ArrowTool
             _traverse(go.transform);
 
             return found;
+        }
+
+        public static Vector3 Vector3_ModZ(Vector3 v, float z)
+        {
+            return new Vector3(v.x,v.y,z);
         }
     }
 }
@@ -474,13 +554,13 @@ public class ArrowMaker {
                 var bp   = Matrix4x4.identity;
                 var go   = new GameObject(b.name);
                 var tr   = go.transform;
-                tr.localRotation = Quaternion.identity;
+                tr.rotation = Quaternion.Euler(0,b.angle_y,0);
                 tr.position = b.org;
 
                 b.tmp_tr = tr;
                 tr.parent = (b.parent!=null) ?  FindBone(b.parent).tmp_tr : transform;
 
-                tr.localPosition = b.org - tr.parent.position;
+                //tr.localPosition = b.org - tr.parent.position;
                 bp = tr.worldToLocalMatrix * transform.localToWorldMatrix;
                 
                 tf_list.Add(tr);
