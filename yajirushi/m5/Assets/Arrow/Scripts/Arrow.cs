@@ -94,7 +94,7 @@ public class Arrow : MonoBehaviour
             }       
         }
         //
-        private void Move()
+        public void Move()
         {
             m_save_head = m_head.position;
 
@@ -134,6 +134,7 @@ public class Arrow : MonoBehaviour
                 //絶対値で修正
                 m_head.transform.position = m_save_head;
 
+#if FLEXIBLE
                 //Ｘ位置が逆転したらモデル変更
                 if (local_pos.x < 0 && m_owner_type == TYPE.TURN_R)
                 {
@@ -145,6 +146,7 @@ public class Arrow : MonoBehaviour
                     m_owner.m_keep_head = true;
                     m_owner_type = TYPE.TURN_R;
                 }
+#endif
 
                 return;
             }
@@ -164,22 +166,37 @@ public class Arrow : MonoBehaviour
 
     private control m_control;
 
-    [HideInInspector]
+    public  Transform m_head {
+        get {
+            if (m_control!=null)
+            {
+                return m_control.m_head;
+            }
+            return null;
+        }
+    }
     public  Vector3 m_save_head;
     public  bool    m_keep_head;
 
-    private void Update()
+
+    public void Update()
     {
         if (__type != m_type)
         {
-            __type = m_type;
-            if (m_go!=null)
+            m_go = null;
+            m_control = null;
+            if (transform.childCount>0)
             {
-                m_control = null;
-                GameObject.DestroyImmediate(m_go);
-                m_go = null;
+                GameObject.DestroyImmediate(transform.GetChild(0).gameObject);
             }
-            return;
+            if (transform.childCount==0)
+            {
+                __type = m_type;
+            }
+            else
+            { 
+                return;
+            }
         }
 
         if (m_type!= TYPE.NONE && m_go==null)
@@ -205,8 +222,18 @@ public class Arrow : MonoBehaviour
                 m_save_head = m_control.m_head.position;
             }
         }
- 
-        if (m_control!=null) m_control.Update();       
+        
+        if (m_control!=null)
+        {
+            if (Application.isPlaying)
+            {
+                m_control.Update();
+            }
+            else
+            {
+                m_control.Move();
+            }
+        }
     }
 
 }
@@ -293,11 +320,11 @@ public class ArrowMaker {
     //       最終的にスキンメッシュを作成する。
     //
 
-    #region 格納クラス
+#region 格納クラス
     //
     public class vertex
     {
-        #region 名前
+#region 名前
         private List<string> names = new List<string>();
         public string name {
             get {  return names.Count>0 ? names[names.Count-1] : null; } // 最後に登録したものを返す
@@ -312,7 +339,7 @@ public class ArrowMaker {
             }
             return false;
         }
-        #endregion
+#endregion
 
         public Vector3    v;       //座標
         public string     bone0;   //所属ボーン0
@@ -352,7 +379,7 @@ public class ArrowMaker {
         public struct trindex {public Vector3 idx0, idx1, idx2; }                            //３角形情報を頂点で管理（※インデックスではない）
         public List<trindex>  tri_index_list= new List<trindex>();                           //トライアングルインデックス
 
-        #region 利用時に便宜
+#region 利用時に便宜
         private string  _tmpsaved_poligonname;                                               //利用時に便宜
         public void     Begin(string poligonname)
         {
@@ -362,7 +389,7 @@ public class ArrowMaker {
         {
             _tmpsaved_poligonname = null;
         }
-        #endregion
+#endregion
 
         private string _makename(string vertexname) { return _tmpsaved_poligonname + ">" + vertexname;  }
         private string _makename(string poligonname,string vertexname) { return poligonname + ">" + vertexname;  }
@@ -583,9 +610,9 @@ public class ArrowMaker {
             bindPoses = bp_list.ToArray();
         }
     }
-    #endregion
+#endregion
 
-    #region ポリゴン作成
+#region ポリゴン作成
     // 矢印の種類
     //
     //  一方向
@@ -836,9 +863,9 @@ public class ArrowMaker {
         pol.End();
         return pol;
     }
-    #endregion
+#endregion
 
-    #region スキンパーツ作成用
+#region スキンパーツ作成用
     private Skin SKINPARTS_createRoot(float width) 
     {
         var skin = new Skin();
@@ -925,9 +952,9 @@ public class ArrowMaker {
 
         return skin;
     }
-    #endregion
+#endregion
 
-    #region スキン作成
+#region スキン作成
     //一方向矢印のスキン作成
     private Skin CreateSkin_OneWay_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
     {
@@ -1061,9 +1088,9 @@ public class ArrowMaker {
         return skin;
     }
 
-    #endregion
+#endregion
 
-    #region スキンからメッシュ生成
+#region スキンからメッシュ生成
     private void CreateMesh(Skin skin, GameObject go)
     {
         // ref https://docs.unity3d.com/jp/540/ScriptReference/Mesh-bindposes.html
@@ -1097,9 +1124,9 @@ public class ArrowMaker {
         rend.bones = bones;
         rend.sharedMesh = mesh;
     }
-    #endregion
+#endregion
 
-    #region 公開
+#region 公開
     
     public static GameObject CreateArrowSub(Arrow.TYPE type,float shuft_width, float unit_len, int curve_divnum, float arrow_width)
     {
@@ -1128,5 +1155,5 @@ public class ArrowMaker {
         ac.m_type = type;
         return go;
     }
-    #endregion
+#endregion
 }
