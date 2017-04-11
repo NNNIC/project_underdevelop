@@ -23,21 +23,80 @@ public class Arrow : MonoBehaviour
         U_TURN_L,
 
         S_TURN_R,
-        S_TURN_L
+        S_TURN_L,
+
+        SS_TURN_R,    //Super S -- 大きく曲がったＳ字
+        SS_TURN_L,
+
+        HEAD_C_R,     //先頭がＣの字
+        HEAD_C_L,
+
+        TAIL_C_R,     //末尾がＣの字
+        TAIL_C_L,
     }
     
     [Serializable]
     public class control
     {
         public  Arrow      m_owner; 
-        private GameObject m_owner_go   { get { return m_owner.m_go; } }
-        private TYPE       m_owner_type { get { return m_owner.m_type; } set { m_owner.m_type = value; } }
+        private GameObject m_go   { get { return m_owner.m_go; } }
+        private TYPE       m_type { get { return m_owner.m_type; } set { m_owner.m_type = value; } }
 
         public Transform   m_head;
-        public Transform   m_mid;
+        public Transform[] m_mids;
 
         private Vector3    m_headsave;
-        private Vector3    m_midsave;
+        private Vector3[]  m_midsaves;
+
+        private bool is_midsEqual()
+        {
+            bool bEqual = false;
+
+            if (m_mids==null)
+            {
+                return true;
+            }
+            if (m_midsaves==null)
+            {
+                m_midsaves = new Vector3[m_mids.Length];
+                for(var i = 0; i<m_mids.Length; i++)
+                {
+                    m_midsaves[i] = m_mids[i].transform.position;
+                }
+                return false;
+            }
+            // ----
+            if (m_mids!=null && m_midsaves!=null)
+            {
+                bEqual = true;
+                for(var i = 0; i<m_mids.Length; i++)
+                {
+                    if (m_mids[i].transform.position!=m_midsaves[i])
+                    {
+                        bEqual = false;
+                        break;
+                    }
+                }
+            }
+            if (!bEqual)
+            {
+                for(var i = 0; i<m_mids.Length; i++)
+                {
+                    m_midsaves[i] = m_mids[i].transform.position;
+                }
+            }
+            return bEqual;
+        }
+        private void restore_mids()
+        {
+            if (m_mids!=null && m_midsaves!=null)
+            {
+                for(var i = 0; i<m_mids.Length; i++)
+                {
+                    m_mids[i].transform.position = m_midsaves[i];
+                }
+            }
+        }
 
         public void Move()
         {
@@ -47,7 +106,7 @@ public class Arrow : MonoBehaviour
                  (
                    (m_head.transform.position == m_headsave)
                     &&
-                   (m_mid!=null && m_mid.transform.position == m_midsave)
+                   is_midsEqual()
                  )
                 )
             {
@@ -55,101 +114,79 @@ public class Arrow : MonoBehaviour
             }
             
             Func<string, Vector3> get_spacepos = (n)=> {
-                var target_tr = Util.FindNode(m_owner_go,n);
-                return m_owner_go.transform.parent.InverseTransformPoint(target_tr.position);
+                var target_tr = Util.FindNode(m_go,n);
+                return m_go.transform.parent.InverseTransformPoint(target_tr.position);
             };
 
             m_headsave = m_head.position;
-            if (m_mid!=null) { m_midsave = m_mid.position; }
             {
                 var     unit_len   = m_owner.m_unit_len;
-                Vector3 space_head = Vector3.zero;
-                Vector3 space_mid  = Vector3.zero;
-                space_head = m_owner_go.transform.parent.InverseTransformPoint(m_head.position);
-                if (m_mid!=null) {
-                    space_mid  = m_owner_go.transform.parent.InverseTransformPoint(m_mid.position);
+                Vector3   space_head  = Vector3.zero;
+                Vector3[] space_mids  = null;//new Vector3[m_mids.Length];
+                space_head = m_go.transform.parent.InverseTransformPoint(m_head.position);
+                if (m_mids!=null) {
+                    space_mids = new Vector3[m_mids.Length];
+                    for(var i = 0; i<m_mids.Length; i++)
+                    {
+                        space_mids[i]  = m_go.transform.parent.InverseTransformPoint(m_mids[i].position);
+                    }
                 }
             
-                if (m_owner_type== TYPE.ONEWAY)
+                if (m_type== TYPE.ONEWAY)
                 {
                     //Ｚ値のみ反映
                     var target_z = space_head.z - unit_len; //矢部分長さ
                     target_z = Mathf.Clamp(target_z,0,float.MaxValue);
 
-                    var arrow_tr = Util.FindNode(m_owner_go,"arrow");
+                    var arrow_tr = Util.FindNode(m_go,"arrow");
                     arrow_tr.localPosition = Util.Vector3_ModZ(arrow_tr.localPosition,target_z);
                 
                 }
-                else if (m_owner_type== TYPE.TURN_R || m_owner_type == TYPE.TURN_L)
+                else if (m_type== TYPE.TURN_R || m_type == TYPE.TURN_L)
                 {
                     //x値が"arrow"のzに影響 
                     var target_x = Mathf.Abs(space_head.x) - unit_len * 2;
                     target_x = Mathf.Clamp(target_x,0,float.MaxValue);
                 
-                    var arrow_tr = Util.FindNode(m_owner_go,"arrow");                
+                    var arrow_tr = Util.FindNode(m_go,"arrow");                
                     arrow_tr.localPosition=Util.Vector3_ModZ(arrow_tr.localPosition,target_x);
 
                     //z値が"curve1_curve90"に影響
                     var target_z = space_head.z - unit_len;
                     target_z = Mathf.Clamp(target_z,0,float.MaxValue);
 
-                    var curve1_tr = Util.FindNode(m_owner_go,"curve1_curve90");
+                    var curve1_tr = Util.FindNode(m_go,"curve1_curve90");
                     curve1_tr.localPosition=Util.Vector3_ModZ(curve1_tr.localPosition,target_z);
                 }
-                else// if (m_owner_type== TYPE.U_TURN_R || m_owner_type == TYPE.U_TURN_L)
+                else if (m_type== TYPE.U_TURN_R || m_type == TYPE.U_TURN_L || m_type == TYPE.S_TURN_R || m_type == TYPE.S_TURN_L )
                 {
                     //headのz値  "arrow"の位置に影響
                     var head_target_z = Mathf.Abs(space_head.z - get_spacepos("shaft3_shaft").z) - unit_len;
                     head_target_z = Mathf.Clamp(head_target_z,0,float.MaxValue);
 
-                    var arrow_tr = Util.FindNode(m_owner_go,"arrow");                
+                    var arrow_tr = Util.FindNode(m_go,"arrow");                
                     arrow_tr.localPosition=Util.Vector3_ModZ(arrow_tr.localPosition,head_target_z);
                   
                     //headのx値 "curve2_curve90"の位置に影響
                     var head_target_x = Mathf.Abs(space_head.x - get_spacepos("shaft2_shaft").x) - unit_len;
                     head_target_x = Mathf.Clamp(head_target_x,0,float.MaxValue);
-                    var curve2_tr = Util.FindNode(m_owner_go,"curve2_curve90");
+                    var curve2_tr = Util.FindNode(m_go,"curve2_curve90");
                     curve2_tr.localPosition=Util.Vector3_ModZ(curve2_tr.localPosition,head_target_x);
 
                     //midのz値 "arrow"と"curve1_curve90"位置に影響
-                    var mid_target_arrow_z = Mathf.Abs(space_mid.z - get_spacepos("arrow").z) -  unit_len;
+                    var mid_target_arrow_z = Mathf.Abs(space_mids[0].z - get_spacepos("arrow").z) -  unit_len;
                     mid_target_arrow_z     = Mathf.Clamp(mid_target_arrow_z,0,float.MaxValue);
                     arrow_tr.localPosition = Util.Vector3_ModZ(arrow_tr.localPosition,mid_target_arrow_z);
 
-                    var mid_target_curve1_z = Mathf.Abs(space_mid.z) - unit_len;
+                    var mid_target_curve1_z = Mathf.Abs(space_mids[0].z) - unit_len;
                     mid_target_curve1_z     = Mathf.Clamp(mid_target_curve1_z,0,float.MaxValue);
-                    var curve1_tr           = Util.FindNode(m_owner_go,"curve1_curve90");
+                    var curve1_tr           = Util.FindNode(m_go,"curve1_curve90");
                     curve1_tr.localPosition = Util.Vector3_ModZ(arrow_tr.localPosition,mid_target_curve1_z);
                 }
-                //else if (m_owner_type== TYPE.S_TURN_R)
-                //{
-                //    //headのz値 "arrow"の
-                //    var head_target_z = Mathf.Abs(space_head.z - get_spacepos("shaft3_shaft").z) - unit_len;
-                //    head_target_z = Mathf.Clamp(head_target_z,0,float.MaxValue);
-
-                //    var arrow_tr = Util.FindNode(m_owner_go,"arrow");                
-                //    arrow_tr.localPosition=Util.Vector3_ModZ(arrow_tr.localPosition,head_target_z);
-
-                //    //headのx値 "curve2_curve90"の位置に影響
-                //    var head_target_x = Mathf.Abs(space_head.x - get_spacepos("shaft2_shaft").x) - unit_len;
-                //    head_target_x = Mathf.Clamp(head_target_x,0,float.MaxValue);
-                //    var curve2_tr = Util.FindNode(m_owner_go,"curve2_curve90");
-                //    curve2_tr.localPosition=Util.Vector3_ModZ(curve2_tr.localPosition,head_target_x);
-
-                //    //midのz値 "arrow"と"curve1_curve90"位置に影響
-                //    var mid_target_arrow_z = Mathf.Abs(space_mid.z - get_spacepos("arrow").z) -  unit_len;
-                //    mid_target_arrow_z     = Mathf.Clamp(mid_target_arrow_z,0,float.MaxValue);
-                //    arrow_tr.localPosition = Util.Vector3_ModZ(arrow_tr.localPosition,mid_target_arrow_z);
-
-                //    var mid_target_curve1_z = Mathf.Abs(space_mid.z) - unit_len;
-                //    mid_target_curve1_z     = Mathf.Clamp(mid_target_curve1_z,0,float.MaxValue);
-                //    var curve1_tr           = Util.FindNode(m_owner_go,"curve1_curve90");
-                //    curve1_tr.localPosition = Util.Vector3_ModZ(arrow_tr.localPosition,mid_target_curve1_z);
-                //}
             }
             //絶対値で修正
             m_head.position = m_headsave;
-            if (m_mid!=null) { m_mid.position = m_midsave; }
+            restore_mids();
         }
     }
 
@@ -161,13 +198,12 @@ public class Arrow : MonoBehaviour
     private TYPE __type;
     public  TYPE  m_type;
 
-    //public float m_root_angle_y = 0;
     private GameObject m_go;
 
     private control m_control;
 
-    public  Transform m_head { get { if (m_control!=null) { return m_control.m_head; } return null; }}
-    public  Transform m_mid  { get { if (m_control!=null) { return m_control.m_mid;  } return null; }}
+    public  Transform m_head  { get { if (m_control!=null) { return m_control.m_head; } return null; }}
+    public Transform[] m_mids { get { if (m_control!=null) { return m_control.m_mids; } return null; }}
 
     public void Update()
     {
@@ -201,8 +237,34 @@ public class Arrow : MonoBehaviour
             m_control = new control();
             m_control.m_owner = this;
             m_control.m_head = Util.FindNode(m_go,"head");
-            m_control.m_mid  = Util.FindNode(m_go,"mid");
 
+            var midlist = new List<Transform>();
+            var midbone_0 = Util.FindNode(m_go,"mid");
+            var midbone_1 = Util.FindNode(m_go,"mid1");
+            var midbone_2 = Util.FindNode(m_go,"mid2");
+
+            if (midbone_2!=null)
+            {
+                m_control.m_mids = new Transform[3];
+                m_control.m_mids[0] = midbone_0;
+                m_control.m_mids[1] = midbone_1;
+                m_control.m_mids[2] = midbone_2;
+            }
+            else if (midbone_1!=null)
+            {
+                m_control.m_mids = new Transform[2];
+                m_control.m_mids[0] = midbone_0;
+                m_control.m_mids[1] = midbone_1;
+            }
+            else if (midbone_0!=null)
+            {
+                m_control.m_mids = new Transform[1];
+                m_control.m_mids[0] = midbone_0;
+            }
+            else
+            {
+                m_control.m_mids = null;
+            }
         }
         
         if (m_control!=null)
@@ -509,11 +571,11 @@ public class ArrowMaker {
             bone_list.Add(bone);
         }
 
-        public void InsertMidBone(string parent) //ハンドルとなる中間点
+        public void InsertMidBone(string parent, string index=null) //ハンドルとなる中間点
         {
             var parent_bone = bone_list.Find(i=>i.name==parent);
 
-            var bone = new bone("mid",parent,parent_bone.org, parent_bone.angle_y);
+            var bone = new bone("mid" + index,parent,parent_bone.org, parent_bone.angle_y);
             bone_list.Add(bone);
         }
 
@@ -929,7 +991,6 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
 
-        //skin = SKINPARTS_addCurve90(skin,"curve1",1,10,false);
         skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,false);
 
         skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
@@ -947,7 +1008,6 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
 
-        //skin = SKINPARTS_addCurve90(skin,"curve1",1,10,true);
         skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,true);
 
         skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
@@ -965,12 +1025,10 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
 
-        //skin = SKINPARTS_addCurve90(skin,"curve1",1,10,false);
         skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,false);
 
         skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
 
-        //skin = SKINPARTS_addCurve90(skin,"curve2",1,10,false);
         skin = SKINPARTS_addCurve90(skin,"curve2",unit_len,unit_divnum,false);
 
         skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
@@ -991,12 +1049,10 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
 
-        //skin = SKINPARTS_addCurve90(skin,"curve1",1,10,true);
         skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,true);
 
         skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
 
-        //skin = SKINPARTS_addCurve90(skin,"curve2",1,10,true);
         skin = SKINPARTS_addCurve90(skin,"curve2",unit_len,unit_divnum,true);
 
         skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
@@ -1016,12 +1072,10 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
 
-        //skin = SKINPARTS_addCurve90(skin,"curve1",1,10,false);
         skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,false);
 
         skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
 
-        //skin = SKINPARTS_addCurve90(skin,"curve2",1,10,true);
         skin = SKINPARTS_addCurve90(skin,"curve2",unit_len,unit_divnum,true);
 
         skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
@@ -1041,12 +1095,10 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
 
-        //skin = SKINPARTS_addCurve90(skin,"curve1",1,10,true);
         skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,true);
 
         skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
 
-        //skin = SKINPARTS_addCurve90(skin,"curve2",1,10,false);
         skin = SKINPARTS_addCurve90(skin,"curve2",unit_len,unit_divnum,false);
 
         skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
@@ -1056,6 +1108,194 @@ public class ArrowMaker {
         skin = SKINPARTS_addArrowHead(skin);
 
         skin.InsertMidBone("shaft2_shaft");
+
+        return skin;
+    }
+    //SSターン右用のスキン作成
+    //
+    //
+    //    +---+  ^
+    //    |   |  | 
+    //        +---
+    private Skin CreateSkin_SS_Turn_R_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve2",unit_len,unit_divnum,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve3",unit_len,unit_divnum,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft4",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve4",unit_len,unit_divnum,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft5",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
+
+        skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft","1");
+        skin.InsertMidBone("shaft4_shaft","2");
+        
+        return skin;
+    }
+    private Skin CreateSkin_SS_Turn_L_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve2",unit_len,unit_divnum,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve3",unit_len,unit_divnum,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft4",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve4",unit_len,unit_divnum,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft5",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
+
+        skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft","1");
+        skin.InsertMidBone("shaft4_shaft","2");
+        
+        return skin;
+    }
+    // 先頭部分がクランプ
+    //             <---+
+    //                 |
+    //             +---+
+    //             |
+    private Skin CreateSkin_HEAD_C_R_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve2",unit_len,unit_divnum,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve3",unit_len,unit_divnum,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft4",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
+
+        skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft","1");
+
+        return skin;
+    }
+    private Skin CreateSkin_HEAD_C_L_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve2",unit_len,unit_divnum,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve3",unit_len,unit_divnum,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft4",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
+
+        skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft","1");
+
+        return skin;
+    }
+    //根本がクランプ
+    //
+    //       +---+   
+    //       |   |   
+    //           +--->
+    private Skin CreateSkin_TAIL_C_R_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve2",unit_len,unit_divnum,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve3",unit_len,unit_divnum,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft4",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
+
+        skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft","1");
+
+        return skin;
+    }
+    private Skin CreateSkin_TAIL_C_L_Arrow(float shaft_width, float unit_len, int unit_divnum, float arrow_width)
+    {
+        var skin = SKINPARTS_createRoot(shaft_width);
+
+        skin = SKINPARTS_addShaft(skin,"shaft1",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve1",unit_len,unit_divnum,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft2",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve2",unit_len,unit_divnum,true);
+
+        skin = SKINPARTS_addShaft(skin,"shaft3",unit_len);
+
+        skin = SKINPARTS_addCurve90(skin,"curve3",unit_len,unit_divnum,false);
+
+        skin = SKINPARTS_addShaft(skin,"shaft4",unit_len);
+
+        skin = SKINPARTS_addArrowRoot(skin,arrow_width,unit_len);
+
+        skin = SKINPARTS_addArrowHead(skin);
+
+        skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft","1");
 
         return skin;
     }
@@ -1107,13 +1347,19 @@ public class ArrowMaker {
 
         switch(type)
         {
-            case Arrow.TYPE.ONEWAY:   skin =  p.CreateSkin_OneWay_Arrow  (shuft_width,unit_len,curve_divnum,arrow_width);     break;
-            case Arrow.TYPE.TURN_R:   skin =  p.CreateSkin_Curve_R_Arrow (shuft_width,unit_len,curve_divnum,arrow_width);     break;
-            case Arrow.TYPE.TURN_L:   skin =  p.CreateSkin_Curve_L_Arrow (shuft_width,unit_len,curve_divnum,arrow_width);     break;
-            case Arrow.TYPE.U_TURN_R: skin =  p.CreateSkin_U_Turn_R_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
-            case Arrow.TYPE.U_TURN_L: skin =  p.CreateSkin_U_Turn_L_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
-            case Arrow.TYPE.S_TURN_R: skin =  p.CreateSkin_S_Turn_R_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
-            case Arrow.TYPE.S_TURN_L: skin =  p.CreateSkin_S_Turn_L_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.ONEWAY:    skin =  p.CreateSkin_OneWay_Arrow  (shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.TURN_R:    skin =  p.CreateSkin_Curve_R_Arrow (shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.TURN_L:    skin =  p.CreateSkin_Curve_L_Arrow (shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.U_TURN_R:  skin =  p.CreateSkin_U_Turn_R_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.U_TURN_L:  skin =  p.CreateSkin_U_Turn_L_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.S_TURN_R:  skin =  p.CreateSkin_S_Turn_R_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.S_TURN_L:  skin =  p.CreateSkin_S_Turn_L_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.SS_TURN_R: skin =  p.CreateSkin_SS_Turn_R_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);    break;
+            case Arrow.TYPE.SS_TURN_L: skin =  p.CreateSkin_SS_Turn_L_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);    break;
+            case Arrow.TYPE.HEAD_C_R:  skin =  p.CreateSkin_HEAD_C_R_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.HEAD_C_L:  skin =  p.CreateSkin_HEAD_C_L_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.TAIL_C_R:  skin =  p.CreateSkin_TAIL_C_R_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
+            case Arrow.TYPE.TAIL_C_L:  skin =  p.CreateSkin_TAIL_C_L_Arrow(shuft_width,unit_len,curve_divnum,arrow_width);     break;
         }
         p.CreateMesh(skin,go);
         return go;

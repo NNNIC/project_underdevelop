@@ -27,15 +27,15 @@ public class ArrowEditor : Editor {
 
         if (com==null) return;
         Vector3? headpos = com.m_head!=null ? (Vector3?)com.m_head.position : null;
-        Vector3? midpos  = com.m_mid!=null  ? (Vector3?)com.m_mid.position  : null;
+        Vector3? midpos  = com.m_mids!=null && com.m_mids.Length>0  ? (Vector3?)com.m_mids[0].position  : null;
         
         if (headpos!=null && midpos!=null)
         {
             Vector3 buttonpos = Vector3.zero;
             if (m_bAlt)
             {
-                com.m_mid.position = Handles.PositionHandle(com.m_mid.position,Quaternion.identity);
-                buttonpos = com.m_mid.position;
+                com.m_mids[0].position = Handles.PositionHandle(com.m_mids[0].position,Quaternion.identity);
+                buttonpos = com.m_mids[0].position;
             }
             else
             {
