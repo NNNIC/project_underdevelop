@@ -39,39 +39,54 @@ public class Arrow : MonoBehaviour
     public class control
     {
         public  Arrow      m_owner; 
-        private GameObject m_go   { get { return m_owner.m_go; } }
-        private TYPE       m_type { get { return m_owner.m_type; } set { m_owner.m_type = value; } }
+        private GameObject m_go    { get { return m_owner.m_go; } }
+        private Transform  m_space { get { return m_owner.m_go.transform; } }
+        private TYPE       m_type  { get { return m_owner.m_type; } set { m_owner.m_type = value; } }
 
         public Transform   m_head;
         public Transform[] m_mids;
 
+        public Vector3     m_space_head;
+        public Vector3[]   m_space_mids;
+
         private Vector3    m_headsave;
         private Vector3[]  m_midsaves;
 
-        private bool is_midsEqual()
+
+        private bool is_headEqualAndUpdate()
+        {
+            if (m_head==null)
+            {
+                return true;
+            }
+            if (Util.IsEqualVector3(m_space_head,m_headsave))
+            {
+                return true;
+            }
+            m_headsave = m_space_head;
+            return false;
+        }
+        private bool is_midsEqualAndUpdate()
         {
             bool bEqual = false;
 
-            if (m_mids==null)
+            if (m_space_mids==null)
             {
                 return true;
             }
             if (m_midsaves==null)
             {
-                m_midsaves = new Vector3[m_mids.Length];
-                for(var i = 0; i<m_mids.Length; i++)
-                {
-                    m_midsaves[i] = m_mids[i].transform.position;
-                }
+                m_midsaves = new Vector3[m_space_mids.Length];
+                Array.Copy(m_space_mids,m_midsaves,m_space_mids.Length);
                 return false;
             }
             // ----
-            if (m_mids!=null && m_midsaves!=null)
+            if (m_space_mids!=null && m_midsaves!=null)
             {
                 bEqual = true;
-                for(var i = 0; i<m_mids.Length; i++)
+                for(var i = 0; i<m_space_mids.Length; i++)
                 {
-                    if (m_mids[i].transform.position!=m_midsaves[i])
+                    if ( !Util.IsEqualVector3( m_space_mids[i], m_midsaves[i] ) )
                     {
                         bEqual = false;
                         break;
@@ -80,10 +95,7 @@ public class Arrow : MonoBehaviour
             }
             if (!bEqual)
             {
-                for(var i = 0; i<m_mids.Length; i++)
-                {
-                    m_midsaves[i] = m_mids[i].transform.position;
-                }
+                Array.Copy(m_space_mids,m_midsaves,m_space_mids.Length);
             }
             return bEqual;
         }
@@ -93,99 +105,77 @@ public class Arrow : MonoBehaviour
             {
                 for(var i = 0; i<m_mids.Length; i++)
                 {
-                    m_mids[i].transform.position = m_midsaves[i];
+                    m_mids[i].transform.position = m_space.TransformPoint(m_midsaves[i]);
                 }
             }
         }
 
         public void Move()
         {
-            if (
-                (m_head==null)
-                ||
-                 (
-                   (m_head.transform.position == m_headsave)
-                    &&
-                   is_midsEqual()
-                 )
-                )
+            Func<string, Vector3> spaceNodePos = (n)=> {
+                var target_tr = Util.FindNode(m_go,n);
+                return m_space.InverseTransformPoint(target_tr.position);
+            };
+            Func<Vector3, Vector3> spacePos = (v) =>
+            {
+                return m_space.InverseTransformPoint(v);
+            };
+
+            m_space_head  = m_head!=null ? spacePos(m_head.position) : Vector3.zero;
+            m_space_mids  = null;
+            if (m_mids!=null) {
+                m_space_mids = new Vector3[m_mids.Length];
+                for(var i = 0; i<m_mids.Length; i++)
+                {
+                    m_space_mids[i]  = spacePos(m_mids[i].position);
+                }
+            }
+
+            if ( is_headEqualAndUpdate() && is_midsEqualAndUpdate() )
             {
                 return;
             }
-            
-            Func<string, Vector3> get_spacepos = (n)=> {
-                var target_tr = Util.FindNode(m_go,n);
-                return m_go.transform.parent.InverseTransformPoint(target_tr.position);
-            };
-
-            m_headsave = m_head.position;
             {
                 var     unit_len   = m_owner.m_unit_len;
-                Vector3   space_head  = Vector3.zero;
-                Vector3[] space_mids  = null;//new Vector3[m_mids.Length];
-                space_head = m_go.transform.parent.InverseTransformPoint(m_head.position);
-                if (m_mids!=null) {
-                    space_mids = new Vector3[m_mids.Length];
-                    for(var i = 0; i<m_mids.Length; i++)
-                    {
-                        space_mids[i]  = m_go.transform.parent.InverseTransformPoint(m_mids[i].position);
-                    }
-                }
+                
+                Action<string, float> SetZ = (n,z) => {
+                    var nz = Mathf.Clamp(z,0,float.MaxValue);
+                    var tr = Util.FindNode(m_go,n);
+                    tr.localPosition = Util.Vector3_ModZ(tr.localPosition,nz);
+                };
             
                 if (m_type== TYPE.ONEWAY)
                 {
                     //Ｚ値のみ反映
-                    var target_z = space_head.z - unit_len; //矢部分長さ
-                    target_z = Mathf.Clamp(target_z,0,float.MaxValue);
-
-                    var arrow_tr = Util.FindNode(m_go,"arrow");
-                    arrow_tr.localPosition = Util.Vector3_ModZ(arrow_tr.localPosition,target_z);
-                
+                    SetZ("arrow",m_space_head.z - unit_len);
                 }
                 else if (m_type== TYPE.TURN_R || m_type == TYPE.TURN_L)
                 {
                     //x値が"arrow"のzに影響 
-                    var target_x = Mathf.Abs(space_head.x) - unit_len * 2;
-                    target_x = Mathf.Clamp(target_x,0,float.MaxValue);
-                
-                    var arrow_tr = Util.FindNode(m_go,"arrow");                
-                    arrow_tr.localPosition=Util.Vector3_ModZ(arrow_tr.localPosition,target_x);
-
+                    SetZ("arrow",Mathf.Abs(m_space_head.x) - unit_len * 2);
                     //z値が"curve1_curve90"に影響
-                    var target_z = space_head.z - unit_len;
-                    target_z = Mathf.Clamp(target_z,0,float.MaxValue);
-
-                    var curve1_tr = Util.FindNode(m_go,"curve1_curve90");
-                    curve1_tr.localPosition=Util.Vector3_ModZ(curve1_tr.localPosition,target_z);
+                    SetZ("curve1_curve90",m_space_head.z - unit_len);
                 }
                 else if (m_type== TYPE.U_TURN_R || m_type == TYPE.U_TURN_L || m_type == TYPE.S_TURN_R || m_type == TYPE.S_TURN_L )
                 {
                     //headのz値  "arrow"の位置に影響
-                    var head_target_z = Mathf.Abs(space_head.z - get_spacepos("shaft3_shaft").z) - unit_len;
-                    head_target_z = Mathf.Clamp(head_target_z,0,float.MaxValue);
-
-                    var arrow_tr = Util.FindNode(m_go,"arrow");                
-                    arrow_tr.localPosition=Util.Vector3_ModZ(arrow_tr.localPosition,head_target_z);
-                  
+                    SetZ("arrow",Mathf.Abs(m_space_head.z - spaceNodePos("shaft3_shaft").z) - unit_len);
                     //headのx値 "curve2_curve90"の位置に影響
-                    var head_target_x = Mathf.Abs(space_head.x - get_spacepos("shaft2_shaft").x) - unit_len;
-                    head_target_x = Mathf.Clamp(head_target_x,0,float.MaxValue);
-                    var curve2_tr = Util.FindNode(m_go,"curve2_curve90");
-                    curve2_tr.localPosition=Util.Vector3_ModZ(curve2_tr.localPosition,head_target_x);
-
-                    //midのz値 "arrow"と"curve1_curve90"位置に影響
-                    var mid_target_arrow_z = Mathf.Abs(space_mids[0].z - get_spacepos("arrow").z) -  unit_len;
-                    mid_target_arrow_z     = Mathf.Clamp(mid_target_arrow_z,0,float.MaxValue);
-                    arrow_tr.localPosition = Util.Vector3_ModZ(arrow_tr.localPosition,mid_target_arrow_z);
-
-                    var mid_target_curve1_z = Mathf.Abs(space_mids[0].z) - unit_len;
-                    mid_target_curve1_z     = Mathf.Clamp(mid_target_curve1_z,0,float.MaxValue);
-                    var curve1_tr           = Util.FindNode(m_go,"curve1_curve90");
-                    curve1_tr.localPosition = Util.Vector3_ModZ(arrow_tr.localPosition,mid_target_curve1_z);
+                    SetZ("curve2_curve90",Mathf.Abs(m_space_head.x - spaceNodePos("shaft2_shaft").x) - unit_len);
+                    //mid0のz値 "arrow"と"curve1_curve90"位置に影響
+                    SetZ("arrow",Mathf.Abs(m_space_mids[0].z - spaceNodePos("arrow").z) -  unit_len);
+                    //
+                    SetZ("curve1_curve90",Mathf.Abs(m_space_mids[0].z) - unit_len);
+                }
+                else if (m_type == TYPE.SS_TURN_R || m_type == TYPE.SS_TURN_L )
+                {
+                    //mid0 z方向のみ影響 curve1_curve90のz位置 curve3_curve90のz位置
+                    SetZ("curve1_curve90", m_space_mids[0].z - unit_len);
+                    SetZ("curve3_curve90", Mathf.Abs(m_space_mids[0].z -spaceNodePos("curve3_curve90").z) - unit_len);
                 }
             }
             //絶対値で修正
-            m_head.position = m_headsave;
+            m_head.position = m_space.TransformPoint(m_headsave);
             restore_mids();
         }
     }
@@ -282,7 +272,7 @@ namespace ArrowTool
     {
         public static bool IsEqualVector3(Vector3 v1, Vector3 v2)
         {
-            float epsiron = 0.0005f;  //floatの有効桁は6桁
+            float epsiron = 0.0010f;  //floatの有効桁は6桁
             var dx = Mathf.Abs(v1.x - v2.x);
             var dy = Mathf.Abs(v1.y - v2.y);
             var dz = Mathf.Abs(v1.z - v2.z);
