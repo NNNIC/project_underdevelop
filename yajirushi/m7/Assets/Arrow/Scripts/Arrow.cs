@@ -43,50 +43,38 @@ public class Arrow : MonoBehaviour
         private Transform  m_space { get { return m_owner.m_go.transform; } }
         private TYPE       m_type  { get { return m_owner.m_type; } set { m_owner.m_type = value; } }
 
-        public Transform   m_head;
-        public Transform[] m_mids;
+        public Transform[] m_hands;
 
-        public Vector3     m_space_head;
-        public Vector3[]   m_space_mids;
+        public Vector3[]   m_space_hands;
 
-        private Vector3    m_headsave;
-        private Vector3[]  m_midsaves;
+        private Vector3[]  m_handsaves;
 
-
-        private bool is_headEqualAndUpdate()
+        private bool is_handsEqaulAndUpdate()
         {
-            if (m_head==null)
+            if (m_hands==null)
             {
                 return true;
             }
-            if (Util.IsEqualVector3(m_space_head,m_headsave))
+            if (m_handsaves==null)
             {
+                if (m_space_hands!=null)
+                {
+                    m_handsaves = new Vector3[m_space_hands.Length];
+                    Array.Copy(m_space_hands,m_handsaves,m_space_hands.Length);
+                    //return false;
+                }
                 return true;
-            }
-            m_headsave = m_space_head;
-            return false;
-        }
-        private bool is_midsEqualAndUpdate()
-        {
-            bool bEqual = false;
-
-            if (m_space_mids==null)
-            {
-                return true;
-            }
-            if (m_midsaves==null)
-            {
-                m_midsaves = new Vector3[m_space_mids.Length];
-                Array.Copy(m_space_mids,m_midsaves,m_space_mids.Length);
-                return false;
             }
             // ----
-            if (m_space_mids!=null && m_midsaves!=null)
+
+            bool bEqual = false;
+
+            if (m_space_hands!=null && m_handsaves!=null)
             {
                 bEqual = true;
-                for(var i = 0; i<m_space_mids.Length; i++)
+                for(var i = 0; i<m_space_hands.Length; i++)
                 {
-                    if ( !Util.IsEqualVector3( m_space_mids[i], m_midsaves[i] ) )
+                    if ( !Util.IsEqualVector3( m_space_hands[i], m_handsaves[i] ) )
                     {
                         bEqual = false;
                         break;
@@ -95,17 +83,18 @@ public class Arrow : MonoBehaviour
             }
             if (!bEqual)
             {
-                Array.Copy(m_space_mids,m_midsaves,m_space_mids.Length);
+                Array.Copy(m_space_hands,m_handsaves,m_space_hands.Length);
             }
             return bEqual;
         }
-        private void restore_mids()
+
+        private void restore_hands()
         {
-            if (m_mids!=null && m_midsaves!=null)
+            if (m_hands!=null && m_handsaves!=null)
             {
-                for(var i = 0; i<m_mids.Length; i++)
+                for(var i = 0; i<m_hands.Length; i++)
                 {
-                    m_mids[i].transform.position = m_space.TransformPoint(m_midsaves[i]);
+                    m_hands[i].transform.position = m_space.TransformPoint(m_handsaves[i]);
                 }
             }
         }
@@ -121,21 +110,21 @@ public class Arrow : MonoBehaviour
                 return m_space.InverseTransformPoint(v);
             };
 
-            m_space_head  = m_head!=null ? spacePos(m_head.position) : Vector3.zero;
-            m_space_mids  = null;
-            if (m_mids!=null) {
-                m_space_mids = new Vector3[m_mids.Length];
-                for(var i = 0; i<m_mids.Length; i++)
+            m_space_hands = null;
+            if (m_hands!=null)
+            {
+                m_space_hands = new Vector3[m_hands.Length];
+                for(var i = 0; i<m_hands.Length; i++)
                 {
-                    m_space_mids[i]  = spacePos(m_mids[i].position);
+                    m_space_hands[i] = spacePos(m_hands[i].position);
                 }
             }
 
-            if ( is_headEqualAndUpdate() && is_midsEqualAndUpdate() )
+            if ( is_handsEqaulAndUpdate())
             {
                 return;
             }
-            {
+            if (m_space_hands!=null) {
                 var     unit_len   = m_owner.m_unit_len;
                 
                 Action<string, float> SetZ = (n,z) => {
@@ -158,37 +147,34 @@ public class Arrow : MonoBehaviour
                 if (m_type== TYPE.ONEWAY)
                 {
                     //Ｚ値のみ反映
-                    SetZ("arrow",m_space_head.z - unit_len);
+                    SetZ("arrow",m_space_hands[0].z - unit_len);
                 }
                 else if (m_type== TYPE.TURN_R || m_type == TYPE.TURN_L)
                 {
                     //x値が"arrow"のzに影響 
-                    SetZ("arrow",Mathf.Abs(m_space_head.x) - unit_len * 2);
+                    SetZ("arrow",Mathf.Abs(m_space_hands[0].x) - unit_len * 2);
                     //z値が"curve1_curve90"に影響
-                    SetZ("curve1_curve90",m_space_head.z - unit_len);
+                    SetZ("curve1_curve90",m_space_hands[0].z - unit_len);
                 }
                 else if (m_type== TYPE.U_TURN_R || m_type == TYPE.U_TURN_L || m_type == TYPE.S_TURN_R || m_type == TYPE.S_TURN_L )
                 {
                     //headのz値  "arrow"の位置に影響
-                    SetZ("arrow",Mathf.Abs(m_space_head.z - spaceNodePos("shaft3_shaft").z) - unit_len);
+                    SetZ("arrow",Mathf.Abs(m_space_hands[0].z - spaceNodePos("shaft3_shaft").z) - unit_len);
                     //headのx値 "curve2_curve90"の位置に影響
-                    SetZ("curve2_curve90",Mathf.Abs(m_space_head.x - spaceNodePos("shaft2_shaft").x) - unit_len);
+                    SetZ("curve2_curve90",Mathf.Abs(m_space_hands[0].x - spaceNodePos("shaft2_shaft").x) - unit_len);
                     //mid0のz値 "arrow"と"curve1_curve90"位置に影響
-                    SetZ("arrow",Mathf.Abs(m_space_mids[0].z - spaceNodePos("arrow").z) -  unit_len);
+                    SetZ("arrow",Mathf.Abs(m_space_hands[0].z - spaceNodePos("arrow").z) -  unit_len);
                     //
-                    SetZ("curve1_curve90",Mathf.Abs(m_space_mids[0].z) - unit_len);
+                    SetZ("curve1_curve90",Mathf.Abs(m_space_hands[1].z) - unit_len);
                 }
                 else if (m_type == TYPE.SS_TURN_R || m_type == TYPE.SS_TURN_L )
                 {
                     //mid0 z方向のみ影響 curve1_curve90のz位置 curve3_curve90のz位置
-                    //SetZ("curve1_curve90", m_space_mids[0].z - unit_len);
-                    //SetZ("curve3_curve90", Mathf.Abs(m_space_mids[0].z -spaceNodePos("curve3_curve90").z) - unit_len);
-                    SetZZ("curve1_curve90", m_space_mids[0].z - unit_len,"curve3_curve90", Mathf.Abs(m_space_mids[0].z -spaceNodePos("curve3_curve90").z) - unit_len);
+                    SetZZ("curve1_curve90", m_space_hands[1].z - unit_len,"curve3_curve90", Mathf.Abs(m_space_hands[1].z -spaceNodePos("curve3_curve90").z) - unit_len);
                 }
             }
             //絶対値で修正
-            m_head.position = m_space.TransformPoint(m_headsave);
-            restore_mids();
+            restore_hands();
         }
     }
 
@@ -204,8 +190,7 @@ public class Arrow : MonoBehaviour
 
     private control m_control;
 
-    public  Transform m_head  { get { if (m_control!=null) { return m_control.m_head; } return null; }}
-    public Transform[] m_mids { get { if (m_control!=null) { return m_control.m_mids; } return null; }}
+    public Transform[] m_hands { get { if (m_control!=null) { return m_control.m_hands; } return null; }}
 
     public void Update()
     {
@@ -238,34 +223,40 @@ public class Arrow : MonoBehaviour
 
             m_control = new control();
             m_control.m_owner = this;
-            m_control.m_head = Util.FindNode(m_go,"head");
 
-            var midlist = new List<Transform>();
+            //return; //test
+
+            var headbone = Util.FindNode(m_go,"head");
+
             var midbone_0 = Util.FindNode(m_go,"mid");
             var midbone_1 = Util.FindNode(m_go,"mid1");
             var midbone_2 = Util.FindNode(m_go,"mid2");
 
             if (midbone_2!=null)
             {
-                m_control.m_mids = new Transform[3];
-                m_control.m_mids[0] = midbone_0;
-                m_control.m_mids[1] = midbone_1;
-                m_control.m_mids[2] = midbone_2;
+                m_control.m_hands = new Transform[4];
+                m_control.m_hands[0] = headbone;
+                m_control.m_hands[1] = midbone_0;
+                m_control.m_hands[2] = midbone_1;
+                m_control.m_hands[3] = midbone_2;
             }
             else if (midbone_1!=null)
             {
-                m_control.m_mids = new Transform[2];
-                m_control.m_mids[0] = midbone_0;
-                m_control.m_mids[1] = midbone_1;
+                m_control.m_hands = new Transform[3];
+                m_control.m_hands[0] = headbone;
+                m_control.m_hands[1] = midbone_0;
+                m_control.m_hands[2] = midbone_1;
             }
             else if (midbone_0!=null)
             {
-                m_control.m_mids = new Transform[1];
-                m_control.m_mids[0] = midbone_0;
+                m_control.m_hands = new Transform[2];
+                m_control.m_hands[0] = headbone;
+                m_control.m_hands[1] = midbone_0;
             }
             else
             {
-                m_control.m_mids = null;
+                m_control.m_hands = new Transform[1];
+                m_control.m_hands[0] = headbone;
             }
         }
         

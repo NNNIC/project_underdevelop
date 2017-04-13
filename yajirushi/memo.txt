@@ -12,4 +12,5 @@ m4 --
 m5 -- Editor機能追加
 
 m6 -- SS CRUMP 追加
- 
+
+m7 -- 扱いづらいため、head->hd0（ハンドル０） mid->hd1 mid1->hd2
