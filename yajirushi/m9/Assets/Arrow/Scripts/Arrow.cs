@@ -178,21 +178,77 @@ public class Arrow : MonoBehaviour
                             SetZ("curve1_curve90",curve1_z);
                         }
                     }
-
-                    //SetZZ( //headのz値  "arrow"の位置に影響
-                    //    "arrow",          Mathf.Abs(m_space_hands[0].z - spaceNodePos("shaft3_shaft").z) - unit_len,
-                    //    "curve2_curve90", Mathf.Abs(m_space_hands[0].x - spaceNodePos("shaft2_shaft").x) - unit_len
-                    //    );
-                    //SetZZ( //mid0のz値 "arrow"と"curve1_curve90"位置に影響
-                    //    "arrow", Mathf.Abs(m_space_hands[1].z - spaceNodePos("arrow").z) - unit_len,
-                    //    "curve1_curve90", Mathf.Abs(m_space_hands[1].z) - unit_len
-                    //    );
+                    else if (!HandItem_bEqual(1))
+                    {
+                        var arrow_z  = spaceNodePos("arrow").z - HandItem_SpaceZ(1) - unit_len;
+                        var curve1_z = HandItem_SpaceZ(1) - unit_len;
+                        if (arrow_z >= 0 && curve1_z>=0)
+                        {
+                            SetZZ( //mid0のz値 "arrow"と"curve1_curve90"位置に影響
+                                "arrow"         , arrow_z,
+                                "curve1_curve90", curve1_z
+                                );
+                        }
+                    }
                     HandItem_Ignore(1);
                 }
                 else if (m_type == TYPE.SS_TURN_R || m_type == TYPE.SS_TURN_L )
                 {
-                    //mid0 z方向のみ影響 curve1_curve90のz位置 curve3_curve90のz位置
-                    SetZZ("curve1_curve90", HandItem_SpaceZ(1) - unit_len,"curve3_curve90", Mathf.Abs(HandItem_SpaceZ(1) -spaceNodePos("curve3_curve90").z) - unit_len);
+                    if (!HandItem_bEqual(0)) //head
+                    {
+                        var arrow_z  = HandItem_SpaceZ(0) - spaceNodePos("shaft5_shaft").z  - unit_len;
+                        var curve4_z = m_isL ?  spaceNodePos("shaft4_shaft").x - HandItem_SpaceX(0) - unit_len : HandItem_SpaceX(0) - spaceNodePos("shaft4_shaft").x - unit_len;
+                        SetZZ( "arrow",         AbsP(arrow_z),
+                               "curve4_curve90",curve4_z
+                               );
+                        if (arrow_z < 0)
+                        {
+                            SetZ("curve3_curve90", spaceNodePos("shaft3_shaft").z - spaceNodePos("curve3_curve90").z - arrow_z);
+                        }
+                        if (curve4_z < 0)
+                        {
+                            SetZ("curve2_curve90", AbsP_R(spaceNodePos("curve2_curve90").x - spaceNodePos("shaft2_shaft").x) + curve4_z);
+                        }
+                    }
+                    else if (!HandItem_bEqual(1)) //mid
+                    {
+                        var curve1_z = HandItem_SpaceZ(1) - unit_len;
+                        var curve3_z = HandItem_SpaceZ(1) - spaceNodePos("curve3_curve90").z - unit_len;
+                        if (curve1_z>=0 && curve3_z>=0)
+                        {
+                            SetZZ(
+                                  "curve1_curve90", curve1_z,
+                                  "curve3_curve90", curve3_z
+                                  );
+                        }
+                    }
+                    else if (!HandItem_bEqual(2)) //mid1
+                    {
+                        var curve2_z = m_isL ? spaceNodePos("shaft2_shaft").x - HandItem_SpaceX(2) - unit_len   : HandItem_SpaceX(2) - spaceNodePos("shaft2_shaft").x - unit_len; 
+                        var curve4_z = m_isL ? HandItem_SpaceX(2) - spaceNodePos("curve4_curve90").x  - unit_len : spaceNodePos("curve4_curve90").x - HandItem_SpaceX(2) - unit_len;
+                        if (curve2_z>=0 && curve4_z>=0)
+                        {
+                            SetZZ(
+                                "curve2_curve90", curve2_z,
+                                "curve4_curve90", curve4_z
+                                );
+                        }
+                    }
+                    else if (!HandItem_bEqual(3)) //mid2
+                    {
+                        var curve3_z = spaceNodePos("shaft3_shaft").z - HandItem_SpaceZ(3) - unit_len;
+                        var arrow_z  = spaceNodePos("arrow").z - HandItem_SpaceZ(3) - unit_len;
+                        if (curve3_z >= 0 && arrow_z>=0)
+                        {
+                            SetZZ(
+                                "curve3_curve90", curve3_z,
+                                "arrow"         , arrow_z
+                                );
+                        }
+                    }
+                    HandItem_Ignore(1);
+                    HandItem_Ignore(2);
+                    HandItem_Ignore(3);
                 }
 
                 //絶対値で修正
