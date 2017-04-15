@@ -52,16 +52,7 @@ public class Arrow : MonoBehaviour
             public Transform m_transform;
             public Vector3   m_space_pos;
             public Vector3   m_save_space_pos;
-            public bool      __bEqual;
-            public bool      m_bEqual
-            {
-                set {
-                    __bEqual = value;
-                }
-                get {
-                    return __bEqual;
-                }
-            }
+            public bool      m_bEqual;
             public string    m_name  {get { return m_transform.name;} }
             public Transform m_space {get { return m_owner.m_space; } }
             public bool      m_ignoreRestore;
@@ -107,11 +98,12 @@ public class Arrow : MonoBehaviour
             }
             return true;
         }
-        public void  HandItem_Reset()       { m_handitems.ForEach(i=>i.Reset());         }
-        public void  HandItem_Restore()     { m_handitems.ForEach(i=>i.Restore());       }
-        public float HandItem_SpaceZ(int i) { return m_handitems[i].m_space_pos.z;       }
-        public float HandItem_SpaceX(int i) { return m_handitems[i].m_space_pos.x;       }
-        public bool  HandItem_bEqual(int i) { return m_handitems[i].m_bEqual;            }
+        public void  HandItem_Reset()       { m_handitems.ForEach(i=>i.Reset());   }
+        public void  HandItem_Restore()     { m_handitems.ForEach(i=>i.Restore()); }
+        public float HandItem_SpaceZ(int i) { return m_handitems[i].m_space_pos.z; }
+        public float HandItem_SpaceX(int i) { return m_handitems[i].m_space_pos.x; }
+        public bool  HandItem_bEqual(int i) { return m_handitems[i].m_bEqual;      }
+        public void  HandItem_Ignore(int i) { m_handitems[i].m_ignoreRestore = true; m_handitems[i].m_transform.localPosition = Vector3.zero; }
         #endregion
 
 
@@ -129,7 +121,6 @@ public class Arrow : MonoBehaviour
 
             if (m_handitems != null) {
                 var     unit_len   = m_owner.m_unit_len;
-                //var ignore = new List<int>(); //リストア時に無視させるmidのインデックス
 
                 if (m_type== TYPE.ONEWAY)
                 {
@@ -147,7 +138,6 @@ public class Arrow : MonoBehaviour
                     if (!HandItem_bEqual(0))
                     {
                         //headのz値  "arrow"の位置に影響
-                        //var arrow_z = AbsM(HandItem_SpaceZ(0) - spaceNodePos("shaft3_shaft").z) - unit_len;
                         var arrow_z = spaceNodePos("shaft3_shaft").z - HandItem_SpaceZ(0) - unit_len;
                         SetZZ( 
                             "arrow",          AbsP(arrow_z),
@@ -155,22 +145,40 @@ public class Arrow : MonoBehaviour
                             );
                         if (arrow_z < 0)
                         {
-                            m_handitems[1].m_ignoreRestore = true;
-                            m_handitems[1].m_transform.localPosition = Vector3.zero;
                             var curve1_z = spaceNodePos("curve1_curve90").z + Mathf.Abs(arrow_z);
                             SetZ("curve1_curve90",curve1_z);
                         }
                     }
                     else if (!HandItem_bEqual(1))
                     {
-                        SetZZ( //mid0のz値 "arrow"と"curve1_curve90"位置に影響
-                            "arrow", AbsP(HandItem_SpaceZ(1) - spaceNodePos("arrow").z) - unit_len,
-                            "curve1_curve90", AbsP(HandItem_SpaceZ(1)) - unit_len
-                            );
+                        var arrow_z  = HandItem_SpaceZ(1) - spaceNodePos("arrow").z - unit_len;
+                        var curve1_z = HandItem_SpaceZ(1) - unit_len;
+                        if (arrow_z >= 0 && curve1_z>=0)
+                        {
+                            SetZZ( //mid0のz値 "arrow"と"curve1_curve90"位置に影響
+                                "arrow"         , arrow_z,
+                                "curve1_curve90", curve1_z
+                                );
+                        }
                     }
+                    HandItem_Ignore(1);
                 }
                 else if (m_type == TYPE.S_TURN_R || m_type == TYPE.S_TURN_L)
                 {
+                    if (!HandItem_bEqual(0))
+                    {
+                        var arrow_z = HandItem_SpaceZ(0) - spaceNodePos("shaft3_shaft").z - unit_len;
+                        SetZZ( 
+                            "arrow",          AbsP(arrow_z),
+                            "curve2_curve90", AbsP_R(HandItem_SpaceX(0) - spaceNodePos("shaft2_shaft").x) - unit_len
+                            );
+                        if (arrow_z < 0)
+                        {
+                            var curve1_z = spaceNodePos("curve1_curve90").z - Mathf.Abs(arrow_z);
+                            SetZ("curve1_curve90",curve1_z);
+                        }
+                    }
+
                     //SetZZ( //headのz値  "arrow"の位置に影響
                     //    "arrow",          Mathf.Abs(m_space_hands[0].z - spaceNodePos("shaft3_shaft").z) - unit_len,
                     //    "curve2_curve90", Mathf.Abs(m_space_hands[0].x - spaceNodePos("shaft2_shaft").x) - unit_len
@@ -179,6 +187,7 @@ public class Arrow : MonoBehaviour
                     //    "arrow", Mathf.Abs(m_space_hands[1].z - spaceNodePos("arrow").z) - unit_len,
                     //    "curve1_curve90", Mathf.Abs(m_space_hands[1].z) - unit_len
                     //    );
+                    HandItem_Ignore(1);
                 }
                 else if (m_type == TYPE.SS_TURN_R || m_type == TYPE.SS_TURN_L )
                 {
