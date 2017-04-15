@@ -12,27 +12,27 @@ public class Arrow : MonoBehaviour
 {
     public enum TYPE
     {
-        NONE,
+        NONE    =0,
 
         ONEWAY,
 
         TURN_L,
         TURN_R,
 
-        U_TURN_R,
         U_TURN_L,
+        U_TURN_R,
 
-        S_TURN_R,
         S_TURN_L,
+        S_TURN_R,
 
-        SS_TURN_R,    //Super S -- 大きく曲がったＳ字
-        SS_TURN_L,
+        SS_TURN_L,    //Super S -- 大きく曲がったＳ字
+        SS_TURN_R,    
 
-        HEAD_C_R,     //先頭がＣの字
-        HEAD_C_L,
+        HEAD_C_L,     //先頭がＣの字
+        HEAD_C_R,     
 
-        TAIL_C_R,     //末尾がＣの字
-        TAIL_C_L,
+        TAIL_C_L,     //末尾がＣの字
+        TAIL_C_R,     
     }
     
     [Serializable]
@@ -42,158 +42,236 @@ public class Arrow : MonoBehaviour
         private GameObject m_go    { get { return m_owner.m_go; } }
         private Transform  m_space { get { return m_owner.m_go.transform; } }
         private TYPE       m_type  { get { return m_owner.m_type; } set { m_owner.m_type = value; } }
+        private bool       m_isL   { get { return ((int)m_type%2)==0; } }
 
-        public Transform[] m_hands;
-
-        public Vector3[]   m_space_hands;
-
-        private Vector3[]  m_handsaves;
-
-        private bool is_handsEqaulAndUpdate()
+        #region Hand ITEM
+        public class handitem
         {
-            if (m_hands==null)
-            {
-                return true;
-            }
-            if (m_handsaves==null)
-            {
-                if (m_space_hands!=null)
-                {
-                    m_handsaves = new Vector3[m_space_hands.Length];
-                    Array.Copy(m_space_hands,m_handsaves,m_space_hands.Length);
-                    //return false;
-                }
-                return true;
-            }
-            // ----
+            private control  m_owner;
+            public int       m_index;
+            public Transform m_transform;
+            public Vector3   m_space_pos;
+            public Vector3   m_save_space_pos;
+            public bool      m_bDiff;
+            public string    m_name  {get { return m_transform.name;} }
+            public Transform m_space {get { return m_owner.m_space; } }
 
-            bool bEqual = false;
+            public handitem(control owner) {m_owner = owner; }
 
-            if (m_space_hands!=null && m_handsaves!=null)
+            public void Reset()
             {
-                bEqual = true;
-                for(var i = 0; i<m_space_hands.Length; i++)
-                {
-                    if ( !Util.IsEqualVector3( m_space_hands[i], m_handsaves[i] ) )
-                    {
-                        bEqual = false;
-                        break;
-                    }
-                }
+                Update();
+                m_bDiff = false;
             }
-            if (!bEqual)
-            {
-                Array.Copy(m_space_hands,m_handsaves,m_space_hands.Length);
-            }
-            return bEqual;
-        }
 
-        private void restore_hands()
-        {
-            if (m_hands!=null && m_handsaves!=null)
+            public void Update()
             {
-                for(var i = 0; i<m_hands.Length; i++)
-                {
-                    m_hands[i].transform.position = m_space.TransformPoint(m_handsaves[i]);
-                }
+                m_space_pos      = m_space.InverseTransformPoint(m_transform.position);
+                m_bDiff          = Util.IsEqualVector3(m_save_space_pos,m_space_pos);
+                m_save_space_pos = m_space_pos;
+            }
+
+            public void Restore()
+            {
+                m_transform.position = m_space.TransformPoint(m_save_space_pos);
             }
         }
+        public List<handitem> m_handitems;
+        public void HandItem_Add(Transform t) {
+            var item = new handitem(this);
+            item.m_transform = t;
+            m_handitems.Add(item);
+        }
+        public bool HandItem_Update_checkNoChanges()
+        {
+            if (m_handitems!=null)
+            { 
+                m_handitems.ForEach(i=>i.Update());
+                return m_handitems.TrueForAll(i=>i.m_bDiff=false);
+            }
+            return true;
+        }
+        public void HandItem_Reset()
+        {
+            if (m_handitems!=null) m_handitems.ForEach(i=>i.Reset());
+        }
+        public void HandItem_Restore()
+        {
+            if (m_handitems!=null) m_handitems.ForEach(i=>i.Restore());
+        }
+        public float HandItem_SpaceZ(int i)
+        {
+            return m_handitems[i].m_space_pos.z;
+        }
+        public float HandItem_SpaceX(int i)
+        {
+            return m_handitems[i].m_space_pos.x;
+        }
+        #endregion
+
+        //public Transform[] m_hands;
+        //public Vector3[]   m_space_hands;
+        //private Vector3[]  m_handsaves;
+
+        //private bool is_handsEqaulAndUpdate()
+        //{
+        //    if (m_handitems==null)
+        //    {
+        //        return true;
+        //    }
+        //    if (m_handsaves==null)
+        //    {
+        //        if (m_space_hands!=null)
+        //        {
+        //            m_handsaves = new Vector3[m_space_hands.Length];
+        //            Array.Copy(m_space_hands,m_handsaves,m_space_hands.Length);
+        //            //return false;
+        //        }
+        //        return true;
+        //    }
+        //    // ----
+
+        //    bool bEqual = false;
+
+        //    if (m_space_hands!=null && m_handsaves!=null)
+        //    {
+        //        bEqual = true;
+        //        for(var i = 0; i<m_space_hands.Length; i++)
+        //        {
+        //            if ( !Util.IsEqualVector3( m_space_hands[i], m_handsaves[i] ) )
+        //            {
+        //                bEqual = false;
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    if (!bEqual)
+        //    {
+        //        Array.Copy(m_space_hands,m_handsaves,m_space_hands.Length);
+        //    }
+        //    return bEqual;
+        //}
+
+        //private void restore_hands()
+        //{
+        //    if (m_hands!=null && m_handsaves!=null)
+        //    {
+        //        for(var i = 0; i<m_hands.Length; i++)
+        //        {
+        //            m_hands[i].transform.position = m_space.TransformPoint(m_handsaves[i]);
+        //        }
+        //    }
+        //}
 
         #region Move
         public void Move()
         {
-            Func<string, Vector3> spaceNodePos = (n)=> {
-                var target_tr = Util.FindNode(m_go,n);
+            Func<string, Vector3> spaceNodePos = (n) =>
+            {
+                var target_tr = Util.FindNode(m_go, n);
                 return m_space.InverseTransformPoint(target_tr.position);
             };
-            Func<Vector3, Vector3> spacePos = (v) =>
-            {
-                return m_space.InverseTransformPoint(v);
-            };
+            //Func<Vector3, Vector3> spacePos = (v) =>
+            //{
+            //    return m_space.InverseTransformPoint(v);
+            //};
 
-            m_space_hands = null;
-            if (m_hands!=null)
-            {
-                m_space_hands = new Vector3[m_hands.Length];
-                for(var i = 0; i<m_hands.Length; i++)
-                {
-                    m_space_hands[i] = spacePos(m_hands[i].position);
-                }
-            }
+            //m_space_hands = null;
+            //if (m_hands!=null)
+            //{
+            //    m_space_hands = new Vector3[m_hands.Length];
+            //    for(var i = 0; i<m_hands.Length; i++)
+            //    {
+            //        m_space_hands[i] = spacePos(m_hands[i].position);
+            //    }
+            //}
 
-            if ( is_handsEqaulAndUpdate())
-            {
-                return;
-            }
-            if (m_space_hands!=null) {
+            //if ( is_handsEqaulAndUpdate())
+            //{
+            //    return;
+            //}
+
+            bool bSame = HandItem_Update_checkNoChanges();
+
+
+            //if (m_space_hands!=null) {
                 var     unit_len   = m_owner.m_unit_len;
                 var ignore = new List<int>(); //リストア時に無視させるmidのインデックス
 
                 if (m_type== TYPE.ONEWAY)
                 {
-                    //Ｚ値のみ反映
-                    SetZ("arrow",m_space_hands[0].z - unit_len);
+                    SetZ("arrow",HandItem_SpaceZ(0) - unit_len);//Ｚ値のみ反映
                 }
                 else if (m_type== TYPE.TURN_R || m_type == TYPE.TURN_L)
                 {
-                    //x値が"arrow"のzに影響 
-                    SetZ("arrow",Mathf.Abs(m_space_hands[0].x) - unit_len * 2);
-                    //z値が"curve1_curve90"に影響
-                    SetZ("curve1_curve90",m_space_hands[0].z - unit_len);
+                    SetZZ(
+                        "arrow",         AbsP_R(HandItem_SpaceX(0)) - unit_len * 2,  //x値が"arrow"のzに影響 
+                        "curve1_curve90",AbsP(HandItem_SpaceZ(0)) - unit_len       //z値が"curve1_curve90"に影響
+                        );
                 }
-                else if (m_type== TYPE.U_TURN_R || m_type == TYPE.U_TURN_L || m_type == TYPE.S_TURN_R || m_type == TYPE.S_TURN_L )
+                else if (m_type== TYPE.U_TURN_R || m_type == TYPE.U_TURN_L )
                 {
-                    //headのz値  "arrow"の位置に影響
-                    SetZZ(
-                        "arrow",          Mathf.Abs(m_space_hands[0].z - spaceNodePos("shaft3_shaft").z) - unit_len,
-                        "curve2_curve90", Mathf.Abs(m_space_hands[0].x - spaceNodePos("shaft2_shaft").x) - unit_len
+                    SetZZ( //headのz値  "arrow"の位置に影響
+                        "arrow",          AbsM(HandItem_SpaceZ(0) - spaceNodePos("shaft3_shaft").z) - unit_len,
+                        "curve2_curve90", AbsP_R(HandItem_SpaceX(0) - spaceNodePos("shaft2_shaft").x) - unit_len
                         );
-
-                    //mid0のz値 "arrow"と"curve1_curve90"位置に影響
-                    SetZZ(
-                        "arrow", Mathf.Abs(m_space_hands[1].z - spaceNodePos("arrow").z) - unit_len,
-                        "curve1_curve90", Mathf.Abs(m_space_hands[1].z) - unit_len
+                    SetZZ( //mid0のz値 "arrow"と"curve1_curve90"位置に影響
+                        "arrow", AbsP(HandItem_SpaceZ(1) - spaceNodePos("arrow").z) - unit_len,
+                        "curve1_curve90", AbsP(HandItem_SpaceZ(1)) - unit_len
                         );
-
+                }
+                else if (m_type == TYPE.S_TURN_R || m_type == TYPE.S_TURN_L)
+                {
+                    //SetZZ( //headのz値  "arrow"の位置に影響
+                    //    "arrow",          Mathf.Abs(m_space_hands[0].z - spaceNodePos("shaft3_shaft").z) - unit_len,
+                    //    "curve2_curve90", Mathf.Abs(m_space_hands[0].x - spaceNodePos("shaft2_shaft").x) - unit_len
+                    //    );
+                    //SetZZ( //mid0のz値 "arrow"と"curve1_curve90"位置に影響
+                    //    "arrow", Mathf.Abs(m_space_hands[1].z - spaceNodePos("arrow").z) - unit_len,
+                    //    "curve1_curve90", Mathf.Abs(m_space_hands[1].z) - unit_len
+                    //    );
                 }
                 else if (m_type == TYPE.SS_TURN_R || m_type == TYPE.SS_TURN_L )
                 {
                     //mid0 z方向のみ影響 curve1_curve90のz位置 curve3_curve90のz位置
-                    SetZZ("curve1_curve90", m_space_hands[1].z - unit_len,"curve3_curve90", Mathf.Abs(m_space_hands[1].z -spaceNodePos("curve3_curve90").z) - unit_len);
+                    SetZZ("curve1_curve90", HandItem_SpaceZ(1) - unit_len,"curve3_curve90", Mathf.Abs(HandItem_SpaceZ(1) -spaceNodePos("curve3_curve90").z) - unit_len);
                 }
-            }
+            //}
             //絶対値で修正
-            restore_hands();
+            HandItem_Restore();
         }
         private void SetZ(string n, float z)
         {
-            var nz = Mathf.Clamp(z,0,float.MaxValue);
-            var tr = Util.FindNode(m_go,n);
-            tr.localPosition = Util.Vector3_ModZ(tr.localPosition,nz);
+            SetLocalClampZ(n,z);
         }
         private void SetZZ(string n1, float z1, string n2, float z2)
         {
-            var nz1 = Mathf.Clamp(z1,0,float.MaxValue);
-            var nz2 = Mathf.Clamp(z2,0,float.MaxValue);
-            var tr1 = Util.FindNode(m_go,n1);
-            var tr2 = Util.FindNode(m_go,n2);
-
-            tr1.localPosition = Util.Vector3_ModZ(tr1.localPosition,nz1);
-            tr2.localPosition = Util.Vector3_ModZ(tr2.localPosition,nz2);
+            SetLocalClampZ(n1,z1);
+            SetLocalClampZ(n2,z2);
         }
         private void SetZZZ(string n1, float z1, string n2, float z2, string n3, float z3)
         {
-            var nz1 = Mathf.Clamp(z1,0,float.MaxValue);
-            var nz2 = Mathf.Clamp(z2,0,float.MaxValue);
-            var nz3 = Mathf.Clamp(z3,0,float.MaxValue);
-            var tr1 = Util.FindNode(m_go,n1);
-            var tr2 = Util.FindNode(m_go,n2);
-            var tr3 = Util.FindNode(m_go,n3);
-
-            tr1.localPosition = Util.Vector3_ModZ(tr1.localPosition,nz1);
-            tr2.localPosition = Util.Vector3_ModZ(tr2.localPosition,nz2);
-            tr3.localPosition = Util.Vector3_ModZ(tr3.localPosition,nz3);
+            SetLocalClampZ(n1,z1);
+            SetLocalClampZ(n2,z2);
+            SetLocalClampZ(n3,z3);
         }
+        private float Clamp(float a)                        { return Mathf.Clamp(a,0,float.MaxValue);                  }
+        private void  SetLocalClampZ(string n, float z)     {
+            var t = Util.FindNode(m_go,n);
+            t.localPosition = Util.Vector3_ModZ(t.localPosition,Clamp(z));
+        }
+        private float AbsP_R(float a) // タイプが"XXX_R"時にプラスを期待し、"XXX_L"時はマイナスとなる
+        {
+            return m_isL ? AbsM(a) : AbsP(a);
+        }
+        private float AbsM_R(float a)
+        {
+            return m_isL ? AbsP(a) : AbsM(a);
+        }
+        private float AbsP(float a)  { return a>0 ? a : 0; }
+        private float AbsM(float a) { return a<0 ? -a: 0; }
+
+
         #endregion
     }
 
@@ -209,8 +287,26 @@ public class Arrow : MonoBehaviour
 
     private control m_control;
 
-    public Transform[] m_hands { get { if (m_control!=null) { return m_control.m_hands; } return null; }}
-
+    //public List<Transform> m_hands { get { if (m_control!=null&&m_control.m_handitems!=null ) { return m_control.m_handitems; } return null; }}
+    public Transform GetHandle(int i)
+    {
+        if (m_control!=null && m_control.m_handitems!=null)
+        {
+            if (i>=0 && i<m_control.m_handitems.Count)
+            {
+                return m_control.m_handitems[i].m_transform;
+            }
+        }
+        return null;
+    }
+    public int SizeHandle()
+    {
+        if (m_control!=null && m_control.m_handitems!=null)
+        {
+            return m_control.m_handitems.Count;
+        }
+        return 0;
+    }
     public void Update()
     {
         if (__type != m_type)
@@ -243,40 +339,19 @@ public class Arrow : MonoBehaviour
             m_control = new control();
             m_control.m_owner = this;
 
-            //return; //test
-
             var headbone = Util.FindNode(m_go,"head");
 
             var midbone_0 = Util.FindNode(m_go,"mid");
             var midbone_1 = Util.FindNode(m_go,"mid1");
             var midbone_2 = Util.FindNode(m_go,"mid2");
 
-            if (midbone_2!=null)
-            {
-                m_control.m_hands = new Transform[4];
-                m_control.m_hands[0] = headbone;
-                m_control.m_hands[1] = midbone_0;
-                m_control.m_hands[2] = midbone_1;
-                m_control.m_hands[3] = midbone_2;
-            }
-            else if (midbone_1!=null)
-            {
-                m_control.m_hands = new Transform[3];
-                m_control.m_hands[0] = headbone;
-                m_control.m_hands[1] = midbone_0;
-                m_control.m_hands[2] = midbone_1;
-            }
-            else if (midbone_0!=null)
-            {
-                m_control.m_hands = new Transform[2];
-                m_control.m_hands[0] = headbone;
-                m_control.m_hands[1] = midbone_0;
-            }
-            else
-            {
-                m_control.m_hands = new Transform[1];
-                m_control.m_hands[0] = headbone;
-            }
+            m_control.m_handitems = new List<control.handitem>();
+
+            m_control.HandItem_Add(headbone);
+
+            if (midbone_0!=null) m_control.HandItem_Add(midbone_0);
+            if (midbone_1!=null) m_control.HandItem_Add(midbone_1);
+            if (midbone_2!=null) m_control.HandItem_Add(midbone_2);
         }
         
         if (m_control!=null)

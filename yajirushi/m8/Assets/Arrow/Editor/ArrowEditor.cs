@@ -35,14 +35,18 @@ public class ArrowEditor : Editor {
 
         if (com == null) return;
 
-        if (com.m_hands != null)
+        if (com.SizeHandle() != 0)
         {
-            for(var i = 0; i<com.m_hands.Length; i++)
+            for(var i = 0; i<com.SizeHandle() ; i++)
             {
-                var save = com.m_hands[i].position;
-                var p = Handles.PositionHandle(com.m_hands[i].position, Quaternion.identity);
-                com.m_hands[i].position = new Vector3(p.x,save.y,p.z);
+                var hand = com.GetHandle(i);
+                var save = hand.position;
+                var p = Handles.PositionHandle(hand.position, Quaternion.identity);
+                hand.position = new Vector3(p.x,save.y,p.z);
             }
+
+            com.transform.position = Handles.PositionHandle(com.transform.position, Quaternion.identity);
+
         }
     }
 }
