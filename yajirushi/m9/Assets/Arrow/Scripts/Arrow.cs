@@ -185,10 +185,12 @@ public class Arrow : MonoBehaviour
                 {
                     if (!HandItem_bEqual(0))
                     {
-                        var arrow_z = HandItem_SpaceZ(0) - spaceNodePos(BN_SHAFT3).z - unit_len;
+                        var hand_z = HandItem_SpaceZ(0);
+                        var hand_x = HandItem_SpaceX(0);
+                        var arrow_z = hand_z - spaceNodePos(BN_SHAFT3).z - unit_len;
                         SetZZ( 
                             BN_ARROW,          AbsP(arrow_z),
-                            BN_CURVE2, AbsP_R(HandItem_SpaceX(0) - spaceNodePos(BN_SHAFT2).x) - unit_len
+                            BN_CURVE2, AbsP_R(hand_x - spaceNodePos(BN_SHAFT2).x) - unit_len
                             );
                         if (arrow_z < 0)
                         {
@@ -198,15 +200,14 @@ public class Arrow : MonoBehaviour
                     }
                     else if (!HandItem_bEqual(1))
                     {
-                        var arrow_z  = spaceNodePos(BN_ARROW).z - HandItem_SpaceZ(1) - unit_len;
-                        var curve1_z = HandItem_SpaceZ(1) - unit_len;
-                        if (arrow_z >= 0 && curve1_z>=0)
-                        {
-                            SetZZ( //mid0のz値 "arrow"と"curve1_curve90"位置に影響
-                                BN_ARROW , arrow_z,
+                        var hand_z = HandItem_SpaceZ(1);
+
+                        var arrow_z  = spaceNodePos(BN_ARROW).z - hand_z - unit_len;
+                        var curve1_z = hand_z - unit_len;
+                        SetComplexZZ(
+                                BN_ARROW, arrow_z,
                                 BN_CURVE1, curve1_z
-                                );
-                        }
+                            );
                     }
                     HandItem_Ignore(1);
                 }
@@ -214,14 +215,17 @@ public class Arrow : MonoBehaviour
                 {
                     if (!HandItem_bEqual(0)) //head
                     {
-                        var arrow_z  = HandItem_SpaceZ(0) - spaceNodePos(BN_SHAFT5).z  - unit_len;
-                        var curve4_z = LenWoUnit_R(HandItem_SpaceX(0),spaceNodePos(BN_SHAFT4).x,unit_len);
+                        var hand_z = HandItem_SpaceZ(0);
+                        var hand_x = HandItem_SpaceX(0);
+
+                        var arrow_z  = hand_z - spaceNodePos(BN_SHAFT5).z  - unit_len;
+                        var curve4_z = LenWoUnit_R(hand_x,spaceNodePos(BN_SHAFT4).x,unit_len);
                         SetZZ( BN_ARROW , AbsP(arrow_z),
                                BN_CURVE4, curve4_z
                                );
                         if (arrow_z < 0)
                         {
-                            SetZ(BN_CURVE3, spaceNodePos(BN_SHAFT3).z - spaceNodePos(BN_SHAFT3).z - arrow_z);
+                            SetZ(BN_CURVE3, spaceNodePos(BN_SHAFT3).z - spaceNodePos(BN_CURVE3).z - arrow_z);
                         }
                         if (curve4_z < 0)
                         {
@@ -230,39 +234,36 @@ public class Arrow : MonoBehaviour
                     }
                     else if (!HandItem_bEqual(1)) //mid
                     {
-                        var curve1_z = HandItem_SpaceZ(1) - unit_len;
-                        var curve3_z = HandItem_SpaceZ(1) - spaceNodePos(BN_CURVE3).z - unit_len;
-                        if (curve1_z>=0 && curve3_z>=0)
-                        {
-                            SetZZ(
-                                  BN_CURVE1, curve1_z,
-                                  BN_CURVE3, curve3_z
-                                  );
-                        }
+                        var hand_z   = HandItem_SpaceZ(1);
+                        var curve1_z = hand_z - unit_len;
+                        var curve3_z = hand_z - spaceNodePos(BN_CURVE3).z - unit_len;
+
+                        SetComplexZZ(
+                                BN_CURVE1, curve1_z,
+                                BN_CURVE3, curve3_z
+                                );
                     }
                     else if (!HandItem_bEqual(2)) //mid1
                     {
-                        var curve2_z = LenWoUnit_R(HandItem_SpaceX(2) , spaceNodePos(BN_SHAFT2).x , unit_len);
-                        var curve4_z = LenWoUnit_R(spaceNodePos(BN_CURVE4).x , HandItem_SpaceX(2) , unit_len);
-                        if (curve2_z>=0 && curve4_z>=0)
-                        {
-                            SetZZ(
-                                BN_CURVE2, curve2_z,
-                                BN_CURVE4, curve4_z
-                                );
-                        }
+                        var hand_x = HandItem_SpaceX(2);
+                        var curve2_z = LenWoUnit_R(hand_x , spaceNodePos(BN_SHAFT2).x , unit_len);
+                        var curve4_z = LenWoUnit_R(spaceNodePos(BN_CURVE4).x , hand_x , unit_len);
+
+                        SetComplexZZ(
+                            BN_CURVE2, curve2_z,
+                            BN_CURVE4, curve4_z
+                            );
                     }
                     else if (!HandItem_bEqual(3)) //mid2
                     {
-                        var curve3_z = spaceNodePos(BN_SHAFT3).z - HandItem_SpaceZ(3) - unit_len;
-                        var arrow_z  = spaceNodePos(BN_ARROW).z - HandItem_SpaceZ(3) - unit_len;
-                        if (curve3_z >= 0 && arrow_z>=0)
-                        {
-                            SetZZ(
-                                BN_CURVE3, curve3_z,
-                                BN_ARROW , arrow_z
-                                );
-                        }
+                        float hand_z  = HandItem_SpaceZ(3);
+                        var curve3_z = spaceNodePos(BN_SHAFT3).z - hand_z - unit_len;
+                        var arrow_z  = spaceNodePos(BN_ARROW).z - hand_z - unit_len;
+
+                        SetComplexZZ(
+                        BN_CURVE3, curve3_z,
+                        BN_ARROW , arrow_z
+                        );
                     }
                     HandItem_Ignore(1);
                     HandItem_Ignore(2);
@@ -281,6 +282,14 @@ public class Arrow : MonoBehaviour
         {
             SetLocalClampZ(n1,z1);
             SetLocalClampZ(n2,z2);
+        }
+        private void SetComplexZZ(string n1, float z1, string n2, float z2)
+        {
+            if (z1>=0 && z2>=0)
+            {
+                SetLocalClampZ(n1,z1);
+                SetLocalClampZ(n2,z2);
+            }
         }
         private float Clamp(float a)                        { return Mathf.Clamp(a,0,float.MaxValue);                  }
         private void  SetLocalClampZ(string n, float z)     {
