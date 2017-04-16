@@ -84,8 +84,10 @@ public class Arrow : MonoBehaviour
 
 
         #region Hand ITEM
+        [Serializable]
         public class handitem
         {
+            [SerializeField]
             private control  m_owner;
             public int       m_index;
             public Transform m_transform;
@@ -463,12 +465,15 @@ public class Arrow : MonoBehaviour
     public int   m_curve_divnum  = 10;
     public float m_arrow_width   = 1.3f;
 
-    private TYPE __type;
+    [HideInInspector]
+    public TYPE __type;
     public  TYPE  m_type;
 
-    private GameObject m_go;
+    [HideInInspector]
+    public GameObject m_go;
 
-    private control m_control;
+    [HideInInspector]
+    public control m_control;
 
     public Transform GetHandle(int i)
     {
