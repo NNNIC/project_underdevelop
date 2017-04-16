@@ -58,8 +58,29 @@ public class Arrow : MonoBehaviour
         readonly string BN_SHAFT3= "shaft3_shaft";
         readonly string BN_SHAFT4= "shaft4_shaft";
         readonly string BN_SHAFT5= "shaft5_shaft";
-
         #endregion
+
+        #region node position in the space
+        private Vector3 spaceNodePos(string n)
+        {
+            var target_tr = Util.FindNode(m_go, n);
+            return m_space.InverseTransformPoint(target_tr.position);
+        }
+        Vector3 SPOS_ARROW()  { return spaceNodePos(BN_ARROW);      }
+
+        Vector3 SPOS_CURVE1() { return spaceNodePos(BN_CURVE1);     }
+        Vector3 SPOS_CURVE2() { return spaceNodePos(BN_CURVE2);     }
+        Vector3 SPOS_CURVE3() { return spaceNodePos(BN_CURVE3);     }
+        Vector3 SPOS_CURVE4() { return spaceNodePos(BN_CURVE4);     }
+        Vector3 SPOS_CURVE5() { return spaceNodePos(BN_CURVE5);     }
+
+        Vector3 SPOS_SHAFT1() { return spaceNodePos(BN_SHAFT1);     }
+        Vector3 SPOS_SHAFT2() { return spaceNodePos(BN_SHAFT2);     }
+        Vector3 SPOS_SHAFT3() { return spaceNodePos(BN_SHAFT3);     }
+        Vector3 SPOS_SHAFT4() { return spaceNodePos(BN_SHAFT4);     }
+        Vector3 SPOS_SHAFT5() { return spaceNodePos(BN_SHAFT5);     }
+        #endregion
+
 
 
         #region Hand ITEM
@@ -128,12 +149,6 @@ public class Arrow : MonoBehaviour
         #region Move
         public void Move()
         {
-            Func<string, Vector3> spaceNodePos = (n) =>
-            {
-                var target_tr = Util.FindNode(m_go, n);
-                return m_space.InverseTransformPoint(target_tr.position);
-            };
-
             bool bSame = HandItem_Update_checkNoChanges();
             if (bSame) return;
 
@@ -142,171 +157,300 @@ public class Arrow : MonoBehaviour
 
                 if (m_type== TYPE.ONEWAY)
                 {
-                    SetZ(BN_ARROW,HandItem_SpaceZ(0) - unit_len);//Ｚ値のみ反映
+                    move_oneway();
                 }
                 else if (m_type== TYPE.TURN_R || m_type == TYPE.TURN_L)
                 {
-                    SetZZ(
-                        BN_ARROW, AbsP_R(HandItem_SpaceX(0)) - unit_len * 2,  //x値が"arrow"のzに影響 
-                        BN_CURVE1,AbsP(HandItem_SpaceZ(0)) - unit_len       //z値が"curve1_curve90"に影響
-                        );
+                    move_turn();
                 }
                 else if (m_type== TYPE.U_TURN_R || m_type == TYPE.U_TURN_L )
                 {
-                    if (!HandItem_bEqual(0))
-                    {
-                        //headのz値  "arrow"の位置に影響
-                        var arrow_z = spaceNodePos(BN_SHAFT3).z - HandItem_SpaceZ(0) - unit_len;
-                        SetZZ( 
-                            BN_ARROW , AbsP(arrow_z),
-                            BN_CURVE2, AbsP_R(HandItem_SpaceX(0) - spaceNodePos(BN_SHAFT2).x) - unit_len
-                            );
-                        if (arrow_z < 0)
-                        {
-                            var curve1_z = spaceNodePos(BN_CURVE1).z + Mathf.Abs(arrow_z);
-                            SetZ(BN_CURVE1,curve1_z);
-                        }
-                    }
-                    else if (!HandItem_bEqual(1))
-                    {
-                        var arrow_z  = HandItem_SpaceZ(1) - spaceNodePos(BN_ARROW).z - unit_len;
-                        var curve1_z = HandItem_SpaceZ(1) - unit_len;
-                        if (arrow_z >= 0 && curve1_z>=0)
-                        {
-                            SetZZ( //mid0のz値 "arrow"と"curve1_curve90"位置に影響
-                                BN_ARROW , arrow_z,
-                                BN_CURVE1, curve1_z
-                                );
-                        }
-                    }
-                    HandItem_Ignore(1);
+                    move_u_turn();
                 }
                 else if (m_type == TYPE.S_TURN_R || m_type == TYPE.S_TURN_L)
                 {
-                    if (!HandItem_bEqual(0))
-                    {
-                        var hand_z = HandItem_SpaceZ(0);
-                        var hand_x = HandItem_SpaceX(0);
-                        var arrow_z = hand_z - spaceNodePos(BN_SHAFT3).z - unit_len;
-                        SetZZ( 
-                            BN_ARROW,          AbsP(arrow_z),
-                            BN_CURVE2, AbsP_R(hand_x - spaceNodePos(BN_SHAFT2).x) - unit_len
-                            );
-                        if (arrow_z < 0)
-                        {
-                            var curve1_z = spaceNodePos(BN_CURVE1).z - Mathf.Abs(arrow_z);
-                            SetZ(BN_CURVE1,curve1_z);
-                        }
-                    }
-                    else if (!HandItem_bEqual(1))
-                    {
-                        var hand_z = HandItem_SpaceZ(1);
-
-                        var arrow_z  = spaceNodePos(BN_ARROW).z - hand_z - unit_len;
-                        var curve1_z = hand_z - unit_len;
-                        SetComplexZZ(
-                                BN_ARROW, arrow_z,
-                                BN_CURVE1, curve1_z
-                            );
-                    }
-                    HandItem_Ignore(1);
+                    move_s_turn();
                 }
                 else if (m_type == TYPE.SS_TURN_R || m_type == TYPE.SS_TURN_L )
                 {
-                    if (!HandItem_bEqual(0)) //head
-                    {
-                        var hand_z = HandItem_SpaceZ(0);
-                        var hand_x = HandItem_SpaceX(0);
-
-                        var arrow_z  = hand_z - spaceNodePos(BN_SHAFT5).z  - unit_len;
-                        var curve4_z = LenWoUnit_R(hand_x,spaceNodePos(BN_SHAFT4).x,unit_len);
-                        SetZZ( BN_ARROW , AbsP(arrow_z),
-                               BN_CURVE4, curve4_z
-                               );
-                        if (arrow_z < 0)
-                        {
-                            SetZ(BN_CURVE3, spaceNodePos(BN_SHAFT3).z - spaceNodePos(BN_CURVE3).z - arrow_z);
-                        }
-                        if (curve4_z < 0)
-                        {
-                            SetZ(BN_CURVE2, AbsP_R(spaceNodePos(BN_CURVE2).x - spaceNodePos(BN_SHAFT2).x) + curve4_z);
-                        }
-                    }
-                    else if (!HandItem_bEqual(1)) //mid
-                    {
-                        var hand_z   = HandItem_SpaceZ(1);
-                        var curve1_z = hand_z - unit_len;
-                        var curve3_z = hand_z - spaceNodePos(BN_CURVE3).z - unit_len;
-
-                        SetComplexZZ(
-                                BN_CURVE1, curve1_z,
-                                BN_CURVE3, curve3_z
-                                );
-                    }
-                    else if (!HandItem_bEqual(2)) //mid1
-                    {
-                        var hand_x = HandItem_SpaceX(2);
-                        var curve2_z = LenWoUnit_R(hand_x , spaceNodePos(BN_SHAFT2).x , unit_len);
-                        var curve4_z = LenWoUnit_R(spaceNodePos(BN_CURVE4).x , hand_x , unit_len);
-
-                        SetComplexZZ(
-                            BN_CURVE2, curve2_z,
-                            BN_CURVE4, curve4_z
-                            );
-                    }
-                    else if (!HandItem_bEqual(3)) //mid2
-                    {
-                        float hand_z  = HandItem_SpaceZ(3);
-                        var curve3_z = spaceNodePos(BN_SHAFT3).z - hand_z - unit_len;
-                        var arrow_z  = spaceNodePos(BN_ARROW).z - hand_z - unit_len;
-
-                        SetComplexZZ(
-                        BN_CURVE3, curve3_z,
-                        BN_ARROW , arrow_z
-                        );
-                    }
-                    HandItem_Ignore(1);
-                    HandItem_Ignore(2);
-                    HandItem_Ignore(3);
+                    move_ss_turn();
+                }
+                else if (m_type == TYPE.HEAD_C_R || m_type == TYPE.HEAD_C_L)
+                {
+                    move_head_c();
+                }
+                else if (m_type == TYPE.TAIL_C_R || m_type == TYPE.TAIL_C_L)
+                {
+                    move_tail_c();
                 }
 
                 //絶対値で修正
                 HandItem_Restore();
             }
         }
-        private void SetZ(string n, float z)
+
+        private void move_oneway()
         {
-            SetLocalClampZ(n,z);
+            var     unit_len   = m_owner.m_unit_len;
+            _setZ(BN_ARROW,HandItem_SpaceZ(0) - unit_len);//Ｚ値のみ反映
         }
-        private void SetZZ(string n1, float z1, string n2, float z2)
+        private void move_turn()
         {
-            SetLocalClampZ(n1,z1);
-            SetLocalClampZ(n2,z2);
+            var     unit_len   = m_owner.m_unit_len;
+            _setZZ(
+                BN_ARROW, _absP_R(HandItem_SpaceX(0)) - unit_len * 2,  //x値が"arrow"のzに影響 
+                BN_CURVE1,_absP(HandItem_SpaceZ(0)) - unit_len       //z値が"curve1_curve90"に影響
+                );
         }
-        private void SetComplexZZ(string n1, float z1, string n2, float z2)
+        private void move_u_turn()
+        {
+            var     unit_len   = m_owner.m_unit_len;
+            if (!HandItem_bEqual(0))
+            {
+                //headのz値  "arrow"の位置に影響
+                var arrow_z = SPOS_SHAFT3().z - HandItem_SpaceZ(0) - unit_len;
+                _setZZ( 
+                    BN_ARROW , _absP(arrow_z),
+                    BN_CURVE2, _absP_R(HandItem_SpaceX(0) - SPOS_SHAFT2().x) - unit_len
+                    );
+                if (arrow_z < 0)
+                {
+                    var curve1_z = SPOS_CURVE1().z + Mathf.Abs(arrow_z);
+                    _setZ(BN_CURVE1,curve1_z);
+                }
+            }
+            else if (!HandItem_bEqual(1))
+            {
+                var arrow_z  = HandItem_SpaceZ(1) - SPOS_ARROW().z - unit_len;
+                var curve1_z = HandItem_SpaceZ(1) - unit_len;
+                if (arrow_z >= 0 && curve1_z>=0)
+                {
+                    _setZZ( //mid0のz値 "arrow"と"curve1_curve90"位置に影響
+                        BN_ARROW , arrow_z,
+                        BN_CURVE1, curve1_z
+                        );
+                }
+            }
+            HandItem_Ignore(1);
+        }
+        private void move_s_turn()
+        {
+            var     unit_len   = m_owner.m_unit_len;
+            if (!HandItem_bEqual(0))
+            {
+                var hand_z = HandItem_SpaceZ(0);
+                var hand_x = HandItem_SpaceX(0);
+                var arrow_z = hand_z - SPOS_SHAFT3().z - unit_len;
+                _setZZ( 
+                    BN_ARROW,          _absP(arrow_z),
+                    BN_CURVE2, _absP_R(hand_x - SPOS_SHAFT2().x) - unit_len
+                    );
+                if (arrow_z < 0)
+                {
+                    var curve1_z = SPOS_CURVE1().z - Mathf.Abs(arrow_z);
+                    _setZ(BN_CURVE1,curve1_z);
+                }
+            }
+            else if (!HandItem_bEqual(1))
+            {
+                var hand_z = HandItem_SpaceZ(1);
+
+                var arrow_z  = SPOS_ARROW().z - hand_z - unit_len;
+                var curve1_z = hand_z - unit_len;
+                _setComplexZZ(
+                        BN_ARROW, arrow_z,
+                        BN_CURVE1, curve1_z
+                    );
+            }
+            HandItem_Ignore(1);
+        }
+        private void move_ss_turn()
+        {
+            var     unit_len   = m_owner.m_unit_len;
+            if (!HandItem_bEqual(0)) //head
+            {
+                var hand_z = HandItem_SpaceZ(0);
+                var hand_x = HandItem_SpaceX(0);
+
+                var arrow_z  = hand_z - SPOS_SHAFT5().z  - unit_len;
+                var curve4_z = _lenWoUnit_R(hand_x,SPOS_SHAFT4().x,unit_len);
+                _setZZ( BN_ARROW , _absP(arrow_z),
+                        BN_CURVE4, curve4_z
+                        );
+                if (arrow_z < 0)
+                {
+                    _setZ(BN_CURVE3, SPOS_SHAFT3().z - SPOS_CURVE3().z - arrow_z);
+                }
+                if (curve4_z < 0)
+                {
+                    _setZ(BN_CURVE2, _absP_R(SPOS_CURVE2().x - SPOS_SHAFT2().x) + curve4_z);
+                }
+            }
+            else if (!HandItem_bEqual(1)) //mid
+            {
+                var hand_x = HandItem_SpaceX(1);
+                var curve2_z = _lenWoUnit_R(hand_x , SPOS_SHAFT2().x , unit_len);
+                var curve4_z = _lenWoUnit_R(SPOS_CURVE4().x , hand_x , unit_len);
+
+                _setComplexZZ(
+                    BN_CURVE2, curve2_z,
+                    BN_CURVE4, curve4_z
+                    );
+
+                var hand_z   = HandItem_SpaceZ(1);
+                var curve1_z = hand_z;
+                var curve3_z = hand_z - SPOS_CURVE3().z;
+
+                _setComplexZZ(
+                        BN_CURVE1, curve1_z,
+                        BN_CURVE3, curve3_z
+                        );
+
+            }
+            else if (!HandItem_bEqual(2)) //mid1
+            {
+                float hand_x = HandItem_SpaceX(2);
+                var curve2_z =  _lenWoUnit_R(hand_x , SPOS_SHAFT2().x , unit_len*2);
+                var curve4_z =  _lenWoUnit_R(SPOS_CURVE4().x , hand_x , 0);
+
+                _setComplexZZ(
+                    BN_CURVE2, curve2_z,
+                    BN_CURVE4, curve4_z
+                    );
+
+                float hand_z  = HandItem_SpaceZ(2);
+                var curve3_z = SPOS_SHAFT3().z - hand_z - unit_len;
+                var arrow_z  = SPOS_ARROW().z - hand_z - unit_len;
+
+                _setComplexZZ(
+                BN_CURVE3, curve3_z,
+                BN_ARROW , arrow_z
+                );
+            }
+            HandItem_Ignore(1);
+            HandItem_Ignore(2);
+        }
+        private void move_head_c()
+        {
+            var     unit_len   = m_owner.m_unit_len;
+            if (!HandItem_bEqual(0)) //head
+            {
+                var hand_x = HandItem_SpaceX(0);
+                var arrow_z = _lenWoUnit_R(SPOS_SHAFT4().x,hand_x, unit_len);
+                _setZ(BN_ARROW,arrow_z);
+                if (arrow_z < 0)
+                {
+                    var curve2_z = _absP_R(SPOS_CURVE2().x - SPOS_SHAFT2().x) - arrow_z;
+                    _setZ(BN_CURVE2, curve2_z);
+                }
+
+                var hand_z = HandItem_SpaceZ(0);
+                var curve3_z = hand_z - SPOS_SHAFT3().z - unit_len;
+                _setZ(BN_CURVE3,curve3_z);
+                if (curve3_z < 0)
+                {
+                    var curve1_z = SPOS_CURVE1().z + curve3_z;
+                    _setZ(BN_CURVE1,curve1_z);
+                }
+            }
+            else if (!HandItem_bEqual(1)) //mid
+            {
+                var hand_x = HandItem_SpaceX(1);
+                var curve2_z = _lenWoUnit_R(hand_x,SPOS_SHAFT2().x,unit_len);
+                var arrow_z  = _lenWoUnit_R(hand_x,SPOS_ARROW().x,unit_len);
+                _setComplexZZ(
+                    BN_CURVE2,curve2_z,
+                    BN_ARROW, arrow_z
+                    );
+                var hand_z = HandItem_SpaceZ(1);
+                var curve3_z = SPOS_CURVE3().z - hand_z;
+                var curve1_z = hand_z - unit_len * 2;
+                _setComplexZZ(
+                    BN_CURVE3,curve3_z,
+                    BN_CURVE1,curve1_z
+                    );
+            }
+            HandItem_Ignore(1);
+        }
+        private void move_tail_c()
+        {
+            var     unit_len   = m_owner.m_unit_len;
+            if (!HandItem_bEqual(0)) //head
+            {
+                var hand_x = HandItem_SpaceX(0);
+                var arrow_z = _lenWoUnit_R(hand_x,SPOS_SHAFT4().x,unit_len);
+                _setZ(BN_ARROW,arrow_z);
+                if (arrow_z < 0)
+                {
+                    var curve2_z = _absP_R(SPOS_CURVE2().x - SPOS_SHAFT2().x) + arrow_z;
+                    _setZ(BN_CURVE2, curve2_z);
+                }
+
+                var hand_z = HandItem_SpaceZ(0);
+                var curve3_z = SPOS_SHAFT3().z - hand_z - unit_len;
+                _setZ(BN_CURVE3, curve3_z);
+                if (curve3_z < 0)
+                {
+                    var curve1_z = SPOS_CURVE1().z - curve3_z;
+                    _setZ(BN_CURVE1, curve1_z);
+                }
+            }
+            else if (!HandItem_bEqual(1)) //mid
+            {
+                var hand_x = HandItem_SpaceX(1);
+                var curve2_z = _lenWoUnit_R(hand_x,SPOS_SHAFT2().x,unit_len);
+                var arrow_z  = _lenWoUnit_R(SPOS_ARROW().x,hand_x,unit_len);
+                _setComplexZZ(
+                    BN_CURVE2,curve2_z,
+                    BN_ARROW, arrow_z
+                    );
+                var hand_z = HandItem_SpaceZ(1);
+                var curve3_z = hand_z - SPOS_CURVE3().z;
+                var curve1_z = hand_z;
+                _setComplexZZ(
+                    BN_CURVE3,curve3_z,
+                    BN_CURVE1,curve1_z
+                    );
+            }
+
+
+            HandItem_Ignore(1);
+            
+        }
+
+        private void _setZ(string n, float z)
+        {
+            _setLocalClampZ(n,z);
+        }
+        private void _setZZ(string n1, float z1, string n2, float z2)
+        {
+            _setLocalClampZ(n1,z1);
+            _setLocalClampZ(n2,z2);
+        }
+        private void _setComplexZZ(string n1, float z1, string n2, float z2)
         {
             if (z1>=0 && z2>=0)
             {
-                SetLocalClampZ(n1,z1);
-                SetLocalClampZ(n2,z2);
+                _setLocalClampZ(n1,z1);
+                _setLocalClampZ(n2,z2);
             }
         }
-        private float Clamp(float a)                        { return Mathf.Clamp(a,0,float.MaxValue);                  }
-        private void  SetLocalClampZ(string n, float z)     {
+        private float _clamp(float a)                        { return Mathf.Clamp(a,0,float.MaxValue);                  }
+        private void  _setLocalClampZ(string n, float z)     {
             var t = Util.FindNode(m_go,n);
-            t.localPosition = Util.Vector3_ModZ(t.localPosition,Clamp(z));
+            t.localPosition = Util.Vector3_ModZ(t.localPosition,_clamp(z));
         }
-        private float AbsP_R(float a) // タイプが"XXX_R"時にプラスを期待し、"XXX_L"時はマイナスとなる
+        private float _absP_R(float a) // タイプが"XXX_R"時にプラスを期待し、"XXX_L"時はマイナスとなる
         {
-            return m_isL ? AbsM(a) : AbsP(a);
+            return m_isL ? _absM(a) : _absP(a);
         }
-        private float AbsM_R(float a)
+        private float _absM_R(float a)
         {
-            return m_isL ? AbsP(a) : AbsM(a);
+            return m_isL ? _absP(a) : _absM(a);
         }
-        private float AbsP(float a)  { return a>0 ? a : 0; }
-        private float AbsM(float a) { return a<0 ? -a: 0; }
-        private float LenWoUnit_R(float a, float b, float unit) //右時 a-b-unit 左時 b-a-unitを返す
+        private float _absP(float a)  { return a>0 ? a : 0; }
+        private float _absM(float a) { return a<0 ? -a: 0; }
+        private float _lenWoUnit_R(float a, float b, float unit) //右時 a-b-unit 左時 b-a-unitを返す
         {
             return m_isL ? b - a - unit : a - b - unit;
         }
@@ -1297,9 +1441,9 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addArrowHead(skin);
 
-        skin.InsertMidBone("shaft2_shaft");
-        skin.InsertMidBone("shaft3_shaft","1");
-        skin.InsertMidBone("shaft4_shaft","2");
+        //skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft");
+        skin.InsertMidBone("shaft4_shaft","1");
         
         return skin;
     }
@@ -1331,9 +1475,9 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addArrowHead(skin);
 
-        skin.InsertMidBone("shaft2_shaft");
-        skin.InsertMidBone("shaft3_shaft","1");
-        skin.InsertMidBone("shaft4_shaft","2");
+        //skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft");
+        skin.InsertMidBone("shaft4_shaft","1");
         
         return skin;
     }
@@ -1366,8 +1510,8 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addArrowHead(skin);
 
-        skin.InsertMidBone("shaft2_shaft");
-        skin.InsertMidBone("shaft3_shaft","1");
+        //skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft");
 
         return skin;
     }
@@ -1395,8 +1539,8 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addArrowHead(skin);
 
-        skin.InsertMidBone("shaft2_shaft");
-        skin.InsertMidBone("shaft3_shaft","1");
+        //skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft");
 
         return skin;
     }
@@ -1429,8 +1573,8 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addArrowHead(skin);
 
-        skin.InsertMidBone("shaft2_shaft");
-        skin.InsertMidBone("shaft3_shaft","1");
+        //skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft");
 
         return skin;
     }
@@ -1458,8 +1602,8 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addArrowHead(skin);
 
-        skin.InsertMidBone("shaft2_shaft");
-        skin.InsertMidBone("shaft3_shaft","1");
+        //skin.InsertMidBone("shaft2_shaft");
+        skin.InsertMidBone("shaft3_shaft");
 
         return skin;
     }
