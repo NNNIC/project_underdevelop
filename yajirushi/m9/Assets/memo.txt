@@ -1,42 +1,6 @@
 プロシージャルな矢印を作る
 
- 矢印を4つのパート 腕に見立てて、手の部分を矢印と考える
  
- スキンメッシュで作る
-   
- XY平面のみ。厚みはない。
- 
- 拡縮について
- 　矢印の大きさは横縦とも大きくできる
- 　肩部分も
-　 腕と接続部分の幅は一致し、拡縮可能
-   接続部分はウエイトを使い曲がるとカーブする
-
-
-   |<-------->| arrow width
-        +         ^
-                 | arrow                                bone 8
-                 |   
-   +  +   +  +   v           --
-     >|   |<--- line width     ^ -- _3rd line            bone 7
-      |   |                   v
-      +   +                  --
-      | # |                     -- _2nd joint tail      bone 6
-      +   +                  --
-      | # |                     -- _2nd joint head      bone 5
-      +   +                  --
-      |   |                   ^ -- _2nd line            bone 4
-      |   |                   v
-      +   +                  -- 
-      | * |                     -- _1st joint tail      bone 3
-      +   +                  --
-      | * |                     -- _1st joint head      bone 2
-      +   +                  --
-      |   |                   ^ -- _1st line            bone 1
-      |   |                   v
-      + o +                  --
-       ---                   -- -- root                 bone 0
-
 
       2nd
      *--* 
@@ -56,14 +20,6 @@
  012345678
  |-**-**->
  
- 
-property
- 
- joint div num --- 接続分割数　（上下ある片方）
- 
- line width   = 0.5
- arrow width  = 1.0
- arrow height = 0.5
       
 b     c
  +---+ 

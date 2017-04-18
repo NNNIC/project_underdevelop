@@ -153,8 +153,6 @@ public class Arrow : MonoBehaviour
             if (bSame) return;
 
             if (m_handitems != null) {
-                var     unit_len   = m_owner.m_unit_len;
-
                 if (m_type== TYPE.ONEWAY)
                 {
                     move_oneway();
@@ -458,10 +456,11 @@ public class Arrow : MonoBehaviour
         #endregion
     }
 
-    public float m_shuft_width   = 0.4f;
-    public float m_unit_len      = 1.0f;
-    public int   m_curve_divnum  = 10;
-    public float m_arrow_width   = 1.3f;
+    public float    m_shuft_width    = 0.4f;
+    public readonly float m_unit_len = 1.0f; //１以外は保証外
+    public float    m_scale          = 1;
+    public int      m_curve_divnum   = 10;
+    public float    m_arrow_width    = 1.3f;
 
     [HideInInspector]
     public TYPE __type;
@@ -492,6 +491,24 @@ public class Arrow : MonoBehaviour
         }
         return 0;
     }
+
+    #region 便宜
+    Transform m_head;
+    public Transform GetHead()
+    {
+        if (m_head!=null) return m_head;
+        m_head = Util.FindNode(m_go,"head");
+        return m_head;
+    }
+    Transform m_arrowtop;
+    public Transform GetArrowTop()
+    {
+        if (m_arrowtop!=null) return m_arrowtop;
+        m_arrowtop = Util.FindNode(m_go,"arrow_top");
+        return m_arrowtop;
+    }
+    #endregion
+
     public void Update()
     {
         if (__type != m_type)
@@ -518,7 +535,7 @@ public class Arrow : MonoBehaviour
             m_go.transform.parent = transform;
             transform.localEulerAngles      = Vector3.zero;
             m_go.transform.localEulerAngles = Vector3.zero;
-            m_go.transform.localScale       = Vector3.one;
+            m_go.transform.localScale       = m_scale * Vector3.one;
             m_go.transform.localPosition    = Vector3.zero;
 
             m_control = new control();
@@ -1605,7 +1622,6 @@ public class ArrowMaker {
 
         skin = SKINPARTS_addArrowHead(skin);
 
-        //skin.InsertMidBone("shaft2_shaft");
         skin.InsertMidBone("shaft3_shaft");
 
         return skin;
@@ -1633,7 +1649,13 @@ public class ArrowMaker {
         mesh.uv = uvlist.ToArray();
         mesh.triangles = tlist.ToArray();
         mesh.RecalculateNormals();
-        rend.material = new Material(Shader.Find("Diffuse"));
+
+        var material = Resources.Load<Material>("Arrow/Arrow");
+        if (material==null)
+        {
+            material = new Material(Shader.Find("Diffuse"));
+        }
+        rend.material = material;
 
         // assign bone weight
         mesh.boneWeights = bwlist.ToArray();
