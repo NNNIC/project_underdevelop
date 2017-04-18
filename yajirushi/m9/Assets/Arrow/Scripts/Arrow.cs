@@ -87,18 +87,16 @@ public class Arrow : MonoBehaviour
         [Serializable]
         public class handitem
         {
-            [SerializeField]
-            private control  m_owner;
             public int       m_index;
             public Transform m_transform;
             public Vector3   m_space_pos;
             public Vector3   m_save_space_pos;
             public bool      m_bEqual;
             public string    m_name  {get { return m_transform.name;} }
-            public Transform m_space {get { return m_owner.m_space; } }
+            public Transform m_space;
             public bool      m_ignoreRestore;
 
-            public handitem(control owner) {m_owner = owner; }
+            public handitem(Transform space) {m_space = space; }
 
             public void Reset()
             {
@@ -125,7 +123,7 @@ public class Arrow : MonoBehaviour
         public List<handitem> m_handitems;
         // HandItem用便利関数
         public void HandItem_Add(Transform t) {
-            var item = new handitem(this);
+            var item = new handitem(m_space);
             item.m_transform = t;
             item.m_index     = m_handitems.Count;
             m_handitems.Add(item);
