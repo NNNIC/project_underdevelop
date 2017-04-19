@@ -23,13 +23,22 @@ public class m1_move_dst : MonoBehaviour {
 		transform.RotateAround(Vector3.zero,Vector3.up,m_speed*Time.deltaTime);
         if (m_arrows!=null)
         {
-            Array.ForEach(m_arrows,i=> {
+            //Array.ForEach(m_arrows,i=> {
+            //    var h = i.GetHead();
+            //    if (h!=null)
+            //    {
+            //        h.transform.position = transform.position;
+            //    }
+            //});
+
+            foreach(var i in m_arrows)
+            {
                 var h = i.GetHead();
-                if (h!=null)
+                if (h != null)
                 {
                     h.transform.position = transform.position;
                 }
-            });
+            }
         }
 	}
 }

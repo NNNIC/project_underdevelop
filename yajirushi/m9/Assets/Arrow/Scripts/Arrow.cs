@@ -44,7 +44,42 @@ public class Arrow : MonoBehaviour
         private TYPE       m_type  { get { return m_owner.m_type; } set { m_owner.m_type = value; } }
         private bool       m_isL   { get { return ((int)m_type%2)==0; } }
 
-        #region define bone name
+        #region define bone
+        public enum BONE
+        {
+            ARROW = 0,
+
+            CURVE1,
+            CURVE2,
+            CURVE3,
+            CURVE4,
+            CURVE5,
+
+            SHAFT1,
+            SHAFT2,
+            SHAFT3,
+            SHAFT4,
+            SHAFT5,
+
+            NUM
+        }
+
+        public readonly string[] BNAME = new string[] {
+        "arrow",
+
+        "curve1_curve90",
+        "curve2_curve90",
+        "curve3_curve90",
+        "curve4_curve90",
+        "curve5_curve90",
+
+        "shaft1_shaft",
+        "shaft2_shaft",
+        "shaft3_shaft",
+        "shaft4_shaft",
+        "shaft5_shaft"
+        };
+
         readonly string BN_ARROW = "arrow";
 
         readonly string BN_CURVE1= "curve1_curve90";
@@ -58,27 +93,49 @@ public class Arrow : MonoBehaviour
         readonly string BN_SHAFT3= "shaft3_shaft";
         readonly string BN_SHAFT4= "shaft4_shaft";
         readonly string BN_SHAFT5= "shaft5_shaft";
+
+        Transform[] m_bones;
+        Transform GetBone(BONE bone) {
+            Transform t = null;
+            if (m_bones!=null)
+            {
+                t = (Transform)m_bones[(int)bone];
+                if (t!=null)
+                {
+                    return t;
+                }
+            }
+            if (m_bones==null) m_bones = new Transform[(int)BONE.NUM];
+            t = Util.FindNode(m_go,BNAME[(int)bone]);
+            m_bones[(int)bone] = t;
+            return t;
+        }
         #endregion
 
         #region node position in the space
-        private Vector3 spaceNodePos(string n)
+        //private Vector3 spaceNodePos(string n)
+        //{
+        //    var target_tr = Util.FindNode(m_go, n);
+        //    return m_space.InverseTransformPoint(target_tr.position);
+        //}
+        private Vector3 spaceNodePos(BONE n)
         {
-            var target_tr = Util.FindNode(m_go, n);
+            var target_tr =  GetBone(n);//   Util.FindNode(m_go, n);
             return m_space.InverseTransformPoint(target_tr.position);
         }
-        Vector3 SPOS_ARROW()  { return spaceNodePos(BN_ARROW);      }
+        Vector3 SPOS_ARROW()  { return spaceNodePos(BONE.ARROW);      }
 
-        Vector3 SPOS_CURVE1() { return spaceNodePos(BN_CURVE1);     }
-        Vector3 SPOS_CURVE2() { return spaceNodePos(BN_CURVE2);     }
-        Vector3 SPOS_CURVE3() { return spaceNodePos(BN_CURVE3);     }
-        Vector3 SPOS_CURVE4() { return spaceNodePos(BN_CURVE4);     }
-        Vector3 SPOS_CURVE5() { return spaceNodePos(BN_CURVE5);     }
+        Vector3 SPOS_CURVE1() { return spaceNodePos(BONE.CURVE1);     }
+        Vector3 SPOS_CURVE2() { return spaceNodePos(BONE.CURVE2);     }
+        Vector3 SPOS_CURVE3() { return spaceNodePos(BONE.CURVE3);     }
+        Vector3 SPOS_CURVE4() { return spaceNodePos(BONE.CURVE4);     }
+        Vector3 SPOS_CURVE5() { return spaceNodePos(BONE.CURVE5);     }
 
-        Vector3 SPOS_SHAFT1() { return spaceNodePos(BN_SHAFT1);     }
-        Vector3 SPOS_SHAFT2() { return spaceNodePos(BN_SHAFT2);     }
-        Vector3 SPOS_SHAFT3() { return spaceNodePos(BN_SHAFT3);     }
-        Vector3 SPOS_SHAFT4() { return spaceNodePos(BN_SHAFT4);     }
-        Vector3 SPOS_SHAFT5() { return spaceNodePos(BN_SHAFT5);     }
+        Vector3 SPOS_SHAFT1() { return spaceNodePos(BONE.SHAFT1);     }
+        Vector3 SPOS_SHAFT2() { return spaceNodePos(BONE.SHAFT2);     }
+        Vector3 SPOS_SHAFT3() { return spaceNodePos(BONE.SHAFT3);     }
+        Vector3 SPOS_SHAFT4() { return spaceNodePos(BONE.SHAFT4);     }
+        Vector3 SPOS_SHAFT5() { return spaceNodePos(BONE.SHAFT5);     }
         #endregion
 
 
@@ -190,14 +247,14 @@ public class Arrow : MonoBehaviour
         private void move_oneway()
         {
             var     unit_len   = m_owner.m_unit_len;
-            _setZ(BN_ARROW,HandItem_SpaceZ(0) - unit_len);//Ｚ値のみ反映
+            _setZ(BONE.ARROW,HandItem_SpaceZ(0) - unit_len);//Ｚ値のみ反映
         }
         private void move_turn()
         {
             var     unit_len   = m_owner.m_unit_len;
             _setZZ(
-                BN_ARROW, _absP_R(HandItem_SpaceX(0)) - unit_len * 2,  //x値が"arrow"のzに影響 
-                BN_CURVE1,_absP(HandItem_SpaceZ(0)) - unit_len       //z値が"curve1_curve90"に影響
+                BONE.ARROW, _absP_R(HandItem_SpaceX(0)) - unit_len * 2,  //x値が"arrow"のzに影響 
+                BONE.CURVE1,_absP(HandItem_SpaceZ(0)) - unit_len       //z値が"curve1_curve90"に影響
                 );
         }
         private void move_u_turn()
@@ -208,13 +265,13 @@ public class Arrow : MonoBehaviour
                 //headのz値  "arrow"の位置に影響
                 var arrow_z = SPOS_SHAFT3().z - HandItem_SpaceZ(0) - unit_len;
                 _setZZ( 
-                    BN_ARROW , _absP(arrow_z),
-                    BN_CURVE2, _absP_R(HandItem_SpaceX(0) - SPOS_SHAFT2().x) - unit_len
+                    BONE.ARROW , _absP(arrow_z),
+                    BONE.CURVE2, _absP_R(HandItem_SpaceX(0) - SPOS_SHAFT2().x) - unit_len
                     );
                 if (arrow_z < 0)
                 {
                     var curve1_z = SPOS_CURVE1().z + Mathf.Abs(arrow_z);
-                    _setZ(BN_CURVE1,curve1_z);
+                    _setZ(BONE.CURVE1,curve1_z);
                 }
             }
             else if (!HandItem_bEqual(1))
@@ -224,8 +281,8 @@ public class Arrow : MonoBehaviour
                 if (arrow_z >= 0 && curve1_z>=0)
                 {
                     _setZZ( //mid0のz値 "arrow"と"curve1_curve90"位置に影響
-                        BN_ARROW , arrow_z,
-                        BN_CURVE1, curve1_z
+                        BONE.ARROW , arrow_z,
+                        BONE.CURVE1, curve1_z
                         );
                 }
             }
@@ -240,13 +297,13 @@ public class Arrow : MonoBehaviour
                 var hand_x = HandItem_SpaceX(0);
                 var arrow_z = hand_z - SPOS_SHAFT3().z - unit_len;
                 _setZZ( 
-                    BN_ARROW,          _absP(arrow_z),
-                    BN_CURVE2, _absP_R(hand_x - SPOS_SHAFT2().x) - unit_len
+                    BONE.ARROW,          _absP(arrow_z),
+                    BONE.CURVE2, _absP_R(hand_x - SPOS_SHAFT2().x) - unit_len
                     );
                 if (arrow_z < 0)
                 {
                     var curve1_z = SPOS_CURVE1().z - Mathf.Abs(arrow_z);
-                    _setZ(BN_CURVE1,curve1_z);
+                    _setZ(BONE.CURVE1,curve1_z);
                 }
             }
             else if (!HandItem_bEqual(1))
@@ -256,8 +313,8 @@ public class Arrow : MonoBehaviour
                 var arrow_z  = SPOS_ARROW().z - hand_z - unit_len;
                 var curve1_z = hand_z - unit_len;
                 _setComplexZZ(
-                        BN_ARROW, arrow_z,
-                        BN_CURVE1, curve1_z
+                        BONE.ARROW, arrow_z,
+                        BONE.CURVE1, curve1_z
                     );
             }
             HandItem_Ignore(1);
@@ -272,16 +329,16 @@ public class Arrow : MonoBehaviour
 
                 var arrow_z  = hand_z - SPOS_SHAFT5().z  - unit_len;
                 var curve4_z = _lenWoUnit_R(hand_x,SPOS_SHAFT4().x,unit_len);
-                _setZZ( BN_ARROW , _absP(arrow_z),
-                        BN_CURVE4, curve4_z
+                _setZZ( BONE.ARROW , _absP(arrow_z),
+                        BONE.CURVE4, curve4_z
                         );
                 if (arrow_z < 0)
                 {
-                    _setZ(BN_CURVE3, SPOS_SHAFT3().z - SPOS_CURVE3().z - arrow_z);
+                    _setZ(BONE.CURVE3, SPOS_SHAFT3().z - SPOS_CURVE3().z - arrow_z);
                 }
                 if (curve4_z < 0)
                 {
-                    _setZ(BN_CURVE2, _absP_R(SPOS_CURVE2().x - SPOS_SHAFT2().x) + curve4_z);
+                    _setZ(BONE.CURVE2, _absP_R(SPOS_CURVE2().x - SPOS_SHAFT2().x) + curve4_z);
                 }
             }
             else if (!HandItem_bEqual(1)) //mid
@@ -291,8 +348,8 @@ public class Arrow : MonoBehaviour
                 var curve4_z = _lenWoUnit_R(SPOS_CURVE4().x , hand_x , unit_len);
 
                 _setComplexZZ(
-                    BN_CURVE2, curve2_z,
-                    BN_CURVE4, curve4_z
+                    BONE.CURVE2, curve2_z,
+                    BONE.CURVE4, curve4_z
                     );
 
                 var hand_z   = HandItem_SpaceZ(1);
@@ -300,8 +357,8 @@ public class Arrow : MonoBehaviour
                 var curve3_z = hand_z - SPOS_CURVE3().z;
 
                 _setComplexZZ(
-                        BN_CURVE1, curve1_z,
-                        BN_CURVE3, curve3_z
+                        BONE.CURVE1, curve1_z,
+                        BONE.CURVE3, curve3_z
                         );
 
             }
@@ -312,8 +369,8 @@ public class Arrow : MonoBehaviour
                 var curve4_z =  _lenWoUnit_R(SPOS_CURVE4().x , hand_x , 0);
 
                 _setComplexZZ(
-                    BN_CURVE2, curve2_z,
-                    BN_CURVE4, curve4_z
+                    BONE.CURVE2, curve2_z,
+                    BONE.CURVE4, curve4_z
                     );
 
                 float hand_z  = HandItem_SpaceZ(2);
@@ -321,8 +378,8 @@ public class Arrow : MonoBehaviour
                 var arrow_z  = SPOS_ARROW().z - hand_z - unit_len;
 
                 _setComplexZZ(
-                BN_CURVE3, curve3_z,
-                BN_ARROW , arrow_z
+                BONE.CURVE3, curve3_z,
+                BONE.ARROW , arrow_z
                 );
             }
             HandItem_Ignore(1);
@@ -335,20 +392,20 @@ public class Arrow : MonoBehaviour
             {
                 var hand_x = HandItem_SpaceX(0);
                 var arrow_z = _lenWoUnit_R(SPOS_SHAFT4().x,hand_x, unit_len);
-                _setZ(BN_ARROW,arrow_z);
+                _setZ(BONE.ARROW,arrow_z);
                 if (arrow_z < 0)
                 {
                     var curve2_z = _absP_R(SPOS_CURVE2().x - SPOS_SHAFT2().x) - arrow_z;
-                    _setZ(BN_CURVE2, curve2_z);
+                    _setZ(BONE.CURVE2, curve2_z);
                 }
 
                 var hand_z = HandItem_SpaceZ(0);
                 var curve3_z = hand_z - SPOS_SHAFT3().z - unit_len;
-                _setZ(BN_CURVE3,curve3_z);
+                _setZ(BONE.CURVE3,curve3_z);
                 if (curve3_z < 0)
                 {
                     var curve1_z = SPOS_CURVE1().z + curve3_z;
-                    _setZ(BN_CURVE1,curve1_z);
+                    _setZ(BONE.CURVE1,curve1_z);
                 }
             }
             else if (!HandItem_bEqual(1)) //mid
@@ -357,15 +414,15 @@ public class Arrow : MonoBehaviour
                 var curve2_z = _lenWoUnit_R(hand_x,SPOS_SHAFT2().x,unit_len);
                 var arrow_z  = _lenWoUnit_R(hand_x,SPOS_ARROW().x,unit_len);
                 _setComplexZZ(
-                    BN_CURVE2,curve2_z,
-                    BN_ARROW, arrow_z
+                    BONE.CURVE2,curve2_z,
+                    BONE.ARROW, arrow_z
                     );
                 var hand_z = HandItem_SpaceZ(1);
                 var curve3_z = SPOS_CURVE3().z - hand_z;
                 var curve1_z = hand_z - unit_len * 2;
                 _setComplexZZ(
-                    BN_CURVE3,curve3_z,
-                    BN_CURVE1,curve1_z
+                    BONE.CURVE3,curve3_z,
+                    BONE.CURVE1,curve1_z
                     );
             }
             HandItem_Ignore(1);
@@ -377,20 +434,20 @@ public class Arrow : MonoBehaviour
             {
                 var hand_x = HandItem_SpaceX(0);
                 var arrow_z = _lenWoUnit_R(hand_x,SPOS_SHAFT4().x,unit_len);
-                _setZ(BN_ARROW,arrow_z);
+                _setZ(BONE.ARROW,arrow_z);
                 if (arrow_z < 0)
                 {
                     var curve2_z = _absP_R(SPOS_CURVE2().x - SPOS_SHAFT2().x) + arrow_z;
-                    _setZ(BN_CURVE2, curve2_z);
+                    _setZ(BONE.CURVE2, curve2_z);
                 }
 
                 var hand_z = HandItem_SpaceZ(0);
                 var curve3_z = SPOS_SHAFT3().z - hand_z - unit_len;
-                _setZ(BN_CURVE3, curve3_z);
+                _setZ(BONE.CURVE3, curve3_z);
                 if (curve3_z < 0)
                 {
                     var curve1_z = SPOS_CURVE1().z - curve3_z;
-                    _setZ(BN_CURVE1, curve1_z);
+                    _setZ(BONE.CURVE1, curve1_z);
                 }
             }
             else if (!HandItem_bEqual(1)) //mid
@@ -399,15 +456,15 @@ public class Arrow : MonoBehaviour
                 var curve2_z = _lenWoUnit_R(hand_x,SPOS_SHAFT2().x,unit_len);
                 var arrow_z  = _lenWoUnit_R(SPOS_ARROW().x,hand_x,unit_len);
                 _setComplexZZ(
-                    BN_CURVE2,curve2_z,
-                    BN_ARROW, arrow_z
+                    BONE.CURVE2,curve2_z,
+                    BONE.ARROW, arrow_z
                     );
                 var hand_z = HandItem_SpaceZ(1);
                 var curve3_z = hand_z - SPOS_CURVE3().z;
                 var curve1_z = hand_z;
                 _setComplexZZ(
-                    BN_CURVE3,curve3_z,
-                    BN_CURVE1,curve1_z
+                    BONE.CURVE3,curve3_z,
+                    BONE.CURVE1,curve1_z
                     );
             }
 
@@ -416,16 +473,37 @@ public class Arrow : MonoBehaviour
             
         }
 
-        private void _setZ(string n, float z)
+        //[Obsolete]
+        //private void _setZ(string n, float z)
+        //{
+        //    _setLocalClampZ(n,z);
+        //}
+        //[Obsolete]
+        //private void _setZZ(string n1, float z1, string n2, float z2)
+        //{
+        //    _setLocalClampZ(n1,z1);
+        //    _setLocalClampZ(n2,z2);
+        //}
+        //[Obsolete]
+        //private void _setComplexZZ(string n1, float z1, string n2, float z2)
+        //{
+        //    if (z1>=0 && z2>=0)
+        //    {
+        //        _setLocalClampZ(n1,z1);
+        //        _setLocalClampZ(n2,z2);
+        //    }
+        //}
+
+        private void _setZ(BONE n, float z)
         {
             _setLocalClampZ(n,z);
         }
-        private void _setZZ(string n1, float z1, string n2, float z2)
+        private void _setZZ(BONE n1, float z1, BONE n2, float z2)
         {
             _setLocalClampZ(n1,z1);
             _setLocalClampZ(n2,z2);
         }
-        private void _setComplexZZ(string n1, float z1, string n2, float z2)
+        private void _setComplexZZ(BONE n1, float z1, BONE n2, float z2)
         {
             if (z1>=0 && z2>=0)
             {
@@ -433,11 +511,18 @@ public class Arrow : MonoBehaviour
                 _setLocalClampZ(n2,z2);
             }
         }
-        private float _clamp(float a)                        { return Mathf.Clamp(a,0,float.MaxValue);                  }
-        private void  _setLocalClampZ(string n, float z)     {
-            var t = Util.FindNode(m_go,n);
+        private void  _setLocalClampZ(BONE n, float z)     {
+            var t = GetBone(n); // Util.FindNode(m_go,n);
             t.localPosition = Util.Vector3_ModZ(t.localPosition,_clamp(z));
         }
+
+
+        private float _clamp(float a)                        { return Mathf.Clamp(a,0,float.MaxValue);                  }
+        //[Obsolete]
+        //private void  _setLocalClampZ(string n, float z)     {
+        //    var t = Util.FindNode(m_go,n);
+        //    t.localPosition = Util.Vector3_ModZ(t.localPosition,_clamp(z));
+        //}
         private float _absP_R(float a) // タイプが"XXX_R"時にプラスを期待し、"XXX_L"時はマイナスとなる
         {
             return m_isL ? _absM(a) : _absP(a);
