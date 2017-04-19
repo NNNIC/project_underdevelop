@@ -11,10 +11,10 @@ public class ArrowEditor : Editor {
     public override void OnInspectorGUI()
     {
         var com = (Arrow)target;
+        if (com==null) return;
 
         base.OnInspectorGUI();
-
-
+        
         if (GUILayout.Button("RESET"))
         {
             com.m_type = Arrow.TYPE.NONE;
@@ -27,25 +27,26 @@ public class ArrowEditor : Editor {
             com.transform.localEulerAngles = new Vector3(0,y,0);
         }
 
-        if (com.SizeHandle()>0)
+        var head = com.GetHead();
+        if (head!=null)
         {
             if (GUILayout.Button("Save 'head' position"))
             {
-                m_save_head = com.GetHandle(0).position;
+                m_save_head = head.position;
             }
-        }
-        
-        if (m_save_head!=null)
-        {
-            if (GUILayout.Button("Restore 'head' Position"))
+
+            if (m_save_head!=null)
             {
-                if (com.SizeHandle()>0)
+                if (GUILayout.Button("Restore 'head' Position"))
                 {
-                    com.GetHandle(0).position = (Vector3)m_save_head;
+                    head.position = (Vector3)m_save_head;
                 }
             }
         }
-
+        if (GUILayout.Button("Adjustment"))
+        {
+            com.Adjust();
+        }
     }
 
     private void OnSceneGUI()

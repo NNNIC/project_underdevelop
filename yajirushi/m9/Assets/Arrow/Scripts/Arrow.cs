@@ -61,10 +61,20 @@ public class Arrow : MonoBehaviour
             SHAFT4,
             SHAFT5,
 
+            HEAD,
+            ARROW_TOP,
+
+            MID,
+            MID1,
+            MID2,
+
+            ROOT,
+
             NUM
         }
 
         public readonly string[] BNAME = new string[] {
+
         "arrow",
 
         "curve1_curve90",
@@ -77,27 +87,24 @@ public class Arrow : MonoBehaviour
         "shaft2_shaft",
         "shaft3_shaft",
         "shaft4_shaft",
-        "shaft5_shaft"
+        "shaft5_shaft",
+
+        "head",
+        "arrow_top",
+
+        "mid",
+        "mid1",
+        "mid2",
+
+        "root"
+
         };
 
-        readonly string BN_ARROW = "arrow";
-
-        readonly string BN_CURVE1= "curve1_curve90";
-        readonly string BN_CURVE2= "curve2_curve90";
-        readonly string BN_CURVE3= "curve3_curve90";
-        readonly string BN_CURVE4= "curve4_curve90";
-        readonly string BN_CURVE5= "curve5_curve90";
-
-        readonly string BN_SHAFT1= "shaft1_shaft";
-        readonly string BN_SHAFT2= "shaft2_shaft";
-        readonly string BN_SHAFT3= "shaft3_shaft";
-        readonly string BN_SHAFT4= "shaft4_shaft";
-        readonly string BN_SHAFT5= "shaft5_shaft";
-
-        Transform[] m_bones;
-        Transform GetBone(BONE bone) {
+        [SerializeField]
+        private Transform[] m_bones=null;
+        public  Transform GetBone(BONE bone) {
             Transform t = null;
-            if (m_bones!=null)
+            if (m_bones != null && m_bones.Length == (int)BONE.NUM)
             {
                 t = (Transform)m_bones[(int)bone];
                 if (t!=null)
@@ -105,7 +112,10 @@ public class Arrow : MonoBehaviour
                     return t;
                 }
             }
-            if (m_bones==null) m_bones = new Transform[(int)BONE.NUM];
+            if (m_bones==null || m_bones.Length != (int)BONE.NUM )
+            {
+                m_bones = new Transform[(int)BONE.NUM];
+            }
             t = Util.FindNode(m_go,BNAME[(int)bone]);
             m_bones[(int)bone] = t;
             return t;
@@ -113,32 +123,25 @@ public class Arrow : MonoBehaviour
         #endregion
 
         #region node position in the space
-        //private Vector3 spaceNodePos(string n)
-        //{
-        //    var target_tr = Util.FindNode(m_go, n);
-        //    return m_space.InverseTransformPoint(target_tr.position);
-        //}
-        private Vector3 spaceNodePos(BONE n)
+        public Vector3 SpaceNodePos(BONE n)
         {
             var target_tr =  GetBone(n);//   Util.FindNode(m_go, n);
             return m_space.InverseTransformPoint(target_tr.position);
         }
-        Vector3 SPOS_ARROW()  { return spaceNodePos(BONE.ARROW);      }
+        Vector3 SPOS_ARROW()  { return SpaceNodePos(BONE.ARROW);      }
 
-        Vector3 SPOS_CURVE1() { return spaceNodePos(BONE.CURVE1);     }
-        Vector3 SPOS_CURVE2() { return spaceNodePos(BONE.CURVE2);     }
-        Vector3 SPOS_CURVE3() { return spaceNodePos(BONE.CURVE3);     }
-        Vector3 SPOS_CURVE4() { return spaceNodePos(BONE.CURVE4);     }
-        Vector3 SPOS_CURVE5() { return spaceNodePos(BONE.CURVE5);     }
+        Vector3 SPOS_CURVE1() { return SpaceNodePos(BONE.CURVE1);     }
+        Vector3 SPOS_CURVE2() { return SpaceNodePos(BONE.CURVE2);     }
+        Vector3 SPOS_CURVE3() { return SpaceNodePos(BONE.CURVE3);     }
+        Vector3 SPOS_CURVE4() { return SpaceNodePos(BONE.CURVE4);     }
+        Vector3 SPOS_CURVE5() { return SpaceNodePos(BONE.CURVE5);     }
 
-        Vector3 SPOS_SHAFT1() { return spaceNodePos(BONE.SHAFT1);     }
-        Vector3 SPOS_SHAFT2() { return spaceNodePos(BONE.SHAFT2);     }
-        Vector3 SPOS_SHAFT3() { return spaceNodePos(BONE.SHAFT3);     }
-        Vector3 SPOS_SHAFT4() { return spaceNodePos(BONE.SHAFT4);     }
-        Vector3 SPOS_SHAFT5() { return spaceNodePos(BONE.SHAFT5);     }
+        Vector3 SPOS_SHAFT1() { return SpaceNodePos(BONE.SHAFT1);     }
+        Vector3 SPOS_SHAFT2() { return SpaceNodePos(BONE.SHAFT2);     }
+        Vector3 SPOS_SHAFT3() { return SpaceNodePos(BONE.SHAFT3);     }
+        Vector3 SPOS_SHAFT4() { return SpaceNodePos(BONE.SHAFT4);     }
+        Vector3 SPOS_SHAFT5() { return SpaceNodePos(BONE.SHAFT5);     }
         #endregion
-
-
 
         #region Hand ITEM
         [Serializable]
@@ -473,27 +476,6 @@ public class Arrow : MonoBehaviour
             
         }
 
-        //[Obsolete]
-        //private void _setZ(string n, float z)
-        //{
-        //    _setLocalClampZ(n,z);
-        //}
-        //[Obsolete]
-        //private void _setZZ(string n1, float z1, string n2, float z2)
-        //{
-        //    _setLocalClampZ(n1,z1);
-        //    _setLocalClampZ(n2,z2);
-        //}
-        //[Obsolete]
-        //private void _setComplexZZ(string n1, float z1, string n2, float z2)
-        //{
-        //    if (z1>=0 && z2>=0)
-        //    {
-        //        _setLocalClampZ(n1,z1);
-        //        _setLocalClampZ(n2,z2);
-        //    }
-        //}
-
         private void _setZ(BONE n, float z)
         {
             _setLocalClampZ(n,z);
@@ -512,17 +494,11 @@ public class Arrow : MonoBehaviour
             }
         }
         private void  _setLocalClampZ(BONE n, float z)     {
-            var t = GetBone(n); // Util.FindNode(m_go,n);
+            var t = GetBone(n); 
             t.localPosition = Util.Vector3_ModZ(t.localPosition,_clamp(z));
         }
 
-
         private float _clamp(float a)                        { return Mathf.Clamp(a,0,float.MaxValue);                  }
-        //[Obsolete]
-        //private void  _setLocalClampZ(string n, float z)     {
-        //    var t = Util.FindNode(m_go,n);
-        //    t.localPosition = Util.Vector3_ModZ(t.localPosition,_clamp(z));
-        //}
         private float _absP_R(float a) // タイプが"XXX_R"時にプラスを期待し、"XXX_L"時はマイナスとなる
         {
             return m_isL ? _absM(a) : _absP(a);
@@ -577,20 +553,46 @@ public class Arrow : MonoBehaviour
         return 0;
     }
 
-    #region 便宜
+    #region EDITOR用
     Transform m_head;
     public Transform GetHead()
     {
-        if (m_head!=null) return m_head;
-        m_head = Util.FindNode(m_go,"head");
+        if (m_go==null) return null;
+        if (m_head==null)
+        {
+            m_head = Util.FindNode(m_go,"head");
+        }
         return m_head;
+        //return m_type!= TYPE.NONE && m_control!=null ? m_control.GetBone(control.BONE.HEAD) : null;
     }
-    Transform m_arrowtop;
+    Transform m_arrow_top;
     public Transform GetArrowTop()
     {
-        if (m_arrowtop!=null) return m_arrowtop;
-        m_arrowtop = Util.FindNode(m_go,"arrow_top");
-        return m_arrowtop;
+        if (m_go==null) return null;
+        if (m_arrow_top==null)
+        {
+            m_arrow_top = Util.FindNode(m_go,"arrow_top");
+        }
+        return m_arrow_top;
+        //return m_type!= TYPE.NONE && m_control!=null ? m_control.GetBone(control.BONE.ARROW_TOP) : null;
+    }
+    public void Adjust()
+    {
+        if (m_control==null) return;
+        switch(m_type) {
+            case TYPE.S_TURN_R:
+            case TYPE.S_TURN_L:
+                {
+                    var mid =  m_control.GetBone(control.BONE.MID);
+                                       
+                    var arrow_pos = m_control.GetBone(control.BONE.ARROW);
+                    var root_pos  = m_control.GetBone(control.BONE.ROOT);
+                    
+                    mid.position = (arrow_pos.position + root_pos.position) * 0.5f;
+                }
+                break;
+        }
+
     }
     #endregion
 
@@ -626,7 +628,7 @@ public class Arrow : MonoBehaviour
             m_control = new control();
             m_control.m_owner = this;
 
-            var headbone = Util.FindNode(m_go,"head");
+            var headbone  = Util.FindNode(m_go,"head");
 
             var midbone_0 = Util.FindNode(m_go,"mid");
             var midbone_1 = Util.FindNode(m_go,"mid1");
