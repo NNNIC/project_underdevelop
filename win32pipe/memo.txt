@@ -1,0 +1,2 @@
+alpha01 -- ネイティブdll作成ＯＫ。 Unity動作ＯＫ
+alpha02 -- .net dll作成
