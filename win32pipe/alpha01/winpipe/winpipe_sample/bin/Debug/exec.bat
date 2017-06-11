@@ -1,1 +1,0 @@
-winpipe_sample.exe x

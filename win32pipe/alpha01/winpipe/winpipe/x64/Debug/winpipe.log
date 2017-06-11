@@ -1,9 +1,0 @@
-﻿  stdafx.cpp
-  dllmain.cpp
-  winpipe.cpp
-  Pipe.cpp
-  コードを生成中...
-     ライブラリ C:\Users\gea01\Documents\project_underdevelop\win32pipe\alpha01\winpipe\x64\Debug\winpipe.lib とオブジェクト C:\Users\gea01\Documents\project_underdevelop\win32pipe\alpha01\winpipe\x64\Debug\winpipe.exp を作成中
-  winpipe.vcxproj -> C:\Users\gea01\Documents\project_underdevelop\win32pipe\alpha01\winpipe\x64\Debug\winpipe.dll
-  winpipe.vcxproj -> C:\Users\gea01\Documents\project_underdevelop\win32pipe\alpha01\winpipe\x64\Debug\winpipe.pdb (Full PDB)
-          1 個のファイルをコピーしました。
