@@ -30,12 +30,12 @@ namespace excelwork
         public Worksheet   m_ws
         {
             get { return __ws;                                      }
-            set { __ws = value;  m_sheetnames = null; m_cache=null; }
+            set { __ws = value;  m_sheetnames = null;              }
         }
         private Worksheet   __ws;
         public  string[]    m_sheetnames;
 
-        public celldata     m_cache;
+        //public celldata     m_cache;
 
         public void Dispose() //ref http://ufcpp.net/study/csharp/rm_disposable.html
         {
@@ -96,7 +96,7 @@ namespace excelwork
         public void     SetObject(string row, string col,object val) { ExcelControl.SetObject(this,row,col,val);     }
         public void     SetObject(int row, int col, object val)      { ExcelControl.SetObject(this,row,col,val);     }
                         
-        public void     Flush(bool bForce=false)                     { ExcelControl.Flush(this,bForce);              }    
+        //public void     Flush(bool bForce=false)                     { ExcelControl.Flush(this,bForce);              }    
         
         public string[] GetAllSheets()                               { return ExcelControl.GetAllSheets(this);       }
         public void     SetSheet(string name)                        { ExcelControl.SetSheet(this,name);             }
@@ -111,146 +111,146 @@ namespace excelwork
 
     //
     #region 便利セルアイテム  ※高速アクセス用
-    public class celldata
-    {
-        public ExcelControlWork m_wk;
-        public class item
-        {
-            public int    row;
-            public int    col;
-            public object value;
-            public bool   bModified;
-        }
-        private Dictionary<ulong,item> m_celllist;
-        private ulong _makekey(int row, int col) { return (ulong)row * 100000L + (ulong)col;  } //辞書に使うキー
+    //public class celldata
+    //{
+    //    public ExcelControlWork m_wk;
+    //    public class item
+    //    {
+    //        public int    row;
+    //        public int    col;
+    //        public object value;
+    //        public bool   bModified;
+    //    }
+    //    private Dictionary<ulong,item> m_celllist;
+    //    private ulong _makekey(int row, int col) { return (ulong)row * 100000L + (ulong)col;  } //辞書に使うキー
 
-        private int   m_maxrow;
-        private int   m_maxcol;
+    //    private int   m_maxrow;
+    //    private int   m_maxcol;
 
-        public celldata(ExcelControlWork wk)
-        {
-            m_wk = wk;
-            init();
-        }
+    //    public celldata(ExcelControlWork wk)
+    //    {
+    //        m_wk = wk;
+    //        init();
+    //    }
 
-        private void init()
-        {
-            m_celllist = new Dictionary<ulong, item>();
-            m_maxrow = 0;
-            m_maxcol = 0;
-        }
+    //    private void init()
+    //    {
+    //        m_celllist = new Dictionary<ulong, item>();
+    //        m_maxrow = 0;
+    //        m_maxcol = 0;
+    //    }
 
-        public object this [string row, string col] //エクセルrow(ベース１)とカラム指定  
-        {
-            set {
-                var row_b1 = ExcelControl._toNum_nb1(row);
-                var col_b1 = ExcelControl._toNum_nb1(col);
-                this[row_b1-1,col_b1-1] = value;
-            }
-            get {
-                var row_b1 = ExcelControl._toNum_nb1(row);
-                var col_b1 = ExcelControl._toNum_nb1(col);
-                return this[row_b1-1,col_b1-1];
-            }
-        }
+    //    public object this [string row, string col] //エクセルrow(ベース１)とカラム指定  
+    //    {
+    //        set {
+    //            var row_b1 = util._toNum_nb1(row);
+    //            var col_b1 = util._toNum_nb1(col);
+    //            this[row_b1-1,col_b1-1] = value;
+    //        }
+    //        get {
+    //            var row_b1 = util._toNum_nb1(row);
+    //            var col_b1 = util._toNum_nb1(col);
+    //            return this[row_b1-1,col_b1-1];
+    //        }
+    //    }
 
-        public object this [int row, int col]
-        {
-            set {
-                var newvalue = _normalize_value(value);
+    //    public object this [int row, int col]
+    //    {
+    //        set {
+    //            var newvalue = _normalize_value(value);
 
-                var key = _makekey(row,col);
-                if (m_celllist.ContainsKey(key))
-                {
-                    m_celllist[key].value     = newvalue;
-                    m_celllist[key].bModified = true;
-                }
-                else
-                {
-                    var item = new item();
-                    item.row = row;
-                    item.col = col;
-                    item.value = newvalue;
-                    item.bModified = true;
+    //            var key = _makekey(row,col);
+    //            if (m_celllist.ContainsKey(key))
+    //            {
+    //                m_celllist[key].value     = newvalue;
+    //                m_celllist[key].bModified = true;
+    //            }
+    //            else
+    //            {
+    //                var item = new item();
+    //                item.row = row;
+    //                item.col = col;
+    //                item.value = newvalue;
+    //                item.bModified = true;
 
-                    m_celllist.Add(key,item);
+    //                m_celllist.Add(key,item);
 
-                    m_maxrow = Math.Max(m_maxrow,row);
-                    m_maxcol = Math.Max(m_maxcol,col);
-                }
-            }
-            get {
-                var key = _makekey(row,col);
-                if (m_celllist.ContainsKey(key))
-                {
-                    return m_celllist[key].value;
-                }
-                return null;
-            }
-        }
+    //                m_maxrow = Math.Max(m_maxrow,row);
+    //                m_maxcol = Math.Max(m_maxcol,col);
+    //            }
+    //        }
+    //        get {
+    //            var key = _makekey(row,col);
+    //            if (m_celllist.ContainsKey(key))
+    //            {
+    //                return m_celllist[key].value;
+    //            }
+    //            return null;
+    //        }
+    //    }
 
-        private object _normalize_value(object value)
-        {
-            try {
-                Type type = typeof(void);
-                if (value!=null)
-                {
-                    type = value.GetType();
-                }
-                if (type == typeof(Range))
-                {
-                    return value;
-                }
+    //    private object _normalize_value(object value)
+    //    {
+    //        try {
+    //            Type type = typeof(void);
+    //            if (value!=null)
+    //            {
+    //                type = value.GetType();
+    //            }
+    //            if (type == typeof(Range))
+    //            {
+    //                return value;
+    //            }
 
-                var newrange = m_celllist.FirstOrDefault().Value; //先頭のアイテムを利用。無い場合は考慮せず。
-                newrange.value = value;
+    //            var newrange = m_celllist.FirstOrDefault().Value; //先頭のアイテムを利用。無い場合は考慮せず。
+    //            newrange.value = value;
 
-                return newrange;
-            }
-            catch {
-                MessageBox.Show("Unexpected");
-                return null;
-            }             
-        }
+    //            return newrange;
+    //        }
+    //        catch {
+    //            MessageBox.Show("Unexpected");
+    //            return null;
+    //        }             
+    //    }
 
-        public void ReadAll()
-        {
-            init();
+    //    //public void ReadAll()
+    //    //{
+    //    //    init();
 
-            object[,] rangeArray;
-            Range usedRange = null;
-            try {
-                usedRange = m_wk.m_ws.UsedRange;
-                rangeArray = usedRange.Value;
-                // 二次元配列に対してループを回す
-                var lastrow = rangeArray.GetLength(0);
-                var lastcol = rangeArray.GetLength(1);
-                for(int r = 0; r<lastrow; r++) for(int c=0; c<lastcol; c++)
-                {
-                    this[r,c] = rangeArray[r,c];
-                }
-            }catch {
+    //    //    object[,] rangeArray;
+    //    //    Range usedRange = null;
+    //    //    try {
+    //    //        usedRange = m_wk.m_ws.UsedRange;
+    //    //        rangeArray = usedRange.Value;
+    //    //        // 二次元配列に対してループを回す
+    //    //        var lastrow = rangeArray.GetLength(0);
+    //    //        var lastcol = rangeArray.GetLength(1);
+    //    //        for(int r = 0; r<lastrow; r++) for(int c=0; c<lastcol; c++)
+    //    //        {
+    //    //            this[r,c] = rangeArray[r,c];
+    //    //        }
+    //    //    }catch {
 
-            }
-            finally { Marshal.ReleaseComObject(usedRange); }
-        }
+    //    //    }
+    //    //    finally { Marshal.ReleaseComObject(usedRange); }
+    //    //}
 
-        public void Flush(bool bForce = false)
-        {
-            foreach(var p in m_celllist)
-            {
-                var i = p.Value;
-                if (bForce || i.bModified)
-                {
-                    var src = (Range)i.value;
+    //    //public void Flush(bool bForce = false)
+    //    //{
+    //    //    foreach(var p in m_celllist)
+    //    //    {
+    //    //        var i = p.Value;
+    //    //        if (bForce || i.bModified)
+    //    //        {
+    //    //            var src = (Range)i.value;
 
-                    var range = (Range)m_wk.m_ws.Cells[i.row+1,i.col+1];
-                    util.Copy(src.Font,range.Font);
-                    range.Value = src.Value;
-                }
-            }
-        }
-    }
+    //    //            var range = (Range)m_wk.m_ws.Cells[i.row+1,i.col+1];
+    //    //            util.Copy(src.Font,range.Font);
+    //    //            range.Value = src.Value;
+    //    //        }
+    //    //    }
+    //    //}
+    //}
     #endregion
 
 
@@ -360,7 +360,7 @@ namespace excelwork
         public static object GetObject(ExcelControlWork wk,string row, string col)
         {
             try {
-                var col_b1 = _toNum_nb1(col);
+                var col_b1 = util._toNum_nb1(col);
                 var row_b1 = int.Parse(row) + 1;
                 return _getObject_b0(wk,row_b1,col_b1);
             } catch
@@ -380,8 +380,8 @@ namespace excelwork
         private static object _getObject_b1(ExcelControlWork wk, int row_b1, int col_b1)
         {
             try {
-                _cache(wk);
-                var obj = wk.m_cache[row_b1-1,col_b1-1];
+                //_cache(wk);
+                var obj = _get(wk,row_b1-1,col_b1-1);
                 return obj;
             } catch {
                 return null;
@@ -390,46 +390,48 @@ namespace excelwork
         private static object _getObject_b0(ExcelControlWork wk, int row_b0, int col_b0)
         {
             try {
-                _cache(wk);
-                var obj = wk.m_cache[row_b0,col_b0];
+                //_cache(wk);
+                var obj = _get(wk,row_b0,col_b0);
                 return obj;
             } catch {
                 return null;
             }
         }
 
-        private static void _cache(ExcelControlWork wk)
-        {
-            if (wk.m_cache!=null) return;
+        //private static void _cache(ExcelControlWork wk)
+        //{
+        //    if (wk.m_cache!=null) return;
 
-            wk.m_cache = new celldata(wk);
-            wk.m_cache.ReadAll();
-        }
+        //    wk.m_cache = new celldata(wk);
+        //    wk.m_cache.ReadAll();
+        //}
 
         /// <summary>
         /// 行とカラムを指定して値を設定。（指定は文字列）
         /// </summary>
         public static void SetObject(ExcelControlWork wk, string row, string col, object value)
         {
-            _cache(wk);
-            wk.m_cache[row,col] = value;    
+            //_cache(wk);
+            var row_b1 = util._toNum_nb1(row);
+            var col_b1 = util._toNum_nb1(col);
+            _set(wk, row_b1 - 1, col_b1 -1, value);    
         }
         /// <summary>
         /// 行とカラムを指定して値を設定。（指定は文字列）
         /// </summary>
         public static void SetObject(ExcelControlWork wk, int row, int col,object value)
         {
-            _cache(wk);
-            wk.m_cache[row,col] = value;
+            //_cache(wk);
+            _set(wk,row,col,value);
         }
         /// <summary>
         /// 書き込み
         /// </summary>
-        public static void Flush(ExcelControlWork wk, bool bForce=false)
-        {
-            _cache(wk);
-            wk.m_cache.Flush(bForce);
-        }
+        //public static void Flush(ExcelControlWork wk, bool bForce=false)
+        //{
+        //    //_cache(wk);
+        //    wk.m_cache.Flush(bForce);
+        //}
         #endregion;
 
         #region シート関連
@@ -569,9 +571,37 @@ namespace excelwork
         }
         #endregion
 
+        private static object _get(ExcelControlWork wk,int row_b0, int col_b0)
+        {
+            var row = row_b0+1;
+            var col = col_b0+1;
+            
+            return wk.m_ws.Cells[row,col];
+        }
+        private static void _set(ExcelControlWork wk, int row_b0, int col_b0, object val)
+        {
+            var row = row_b0+1;
+            var col = col_b0+1;
+
+            var dst   = (Range)wk.m_ws.Cells[row,col];
+            var vtype = val.GetType();
+            if (vtype == typeof(Range))
+            {
+                var src = (Range)val;
+                util.Copy(src.Font,dst.Font);
+                dst.Value = src.Value;
+            }
+            else
+            {
+                dst.Value = val;
+                wk.m_ws.Cells[row,col] = dst;
+            }
+        }
 
 
-
+    }
+    static class util
+    {
         //エクセルカラム(ベース１)をアルファベット文字へ
         // ref https://support.microsoft.com/ja-jp/help/833402/how-to-convert-excel-column-numbers-into-alphabetical-characters
         // ref https://memo-c-sharp.blogspot.jp/2015/09/excel.html
@@ -615,9 +645,6 @@ namespace excelwork
             }
             return Convert.ToInt32(result);
         }
-    }
-    static class util
-    {
         public static void Copy<T>(T src, T dst)
         {
             var type = typeof(T);
@@ -640,7 +667,6 @@ namespace excelwork
                 }
                 catch { }
             }
-
         }
     }
 
