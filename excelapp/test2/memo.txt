@@ -1,0 +1,33 @@
+MainForm 
+- Excelのrowの指定col(一つ)が並ぶ
+  
+  >> ItemBoxElement
+   
+   [handle][up/down][number][ Text ]   
+   
+   up/downで行移動 書き直し
+
+EditForm
+
+- MainFormでFocusされたrowのcolが縦に並ぶ。
+  変更すると即反映
+
+ExcelLoad
+
+- Load
+  指定エクセルを開いて指定シートを全部読込む
+
+- Update
+  エクセルを動的に修正
+  
+- Save
+
+Config
+
+  HeaderRow = ヘッダとなっている行
+  MainCol   = MainFormで表示するカラム
+  Range     = "A,B-G,AA"  ・・・レンジを指定する。 連続するところは start-endで指定する
+   
+
+  
+     
