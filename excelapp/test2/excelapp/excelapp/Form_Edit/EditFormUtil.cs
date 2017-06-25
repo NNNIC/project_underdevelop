@@ -30,18 +30,38 @@ namespace excelapp
         public void UpdateData(int row)
         {
             if (m_save_row==row) return;
-            m_save_row = row;
-            
-            //全削除
-            m_dataGridView.Rows.Clear();
 
-            foreach(var col in m_range)
+            m_editForm.m_bReady = false;
             {
-                var newrow  = m_dataGridView.Rows.Add();
-                var newrows = m_dataGridView.Rows[newrow];
-                try {  newrows.Cells[0].Value = m_values[m_header_row,col].ToString() ; } catch { }
-                try { newrows.Cells[1].Value = m_values[m_save_row,col].ToString()   ; } catch { }
+                m_save_row = row;
+            
+                //全削除
+                m_dataGridView.Rows.Clear();
+
+                foreach(var col in m_range)
+                {
+                    var newrow  = m_dataGridView.Rows.Add();
+                    var newrows = m_dataGridView.Rows[newrow];
+                    try {  newrows.Cells[0].Value = m_values[m_header_row,col].ToString() ; } catch { }
+                    try { newrows.Cells[1].Value = m_values[m_save_row,col].ToString()   ; } catch { }
+                }
             }
+            m_editForm.m_bReady = true;
+        }
+
+        public void userChanged()
+        {
+            if (m_values==null || m_dataGridView==null) return;
+
+            m_editForm.m_bReady = false;
+            {
+                int i = 0;
+                foreach(var col in m_range)
+                {
+                    m_values[m_save_row,col] = m_dataGridView.Rows[i++].Cells[1].Value;
+                }
+            }
+            m_editForm.m_bReady = true;
         }
     }
 }

@@ -13,7 +13,7 @@ namespace excelapp
     public partial class MainForm : Form
     {
         public EditForm     m_editForm;
-        public DataGridView m_dataGridView { get { return m_editForm.dataGridView1; } }
+        public DataGridView m_dataGridView { get { return m_editForm!=null ? m_editForm.dataGridView1 : null; } }
 
         public Config         m_config = new Config();
         public LoadExcel      m_loadexcel;
@@ -23,7 +23,7 @@ namespace excelapp
         public List<ItemBoxElement> m_itemBoxElementList = new List<ItemBoxElement>();
         public ItemBoxElement m_draggingItemBox = null;
 
-        public object[,]      m_values { get { return m_loadexcel.m_values; } }
+        public object[,]      m_values { get { return m_loadexcel!=null ?  m_loadexcel.m_values : null; } }
 
         public MainForm()
         {
@@ -40,7 +40,7 @@ namespace excelapp
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            m_editForm = new EditForm();
+            m_editForm = new EditForm(this);
             m_editForm.Show();
         }
 
