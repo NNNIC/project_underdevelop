@@ -26,7 +26,11 @@ namespace excelapp
 
         private void _load(string file, string sheet)
         {
-            m_book = ExcelUtil.OpenBook(file);
+            m_book = ExcelUtil.AttackBook(file);
+            if (m_book==null)
+            {
+                m_book = ExcelUtil.OpenBook(file);
+            }
             m_book.SetVisible(true);
 
             m_sheet = m_book.GetSheet(sheet);

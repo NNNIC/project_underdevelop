@@ -19,10 +19,10 @@ namespace excelapp
                 return null;
             } }
 
-        private List<int> m_range;
-        private int       m_main_col;
-        private int       m_header_row;
-        private int       m_bottom_row;
+        public  List<int> m_range      { get; private set; }
+        public  int       m_main_col   { get; private set; }
+        public  int       m_header_row { get; private set; }
+        public  int       m_bottom_row { get; private set; }
 
         public ItemBoxUtil(MainForm form)
         {
@@ -35,7 +35,7 @@ namespace excelapp
         {
             EraseAll();
 
-            int index = 0;
+            int index = 1;
             for(var n = m_header_row + 1; n<=m_bottom_row; n++)
             {
                 if (_isValidRowValues(n))
@@ -50,6 +50,7 @@ namespace excelapp
 
                     var ib = ItemBoxElement.Create(n.ToString(), m_form, 100, 30 * index++);
                     ib.SetText(s);
+                    ib.SetRowText(n.ToString("0000"));
                     m_itemBoxElementList.Add(ib);
                 }
             }
