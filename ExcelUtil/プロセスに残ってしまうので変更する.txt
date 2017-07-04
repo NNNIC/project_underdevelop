@@ -1,0 +1,9 @@
+1 app 1 book 1 sheet get/set value
+
+using(var book   = new ExcelBook(file))
+{
+	var sheet  = book.SetSheet(name);
+	var values = sheet.GetValues(numofrow=0,numofcol=0);
+	sheet.SetValues(values);
+}
+0
