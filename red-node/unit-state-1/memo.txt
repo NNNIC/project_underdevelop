@@ -1,0 +1,19 @@
+ref https://nodered.org/docs/creating-nodes/first-node
+
+node-redをUnityのステート管理に利用する。
+
+1)専用のノードを用意する
+
+　　cssm-start   C#ステート管理開始
+　　　開始ステートと接続
+
+    cssm-state   C#ステート管理ステート
+　　　
+      初期処理と更新処理を表記させる
+      NextState();で接続されたステートへ
+      NextState(1);   //複数時 switchに似た構造
+      NextState(str);
+
+
+
+2)エキスポートされたJSONからソースを作成する

@@ -1,0 +1,17 @@
+{
+  "name": "node-red-csharp-statemanage",
+  "version": "1.0.0",
+  "description": "refer to https://nodered.org/docs/creating-nodes/first-node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+	"node-red" : {
+		"nodes": {
+		    "cssm-start": "cssm-start.js",
+        "cssm-state": "cssm-state.js"
+		}
+	}
+}

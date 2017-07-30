@@ -1,0 +1,40 @@
+<script type="text/javascript">
+    RED.nodes.registerType('cssm-state',{
+        category: 'cssm',
+        color: '#a6bbcf',
+        defaults: {
+            name: {value:""},
+            inic: {value:"/*initialize code*/"},
+            updc: {value:"/*update code*/"}  
+        },
+        inputs:1,
+        outputs:1,
+        icon: "file.png",
+        label: function() {
+            return this.name||"cssm-state";
+        }
+    });
+</script>
+
+<script type="text/x-red" data-template-name="cssm-state">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-inic"><i class="icon-tag"></i> InitialCode</label>
+        <!-- <input type="text" id="node-input-inic" placeholder="Inic"> -->
+        <!-- <input type="text" id="node-input-inic" placeholder="Updc"> -->
+        <textarea id="node-input-updc" placeholder="Inic" rows=10></textarea>
+
+    </div>
+    <div class="form-row">
+        <label for="node-input-updc"><i class="icon-tag"></i> UpdateCode</label>
+        <!-- <input type="text" id="node-input-updc" placeholder="Updc"> -->
+        <textarea id="node-input-updc" placeholder="Updc" rows=10></textarea>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="cssm-state">
+    <p>Initialize code and update code.</p>
+</script>
