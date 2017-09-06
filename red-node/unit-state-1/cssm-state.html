@@ -5,7 +5,9 @@
         defaults: {
             name: {value:""},
             inic: {value:"/*initialize code*/"},
-            updc: {value:"/*update code*/"}  
+            updc: {value:"/*update code*/"},
+            outputs: {value:1}
+
         },
         inputs:1,
         outputs:1,
@@ -32,6 +34,10 @@
         <label for="node-input-updc"><i class="icon-tag"></i> UpdateCode</label>
         <!-- <input type="text" id="node-input-updc" placeholder="Updc"> -->
         <textarea id="node-input-updc" placeholder="Updc" rows=10></textarea>
+    </div>
+    <div class="form-row">
+        <label for="node-input-outputs"><i class="fa fa-random"></i></label>
+        <input id="node-input-outputs" style="width: 60px;" value="1">
     </div>
 </script>
 
