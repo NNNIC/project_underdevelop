@@ -82,6 +82,7 @@
     <Compile Include="Assets\Scripts\200_Manager\Camera\CameraManager.cs" />
     <Compile Include="Assets\Scripts\200_Manager\Camera\CameraManager_gui.cs" />
     <Compile Include="Assets\Scripts\200_Manager\Camera\CameraManager_move.cs" />
+    <Compile Include="Assets\Scripts\200_Manager\RescueProbe\RescueProbeManager.cs" />
     <Compile Include="Assets\Scripts\900_Util\Etc\NodeCache.cs" />
     <Compile Include="Assets\Scripts\900_Util\Etc\ReadResetValue.cs" />
     <Compile Include="Assets\Scripts\900_Util\Etc\StateManager.cs" />
