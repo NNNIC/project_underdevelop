@@ -45,11 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\..\github\source\ExcelUtil.cs">
-      <Link>Lib\ExcelUtil.cs</Link>
-    </Compile>
     <Compile Include="EditUtil.cs" />
     <Compile Include="ExcelWork.cs" />
+    <Compile Include="Lib\ExcelUtil.cs" />
     <Compile Include="Load\LoadTemplateAndValues.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -75,5 +75,23 @@ namespace ExcelStateChartConverter
             Array.ForEach(Split(s),i=>output += i.TrimEnd() + "\n");
             return output;
         }
+
+        public static string Extract(string s, out int index)
+        {
+            index = -1;
+            var si = s.IndexOf("[[");
+            if (si<0) return string.Empty;
+
+            var ei = s.IndexOf("]]",si);
+            if (ei<0) return string.Empty;
+
+            for(var i = 0; i<s.Length; i++)
+            {
+                if (s[i] > ' ') { index = i; break;}
+            }
+
+            return s.Substring(si+2, ei-(si+2));
+        }
+
     }
 }

@@ -60,7 +60,31 @@ namespace ExcelStateChartConverter
         }
 
         //ソース内の 存在確認後利用する部分を展開する
-        private static string convert_partsifexist(string st,string tmpstr)
+        private static string convert_partsifexist(string st, string tmpstr)
+        {
+            var output = string.Empty;
+            var lines = tmpstr.Split('\n');
+            for (var n = 0; n < lines.Length; n++)
+            {
+                var l = lines[n].TrimEnd();
+                int index = 0;
+                var e = EditUtil.Extract(l, out index);
+                if (!string.IsNullOrWhiteSpace(e))
+                {
+                    var namecmt = e + "-cmt";
+                    var indentspace = (new string(' ', index));
+                    if (!string.IsNullOrWhiteSpace(_getvalue(st,namecmt))) //コメント行あり
+                    {
+                        output += indentspace + "/*" + "\n";
+                        output += indentspace + string.Format("  [[{0}]]", namecmt) + "\n";
+                        output += indentspace + "*/" + "\n";
+                    }
+                }
+                output += l + "\n";
+            }
+            return output;
+        }
+        private static string convert_partsifexist_obs(string st,string tmpstr)
         {
             var mark1 = "<<<?";
             var mark2 = ">>>";
@@ -107,7 +131,12 @@ namespace ExcelStateChartConverter
                     var name = l.Substring(oindex+2,cindex - oindex -2);
                     var val = _getvalue(st,name);
                     
-                    output += EditUtil.Insert(l,"[[" + name + "]]",val).TrimEnd() + "\n";
+                    var result = EditUtil.Insert(l,"[[" + name + "]]",val).TrimEnd();
+                    if (!string.IsNullOrWhiteSpace(result))
+                    {
+                         output += result + "\n";
+                    }
+
                 }
                 else
                 {
