@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1">
+ <asset>
+  <contributor>
+   <authoring_tool>ExpCollada for Metasequoia</authoring_tool>
+  </contributor>
+  <created>2017-09-14T12:36:55Z</created>
+  <modified>2017-09-14T12:36:55Z</modified>
+  <up_axis>Y_UP</up_axis>
+ </asset>
+ <library_cameras>
+  <camera id="Camera-Camera" name="Camera-Camera">
+   <optics>
+    <technique_common>
+     <perspective>
+      <yfov>15.189</yfov>
+      <znear>0.1</znear>
+      <zfar>10000.0</zfar>
+     </perspective>
+    </technique_common>
+   </optics>
+  </camera>
+ </library_cameras>
+ <library_effects>
+  <effect id="_Unattached-fx" name="_Unattached-fx">
+   <profile_COMMON>
+    <technique sid="metaseq">
+     <phong>
+      <emission>
+       <color>0.000 0.000 0.000 1</color>
+      </emission>
+      <ambient>
+       <color>0.600 0.600 0.600 1</color>
+      </ambient>
+      <diffuse>
+       <color>0.800 0.800 0.800 1</color>
+      </diffuse>
+      <specular>
+       <color>0.000 0.000 0.000 1</color>
+      </specular>
+      <shininess>
+       <float>5.000</float>
+      </shininess>
+      <reflective>
+       <color>1 1 1 1</color>
+      </reflective>
+      <reflectivity>
+       <float>0.0</float>
+      </reflectivity>
+      <transparent>
+       <color>1 1 1 1</color>
+      </transparent>
+      <transparency>
+       <float>1.000</float>
+      </transparency>
+     </phong>
+    </technique>
+   </profile_COMMON>
+  </effect>
+ </library_effects>
+ <library_materials>
+  <material id="_Unattached" name="_Unattached">
+   <instance_effect url="#_Unattached-fx"/>
+  </material>
+ </library_materials>
+ <library_geometries>
+  <geometry id="obj1-lib" name="obj1">
+   <mesh>
+    <source id="obj1-lib-positions" name="position">
+     <float_array id="obj1-lib-positions-array" count="30">0.00000 0.00000 100.00000 70.71068 0.00000 70.71068 100.00000 0.00000 -0.00000 70.71068 0.00000 -70.71068 -0.00001 0.00000 -100.00000 -70.71069 0.00000 -70.71066 -100.00000 0.00000 0.00000 -70.71069 0.00000 70.71067 0.00000 200.00000 0.00000 0.00000 0.00000 0.00000</float_array>
+     <technique_common>
+      <accessor count="10" source="#obj1-lib-positions-array" stride="3">
+       <param name="X" type="float"/>
+       <param name="Y" type="float"/>
+       <param name="Z" type="float"/>
+      </accessor>
+     </technique_common>
+    </source>
+    <source id="obj1-lib-normals" name="normal">
+     <float_array id="obj1-lib-normals-array" count="72">-0.00000 0.44721 0.89443 0.63246 0.44721 0.63246 0.63246 0.44721 0.63246 0.89443 0.44721 -0.00000 0.89443 0.44721 -0.00000 0.63246 0.44721 -0.63246 0.63246 0.44721 -0.63246 -0.00000 0.44721 -0.89443 -0.00000 0.44721 -0.89443 -0.63246 0.44721 -0.63246 -0.63246 0.44721 -0.63246 -0.89443 0.44721 0.00000 -0.89443 0.44721 0.00000 -0.63246 0.44721 0.63246 -0.63246 0.44721 0.63246 -0.00000 0.44721 0.89443 0.00000 -1.00000 0.00000 0.00000 -1.00000 0.00000 0.00000 -1.00000 0.00000 0.00000 -1.00000 0.00000 0.00000 -1.00000 0.00000 0.00000 -1.00000 0.00000 0.00000 -1.00000 0.00000 0.00000 -1.00000 0.00000</float_array>
+     <technique_common>
+      <accessor count="24" source="#obj1-lib-normals-array" stride="3">
+       <param name="X" type="float"/>
+       <param name="Y" type="float"/>
+       <param name="Z" type="float"/>
+      </accessor>
+     </technique_common>
+    </source>
+    <source id="obj1-lib-texcoords">
+     <float_array id="obj1-lib-texcoords-array" count="96">0.00000 1.00000 0.06250 0.00000 0.12500 1.00000 0.12500 1.00000 0.12500 0.00000 0.25000 1.00000 0.25000 1.00000 0.18750 0.00000 0.37500 1.00000 0.37500 1.00000 0.25000 0.00000 0.50000 1.00000 0.50000 1.00000 0.31250 0.00000 0.62500 1.00000 0.62500 1.00000 0.37500 0.00000 0.75000 1.00000 0.75000 1.00000 0.43750 0.00000 0.87500 1.00000 0.87500 1.00000 0.50000 0.00000 1.00000 1.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000 0.00000</float_array>
+     <technique_common>
+      <accessor count="48" offset="0" source="#obj1-lib-texcoords-array" stride="2">
+       <param name="U" type="float"/>
+       <param name="V" type="float"/>
+      </accessor>
+     </technique_common>
+    </source>
+    <vertices id="obj1-lib-vertices">
+     <input semantic="POSITION" source="#obj1-lib-positions"/>
+    </vertices>
+    <polylist count="16" material="_Unattached">
+     <input offset="0" semantic="VERTEX" source="#obj1-lib-vertices"/>
+     <input offset="1" semantic="NORMAL" source="#obj1-lib-normals"/>
+     <input offset="2" semantic="TEXCOORD" source="#obj1-lib-texcoords"/>
+     <vcount>3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3</vcount>
+     <p>1 1 2 8 1 1 0 0 0 2 3 5 8 2 4 1 2 3 3 5 8 8 5 7 2 4 6 4 7 11 8 6 10 3 6 9 5 9 14 8 9 13 4 8 12 6 11 17 8 10 16 5 10 15 7 13 20 8 13 19 6 12 18 0 15 23 8 14 22 7 14 21 1 16 26 0 16 25 9 16 24 2 17 29 1 17 28 9 17 27 3 18 32 2 18 31 9 18 30 4 19 35 3 19 34 9 19 33 5 20 38 4 20 37 9 20 36 6 21 41 5 21 40 9 21 39 7 22 44 6 22 43 9 22 42 0 23 47 7 23 46 9 23 45</p>
+    </polylist>
+   </mesh>
+  </geometry>
+ </library_geometries>
+ <library_visual_scenes>
+  <visual_scene id="Scene" name="Scene">
+   <node id="Camera" name="Camera">
+    <rotate sid="rotateY">0 1 0 30.57296</rotate>
+    <rotate sid="rotateX">1 0 0 -0.77915</rotate>
+    <rotate sid="rotateZ">0 0 1 -0.00000</rotate>
+    <translate sid="translate">0.00000 0.00000 904.95068</translate>
+    <instance_camera url="#Camera-Camera"/>
+   </node>
+   <node id="obj1" name="obj1">
+    <translate sid="translate">0.00000 0.00000 0.00000</translate>
+    <rotate sid="head">0 1 0 0.00000</rotate>
+    <rotate sid="pitch">1 0 0 0.00000</rotate>
+    <rotate sid="bank">0 0 1 0.00000</rotate>
+    <scale sid="scale">1.00000 1.00000 1.00000</scale>
+    <instance_geometry url="#obj1-lib">
+     <bind_material>
+      <technique_common>
+       <instance_material symbol="_Unattached" target="#_Unattached">
+        <bind_vertex_input semantic="UVSET0" input_semantic="TEXCOORD"/>
+       </instance_material>
+      </technique_common>
+     </bind_material>
+    </instance_geometry>
+   </node>
+  </visual_scene>
+ </library_visual_scenes>
+ <scene>
+  <instance_visual_scene url="#Scene"/>
+ </scene>
+</COLLADA>
