@@ -16,7 +16,24 @@ public partial class ArrowFlowStateControl
             {
                 return true;
             }
-        }        
+
+            //if (LineUtil.IsOverlapped(a,b,node.arrow_next,false))
+            //{
+            //    return true;
+            //}
+
+            //if (node.arrow_branch_list!=null)
+            //{
+            //    for(var i = 0; i<node.arrow_branch_list.Length;i++)
+            //    {
+            //        if (LineUtil.IsOverlapped(a,b,node.arrow_branch_list[i],false))
+            //        {
+            //            return true;
+            //        }
+            //    }
+            //}
+
+        }
         return false;
     }
 }

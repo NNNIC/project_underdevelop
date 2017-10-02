@@ -51,6 +51,7 @@
     <Compile Include="Chart\ChartManager_tool.cs" />
     <Compile Include="Draw\DrawUtil.cs" />
     <Compile Include="Draw\LineUtil.cs" />
+    <Compile Include="Draw\PointUtil.cs" />
     <Compile Include="Draw\RectUtil.cs" />
     <Compile Include="Excel\ExcelLoadValue.cs" />
     <Compile Include="Excel\ExcelProgram.cs" />

@@ -97,5 +97,14 @@ public class DrawUtil
     {
         return new Point(a.X + b.X, a.Y + b.Y);
     }
+    public static Point Sub_Point(Point a, Point b)
+    {
+        return new Point(a.X - b.X, a.Y - b.Y);
+    }
+    public static float Len_Point(Point a, Point b)
+    {
+        var diff = Sub_Point(a,b);
+        return  (float)Math.Sqrt((double)(a.X * a.X + b.Y * b.Y));
+    }
 }
 

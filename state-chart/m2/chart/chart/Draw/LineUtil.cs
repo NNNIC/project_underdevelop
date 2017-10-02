@@ -8,7 +8,7 @@ using System.Drawing;
 public class LineUtil
 {
 
-    //    https://qiita.com/ykob/items/ab7f30c43a0ed52d16f2 --> 使えない！　　　　http://marupeke296.com/COL_2D_No10_SegmentAndSegment.html　こっち！
+    #region //    https://qiita.com/ykob/items/ab7f30c43a0ed52d16f2 
 
     private static bool IsOnLine(float ax, float ay, float bx, float by, float cx, float cy)
     {
@@ -59,5 +59,54 @@ public class LineUtil
         var isHit_left  = IsHit(a,b,q,o);
 
         return isHit_top || isHit_right || isHit_bot || isHit_left;
+    }
+    #endregion
+
+    public static bool IsOverlapped(Point a, Point b, Point c, Point d, bool? bHorizontal_or_Vertical=null)
+    {
+        var diff_ab = DrawUtil.Sub_Point(a,b);
+        var diff_cd = DrawUtil.Sub_Point(c,d);
+
+        var len_ab  = DrawUtil.Len_Point(a,b);
+        var len_cd  = DrawUtil.Len_Point(c,d);
+
+        if (bHorizontal_or_Vertical==null || (bool)bHorizontal_or_Vertical==true)
+        {
+            if (diff_ab.X == 0 && diff_cd.X == 0)
+            {
+                var min_y = MathUtil.Min(a.Y,b.Y,c.Y,d.Y);
+                var max_y = MathUtil.Max(a.Y,b.Y,c.Y,d.Y);
+            
+                var len = max_y - min_y;
+                return (len < len_ab + len_cd);             
+            }
+        }
+        if (bHorizontal_or_Vertical==null || (bool)bHorizontal_or_Vertical == false)
+        {
+            if (diff_ab.Y == 0 && diff_cd.Y == 0)
+            {
+                var min_x = MathUtil.Min(a.X,b.X,c.X,d.X);
+                var max_x = MathUtil.Max(a.X,b.X,c.X,d.X);
+            
+                var len = max_x - min_x;
+                return (len < len_ab + len_cd);             
+            }
+        }
+        return false;
+    }
+
+    public static bool IsOverlapped(Point a, Point b, List<Point> list, bool? bHorizontal_or_vertical=null)
+    {
+        if (list == null || list.Count < 2) return false;
+        for(var i = 0; i < list.Count-1; i++)
+        {
+            var c = list[i];
+            var d = list[i+1];
+            if (IsOverlapped(a,b,c,d, bHorizontal_or_vertical))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

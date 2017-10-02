@@ -11,9 +11,7 @@ public partial class ArrowFlowStateControl
         m_bStraight = false;
         if (!IsHit(m_buf_src,m_buf_dst))
         {
-            m_pointList.Clear();
-            m_pointList.Add(m_src);
-            m_pointList.Add(m_dst);
+            PointUtil.CreateHVLine(m_src,m_dst,ref m_pointList);
             m_bStraight = true;
         }
     }
