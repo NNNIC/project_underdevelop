@@ -12,7 +12,7 @@ public partial class ArrowFlowStateControl
     {
         foreach(var node in m_nodelist)
         {
-            if (LineUtil.IsHit(a,b,node.rect))
+            if (LineUtil.IsHit(a,b,node.bounding))
             {
                 return true;
             }

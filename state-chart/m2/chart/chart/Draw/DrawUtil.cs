@@ -69,6 +69,10 @@ public class DrawUtil
         {
             for(var i = 0; i<list.Count; i++)
             {
+                //if (i==0)
+                //{
+                //    g.DrawLine(pen_head, list[i], list[i+1]);
+                //}
                 if (i==list.Count-2)
                 {
                     g.DrawLine(pen_head, list[i], list[i+1]);
@@ -76,7 +80,7 @@ public class DrawUtil
                 }
                 else
                 {
-                    g.DrawLine(pen, list[i], list[i+1]);
+                    g.DrawLine(pen_head, list[i], list[i+1]);
                 }
             }
         }

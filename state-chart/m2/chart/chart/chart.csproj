@@ -51,6 +51,7 @@
     <Compile Include="Chart\ChartManager_tool.cs" />
     <Compile Include="Draw\DrawUtil.cs" />
     <Compile Include="Draw\LineUtil.cs" />
+    <Compile Include="Draw\RectUtil.cs" />
     <Compile Include="Excel\ExcelLoadValue.cs" />
     <Compile Include="Excel\ExcelProgram.cs" />
     <Compile Include="Excel\ExcelUtil.cs" />
@@ -78,6 +79,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Lib\EditUtil.cs" />
+    <Compile Include="Lib\MathUtil.cs" />
     <Compile Include="Lib\StateControlBase.cs" />
     <Compile Include="Lib\StateManagerWithPahse.cs" />
     <Compile Include="Program.cs" />

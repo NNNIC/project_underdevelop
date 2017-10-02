@@ -18,10 +18,10 @@ public partial class ChartManager
     readonly Size  NODE_SIZE   = new Size(NODE_WIDTH,NODE_HEIGHT);
 
     const int ARROW_WIDTH      = 1;
-    const int ARROW_BUFFER     = 10; //曲線の矢印時の緩衝用
+    const int ARROW_BUFFER     = 5; //曲線の矢印時の緩衝用
 
-    public const int ARROW_GAP = 10;
-    public const int ARROW_DIF =  2;
+    public const int ARROW_GAP =  5;
+    public const int ARROW_DIF =  0;
 
     PictureBox m_mainPicture { get { return chart.Form1.V.pictureBox_main; }  }
 
@@ -74,7 +74,7 @@ public partial class ChartManager
                                                 node.srcpoint_branch(i),
                                                 nextnode.dstpoint,
                                                 node.buf_srcpoint_branch(i),
-                                                nextnode.dstpoint,
+                                                nextnode.buf_dstpoint,
                                                 false
                                             );
             }

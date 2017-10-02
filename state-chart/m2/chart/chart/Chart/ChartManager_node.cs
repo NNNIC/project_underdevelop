@@ -42,11 +42,12 @@ public partial class ChartManager
         //branch時の矢印始点
         public Point         srcpoint_branch(int i)
         {
-            var x = rect.X + rect.Width;
-            var y = rect.Y + rect.Height + (int)((double)branch_height_size * ((double)i + 0.5d));
+            var trect = get_branch_text_rect(i);
+            var x = trect.X + trect.Width;
+            var y = trect.Y + trect.Height / 2;
             return new Point(x,y);
         }
-        public Point         buf_srcpoint_branch(int i) { return DrawUtil.Add_X(srcpoint_branch(i),ARROW_BUFFER * i); } //緩衝付 
+        public Point         buf_srcpoint_branch(int i) { return DrawUtil.Add_X(srcpoint_branch(i),ARROW_BUFFER * (i+1)); } //緩衝付 
 
         //branchesの分解
         private void        branch_tokens(int i, out string cond, out string st)
@@ -78,6 +79,25 @@ public partial class ChartManager
             branch_tokens(i, out cond, out st);
             if (string.IsNullOrEmpty(cond)) return null;
             return st;
-        }        
+        }
+        #region バンディングボックス
+        private Rectangle? _bounding;
+        public  Rectangle  bounding
+        {
+            get {
+                if (_bounding==null)
+                {
+                    var newrect = rect;
+                    if (branches!=null) for(var i = 0; i<branches.Count; i++)
+                    {
+                        newrect = RectUtil.Add(newrect, get_branch_text_rect(i));
+                    }
+                    _bounding = newrect;
+                }
+                return (Rectangle)_bounding;
+            }
+        }
+
+        #endregion
     }
 }

@@ -15,14 +15,14 @@ public partial class ArrowFlowStateControl
     }	
     void br_up_if_req(Action<int,bool> state)
     {
-        if (m_up_or_down)
+        if (!m_bStraight && m_up_or_down)
         {
             SetNextState(state);
         }
     }
     void br_down_if_req(Action<int,bool> state)
     {
-        if (!m_up_or_down)
+        if (!m_bStraight && !m_up_or_down)
         {
             SetNextState(state);
         }
