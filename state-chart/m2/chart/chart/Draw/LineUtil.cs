@@ -62,7 +62,9 @@ public class LineUtil
     }
     #endregion
 
-    public static bool IsOverlapped(Point a, Point b, Point c, Point d, bool? bHorizontal_or_Vertical=null)
+    #region 直線の重複
+    public static int epsilon_overlapped=5;
+    public static bool IsOverlapped(Point a, Point b, Point c, Point d, bool bHorizontal_or_Vertical)
     {
         var diff_ab = DrawUtil.Sub_Point(a,b);
         var diff_cd = DrawUtil.Sub_Point(c,d);
@@ -70,9 +72,9 @@ public class LineUtil
         var len_ab  = DrawUtil.Len_Point(a,b);
         var len_cd  = DrawUtil.Len_Point(c,d);
 
-        if (bHorizontal_or_Vertical==null || (bool)bHorizontal_or_Vertical==true)
+        if (bHorizontal_or_Vertical==false)
         {
-            if (diff_ab.X == 0 && diff_cd.X == 0)
+            if (diff_ab.X == 0 && diff_cd.X == 0 && Math.Abs(a.X - c.X) <= epsilon_overlapped)
             {
                 var min_y = MathUtil.Min(a.Y,b.Y,c.Y,d.Y);
                 var max_y = MathUtil.Max(a.Y,b.Y,c.Y,d.Y);
@@ -81,9 +83,9 @@ public class LineUtil
                 return (len < len_ab + len_cd);             
             }
         }
-        if (bHorizontal_or_Vertical==null || (bool)bHorizontal_or_Vertical == false)
+        if (bHorizontal_or_Vertical == true)
         {
-            if (diff_ab.Y == 0 && diff_cd.Y == 0)
+            if (diff_ab.Y == 0 && diff_cd.Y == 0 && Math.Abs(a.Y - c.Y) <= epsilon_overlapped)
             {
                 var min_x = MathUtil.Min(a.X,b.X,c.X,d.X);
                 var max_x = MathUtil.Max(a.X,b.X,c.X,d.X);
@@ -95,7 +97,7 @@ public class LineUtil
         return false;
     }
 
-    public static bool IsOverlapped(Point a, Point b, List<Point> list, bool? bHorizontal_or_vertical=null)
+    public static bool IsOverlapped(Point a, Point b, List<Point> list, bool bHorizontal_or_vertical)
     {
         if (list == null || list.Count < 2) return false;
         for(var i = 0; i < list.Count-1; i++)
@@ -109,4 +111,5 @@ public class LineUtil
         }
         return false;
     }
+    #endregion
 }

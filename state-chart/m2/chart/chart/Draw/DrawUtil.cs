@@ -103,8 +103,12 @@ public class DrawUtil
     }
     public static float Len_Point(Point a, Point b)
     {
-        var diff = Sub_Point(a,b);
-        return  (float)Math.Sqrt((double)(a.X * a.X + b.Y * b.Y));
+        var d = Sub_Point(a,b);
+        return  (float)Math.Sqrt((double)(d.X * d.X + d.Y * d.Y));
+    }
+    public static Point Abs(Point a)
+    {
+        return new Point(Math.Abs(a.X), Math.Abs(a.Y));
     }
 }
 

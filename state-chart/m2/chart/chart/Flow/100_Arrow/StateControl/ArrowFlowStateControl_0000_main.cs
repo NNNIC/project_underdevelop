@@ -52,7 +52,7 @@ public partial class ArrowFlowStateControl : StateControlBase
         SetNextState(S_START);
         GoNextState();
 
-        for(var loop = 0; loop < 1000; loop ++)
+        for(var loop = 0; loop < 10000; loop ++)
         {
             if (m_sm.CheckState(S_END))
             {
@@ -62,6 +62,7 @@ public partial class ArrowFlowStateControl : StateControlBase
         }
         if (!m_sm.CheckState(S_END))
         {
+            Debugger.Break();
             MessageBox.Show("unexpected");
             m_pointList = new List<Point>();
             m_pointList.Add(m_src);
