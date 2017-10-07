@@ -48,8 +48,11 @@
   <ItemGroup>
     <Compile Include="0500_State\StateInfo.cs" />
     <Compile Include="0500_State\StateData.cs" />
+    <Compile Include="1000_Draw\DrawStateBox_Layout.cs" />
+    <Compile Include="1000_Draw\DrawUtil.cs" />
     <Compile Include="1000_Draw\DrawStateBox_Detail.cs" />
     <Compile Include="1000_Draw\DrawStateBox.cs" />
+    <Compile Include="1010_Point\PointUtil.cs" />
     <Compile Include="_obs\Chart_obs\ChartManager.cs" />
     <Compile Include="_obs\Chart_obs\ChartManager_node.cs" />
     <Compile Include="_obs\Chart_obs\ChartManager_tool.cs" />

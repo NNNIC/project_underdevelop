@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Diagnostics;
 
 /*
     ソースのinclude指定を展開する
@@ -29,9 +30,11 @@ namespace InsertInclude
         static string m_source_traverse_path = string.Empty;
         static void Main(string[] args)
         {
-            if (args.Length != 2)
+            //Debugger.Break();
+
+            if (args.Length < 2)
             {
-                Console.WriteLine("引数１ インクルード検索ディレクトリ 引数２　検索開始フォルダ ");
+                Console.WriteLine("引数１ インクルード検索ディレクトリ 引数２　検索開始フォルダx ");
                 Environment.Exit(-1);
             }
 

@@ -60,7 +60,7 @@ namespace chart
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var ofd = new OpenFileDialog();
-            ofd.InitialDirectory = @"C:\Users\gea01\Documents\project_underdevelop\state-chart\m5\chart\chart\Flow\010_Main\doc";
+            ofd.InitialDirectory = @"C:\Users\gea01\Documents\project_underdevelop\state-chart\m5\chart\chart\0100_Flow\010_Main\doc";
             var result = ofd.ShowDialog();
             if (result == DialogResult.OK)
             {

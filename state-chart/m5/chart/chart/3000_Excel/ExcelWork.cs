@@ -1,14 +1,19 @@
-﻿using System;
+﻿//<<<include=using_text.txt
+using System;
+using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+//>>>
 
 public class ExcelWork : IDisposable
 {
     public void Dispose() //ref http://ufcpp.net/study/csharp/rm_disposable.html
     {
-            
+
         GC.SuppressFinalize(this);
 
         if (m_sheetCtr!=null)

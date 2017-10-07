@@ -1,11 +1,16 @@
 ﻿//#define WINAPP
 
+//<<<include=using_text.txt
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+//>>>
+
 using System.Runtime.InteropServices;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.VisualBasic;
@@ -17,7 +22,7 @@ using System.Windows.Forms;
 using _Application = Microsoft.Office.Interop.Excel.Application;
 
 /*
-    Excel Utility (C) 2017 NNNIC 
+    Excel Utility (C) 2017 NNNIC
     Futures
 
     #1. Use Microsoft soft original dll only
@@ -31,9 +36,9 @@ using _Application = Microsoft.Office.Interop.Excel.Application;
     SheetCtr  sheet = app.GetSheet(sheetname);
 
     object[,] values =  sheet.GetValues(numofrow=null,numofcol=null); //default : Used Range
-    sheet.SetValues(values); 
+    sheet.SetValues(values);
 
-    book.Close(); 
+    book.Close();
     book.Write();
     book.WriteAs(path)
 
@@ -92,7 +97,7 @@ public partial class ExcelUtil
             if (m_workbooks!=null)
             {
                 try {
-                    Marshal.ReleaseComObject(m_workbooks);  
+                    Marshal.ReleaseComObject(m_workbooks);
                 } finally
                 {
                     m_workbooks = null;
@@ -103,7 +108,7 @@ public partial class ExcelUtil
             {
                 try {
 					m_application.Quit();
-                    Marshal.ReleaseComObject(m_application);  
+                    Marshal.ReleaseComObject(m_application);
                 } finally
                 {
                     m_application = null;
@@ -135,7 +140,7 @@ public partial class ExcelUtil
             m_wb        = wb;
             m_path      = path;
         }
-        
+
         public BookCtr OpenNewBook(string path)
         {
             var wb = m_wbs.Open(path);
@@ -144,11 +149,11 @@ public partial class ExcelUtil
             newbookctr.m_wb = wb;
             return newbookctr;
         }
-        
+
         public void SetVisible(bool b)
         {
             m_app.Visible = b;
-        }     
+        }
 
         public SheetCtr GetSheet(string sheetname) {
             return _getsheet(sheetname);
@@ -164,7 +169,7 @@ public partial class ExcelUtil
             string name = null;
             try {
                 worksheet = m_wb.Sheets[index_base0+1]; name = worksheet.Name;
-            } catch { worksheet = null; return null; } finally { Marshal.ReleaseComObject(worksheet); }            
+            } catch { worksheet = null; return null; } finally { Marshal.ReleaseComObject(worksheet); }
             return _getsheet(name);
         }
         private SheetCtr _getsheet(string name)
@@ -206,7 +211,7 @@ public partial class ExcelUtil
                 if (bSame)
                 {
                     try {
-                        m_wb.Save();  
+                        m_wb.Save();
                         bOk = true;
                     } catch { }
                 }
@@ -262,13 +267,13 @@ public partial class ExcelUtil
         {
             Dispose(true);
             GC.SuppressFinalize(this);
-        } 
+        }
 
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
             {
-                // managed 
+                // managed
                 m_sheetCtr_list.ForEach(s=>s.Dispose());
                 m_appCtr.Delete();
             }
@@ -312,7 +317,7 @@ public partial class ExcelUtil
                 {
                     var maxrow = m_sheet.UsedRange.Row    + m_sheet.UsedRange.Rows.Count;
                     if (maxrow < 2) maxrow = 2;
-                    var maxcol = m_sheet.UsedRange.Column + m_sheet.UsedRange.Columns.Count; 
+                    var maxcol = m_sheet.UsedRange.Column + m_sheet.UsedRange.Columns.Count;
                     if (maxcol < 2) maxcol = 2;
 
                     numofcols = maxcol;
@@ -361,7 +366,7 @@ public partial class ExcelUtil
             } finally
             {
                 Marshal.ReleaseComObject(range_values);
-            }            
+            }
         }
 
 #region Dispose
@@ -412,7 +417,7 @@ public partial class ExcelUtil
             Console.WriteLine(e.Message);
 
             if (wb!=null)
-            {   
+            {
                 try {  wb.Close(false); } catch { }
                 Marshal.ReleaseComObject(wb);
                 wb = null;
@@ -430,7 +435,7 @@ public partial class ExcelUtil
             }
             return null;
         }
-        return new BookCtr(app,wbs,wb,fullpath);   
+        return new BookCtr(app,wbs,wb,fullpath);
     }
     //public static BookCtr AttachBook(string path=null)
     //{
@@ -441,7 +446,7 @@ public partial class ExcelUtil
     //    _Application app = null;
     //    Workbooks    wbs = null;
     //    Workbook     wb  = null;
-        
+
     //    try { app = (_Application)Interaction.GetObject(fullpath,"Excel.Application"); } catch {app=null;}
     //    if (app==null) return null;
 
@@ -460,7 +465,7 @@ public partial class ExcelUtil
     //    catch
     //    {
     //        if (wb!=null)
-    //        {   
+    //        {
     //            try {  wb.Close(false); } catch { }
     //            Marshal.ReleaseComObject(wb);
     //            wb = null;
@@ -477,7 +482,7 @@ public partial class ExcelUtil
     //        }
     //        return null;
     //    }
-    //    return new BookCtr(app,wbs,wb,fullpath);   
+    //    return new BookCtr(app,wbs,wb,fullpath);
     //}
     //private static BookCtr _attachBookAny()
     //{
@@ -485,8 +490,8 @@ public partial class ExcelUtil
     //    _Application app = null;
     //    Workbooks    wbs = null;
     //    Workbook     wb  = null;
-        
-        
+
+
     //    try { app = (_Application)Interaction.GetObject(null,"Excel.Application"); } catch {app=null;}
     //    if (app==null) return null;
 
@@ -500,7 +505,7 @@ public partial class ExcelUtil
     //    catch
     //    {
     //        if (wb!=null)
-    //        {   
+    //        {
     //            try {  wb.Close(false); } catch { }
     //            Marshal.ReleaseComObject(wb);
     //            wb = null;
@@ -520,7 +525,7 @@ public partial class ExcelUtil
 
     //    ShowMsg("Attached!");
 
-    //    return new BookCtr(app,wbs,wb,fullpath,true);   
+    //    return new BookCtr(app,wbs,wb,fullpath,true);
     //}
 #region tool
 
@@ -556,13 +561,13 @@ public partial class ExcelUtil
             return 0;
         }
         var columnStr = str.ToUpper();
- 
+
         double result = 0;
         for (int i = 0; i < columnStr.Length; i++)
         {
             int x = columnStr.Length - i - 1;
             int num = Convert.ToChar(columnStr[x]) - 64;
- 
+
             result += num * Math.Pow(26, i);
         }
         return Convert.ToInt32(result);
@@ -579,6 +584,6 @@ public partial class ExcelUtil
             }
         }
         return -1;
-    } 
+    }
 #endregion
 }

@@ -1,9 +1,13 @@
-﻿using System;
+﻿//<<<include=using_text.txt
+using System;
+using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+//>>>
 
 public class ExcelProgram
 {
@@ -37,96 +41,33 @@ public class ExcelProgram
             });
         }
         m_state_list = state_list;
+
+
+        //StateInfoに収集
+        StateInfo.m_stateData = new List<StateData>();
+
+        foreach(var st in state_list)
+        {
+            var itemlist = new List<StateData.Item>();
+            for(var i = 0; i<m_ld.GetMaxRow();i++)
+            {
+                var key = m_ld.GetValue(i,NAME_COL).Trim();
+                if (!string.IsNullOrEmpty(key))
+                {
+                    var item = new StateData.Item();
+                    item.index = i;
+                    item.key = key;
+                    item.value = GetValue(st,key);
+                    itemlist.Add(item);
+                }
+            }
+            var statedata = new StateData();
+            statedata.m_items = itemlist;
+
+            StateInfo.m_stateData.Add(statedata);
+        }
     }
 
-    //ソース内の 存在確認後利用する部分を展開する
-    //private static string convert_partsifexist(string st, string tmpstr)
-    //{
-    //    var output = string.Empty;
-    //    var lines = tmpstr.Split('\n');
-    //    for (var n = 0; n < lines.Length; n++)
-    //    {
-    //        var l = lines[n].TrimEnd();
-    //        int index = 0;
-    //        var e = EditUtil.Extract(l, out index);
-    //        if (!string.IsNullOrWhiteSpace(e))
-    //        {
-    //            var namecmt = e + "-cmt";
-    //            var indentspace = (new string(' ', index));
-    //            if (!string.IsNullOrWhiteSpace(_getvalue(st,namecmt))) //コメント行あり
-    //            {
-    //                output += indentspace + "/*" + "\n";
-    //                output += indentspace + string.Format("  [[{0}]]", namecmt) + "\n";
-    //                output += indentspace + "*/" + "\n";
-    //            }
-    //        }
-    //        output += l + "\n";
-    //    }
-    //    return output;
-    //}
-    //private static string convert_partsifexist_obs(string st,string tmpstr)
-    //{
-    //    var mark1 = "<<<?";
-    //    var mark2 = ">>>";
-    //    var output = string.Empty;
-    //    var lines = tmpstr.Split('\n');
-    //    for(var n = 0; n<lines.Length; n++)
-    //    {
-    //        var l = lines[n].TrimEnd();
-    //        var oindex = l.IndexOf("<<<?");
-    //        if (oindex >=0)
-    //        {
-    //            var name = l.Substring(oindex + mark1.Length).Trim();
-    //            var bExist  =  !string.IsNullOrEmpty( _getvalue(st,name));
-                
-    //            for(n++; n < lines.Length; n++)
-    //            {
-    //                var j = lines[n].TrimEnd();
-    //                if (j.Contains(mark2)) break;
-    //                if (bExist) {
-    //                    output += j + "\n";
-    //                }
-    //            }
-    //        }
-    //        else
-    //        {
-    //            output += l + "\n";
-    //        }
-    //    }
-    //    return output;
-    //}
-
-    //ソース内のname部分を値に変換する
-    //private static string convert_names(string st, string tmpstr)
-    //{
-    //    var output = string.Empty;
-    //    var lines = tmpstr.Split('\n');
-    //    for(var n = 0; n<lines.Length; n++)
-    //    {
-    //        var l = lines[n].TrimEnd();
-    //        var oindex = l.IndexOf("[[");
-    //        var cindex = l.IndexOf("]]");
-    //        if (oindex >= 0 && cindex >= 0 && oindex < cindex)
-    //        {
-    //            var name = l.Substring(oindex+2,cindex - oindex -2);
-    //            var val = _getvalue(st,name).Trim();
-                
-    //            var result = EditUtil.Insert(l,"[[" + name + "]]",val).TrimEnd();
-    //            if (!string.IsNullOrWhiteSpace(result))
-    //            {
-    //                 output += result + "\n";
-    //            }
-
-    //        }
-    //        else
-    //        {
-    //            output += l + "\n";
-    //        }
-    //    }
-    //    return output;
-    //}
-
-    // ==== tools for this class ===
     int _getColIndexByState(string st)
     {
         var row = _getRowIndexByName("state");

@@ -1,8 +1,13 @@
-﻿using System;
+﻿//<<<include=using_text.txt
+using System;
+using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+//>>>
 
 namespace ExcelStateChartConverter
 {
@@ -27,7 +32,7 @@ namespace ExcelStateChartConverter
                     {
                         var pretext = s.Substring(0,numofsp);
                         if (!string.IsNullOrWhiteSpace(pretext))
-                        { 
+                        {
                             output += pretext + "\n";
                         }
                         foreach(var j in state_str.Split('\n'))

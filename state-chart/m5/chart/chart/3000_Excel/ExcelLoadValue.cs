@@ -1,8 +1,13 @@
-﻿using System;
+﻿//<<<include=using_text.txt
+using System;
+using System.IO;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+//>>>
 
 class ExcelLoadValues
 {
@@ -24,20 +29,20 @@ class ExcelLoadValues
     public string GetValue(int row,int col) // base 0
     {
         if (
-            (row >= 0 && row < GetMaxRow()) 
+            (row >= 0 && row < GetMaxRow())
             &&
             (col >=0 && col < GetMaxCol())
             )
         {
             try {
-                var v = m_values[row+1,col+1].ToString(); 
+                var v = m_values[row+1,col+1].ToString();
                 if (v!=null && (v.Length>0 && v[0]!='#'))
                 {
                     return v;
                 }
             }
             catch {
-                
+
             }
         }
         return "";
