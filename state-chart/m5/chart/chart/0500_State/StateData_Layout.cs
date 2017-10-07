@@ -10,12 +10,7 @@ using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
 //>>>
 
-public partial class DrawStateBox
+public partial class StateData
 {
-    public enum Detail
-    {
-        None,
-        Simple,
-        Detailed
-    }
+    public DrawStateBox.Layout m_layout;
 }

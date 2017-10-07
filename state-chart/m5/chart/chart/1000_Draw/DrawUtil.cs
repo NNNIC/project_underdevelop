@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Detail=DrawStateBox.Detail;
 //>>>
 
 public class DrawUtil
@@ -101,7 +102,7 @@ public class DrawUtil
     }
 
     public static SizeF GetTextSize(
-        Graphics g, 
+        Graphics g,
         string text,
         string fontname,
         float  fontsize,

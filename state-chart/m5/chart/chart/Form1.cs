@@ -16,7 +16,10 @@ namespace chart
         public static Form1 V;
 
         public MainFlowStateControl m_mfsc = new MainFlowStateControl();
-        public ChartManager_obs         m_chartman = new ChartManager_obs();
+        //public ChartManager_obs     m_chartman = new ChartManager_obs();
+        public ChartManager         m_chartman = new ChartManager();
+        public Bitmap               m_canvas;
+        public Graphics             m_g;
 
         public Form1()
         {
@@ -32,13 +35,15 @@ namespace chart
             pictureBox_main.Parent = panel1;
             //ictureBox_temp.Parent = pictureBox_main;
 
-            var canvas = new Bitmap(pictureBox_main.Width, pictureBox_main.Height);
+            m_canvas = new Bitmap(pictureBox_main.Width, pictureBox_main.Height);
+            pictureBox_main.Image = m_canvas;
+            m_g = Graphics.FromImage(m_canvas);
+
             //using (var g = Graphics.FromImage(canvas))
             //{
             //    g.DrawRectangle(Pens.Black, 10, 20, 100, 80);
             //}
 
-            pictureBox_main.Image = canvas;
         }
 
         private void pictureBox_output_Paint(object sender, PaintEventArgs e)
@@ -50,11 +55,13 @@ namespace chart
             //DrawUtil.Arrow(e.Graphics,new PointF(0,100),new PointF(100,100)  );
 
             m_chartman.Draw();
+            
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
             m_mfsc.Update();
+            Refresh();
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)

@@ -88,7 +88,8 @@ public partial class ChartManager_obs
 
     public void Draw()
     {
-        using (var g = m_mainPicture.CreateGraphics())
+        //using (var g = m_mainPicture.CreateGraphics())
+        var g = chart.Form1.V.m_g;
         {
             g.Clear(Color.White);
 
@@ -99,6 +100,7 @@ public partial class ChartManager_obs
                 drawBranchArrow(g,node);
             }
         }
+        
     }
 
 }

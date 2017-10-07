@@ -46,6 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="0200_Chart\ChartManager.cs" />
+    <Compile Include="0200_Chart\ChartManager_tool.cs" />
+    <Compile Include="0500_State\StateData_Layout.cs" />
     <Compile Include="0500_State\StateInfo.cs" />
     <Compile Include="0500_State\StateData.cs" />
     <Compile Include="1000_Draw\DrawStateBox_Layout.cs" />
@@ -53,9 +56,9 @@
     <Compile Include="1000_Draw\DrawStateBox_Detail.cs" />
     <Compile Include="1000_Draw\DrawStateBox.cs" />
     <Compile Include="1010_Point\PointUtil.cs" />
-    <Compile Include="_obs\Chart_obs\ChartManager.cs" />
+    <Compile Include="_obs\Chart_obs\ChartManager_obs.cs" />
     <Compile Include="_obs\Chart_obs\ChartManager_node.cs" />
-    <Compile Include="_obs\Chart_obs\ChartManager_tool.cs" />
+    <Compile Include="_obs\Chart_obs\ChartManager_tool_obs.cs" />
     <Compile Include="_obs\Draw_obs\DrawUtil_obs.cs" />
     <Compile Include="_obs\Draw_obs\LineUtil_obs.cs" />
     <Compile Include="_obs\Draw_obs\PointUtil_obs.cs" />
@@ -146,6 +149,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

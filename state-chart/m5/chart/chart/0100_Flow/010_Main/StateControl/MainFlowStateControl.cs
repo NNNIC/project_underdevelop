@@ -14,7 +14,8 @@ public partial class MainFlowStateControl : StateControlBase {
     COMMAND m_cmd = COMMAND.NONE;
     string  m_error = null;
 
-    public ChartManager_obs m_chartman { get { return chart.Form1.V.m_chartman; } }
+    //public ChartManager_obs m_chartman { get { return chart.Form1.V.m_chartman; } }
+    public ChartManager m_chartman { get { return chart.Form1.V.m_chartman; } }
     public ExcelProgram m_excelpgm { get; private set;                        }
 
     public void Start()

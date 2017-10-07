@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Detail=DrawStateBox.Detail;
 //>>>
 
-public class StateData
+public partial class StateData
 {
     readonly string STR_STATE     = "state";
     readonly string STR_NEXTSTATE = "nextstate";
@@ -26,7 +27,7 @@ public class StateData
 
     public string    State       { get { if (__state==null) __state = GetValue(STR_STATE); return __state;                     } } string __state = null;
     public string    NextState   { get { if (__nextstate==null) __nextstate = GetValue(STR_NEXTSTATE); return __nextstate;     } } string __nextstate = null;
-    public int       NumBranches { get { if (__numBranches==null) __numBranches = GetBranchCount(); return (int)__numBranches; } } int? __numBranches = null; 
+    public int       NumBranches { get { if (__numBranches==null) __numBranches = GetBranchCount(); return (int)__numBranches; } } int? __numBranches = null;
 
     public Item GetItem(string key)
     {
@@ -41,7 +42,7 @@ public class StateData
             if (i.key == STR_STATE)            continue;
             if (i.key == STR_NEXTSTATE)        continue;
             if (i.key == STR_BRANCH)           continue;
-                                               
+
             if (i.key.EndsWith("-cmt"))        continue;
             if (string.IsNullOrEmpty(i.value)) continue;
             var v = i.value.Trim();
@@ -75,7 +76,7 @@ public class StateData
         {
             return api;
         }
-        
+
         return "";
     }
     public bool GetBranchApiParam(int i, out string api, out string param)

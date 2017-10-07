@@ -12,7 +12,7 @@ using Node = ChartManager_obs.Node;
 public partial class ArrowFlowStateControl : StateControlBase
 {
     #region アクセス用
-    List<Node> m_nodelist { get { return chart.Form1.V.m_chartman.m_nodeList; } }
+    //List<Node> m_nodelist { get { return chart.Form1.V.m_chartman.m_nodeList; } }
     int        ARROW_GAP  { get { return ChartManager_obs.ARROW_GAP;              } }
     int        ARROW_DIF  { get { return ChartManager_obs.ARROW_DIF;              } } 
     #endregion

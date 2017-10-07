@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using Detail=DrawStateBox.Detail;
 //>>>
 
 public partial class DrawStateBox
@@ -64,14 +65,17 @@ public partial class DrawStateBox
         if (detail == Detail.Detailed)
         {
             var text     = data.GetContent();
-            var box_x    = (OUT_WIDTH - IN_WIDTH) / 2;
-            var box_size = DrawUtil.GetTextBoxSize(g,text,FONTNAME,FONTSIZE,IN_WIDTH); 
+            if (!string.IsNullOrEmpty(text))
+            {
+                var box_x    = (OUT_WIDTH - IN_WIDTH) / 2;
+                var box_size = DrawUtil.GetTextBoxSize(g,text,FONTNAME,FONTSIZE,IN_WIDTH);
 
-            lo.Content   = new Rectangle((int)box_x,(int)gh,(int)box_size.Width,(int)box_size.Height);
-            lo.text_content = text;
+                lo.Content   = new Rectangle((int)box_x,(int)gh,(int)box_size.Width,(int)box_size.Height);
+                lo.text_content = text;
 
-            gh  = ((Rectangle)lo.Content).Y + ((Rectangle)lo.Content).Height;
-            gh += GAP;
+                gh  = ((Rectangle)lo.Content).Y + ((Rectangle)lo.Content).Height;
+                gh += GAP;
+            }
         }
         //分岐
         var branch_num   = data.GetBranchCount();
@@ -81,15 +85,15 @@ public partial class DrawStateBox
         {
             var text     = data.GetBranchApi(i);
             var box_x    = (OUT_WIDTH - IN_WIDTH) / 2;
-            var box_size = DrawUtil.GetTextBoxSize(g,text,FONTNAME,FONTSIZE,IN_WIDTH); 
+            var box_size = DrawUtil.GetTextBoxSize(g,text,FONTNAME,FONTSIZE,IN_WIDTH);
 
             lo.Branches[i]      = new Rectangle((int)box_x,(int)gh,(int)box_size.Width,(int)box_size.Height);
             lo.text_branches[i] = text;
-            
+
             gh  = lo.Branches[i].Y + lo.Branches[i].Height;
             gh += GAP;
         }
-       
+
         lo.Frame = new Rectangle(0,0,(int)OUT_WIDTH,(int)gh);
 
         return lo;
@@ -97,6 +101,7 @@ public partial class DrawStateBox
 
     public static void DrawLayout(Graphics g,PointF point, Layout lo)
     {
+        if (lo==null) return;
         var pointi = new Point((int)point.X,(int)point.Y);
 
         //外枠
@@ -117,6 +122,7 @@ public partial class DrawStateBox
 
             DrawUtil.DrawBoxText_LineAndFill(g,lo.text_content,FONTNAME,CONTENTTEXT_COLOR, FONTSIZE,rect,OUTLINE_SIZE,CONTENTLINE_COLOR,CONTENTFILL_COLOR);
         }
+        //ブランチ
         if (lo.Branches!=null && lo.Branches.Length>0)
         {
             for(var i = 0; i<lo.Branches.Length; i++)
