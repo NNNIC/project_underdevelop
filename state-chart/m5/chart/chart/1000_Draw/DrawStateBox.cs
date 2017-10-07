@@ -38,6 +38,12 @@ public partial class DrawStateBox
     static Color  BRANCHFILL_COLOR  = Color.FromArgb(255,255,255);
     static Color  BRANCTEXT_COLOR   = Color.Black;
 
+    static Color  POINT_LINE_COLOR  = Color.White;
+    static Color  POINT_IN_COLOR    = Color.Green;
+    static Color  POINT_OUT_COLOR   = Color.Red;
+
+    static Color  POINT_OUT_BRANCHES_COLOR(int i) {  return Color.FromArgb(235-20*i,0,0); }
+
     static string FONTNAME          = "メイリオ";
     static float  FONTSIZE          = 11;
 
@@ -96,6 +102,23 @@ public partial class DrawStateBox
 
         lo.Frame = new Rectangle(0,0,(int)OUT_WIDTH,(int)gh);
 
+        //ポイント
+        {
+            var r = (int)(CIRCLE_DIAMETER / 2);
+            var d = r * 2;
+
+            Func<int,int,Rectangle> _createPointRect = (x,y)=> {
+                return new Rectangle(x-r,y-r,d,d);
+            };
+
+            lo.point_in  = _createPointRect(0-r,              lo.State.Top + lo.State.Height / 2);
+            lo.point_out = _createPointRect(lo.Frame.Right+r, lo.State.Top + lo.State.Height / 2);
+            lo.point_out_branches = new Rectangle[branch_num];
+            for(var i =0; i<branch_num; i++)
+            {
+                lo.point_out_branches[i] = _createPointRect(lo.Frame.Right+r, lo.Branches[i].Top + lo.Branches[i].Height / 2);
+            }
+        }
         return lo;
     }
 
@@ -113,6 +136,20 @@ public partial class DrawStateBox
             rect.Offset(pointi);
 
             DrawUtil.DrawBoxText_LineAndFill(g,lo.text_state,FONTNAME,STATETEXT_COLOR, FONTSIZE,rect,OUTLINE_SIZE,STATELINE_COLOR,STATEFILL_COLOR);
+
+            //ポイント
+            if (lo.point_in!=null)
+            {
+                var rect2 = lo.point_in;
+                rect2.Offset(pointi);
+                DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_IN_COLOR);  
+            }
+            if (lo.point_out!=null)
+            {
+                var rect2 = lo.point_out;
+                rect2.Offset(pointi);
+                DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_OUT_COLOR);  
+            }
         }
         //コンテンツ
         if (lo.Content!=null)
@@ -131,7 +168,16 @@ public partial class DrawStateBox
                 rect.Offset(pointi);
 
                 DrawUtil.DrawBoxText_LineAndFill(g,lo.text_branches[i],FONTNAME,BRANCTEXT_COLOR, FONTSIZE,rect,OUTLINE_SIZE,BRANCHLINE_COLOR,BRANCHFILL_COLOR);
+
+                //ポイント
+                if (lo.point_out_branches!=null && i <lo.point_out_branches.Length) 
+                {
+                    var rect2 = lo.point_out_branches[i];
+                    rect2.Offset(pointi);
+                    DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_OUT_BRANCHES_COLOR(i));  
+                }
             }
+
         }
     }
 }

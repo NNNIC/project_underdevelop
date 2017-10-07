@@ -23,5 +23,10 @@ public partial class DrawStateBox
         public string      text_state;
         public string      text_content;
         public string[]    text_branches;
+
+        public Rectangle       point_in; 
+        public Rectangle       point_out;
+
+        public Rectangle[]     point_out_branches;
     }
 }

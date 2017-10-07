@@ -118,4 +118,21 @@ public class DrawUtil
 
         return sz;
     }
+
+    public static void DrawCircle_LinaAndFill(
+        Graphics  g,
+        Rectangle rect,
+        Color     linecolor,
+        Color     fillcolor
+    )
+    {
+        using (var pen = new Pen(fillcolor, 1))
+        {
+            g.FillEllipse(pen.Brush,rect);
+        }
+        using (var pen = new Pen(linecolor, 1))
+        {
+            g.DrawEllipse(pen,rect);
+        }
+    }
 }
