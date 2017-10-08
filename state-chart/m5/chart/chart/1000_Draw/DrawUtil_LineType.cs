@@ -11,9 +11,11 @@ using Detail=DrawStateBox.Detail;
 using LineType=DrawUtil.LineType;
 //>>>
 
-
-public class StateInfo
+public partial class DrawUtil
 {
-    public static List<StateData> m_stateData;
+    public enum LineType
+    {
+        STRAIGHT,
 
+    }
 }

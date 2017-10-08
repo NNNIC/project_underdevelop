@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
+using LineType=DrawUtil.LineType;
 //>>>
 
 public partial class DrawStateBox
@@ -46,6 +47,10 @@ public partial class DrawStateBox
 
     static string FONTNAME          = "メイリオ";
     static float  FONTSIZE          = 11;
+
+    static Color  ARROW_COLOR       = Color.White;
+    static int    ARROW_SIZE        = 4;
+    static LineType ARROW_LINETYPE  = LineType.STRAIGHT;
 
     public static Layout CreateLayout(Graphics g,  StateData data,  Detail detail)
     {
@@ -146,14 +151,14 @@ public partial class DrawStateBox
                 //var rect2 = lo.circle_in;
                 //rect2.Offset(pointi);
                 var rect2 = lo.offset_circle_in;
-                DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_IN_COLOR);  
+                DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_IN_COLOR);
             }
             if (lo.circle_out!=null)
             {
                 //var rect2 = lo.circle_out;
                 //rect2.Offset(pointi);
                 var rect2 = lo.offset_circle_out;
-                DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_OUT_COLOR);  
+                DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_OUT_COLOR);
             }
         }
         //コンテンツ
@@ -176,20 +181,41 @@ public partial class DrawStateBox
                 DrawUtil.DrawBoxText_LineAndFill(g,lo.text_branches[i],FONTNAME,BRANCTEXT_COLOR, FONTSIZE,rect,OUTLINE_SIZE,BRANCHLINE_COLOR,BRANCHFILL_COLOR);
 
                 //ポイント
-                if (lo.circle_out_branches!=null && i <lo.circle_out_branches.Length) 
+                if (lo.circle_out_branches!=null && i <lo.circle_out_branches.Length)
                 {
                     //var rect2 = lo.circle_out_branches[i];
                     //rect2.Offset(pointi);
                     var rect2 = lo.offset_circle_out_branches(i);
-                    DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_OUT_BRANCHES_COLOR(i));  
+                    DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_OUT_BRANCHES_COLOR(i));
                 }
             }
 
         }
     }
-    public static void DrawArrowLine(Graphics g, PointF point, Layout lo)
+    public static void DrawArrowLine(Graphics g, StateData st)
     {
-        if (lo==null) return;
-        lo.offset = new Point((int)point.X,(int)point.Y);
+        if (st==null) return;
+
+        Action<List<Point>> _draw = (plist)=> {
+            if (plist!=null && plist.Count > 1)
+            {
+                for(var i = 0; i<plist.Count-1; i++)
+                {
+                    DrawUtil.DrawLine(g,plist[i],plist[i+1],ARROW_COLOR,ARROW_SIZE,ARROW_LINETYPE);
+                }
+            }
+        };
+
+        //next
+        _draw(st.m_ArrowLine_toNext);
+
+        //branches
+        if (st.m_ArrowLine_branches!=null)
+        {
+            for(var i = 0; i<st.m_ArrowLine_branches.Length; i++)
+            {
+                _draw(st.m_ArrowLine_branches[i]);
+            }
+        }
     }
 }

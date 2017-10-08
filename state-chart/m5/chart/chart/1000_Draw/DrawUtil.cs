@@ -8,9 +8,10 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
+using LineType=DrawUtil.LineType;
 //>>>
 
-public class DrawUtil
+public partial class DrawUtil
 {
     public static float m_text_margin_width = 5;
     public static float m_text_margin_height= 5;
@@ -135,4 +136,21 @@ public class DrawUtil
             g.DrawEllipse(pen,rect);
         }
     }
+
+    public static void DrawLine(Graphics g,  Point a, Point b, Color color, int size,LineType type)
+    {
+        switch(type)
+        {
+            case LineType.STRAIGHT: DrawLine__straight(g,a,b,color, size); break;
+            default:                DrawLine__straight(g,a,b,color, size); break;
+        }
+    }
+    private static void DrawLine__straight(Graphics g,  Point a, Point b, Color color, int size)
+    {
+        using (var pen = new Pen(color, size))
+        {
+            g.DrawLine(pen,a,b);
+        }
+    }
+
 }

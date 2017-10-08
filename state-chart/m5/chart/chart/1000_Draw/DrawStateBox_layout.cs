@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
+using LineType=DrawUtil.LineType;
 //>>>
 
 public partial class DrawStateBox
@@ -24,14 +25,14 @@ public partial class DrawStateBox
         public string      text_content;
         public string[]    text_branches;
 
-        public Rectangle   circle_in; 
+        public Rectangle   circle_in;
         public Rectangle   circle_out;
-        
+
         public Point       point_in  { get { return PointUtil.Add_XY(circle_in.Location,circle_in.Width/ 2 , circle_in.Height/2 ); } }
-        public Point       point_out { get { return PointUtil.Add_XY(circle_out.Location,circle_out.Width/2, circle_out.Height/2); } } 
+        public Point       point_out { get { return PointUtil.Add_XY(circle_out.Location,circle_out.Width/2, circle_out.Height/2); } }
 
         public Rectangle[]     circle_out_branches;
-        
+
         public Point           point_out_branches(int i)
         {
             if (circle_out_branches!=null && i<circle_out_branches.Length)
@@ -70,7 +71,7 @@ public partial class DrawStateBox
             return default(Rectangle);
         }
         public Point     offset_point_in  { get { var pos = point_in;  pos.Offset(offset); return pos; } }
-        public Point     offset_point_out { get { var pos = point_out; pos.Offset(offset); return pos; } }   
+        public Point     offset_point_out { get { var pos = point_out; pos.Offset(offset); return pos; } }
         public Point     offset_point_out_branches(int i)
         {
             var rect= point_out_branches(i);

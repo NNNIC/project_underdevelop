@@ -62,6 +62,7 @@
     <Compile Include="0500_State\StateData_Layout.cs" />
     <Compile Include="0500_State\StateInfo.cs" />
     <Compile Include="0500_State\StateData.cs" />
+    <Compile Include="1000_Draw\DrawUtil_LineType.cs" />
     <Compile Include="1000_Draw\DrawStateBox_Layout.cs" />
     <Compile Include="1000_Draw\DrawUtil.cs" />
     <Compile Include="1000_Draw\DrawStateBox_Detail.cs" />

@@ -8,16 +8,17 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
+using LineType=DrawUtil.LineType;
 //>>>
 
-public partial class ArrowFlowStateControl2 
+public partial class ArrowFlowStateControl2
 {
     bool m_bStraight;
     void check_straight()
     {
         m_bStraight = false;
 
-        if (IsHit_statebox(m_posS,m_posG))
+        if (!IsHit_statebox(m_posS,m_posG))
         {
             m_bStraight = true;
         }

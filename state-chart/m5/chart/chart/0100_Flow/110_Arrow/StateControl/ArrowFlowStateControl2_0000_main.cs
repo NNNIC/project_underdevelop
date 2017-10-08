@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
+using LineType=DrawUtil.LineType;
 //>>>
 
 
@@ -32,7 +33,7 @@ public partial class ArrowFlowStateControl2 : StateControlBase
     public List<Point> m_result;
 
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <param name="start_st">始点所属ステートデータ</param>
     /// <param name="goal_st">終点所属ステートデータ</param>
@@ -43,7 +44,7 @@ public partial class ArrowFlowStateControl2 : StateControlBase
     {
         m_state_start = start_st;
         m_state_goal  = goal_st;
-        
+
         m_branch_index = branch_index;
 
         m_posS = start;

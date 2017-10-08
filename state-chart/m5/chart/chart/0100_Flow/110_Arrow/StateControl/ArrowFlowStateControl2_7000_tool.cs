@@ -8,24 +8,31 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
+using LineType=DrawUtil.LineType;
 //>>>
 
-public partial class ArrowFlowStateControl2 
+public partial class ArrowFlowStateControl2
 {
     bool IsHit_statebox(Point a, Point b)
     {
         var rect = _create_rect(a,b);
-        
+
         foreach(var st in m_stateData)
         {
-            if (st!=null && st.m_layout!=null && st.m_layout.Frame!=null)
+            if (st!=null && st.m_layout!=null && st.m_layout.offset_Frame!=null)
             {
-                if (st.m_layout.Frame.IntersectsWith(rect))
+                if (st.m_layout.offset_Frame.IntersectsWith(rect))
                 {
+                    //var rectx = st.m_layout.offset_Frame;
+                    //rectx.Intersect(rect);
+                    //if (!rectx.IsEmpty)
+                    //{
+                    //    return true;
+                    //}
                     return true;
                 }
             }
-        } 
+        }
         return false;
     }
     bool IsHit_HorizontalLine(Point a, Point b) //aとbの領域が 他の水平ラインと重なるか？
@@ -175,10 +182,10 @@ public partial class ArrowFlowStateControl2
         var width = Math.Abs(a.X-b.X);
         var height= Math.Abs(a.Y-b.Y);
         if (width==0 ) width = 1;
-        if (height==0) height =1; 
+        if (height==0) height =1;
         var x = Math.Min(a.X,b.X);
         var y = Math.Min(a.Y,b.Y);
-        
+
         return new Rectangle(x,y,width,height);
-    }    
+    }
 }

@@ -8,9 +8,10 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
+using LineType=DrawUtil.LineType;
 //>>>
 
-public partial class ArrowFlowStateControl2 
+public partial class ArrowFlowStateControl2
 {
     void br_straight(Action<int,bool> st)
     {

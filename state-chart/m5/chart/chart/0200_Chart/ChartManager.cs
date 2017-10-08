@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
+using LineType=DrawUtil.LineType;
 //>>>
 
 public partial class ChartManager
@@ -25,10 +26,18 @@ public partial class ChartManager
     public void Create()
     {
         var statelist = get_all_states();
+        
+        var point = Point.Truncate( POINT_START);
+        
         for(var i = 0; i<statelist.Count; i++)
         {
             var st  = m_stateData[i];
             st.m_layout = DrawStateBox.CreateLayout(m_g,st,Detail.Detailed);
+            if (st.m_layout!=null)
+            {
+                st.m_layout.offset = point;
+            }
+            point=PointUtil.Add_X(point,st.m_layout.Frame.Width + (int)LEN_BETWEEN_STATES);
         }
     }
 
@@ -67,7 +76,7 @@ public partial class ChartManager
                         }
                     }
                 }
-            }          
+            }
         }
 
     }
@@ -76,8 +85,8 @@ public partial class ChartManager
     {
         if (m_stateData == null) return;
 
+        // BG
         m_g.Clear(Color.FromArgb(65,65,65));
-
         using (var pen = new Pen(Color.FromArgb(112, 112, 112), 1))
         {
             for (var y = 0; y < m_canvas.Height; y += 20)
@@ -90,17 +99,25 @@ public partial class ChartManager
             }
         }
 
-        var point = Point.Truncate( POINT_START);
+        // Offset
+        //var point = Point.Truncate( POINT_START);
+        //foreach(var st in m_stateData)
+        //{
+        //    if (st.m_layout == null) return;
+        //    st.m_layout.offset = point;
+        //    point=PointUtil.Add_X(point,st.m_layout.Frame.Width + (int)LEN_BETWEEN_STATES);
+        //}
 
+        //Arrow
         foreach(var st in m_stateData)
         {
-            if (st.m_layout==null) continue;
+            DrawStateBox.DrawArrowLine(m_g,st);
+        }
 
-            st.m_layout.offset = point;
-
+        //Box
+        foreach(var st in m_stateData)
+        {
             DrawStateBox.DrawLayout(m_g,st.m_layout);
-
-            point=PointUtil.Add_X(point,st.m_layout.Frame.Width + (int)LEN_BETWEEN_STATES);
         }
     }
 }
