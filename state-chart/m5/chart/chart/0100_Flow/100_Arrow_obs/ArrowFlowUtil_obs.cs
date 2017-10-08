@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-public class ArrowFlowUtil
+public class ArrowFlowUtil_obs
 {
+    [Obsolete]
     public static List<Point> Create(
         Point src,    Point dst,
         Point buf_src,Point buf_dst,

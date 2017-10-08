@@ -57,7 +57,7 @@ public partial class ChartManager_obs
             var nextnode = m_nodeList.Find(n=>n.state==node.nextstate);
             if (nextnode !=null)
             {
-                node.arrow_next =   ArrowFlowUtil.Create(
+                node.arrow_next =   ArrowFlowUtil_obs.Create(
                                         node.srcpoint_next,             
                                         nextnode.dstpoint,
                                         node.buf_srcpoint_next,
@@ -73,7 +73,7 @@ public partial class ChartManager_obs
                 nextnode = m_nodeList.Find(n=>branch_state == n.state);
                 if (nextnode == null) continue;
 
-                node.arrow_branch_list[i] = ArrowFlowUtil.Create(
+                node.arrow_branch_list[i] = ArrowFlowUtil_obs.Create(
                                                 node.srcpoint_branch(i),
                                                 nextnode.dstpoint,
                                                 node.buf_srcpoint_branch(i),

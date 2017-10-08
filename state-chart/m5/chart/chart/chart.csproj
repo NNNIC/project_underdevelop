@@ -46,8 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="0100_Flow\110_Arrow\ArrowFlowUtil.cs" />
+    <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_2000_check.cs" />
+    <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_5000_branch.cs" />
+    <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_4000_setdiff.cs" />
+    <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_3000_point.cs" />
+    <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_7000_tool.cs" />
+    <Compile Include="0100_Flow\110_Arrow\created\ArrowFlowStateControl2_created.cs" />
+    <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_0000_main.cs" />
+    <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_1000_outline.cs" />
     <Compile Include="0200_Chart\ChartManager.cs" />
     <Compile Include="0200_Chart\ChartManager_tool.cs" />
+    <Compile Include="0500_State\StateData_Distination.cs" />
+    <Compile Include="0500_State\StateData_ArrowLine.cs" />
     <Compile Include="0500_State\StateData_Layout.cs" />
     <Compile Include="0500_State\StateInfo.cs" />
     <Compile Include="0500_State\StateData.cs" />
@@ -74,15 +85,15 @@
     <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0200_chart.cs" />
     <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0300_command.cs" />
     <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0400_branch.cs" />
-    <Compile Include="0100_Flow\100_Arrow\ArrowFlowUtil.cs" />
-    <Compile Include="0100_Flow\100_Arrow\created\ArrowFlowStateControl_created.cs" />
-    <Compile Include="0100_Flow\100_Arrow\StateControl\ArrowFlowStateControl_0000_main.cs" />
-    <Compile Include="0100_Flow\100_Arrow\StateControl\ArrowFlowStateControl_0100_set.cs" />
-    <Compile Include="0100_Flow\100_Arrow\StateControl\ArrowFlowStateControl_0200_temp.cs" />
-    <Compile Include="0100_Flow\100_Arrow\StateControl\ArrowFlowStateControl_0300_check.cs" />
-    <Compile Include="0100_Flow\100_Arrow\StateControl\ArrowFlowStateControl_0400_draw.cs" />
-    <Compile Include="0100_Flow\100_Arrow\StateControl\ArrowFlowStateControl_0500_branch.cs" />
-    <Compile Include="0100_Flow\100_Arrow\StateControl\ArrowFlowStateControl_9000_tool.cs" />
+    <Compile Include="0100_Flow\100_Arrow_obs\ArrowFlowUtil_obs.cs" />
+    <Compile Include="0100_Flow\100_Arrow_obs\created\ArrowFlowStateControl_created.cs" />
+    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0000_main.cs" />
+    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0100_set.cs" />
+    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0200_temp.cs" />
+    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0300_check.cs" />
+    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0400_draw.cs" />
+    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0500_branch.cs" />
+    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_9000_tool.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -149,7 +160,9 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="1400_Intersect\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

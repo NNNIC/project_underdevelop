@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-public partial class ArrowFlowStateControl 
+public partial class ArrowFlowStateControl
 {
 	void set_src()
     {

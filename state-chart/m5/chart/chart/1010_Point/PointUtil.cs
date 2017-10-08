@@ -33,6 +33,10 @@ public class PointUtil
     {
         return new PointF(a.X+x , a.Y + y);
     }
+    public static Point Add_XY(Point a, int x, int y)
+    {
+        return new Point(a.X+x , a.Y + y);
+    }
 
 
     public static Point Add_Point(Point a, Point b)

@@ -32,6 +32,46 @@ public partial class ChartManager
         }
     }
 
+    public void CreateArrowLine()
+    {
+        var statelist = get_all_states();
+        for(var i = 0; i<statelist.Count; i++)
+        {
+            var st  = m_stateData[i];
+            st.m_ArrowLine_toNext = null;
+            st.m_ArrowLine_branches = null;
+
+            if (st.m_layout!=null)
+            {
+                //Nextへ
+                if (st.m_dist_nextstate!=null && st.m_dist_nextstate.m_layout!=null)
+                {
+                    var start = st.m_layout.point_out;
+                    var goal =  st.m_dist_nextstate.m_layout.point_in;
+
+                    st.m_ArrowLine_toNext = ArrowFlowUtil.Create(st,st.m_dist_nextstate,null,start,goal);
+                }
+                //branchesへ
+                if (st.m_dist_branches!=null)
+                {
+                    st.m_ArrowLine_branches = new List<Point>[st.NumBranches];
+
+                    for(var j = 0; j<st.m_dist_branches.Length; j++)
+                    {
+                        if (st.m_dist_branches[j].m_layout!=null)
+                        {
+                            var start = st.m_layout.point_out_branches(j);
+                            var goal  = st.m_dist_branches[j].m_layout.point_in;
+
+                            st.m_ArrowLine_branches[j] = ArrowFlowUtil.Create(st,st.m_dist_branches[j],j,start,goal);
+                        }
+                    }
+                }
+            }          
+        }
+
+    }
+
     public void Draw()
     {
         if (m_stateData == null) return;

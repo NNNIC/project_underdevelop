@@ -64,7 +64,7 @@
             this.pictureBox_main.Location = new System.Drawing.Point(0, 0);
             this.pictureBox_main.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox_main.Name = "pictureBox_main";
-            this.pictureBox_main.Size = new System.Drawing.Size(2000, 800);
+            this.pictureBox_main.Size = new System.Drawing.Size(4000, 800);
             this.pictureBox_main.TabIndex = 0;
             this.pictureBox_main.TabStop = false;
             this.pictureBox_main.VisibleChanged += new System.EventHandler(this.pictureBox_main_VisibleChanged);

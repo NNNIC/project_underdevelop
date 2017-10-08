@@ -79,6 +79,18 @@ public partial class StateData
 
         return "";
     }
+    public string GetBranchParam(int i)
+    {
+        var api   = "";
+        var param = "";
+
+        if (GetBranchApiParam(i,out api, out param))
+        {
+            return param;
+        }
+
+        return "";
+    }
     public bool GetBranchApiParam(int i, out string api, out string param)
     {
         api   = string.Empty;

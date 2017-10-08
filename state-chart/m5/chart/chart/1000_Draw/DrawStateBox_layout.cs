@@ -24,9 +24,23 @@ public partial class DrawStateBox
         public string      text_content;
         public string[]    text_branches;
 
-        public Rectangle       point_in; 
-        public Rectangle       point_out;
+        public Rectangle   circle_in; 
+        public Rectangle   circle_out;
+        
+        public Point       point_in  { get { return PointUtil.Add_XY(circle_in.Location,circle_in.Width/ 2 , circle_in.Height/2 ); } }
+        public Point       point_out { get { return PointUtil.Add_XY(circle_out.Location,circle_out.Width/2, circle_out.Height/2); } } 
 
-        public Rectangle[]     point_out_branches;
+        public Rectangle[]     circle_out_branches;
+        
+        public Point           point_out_branches(int i)
+        {
+            if (circle_out_branches!=null && i<circle_out_branches.Length)
+            {
+                var rect = circle_out_branches[i];
+                return PointUtil.Add_XY(rect.Location,rect.Width / 2, rect.Height / 2);
+            }
+            return default(Point);
+        }
+        
     }
 }

@@ -111,12 +111,12 @@ public partial class DrawStateBox
                 return new Rectangle(x-r,y-r,d,d);
             };
 
-            lo.point_in  = _createPointRect(0-r,              lo.State.Top + lo.State.Height / 2);
-            lo.point_out = _createPointRect(lo.Frame.Right+r, lo.State.Top + lo.State.Height / 2);
-            lo.point_out_branches = new Rectangle[branch_num];
+            lo.circle_in  = _createPointRect(0-r,              lo.State.Top + lo.State.Height / 2);
+            lo.circle_out = _createPointRect(lo.Frame.Right+r, lo.State.Top + lo.State.Height / 2);
+            lo.circle_out_branches = new Rectangle[branch_num];
             for(var i =0; i<branch_num; i++)
             {
-                lo.point_out_branches[i] = _createPointRect(lo.Frame.Right+r, lo.Branches[i].Top + lo.Branches[i].Height / 2);
+                lo.circle_out_branches[i] = _createPointRect(lo.Frame.Right+r, lo.Branches[i].Top + lo.Branches[i].Height / 2);
             }
         }
         return lo;
@@ -138,15 +138,15 @@ public partial class DrawStateBox
             DrawUtil.DrawBoxText_LineAndFill(g,lo.text_state,FONTNAME,STATETEXT_COLOR, FONTSIZE,rect,OUTLINE_SIZE,STATELINE_COLOR,STATEFILL_COLOR);
 
             //ポイント
-            if (lo.point_in!=null)
+            if (lo.circle_in!=null)
             {
-                var rect2 = lo.point_in;
+                var rect2 = lo.circle_in;
                 rect2.Offset(pointi);
                 DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_IN_COLOR);  
             }
-            if (lo.point_out!=null)
+            if (lo.circle_out!=null)
             {
-                var rect2 = lo.point_out;
+                var rect2 = lo.circle_out;
                 rect2.Offset(pointi);
                 DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_OUT_COLOR);  
             }
@@ -170,9 +170,9 @@ public partial class DrawStateBox
                 DrawUtil.DrawBoxText_LineAndFill(g,lo.text_branches[i],FONTNAME,BRANCTEXT_COLOR, FONTSIZE,rect,OUTLINE_SIZE,BRANCHLINE_COLOR,BRANCHFILL_COLOR);
 
                 //ポイント
-                if (lo.point_out_branches!=null && i <lo.point_out_branches.Length) 
+                if (lo.circle_out_branches!=null && i <lo.circle_out_branches.Length) 
                 {
-                    var rect2 = lo.point_out_branches[i];
+                    var rect2 = lo.circle_out_branches[i];
                     rect2.Offset(pointi);
                     DrawUtil.DrawCircle_LinaAndFill(g,rect2, POINT_LINE_COLOR,POINT_OUT_BRANCHES_COLOR(i));  
                 }

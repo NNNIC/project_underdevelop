@@ -67,6 +67,28 @@ public class ExcelProgram
 
             StateInfo.m_stateData.Add(statedata);
         }
+
+        //各ステートデータのDistinationを設定
+        var stateData = StateInfo.m_stateData;
+        foreach(var st in stateData)
+        {
+            var next = st.NextState;
+            if (!string.IsNullOrEmpty(next))
+            {
+                st.m_dist_nextstate = stateData.Find(i=>i.State==next);
+            }
+            var brnum = st.NumBranches;
+            if (brnum!=0)
+            {
+                st.m_dist_branches = new StateData[brnum];
+
+                for(var i = 0; i<brnum; i++)
+                {
+                    var next2 = st.GetBranchParam(i);
+                    st.m_dist_branches[i] = stateData.Find(s=>s.State == next2);
+                }
+            }
+        }
     }
 
     int _getColIndexByState(string st)
