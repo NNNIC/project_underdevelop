@@ -46,8 +46,8 @@ public partial class ChartManager
                 //Nextへ
                 if (st.m_dist_nextstate!=null && st.m_dist_nextstate.m_layout!=null)
                 {
-                    var start = st.m_layout.point_out;
-                    var goal =  st.m_dist_nextstate.m_layout.point_in;
+                    var start = st.m_layout.offset_point_out;
+                    var goal =  st.m_dist_nextstate.m_layout.offset_point_in;
 
                     st.m_ArrowLine_toNext = ArrowFlowUtil.Create(st,st.m_dist_nextstate,null,start,goal);
                 }
@@ -60,8 +60,8 @@ public partial class ChartManager
                     {
                         if (st.m_dist_branches[j].m_layout!=null)
                         {
-                            var start = st.m_layout.point_out_branches(j);
-                            var goal  = st.m_dist_branches[j].m_layout.point_in;
+                            var start = st.m_layout.offset_point_out_branches(j);
+                            var goal  = st.m_dist_branches[j].m_layout.offset_point_in;
 
                             st.m_ArrowLine_branches[j] = ArrowFlowUtil.Create(st,st.m_dist_branches[j],j,start,goal);
                         }
@@ -90,13 +90,17 @@ public partial class ChartManager
             }
         }
 
-        var point     = POINT_START;
+        var point = Point.Truncate( POINT_START);
 
         foreach(var st in m_stateData)
         {
             if (st.m_layout==null) continue;
-            DrawStateBox.DrawLayout(m_g,point,st.m_layout);
-            point=PointUtil.Add_X(point,st.m_layout.Frame.Width + LEN_BETWEEN_STATES);
+
+            st.m_layout.offset = point;
+
+            DrawStateBox.DrawLayout(m_g,st.m_layout);
+
+            point=PointUtil.Add_X(point,st.m_layout.Frame.Width + (int)LEN_BETWEEN_STATES);
         }
     }
 }

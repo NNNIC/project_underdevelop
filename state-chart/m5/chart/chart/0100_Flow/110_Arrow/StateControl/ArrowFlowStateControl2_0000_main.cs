@@ -52,6 +52,7 @@ public partial class ArrowFlowStateControl2 : StateControlBase
         sc_start(S_NONE);
 
         SetNextState(S_START);
+        GoNextState();
     }
 
     public void Calc()

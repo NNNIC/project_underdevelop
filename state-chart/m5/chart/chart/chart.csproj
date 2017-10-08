@@ -85,15 +85,15 @@
     <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0200_chart.cs" />
     <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0300_command.cs" />
     <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0400_branch.cs" />
-    <Compile Include="0100_Flow\100_Arrow_obs\ArrowFlowUtil_obs.cs" />
-    <Compile Include="0100_Flow\100_Arrow_obs\created\ArrowFlowStateControl_created.cs" />
-    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0000_main.cs" />
-    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0100_set.cs" />
-    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0200_temp.cs" />
-    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0300_check.cs" />
-    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0400_draw.cs" />
-    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_0500_branch.cs" />
-    <Compile Include="0100_Flow\100_Arrow_obs\StateControl\ArrowFlowStateControl_9000_tool.cs" />
+    <Compile Include="_obs\100_Arrow_obs\ArrowFlowUtil_obs.cs" />
+    <Compile Include="_obs\100_Arrow_obs\created\ArrowFlowStateControl_created.cs" />
+    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0000_main.cs" />
+    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0100_set.cs" />
+    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0200_temp.cs" />
+    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0300_check.cs" />
+    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0400_draw.cs" />
+    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0500_branch.cs" />
+    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_9000_tool.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
