@@ -26,8 +26,8 @@ public partial class ArrowFlowStateControl2
         var diff_tg = m_posT.X - m_posG.X;
         var diff_rt = m_posR.Y - m_posT.Y;
 
-        m_posP = PointUtil.Add_X(m_posS,  diff_sp + m_diffSP );
-        m_posT = PointUtil.Add_X(m_posG,-(diff_tg + m_diffTG));
+        m_posP = PointUtil.Add_X(m_posS,  Math.Abs(diff_sp) + m_diffSP );
+        m_posT = PointUtil.Add_X(m_posG,-(Math.Abs(diff_tg) + m_diffTG));
 
         m_posQ = PointUtil.Add_Y(m_posP,  diff_pq + ((m_bUD_PQ ? -1 : 1) * m_diffPQ));
         m_posR = new Point(m_posT.X,m_posQ.Y);

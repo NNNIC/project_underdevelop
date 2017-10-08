@@ -136,9 +136,12 @@ public partial class ArrowFlowStateControl2
                 {
                     if (st2.m_dist_branches[i] == st)
                     {
-                        if (_isHit(st2.m_ArrowLine_branches[i]))
+                        if (st2.m_ArrowLine_branches!=null && i < st2.m_ArrowLine_branches.Length)
                         {
-                            return true;
+                            if (_isHit(st2.m_ArrowLine_branches[i]))
+                            {
+                                return true;
+                            }
                         }
                     }
                 }

@@ -117,7 +117,7 @@ public partial class ArrowFlowStateControl2 {
                     各調整値にdを設定
                 */
                 setdiff_SP();
-                setdiff_PQ();
+                setdiff_clear_PQ();
                 setdiff_TG();
             }
             if (HasNextState())

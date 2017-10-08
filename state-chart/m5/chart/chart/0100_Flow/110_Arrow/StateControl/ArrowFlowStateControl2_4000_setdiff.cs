@@ -29,6 +29,15 @@ public partial class ArrowFlowStateControl2
         m_diffTG = m_diff;
     }
 
+    void setdiff_clear_SP() {
+        m_diffSP = 0;
+    }
+    void setdiff_clear_PQ() {
+        m_diffPQ = 0;
+    }
+    void setdiff_clear_TG() {
+        m_diffTG = 0;
+    }
     void setdiff_allclear() {
         m_diffSP = 0;
         m_diffPQ = 0;
