@@ -83,10 +83,11 @@
     <Compile Include="8000_Form_ChartViewer\Control\Form_ChartViewer_0200_heighlite.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Debug.cs">
+    <Compile Include="9000_Debug\DBG.cs" />
+    <Compile Include="9000_Debug\Form\Form_Debug.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form_Debug.Designer.cs">
+    <Compile Include="9000_Debug\Form\Form_Debug.Designer.cs">
       <DependentUpon>Form_Debug.cs</DependentUpon>
     </Compile>
     <Compile Include="_obs\Chart_obs\ChartManager_obs.cs" />
@@ -131,7 +132,7 @@
     <EmbeddedResource Include="8000_Form_ChartViewer\Form_ChartViewer.resx">
       <DependentUpon>Form_ChartViewer.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Form_Debug.resx">
+    <EmbeddedResource Include="9000_Debug\Form\Form_Debug.resx">
       <DependentUpon>Form_Debug.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

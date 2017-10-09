@@ -56,8 +56,8 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
-            this.panel1.Controls.Add(this.pictureBox_highlite);
             this.panel1.Controls.Add(this.pictureBox_select);
+            this.panel1.Controls.Add(this.pictureBox_highlite);
             this.panel1.Controls.Add(this.pictureBox_main);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 48);
@@ -73,6 +73,8 @@
             this.pictureBox_highlite.Size = new System.Drawing.Size(100, 50);
             this.pictureBox_highlite.TabIndex = 2;
             this.pictureBox_highlite.TabStop = false;
+            this.pictureBox_highlite.Click += new System.EventHandler(this.pictureBox_highlite_Click);
+            this.pictureBox_highlite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_highlite_MouseDown);
             // 
             // pictureBox_select
             // 
@@ -81,6 +83,8 @@
             this.pictureBox_select.Size = new System.Drawing.Size(100, 50);
             this.pictureBox_select.TabIndex = 1;
             this.pictureBox_select.TabStop = false;
+            this.pictureBox_select.Click += new System.EventHandler(this.pictureBox_select_Click);
+            this.pictureBox_select.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_select_MouseDown);
             // 
             // pictureBox_main
             // 
@@ -92,7 +96,13 @@
             this.pictureBox_main.TabStop = false;
             this.pictureBox_main.VisibleChanged += new System.EventHandler(this.pictureBox_main_VisibleChanged);
             this.pictureBox_main.Click += new System.EventHandler(this.pictureBox_main_Click);
+            this.pictureBox_main.DragDrop += new System.Windows.Forms.DragEventHandler(this.pictureBox_main_DragDrop);
+            this.pictureBox_main.DragEnter += new System.Windows.Forms.DragEventHandler(this.pictureBox_main_DragEnter);
+            this.pictureBox_main.DragOver += new System.Windows.Forms.DragEventHandler(this.pictureBox_main_DragOver);
+            this.pictureBox_main.DragLeave += new System.EventHandler(this.pictureBox_main_DragLeave);
+            this.pictureBox_main.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.pictureBox_main_GiveFeedback);
             this.pictureBox_main.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_output_Paint);
+            this.pictureBox_main.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_main_MouseDown);
             // 
             // timer1
             // 
@@ -138,6 +148,11 @@
             this.Name = "ChartViewer";
             this.Text = "Chart Viewer";
             this.Load += new System.EventHandler(this.Form_ChartViewer_Load);
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.ChartViewer_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.ChartViewer_DragEnter);
+            this.DragOver += new System.Windows.Forms.DragEventHandler(this.ChartViewer_DragOver);
+            this.DragLeave += new System.EventHandler(this.ChartViewer_DragLeave);
+            this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartViewer_MouseDown);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_highlite)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_select)).EndInit();

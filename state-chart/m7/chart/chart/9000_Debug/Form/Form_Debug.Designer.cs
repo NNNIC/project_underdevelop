@@ -36,6 +36,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_form = new System.Windows.Forms.TextBox();
+            this.textBox_log = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // textBox_mouse
@@ -91,11 +92,22 @@
             this.textBox_form.Size = new System.Drawing.Size(139, 19);
             this.textBox_form.TabIndex = 4;
             // 
+            // textBox_log
+            // 
+            this.textBox_log.Location = new System.Drawing.Point(10, 102);
+            this.textBox_log.Multiline = true;
+            this.textBox_log.Name = "textBox_log";
+            this.textBox_log.ReadOnly = true;
+            this.textBox_log.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox_log.Size = new System.Drawing.Size(484, 150);
+            this.textBox_log.TabIndex = 6;
+            // 
             // Form_Debug
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 261);
+            this.Controls.Add(this.textBox_log);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox_form);
             this.Controls.Add(this.label2);
@@ -104,6 +116,7 @@
             this.Controls.Add(this.textBox_mouse);
             this.Name = "Form_Debug";
             this.Text = "Form_Debug";
+            this.Load += new System.EventHandler(this.Form_Debug_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -118,5 +131,6 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox_form;
+        public System.Windows.Forms.TextBox textBox_log;
     }
 }
