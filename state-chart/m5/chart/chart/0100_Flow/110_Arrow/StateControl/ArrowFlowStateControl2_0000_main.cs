@@ -9,12 +9,13 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
 using LineType=DrawUtil.LineType;
+using D=Define;
 //>>>
 
 
 public partial class ArrowFlowStateControl2 : StateControlBase
 {
-    const int DUNIT = 10;
+    static int DUNIT { get { return D.DUINT; } }
 
     #region アクセス
     public List<StateData> m_stateData {get { return StateInfo.m_stateData;  } }

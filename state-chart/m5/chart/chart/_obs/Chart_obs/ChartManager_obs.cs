@@ -24,7 +24,7 @@ public partial class ChartManager_obs
     public const int ARROW_GAP =  5;
     public const int ARROW_DIF =  0;
 
-    PictureBox m_mainPicture { get { return chart.Form1.V.pictureBox_main; }  }
+    PictureBox m_mainPicture { get { return chart.ChartViewer.V.pictureBox_main; }  }
 
     public List<Node>       m_nodeList { get { return __nodeList; } } 
     private List<Node>      __nodeList  = new List<Node>();     
@@ -89,7 +89,7 @@ public partial class ChartManager_obs
     public void Draw()
     {
         //using (var g = m_mainPicture.CreateGraphics())
-        var g = chart.Form1.V.m_g;
+        var g = chart.ChartViewer.V.m_g;
         {
             g.Clear(Color.White);
 

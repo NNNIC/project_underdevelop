@@ -11,9 +11,9 @@ using System.Windows.Forms;
 
 namespace chart
 {
-    public partial class Form1 : Form
+    public partial class ChartViewer : Form
     {
-        public static Form1 V;
+        public static ChartViewer V;
 
         public MainFlowStateControl m_mfsc = new MainFlowStateControl();
         //public ChartManager_obs     m_chartman = new ChartManager_obs();
@@ -21,14 +21,22 @@ namespace chart
         public Bitmap               m_canvas;
         public Graphics             m_g;
 
-        public Form1()
+        public Form_Debug m_dbgForm;
+
+        public ChartViewer()
         {
             V = this;
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        bool m_pictureBox_select_show;
+
+        private void Form_ChartViewer_Load(object sender, EventArgs e)
         {
+            //デバッグフォーム
+            m_dbgForm = new Form_Debug();
+            m_dbgForm.Show();
+
             //ステート管理実行
             m_mfsc.Start();
             //
@@ -38,6 +46,10 @@ namespace chart
             m_canvas = new Bitmap(pictureBox_main.Width, pictureBox_main.Height);
             pictureBox_main.Image = m_canvas;
             m_g = Graphics.FromImage(m_canvas);
+
+            pictureBox_select.Parent = pictureBox_main;
+            pictureBox_select.Hide();
+            m_pictureBox_select_show = false;
 
             //using (var g = Graphics.FromImage(canvas))
             //{
@@ -62,6 +74,12 @@ namespace chart
         {
             m_mfsc.Update();
             Refresh();
+
+            if (m_pictureBox_select_show)
+            {
+                var pos = pictureBox_main.PointToClient(Cursor.Position);
+                pictureBox_select.Location = pos;
+            }
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
@@ -78,6 +96,20 @@ namespace chart
         private void pictureBox_main_VisibleChanged(object sender, EventArgs e)
         {
             Refresh();
+        }
+
+        private void pictureBox_main_Click(object sender,EventArgs e)
+        {
+            if (m_pictureBox_select_show)
+            {
+                m_pictureBox_select_show = false;
+                pictureBox_select.Hide();
+            }
+            else
+            {
+                m_pictureBox_select_show = true;
+                pictureBox_select.Show();
+            }
         }
     }
 }

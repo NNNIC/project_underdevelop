@@ -1,3 +1,5 @@
+﻿
+//<<<include=using_text.txt
 using System;
 using System.IO;
 using System.Collections.Generic;
@@ -9,3 +11,9 @@ using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
 using LineType=DrawUtil.LineType;
 using D=Define;
+//>>>
+
+public partial class Define
+{
+
+}

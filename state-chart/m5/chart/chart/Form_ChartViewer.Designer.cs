@@ -1,6 +1,6 @@
 ﻿namespace chart
 {
-    partial class Form1
+    partial class ChartViewer
     {
         /// <summary>
         /// 必要なデザイナー変数です。
@@ -31,12 +31,14 @@
             this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.pictureBox_select = new System.Windows.Forms.PictureBox();
             this.pictureBox_main = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_select)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_main)).BeginInit();
             this.menuStrip2.SuspendLayout();
             this.SuspendLayout();
@@ -52,12 +54,21 @@
             // panel1
             // 
             this.panel1.AutoScroll = true;
+            this.panel1.Controls.Add(this.pictureBox_select);
             this.panel1.Controls.Add(this.pictureBox_main);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 48);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1184, 713);
             this.panel1.TabIndex = 2;
+            // 
+            // pictureBox_select
+            // 
+            this.pictureBox_select.Location = new System.Drawing.Point(540, 282);
+            this.pictureBox_select.Name = "pictureBox_select";
+            this.pictureBox_select.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox_select.TabIndex = 1;
+            this.pictureBox_select.TabStop = false;
             // 
             // pictureBox_main
             // 
@@ -68,6 +79,7 @@
             this.pictureBox_main.TabIndex = 0;
             this.pictureBox_main.TabStop = false;
             this.pictureBox_main.VisibleChanged += new System.EventHandler(this.pictureBox_main_VisibleChanged);
+            this.pictureBox_main.Click += new System.EventHandler(this.pictureBox_main_Click);
             this.pictureBox_main.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_output_Paint);
             // 
             // timer1
@@ -101,7 +113,7 @@
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
-            // Form1
+            // ChartViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -111,10 +123,11 @@
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.menuStrip2);
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
-            this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Name = "ChartViewer";
+            this.Text = "Chart Viewer";
+            this.Load += new System.EventHandler(this.Form_ChartViewer_Load);
             this.panel1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_select)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_main)).EndInit();
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
@@ -132,6 +145,7 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         public System.Windows.Forms.PictureBox pictureBox_main;
+        private System.Windows.Forms.PictureBox pictureBox_select;
     }
 }
 

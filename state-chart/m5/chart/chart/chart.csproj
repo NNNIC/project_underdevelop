@@ -46,6 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="0000_Define\Define_1010_drawtext.cs" />
+    <Compile Include="0000_Define\Define_1000_drawstatebox.cs" />
+    <Compile Include="0000_Define\Define_0200_chart.cs" />
+    <Compile Include="0000_Define\Define_0100_arrow.cs" />
+    <Compile Include="0000_Define\Define_0000_main.cs" />
     <Compile Include="0100_Flow\110_Arrow\ArrowFlowUtil.cs" />
     <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_2000_check.cs" />
     <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_5000_branch.cs" />
@@ -68,6 +73,12 @@
     <Compile Include="1000_Draw\DrawStateBox_Detail.cs" />
     <Compile Include="1000_Draw\DrawStateBox.cs" />
     <Compile Include="1010_Point\PointUtil.cs" />
+    <Compile Include="Form_Debug.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form_Debug.Designer.cs">
+      <DependentUpon>Form_Debug.cs</DependentUpon>
+    </Compile>
     <Compile Include="_obs\Chart_obs\ChartManager_obs.cs" />
     <Compile Include="_obs\Chart_obs\ChartManager_node.cs" />
     <Compile Include="_obs\Chart_obs\ChartManager_tool_obs.cs" />
@@ -95,11 +106,11 @@
     <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0400_draw.cs" />
     <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0500_branch.cs" />
     <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_9000_tool.cs" />
-    <Compile Include="Form1.cs">
+    <Compile Include="Form_ChartViewer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="Form_ChartViewer.Designer.cs">
+      <DependentUpon>Form_ChartViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="5000_Lib\EditUtil.cs" />
     <Compile Include="5000_Lib\MathUtil.cs" />
@@ -107,8 +118,11 @@
     <Compile Include="5000_Lib\StateManagerWithPahse.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="Form_ChartViewer.resx">
+      <DependentUpon>Form_ChartViewer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form_Debug.resx">
+      <DependentUpon>Form_Debug.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -161,9 +175,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="1400_Intersect\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

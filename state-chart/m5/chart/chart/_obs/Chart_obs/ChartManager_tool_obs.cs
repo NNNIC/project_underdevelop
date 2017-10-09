@@ -9,9 +9,9 @@ using System.Drawing;
 public partial class ChartManager_obs
 {
     ExcelProgram m_excelpgm { get {
-            if (chart.Form1.V!=null && chart.Form1.V.m_mfsc!=null && chart.Form1.V.m_mfsc.m_excelpgm!=null)
+            if (chart.ChartViewer.V!=null && chart.ChartViewer.V.m_mfsc!=null && chart.ChartViewer.V.m_mfsc.m_excelpgm!=null)
             {
-                return chart.Form1.V.m_mfsc.m_excelpgm;
+                return chart.ChartViewer.V.m_mfsc.m_excelpgm;
             }
             return null;
         } }

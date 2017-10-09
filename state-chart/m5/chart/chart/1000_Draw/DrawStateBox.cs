@@ -9,48 +9,49 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
 using LineType=DrawUtil.LineType;
+using D=Define;
 //>>>
 
 public partial class DrawStateBox
 {
-    const  float POINT_PER_MILI=2.84f;
+    static float POINT_PER_MILI     { get { return D.POINT_PER_MILI; } }
+                                    
+    static float OUT_WIDTH          { get { return D.OUT_WIDTH;} }//{ get { return 62f * POINT_PER_MILI; } } //外枠幅
+    static float GAP                { get { return D.GAP;      } }      //{ get { return 1f  * POINT_PER_MILI; } } //枠のギャップ
+    static float IN_WIDTH           { get { return D.IN_WIDTH; } }//{ get { return 58f * POINT_PER_MILI; } } //内枠の幅
+    static float IN_HEIGHT          { get { return D.IN_HEIGHT;} }//{ get { return 9f  * POINT_PER_MILI; } } //内枠の高さ
+                                    
+    static float OUTLINE_SIZE       { get { return D.OUTLINE_SIZE; } }//= 2f;
+                                    
+    static float CIRCLE_DIAMETER    { get { return D.CIRCLE_DIAMETER;} }//{ get { return 4f * POINT_PER_MILI; } } //丸の直径
+                                    
+    static Color  OUTFILL_COLOR     { get { return D.OUTFILL_COLOR ; }}//= Color.FromArgb(175,171,171);
+    static Color  OUTLINE_COLOR     { get { return D.OUTLINE_COLOR ; }}//    = Color.FromArgb(237,125,49);
+                                    
+    static Color  STATELINE_COLOR   { get { return D.STATELINE_COLOR ; }}//= Color.FromArgb(0,0,0);
+    static Color  STATEFILL_COLOR   { get { return D.STATEFILL_COLOR ; }}//= Color.FromArgb(175,171,171);
+    static Color  STATETEXT_COLOR   { get { return D.STATETEXT_COLOR ; }}// = Color.White;
 
-    static float OUT_WIDTH   { get { return 62f * POINT_PER_MILI; } } //外枠幅
-    static float GAP         { get { return 1f  * POINT_PER_MILI; } } //枠のギャップ
-    static float IN_WIDTH    { get { return 58f * POINT_PER_MILI; } } //内枠の幅
-    static float IN_HEIGHT   { get { return 9f  * POINT_PER_MILI; } } //内枠の高さ
+    static Color  CONTENTLINE_COLOR { get { return D.CONTENTLINE_COLOR ; }}//= Color.FromArgb(65,113,156);
+    static Color  CONTENTFILL_COLOR { get { return D.CONTENTFILL_COLOR ; }}//= Color.FromArgb(91,155,213);
+    static Color  CONTENTTEXT_COLOR { get { return D.CONTENTTEXT_COLOR ; }}//= Color.White;
 
-    static float OUTLINE_SIZE = 2f;
+    static Color  BRANCHLINE_COLOR  { get { return D.BRANCHLINE_COLOR ;}}//= Color.FromArgb(65,113,156);
+    static Color  BRANCHFILL_COLOR  { get { return D.BRANCHFILL_COLOR ;}}//= Color.FromArgb(255,255,255);
+    static Color  BRANCTEXT_COLOR   { get { return D.BRANCTEXT_COLOR  ;}}//= Color.Black;
 
-    static float CIRCLE_DIAMETER { get { return 4f * POINT_PER_MILI; } } //丸の直径
+    static Color  POINT_LINE_COLOR  { get { return D.POINT_LINE_COLOR ; }}//= Color.White;
+    static Color  POINT_IN_COLOR    { get { return D.POINT_IN_COLOR  ; }}//= Color.Green;
+    static Color  POINT_OUT_COLOR   { get { return D.POINT_OUT_COLOR ; }}//= Color.Red;
 
-    static Color  OUTLINE_COLOR     = Color.FromArgb(237,125,49);
-    static Color  OUTFILL_COLOR     = Color.FromArgb(175,171,171);
+    static Color  POINT_OUT_BRANCHES_COLOR(int i) { return D.POINT_OUT_BRANCHES_COLOR(i); }  //{  return Color.FromArgb(235-20*i,0,0); }
 
-    static Color  STATELINE_COLOR   = Color.FromArgb(0,0,0);
-    static Color  STATEFILL_COLOR   = Color.FromArgb(175,171,171);
-    static Color  STATETEXT_COLOR   = Color.White;
-
-    static Color  CONTENTLINE_COLOR = Color.FromArgb(65,113,156);
-    static Color  CONTENTFILL_COLOR = Color.FromArgb(91,155,213);
-    static Color  CONTENTTEXT_COLOR = Color.White;
-
-    static Color  BRANCHLINE_COLOR  = Color.FromArgb(65,113,156);
-    static Color  BRANCHFILL_COLOR  = Color.FromArgb(255,255,255);
-    static Color  BRANCTEXT_COLOR   = Color.Black;
-
-    static Color  POINT_LINE_COLOR  = Color.White;
-    static Color  POINT_IN_COLOR    = Color.Green;
-    static Color  POINT_OUT_COLOR   = Color.Red;
-
-    static Color  POINT_OUT_BRANCHES_COLOR(int i) {  return Color.FromArgb(235-20*i,0,0); }
-
-    static string FONTNAME          = "メイリオ";
-    static float  FONTSIZE          = 11;
-
-    static Color  ARROW_COLOR       = Color.White;
-    static int    ARROW_SIZE        = 4;
-    static LineType ARROW_LINETYPE  = LineType.STRAIGHT;
+    static string FONTNAME          { get { return D.FONTNAME ; }}//= "メイリオ";
+    static float  FONTSIZE          { get { return D.FONTSIZE ; }}//= 11;
+                                      
+    static Color  ARROW_COLOR       { get { return D.ARROW_COLOR ;    }} //= Color.White;
+    static int    ARROW_SIZE        { get { return D.ARROW_SIZE ;     }} //= 4;
+    static LineType ARROW_LINETYPE  { get { return D.ARROW_LINETYPE ; }} //= LineType.STRAIGHT;
 
     public static Layout CreateLayout(Graphics g,  StateData data,  Detail detail)
     {
@@ -197,13 +198,7 @@ public partial class DrawStateBox
         if (st==null) return;
 
         Action<List<Point>> _draw = (plist)=> {
-            if (plist!=null && plist.Count > 1)
-            {
-                for(var i = 0; i<plist.Count-1; i++)
-                {
-                    DrawUtil.DrawLine(g,plist[i],plist[i+1],ARROW_COLOR,ARROW_SIZE,ARROW_LINETYPE);
-                }
-            }
+            DrawUtil.DrawLine(g,plist,ARROW_COLOR,ARROW_SIZE,ARROW_LINETYPE);
         };
 
         //next

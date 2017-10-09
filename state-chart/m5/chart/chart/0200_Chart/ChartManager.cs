@@ -9,26 +9,27 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
 using LineType=DrawUtil.LineType;
+using D=Define;
 //>>>
 
 public partial class ChartManager
 {
-    const    float  LEN_BETWEEN_STATES = 60f;
-    readonly PointF POINT_START        = new PointF(30,150);
+    float  LEN_BETWEEN_STATES { get { return D.LEN_BETWEEN_STATES; } }
+    PointF POINT_START        { get { return D.POINT_START; } }
 
     #region 内部アクセス
-    PictureBox      m_mainPicture { get { return chart.Form1.V.pictureBox_main; } }
+    PictureBox      m_mainPicture { get { return chart.ChartViewer.V.pictureBox_main; } }
     List<StateData> m_stateData   { get { return StateInfo.m_stateData;         } }
-    Bitmap          m_canvas      { get { return chart.Form1.V.m_canvas;        } }
-    Graphics        m_g           { get { return chart.Form1.V.m_g;             } }
+    Bitmap          m_canvas      { get { return chart.ChartViewer.V.m_canvas;        } }
+    Graphics        m_g           { get { return chart.ChartViewer.V.m_g;             } }
     #endregion
 
     public void Create()
     {
         var statelist = get_all_states();
-        
+
         var point = Point.Truncate( POINT_START);
-        
+
         for(var i = 0; i<statelist.Count; i++)
         {
             var st  = m_stateData[i];

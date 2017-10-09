@@ -11,6 +11,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
 using LineType=DrawUtil.LineType;
+using D=Define;
 //>>>
 
 using System.Runtime.InteropServices;

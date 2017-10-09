@@ -9,6 +9,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
 using LineType=DrawUtil.LineType;
+using D=Define;
 //>>>
 
 public partial class DrawUtil
@@ -16,6 +17,7 @@ public partial class DrawUtil
     public enum LineType
     {
         STRAIGHT,
+        BEZIR
 
     }
 }

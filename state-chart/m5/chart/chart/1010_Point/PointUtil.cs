@@ -9,6 +9,7 @@ using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 using Detail=DrawStateBox.Detail;
 using LineType=DrawUtil.LineType;
+using D=Define;
 //>>>
 
 public class PointUtil
@@ -83,5 +84,13 @@ public class PointUtil
     public static PointF Center(PointF a, PointF b)
     {
         return new PointF( (a.X + b.X) / 2, (a.Y + b.Y) /2 );
+    }
+    public static Point Mod_X(Point a, int x)
+    {
+        return new Point(x,a.Y);
+    }
+    public static Point Mod_Y(Point a, int y)
+    {
+        return new Point(a.X,y);
     }
 }
