@@ -51,6 +51,13 @@
     <Compile Include="0000_Define\Define_0200_chart.cs" />
     <Compile Include="0000_Define\Define_0100_arrow.cs" />
     <Compile Include="0000_Define\Define_0000_main.cs" />
+    <Compile Include="0100_Flow\030_Heighlight\created\HeighlightFlowStateControl_created.cs" />
+    <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_3000_heighlight.cs" />
+    <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_2000_setcur.cs" />
+    <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_4000_branch.cs" />
+    <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_1000_check.cs" />
+    <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_5000_tool.cs" />
+    <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_0000_main.cs" />
     <Compile Include="0100_Flow\110_Arrow\ArrowFlowUtil.cs" />
     <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_2000_check.cs" />
     <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_5000_branch.cs" />
@@ -67,8 +74,6 @@
     <Compile Include="0500_State\StateData_Layout.cs" />
     <Compile Include="0500_State\StateInfo.cs" />
     <Compile Include="0500_State\StateData.cs" />
-    <Compile Include="0600_View\050_Heighlite\HeighliteManager_tool.cs" />
-    <Compile Include="0600_View\050_Heighlite\HeighliteManager.cs" />
     <Compile Include="1000_Draw\DrawUtil_LineType.cs" />
     <Compile Include="1000_Draw\DrawStateBox_Layout.cs" />
     <Compile Include="1000_Draw\DrawUtil.cs" />

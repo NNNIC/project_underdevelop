@@ -17,6 +17,7 @@ namespace chart
 {
     public partial class ChartViewer 
     {
+#if obs
         HeighliteManager m_heighliteManager;
 
         void Heighlite_init()
@@ -29,5 +30,19 @@ namespace chart
         {
             m_heighliteManager.Upadte();
         }
+#else
+        HeighlightFlowStateControl m_heighlightControl;
+
+        void Heighlight_init()
+        {
+            m_heighlightControl = new HeighlightFlowStateControl();
+            m_heighlightControl.Init();
+        }
+        void Heighlight_update()
+        {
+            m_heighlightControl.Update();
+        }
+
+#endif
     }
 }

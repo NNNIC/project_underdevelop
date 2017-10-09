@@ -60,7 +60,7 @@ namespace chart
             //}
             
             //Control
-            /*0200*/ Heighlite_init();
+            /*0200*/ Heighlight_init();
 
         }
 
@@ -88,7 +88,7 @@ namespace chart
             }
 
             //Control
-            /*0200*/ Heighlite_update();
+            /*0200*/ Heighlight_update();
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
