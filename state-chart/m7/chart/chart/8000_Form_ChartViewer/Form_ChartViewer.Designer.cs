@@ -31,17 +31,19 @@
             this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.pictureBox_highlite = new System.Windows.Forms.PictureBox();
             this.pictureBox_select = new System.Windows.Forms.PictureBox();
+            this.pictureBox_highlite = new System.Windows.Forms.PictureBox();
             this.pictureBox_main = new System.Windows.Forms.PictureBox();
+            this.pictureBox_BG = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_highlite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_select)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_highlite)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_main)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_BG)).BeginInit();
             this.menuStrip2.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,26 +61,16 @@
             this.panel1.Controls.Add(this.pictureBox_select);
             this.panel1.Controls.Add(this.pictureBox_highlite);
             this.panel1.Controls.Add(this.pictureBox_main);
+            this.panel1.Controls.Add(this.pictureBox_BG);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 48);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(1184, 713);
             this.panel1.TabIndex = 2;
             // 
-            // pictureBox_highlite
-            // 
-            this.pictureBox_highlite.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.pictureBox_highlite.Location = new System.Drawing.Point(662, 282);
-            this.pictureBox_highlite.Name = "pictureBox_highlite";
-            this.pictureBox_highlite.Size = new System.Drawing.Size(100, 50);
-            this.pictureBox_highlite.TabIndex = 2;
-            this.pictureBox_highlite.TabStop = false;
-            this.pictureBox_highlite.Click += new System.EventHandler(this.pictureBox_highlite_Click);
-            this.pictureBox_highlite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_highlite_MouseDown);
-            // 
             // pictureBox_select
             // 
-            this.pictureBox_select.Location = new System.Drawing.Point(540, 282);
+            this.pictureBox_select.Location = new System.Drawing.Point(540, 295);
             this.pictureBox_select.Name = "pictureBox_select";
             this.pictureBox_select.Size = new System.Drawing.Size(100, 50);
             this.pictureBox_select.TabIndex = 1;
@@ -86,8 +78,20 @@
             this.pictureBox_select.Click += new System.EventHandler(this.pictureBox_select_Click);
             this.pictureBox_select.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_select_MouseDown);
             // 
+            // pictureBox_highlite
+            // 
+            this.pictureBox_highlite.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.pictureBox_highlite.Location = new System.Drawing.Point(540, 230);
+            this.pictureBox_highlite.Name = "pictureBox_highlite";
+            this.pictureBox_highlite.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox_highlite.TabIndex = 2;
+            this.pictureBox_highlite.TabStop = false;
+            this.pictureBox_highlite.Click += new System.EventHandler(this.pictureBox_highlite_Click);
+            this.pictureBox_highlite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_highlite_MouseDown);
+            // 
             // pictureBox_main
             // 
+            this.pictureBox_main.BackColor = System.Drawing.Color.Transparent;
             this.pictureBox_main.Location = new System.Drawing.Point(0, 0);
             this.pictureBox_main.Margin = new System.Windows.Forms.Padding(0);
             this.pictureBox_main.Name = "pictureBox_main";
@@ -103,6 +107,15 @@
             this.pictureBox_main.GiveFeedback += new System.Windows.Forms.GiveFeedbackEventHandler(this.pictureBox_main_GiveFeedback);
             this.pictureBox_main.Paint += new System.Windows.Forms.PaintEventHandler(this.pictureBox_output_Paint);
             this.pictureBox_main.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_main_MouseDown);
+            // 
+            // pictureBox_BG
+            // 
+            this.pictureBox_BG.BackColor = System.Drawing.Color.DimGray;
+            this.pictureBox_BG.Location = new System.Drawing.Point(540, 174);
+            this.pictureBox_BG.Name = "pictureBox_BG";
+            this.pictureBox_BG.Size = new System.Drawing.Size(100, 50);
+            this.pictureBox_BG.TabIndex = 4;
+            this.pictureBox_BG.TabStop = false;
             // 
             // timer1
             // 
@@ -154,9 +167,10 @@
             this.DragLeave += new System.EventHandler(this.ChartViewer_DragLeave);
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ChartViewer_MouseDown);
             this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_highlite)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_select)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_highlite)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_main)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_BG)).EndInit();
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
             this.ResumeLayout(false);
@@ -167,14 +181,15 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.MenuStrip menuStrip2;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadToolStripMenuItem;
         public System.Windows.Forms.PictureBox pictureBox_main;
-        private System.Windows.Forms.PictureBox pictureBox_select;
         public System.Windows.Forms.PictureBox pictureBox_highlite;
+        public System.Windows.Forms.Panel panel1;
+        public System.Windows.Forms.PictureBox pictureBox_select;
+        public System.Windows.Forms.PictureBox pictureBox_BG;
     }
 }
 

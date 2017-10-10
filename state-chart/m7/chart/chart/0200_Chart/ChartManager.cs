@@ -19,10 +19,11 @@ public partial class ChartManager
     PointF POINT_START        { get { return D.POINT_START; } }
 
     #region 内部アクセス
-    PictureBox      m_mainPicture { get { return chart.ChartViewer.V.pictureBox_main; } }
-    List<StateData> m_stateData   { get { return StateInfo.m_stateData;         } }
-    Bitmap          m_canvas      { get { return chart.ChartViewer.V.m_canvas;        } }
-    Graphics        m_g           { get { return chart.ChartViewer.V.m_g;             } }
+    PictureBox      m_mainPicture { get { return chart.ChartViewer.V.pictureBox_main;     } }
+    List<StateData> m_stateData   { get { return StateInfo.m_stateData;                   } }
+    Bitmap          m_canvas      { get { return chart.ChartViewer.V.m_maincanvas;        } }
+    Graphics        m_gBg         { get { return chart.ChartViewer.V.m_gBg;               } }
+    Graphics        m_g           { get { return chart.ChartViewer.V.m_gMain;             } }
     #endregion
 
     public void Create()
@@ -88,16 +89,16 @@ public partial class ChartManager
         if (m_stateData == null) return;
 
         // BG
-        m_g.Clear(Color.FromArgb(65,65,65));
+        m_gBg.Clear(Color.FromArgb(65,65,65));
         using (var pen = new Pen(Color.FromArgb(112, 112, 112), 1))
         {
             for (var y = 0; y < m_canvas.Height; y += 20)
             {
-                m_g.DrawLine(pen, 0, y, m_canvas.Width, y);
+                m_gBg.DrawLine(pen, 0, y, m_canvas.Width, y);
             }
             for(var x=0; x<m_canvas.Width; x+= 20)
             {
-                m_g.DrawLine(pen,x,0,x,m_canvas.Height);
+                m_gBg.DrawLine(pen,x,0,x,m_canvas.Height);
             }
         }
 

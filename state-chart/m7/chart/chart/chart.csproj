@@ -58,6 +58,14 @@
     <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_1000_check.cs" />
     <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_5000_tool.cs" />
     <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_0000_main.cs" />
+    <Compile Include="0100_Flow\040_Move\created\MoveFlowStateControl_created.cs" />
+    <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_6000_branch.cs" />
+    <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_9000_tool.cs" />
+    <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_4000_statepos.cs" />
+    <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_3000_select.cs" />
+    <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_2000_check.cs" />
+    <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_1000_mouse.cs" />
+    <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_0000_main.cs" />
     <Compile Include="0100_Flow\110_Arrow\ArrowFlowUtil.cs" />
     <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_2000_check.cs" />
     <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_5000_branch.cs" />
@@ -69,6 +77,9 @@
     <Compile Include="0100_Flow\110_Arrow\StateControl\ArrowFlowStateControl2_1000_outline.cs" />
     <Compile Include="0200_Chart\ChartManager.cs" />
     <Compile Include="0200_Chart\ChartManager_tool.cs" />
+    <Compile Include="0300_Input\InputCallBacks.cs" />
+    <Compile Include="0300_Input\InputInfo.cs" />
+    <Compile Include="0300_Input\InputMouseEvent.cs" />
     <Compile Include="0500_State\StateData_Distination.cs" />
     <Compile Include="0500_State\StateData_ArrowLine.cs" />
     <Compile Include="0500_State\StateData_Layout.cs" />
@@ -80,6 +91,7 @@
     <Compile Include="1000_Draw\DrawStateBox_Detail.cs" />
     <Compile Include="1000_Draw\DrawStateBox.cs" />
     <Compile Include="1010_Point\PointUtil.cs" />
+    <Compile Include="5000_Lib\ReadOnceValue.cs" />
     <Compile Include="8000_Form_ChartViewer\Control\Form_ChartViewer_0200_heighlite.cs">
       <SubType>Form</SubType>
     </Compile>

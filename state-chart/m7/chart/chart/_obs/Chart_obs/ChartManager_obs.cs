@@ -89,7 +89,7 @@ public partial class ChartManager_obs
     public void Draw()
     {
         //using (var g = m_mainPicture.CreateGraphics())
-        var g = chart.ChartViewer.V.m_g;
+        var g = chart.ChartViewer.V.m_gMain;
         {
             g.Clear(Color.White);
 

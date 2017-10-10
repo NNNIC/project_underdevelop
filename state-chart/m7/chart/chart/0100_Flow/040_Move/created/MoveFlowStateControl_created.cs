@@ -3,7 +3,6 @@ public enum MoveFlowState
 {
     S_NONE
     ,S_WAIT_MOUSEDOWN
-    ,S_CHECK_STATE
     ,S_CREATE_SELECT
     ,S_WAIT_MOUSEUP
     ,S_MOVE_DONE
@@ -13,6 +12,7 @@ public enum MoveFlowState
 public partial class MoveFlowStateControl {
     /*
         S_NONE
+        無指定
     */
     void S_NONE(int phase, bool bFirst)
     {
@@ -26,8 +26,8 @@ public partial class MoveFlowStateControl {
         if (phase == 1) {
             if (bFirst) {
                 /*
+                    無指定
                 */
-                S_NONE
                 if (HasNextState())
                 {
                     GoNextState();
@@ -43,9 +43,10 @@ public partial class MoveFlowStateControl {
     {
         if (phase == 0) {
             if (bFirst) {
-                SetNextState(S_CHECK_STATE);
+                SetNextState();
             }
                 /*
+                    マウスダウン待ち
                 */
                 if (!Mouse_isDown()) {
                     return;
@@ -56,39 +57,12 @@ public partial class MoveFlowStateControl {
         if (phase == 1) {
             if (bFirst) {
                 /*
-                    マウスダウン待ち
-                */
-                S_WAIT_MOUSEDOWN
-                if (HasNextState())
-                {
-                    GoNextState();
-                }
-            }
-        }
-    }
-    /*
-        S_CHECK_STATE
-        ステート確認
-    */
-    void S_CHECK_STATE(int phase, bool bFirst)
-    {
-        if (phase == 0) {
-            if (bFirst) {
-                SetNextState();
-            }
-            NextPhase();
-            return;
-        }
-        if (phase == 1) {
-            if (bFirst) {
-                /*
                     ステート内か確認
                 */
                 check_on_state();
                 /*
-                    ステート確認
+                    マウスダウン待ち
                 */
-                S_CHECK_STATE
                 /*
                     ステート内時
                     キャンセル時
@@ -125,7 +99,6 @@ public partial class MoveFlowStateControl {
                 /*
                     セレクト作成
                 */
-                S_CREATE_SELECT
                 if (HasNextState())
                 {
                     GoNextState();
@@ -163,8 +136,9 @@ public partial class MoveFlowStateControl {
                 /*
                     マウスアップ待ち
                 */
-                S_WAIT_MOUSEUP
                 /*
+                    マウスアップ時
+                    キャンセル時
                 */
                 br_mouseup(S_MOVE_DONE);
                 br_mouseup_cancel(S_MOVE_CANCEL);
@@ -198,7 +172,6 @@ public partial class MoveFlowStateControl {
                 /*
                     移動完了
                 */
-                S_MOVE_DONE
                 if (HasNextState())
                 {
                     GoNextState();
@@ -222,12 +195,12 @@ public partial class MoveFlowStateControl {
         if (phase == 1) {
             if (bFirst) {
                 /*
+                    セレクトクリア
                 */
                 select_clear();
                 /*
                     移動キャンセル
                 */
-                S_MOVE_CANCEL
                 if (HasNextState())
                 {
                     GoNextState();

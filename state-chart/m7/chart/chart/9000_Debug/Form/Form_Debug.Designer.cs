@@ -37,6 +37,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.textBox_form = new System.Windows.Forms.TextBox();
             this.textBox_log = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBox_event = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // textBox_mouse
@@ -102,11 +104,29 @@
             this.textBox_log.Size = new System.Drawing.Size(484, 150);
             this.textBox_log.TabIndex = 6;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(211, 16);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(33, 12);
+            this.label4.TabIndex = 8;
+            this.label4.Text = "event";
+            // 
+            // textBox_event
+            // 
+            this.textBox_event.Location = new System.Drawing.Point(252, 13);
+            this.textBox_event.Name = "textBox_event";
+            this.textBox_event.Size = new System.Drawing.Size(139, 19);
+            this.textBox_event.TabIndex = 7;
+            // 
             // Form_Debug
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(505, 261);
+            this.Controls.Add(this.label4);
+            this.Controls.Add(this.textBox_event);
             this.Controls.Add(this.textBox_log);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox_form);
@@ -132,5 +152,7 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBox_form;
         public System.Windows.Forms.TextBox textBox_log;
+        private System.Windows.Forms.Label label4;
+        public System.Windows.Forms.TextBox textBox_event;
     }
 }

@@ -27,4 +27,8 @@ public class DBG
     {
         chart.Form_Debug.V.textBox_log.Text="";
     }
+    public static void LogEvent(string s)
+    {
+        chart.Form_Debug.V.textBox_event.Text = s;
+    }
 }

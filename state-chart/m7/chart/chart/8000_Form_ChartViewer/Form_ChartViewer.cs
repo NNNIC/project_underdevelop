@@ -17,12 +17,18 @@ namespace chart
 {
     public partial class ChartViewer : Form
     {
+        const int WIDTH = 4000;
+        const int HEIGHT= 1000;
+
         public static ChartViewer V;
 
         public MainFlowStateControl m_mfsc = new MainFlowStateControl();
         public ChartManager         m_chartman = new ChartManager();
-        public Bitmap               m_canvas;
-        public Graphics             m_g;
+        public Bitmap               m_maincanvas;
+        public Bitmap               m_bgcanvas;
+
+        public Graphics             m_gMain;
+        public Graphics             m_gBg;
 
         public Form_Debug m_dbgForm;
 
@@ -42,23 +48,35 @@ namespace chart
 
             //ステート管理実行
             m_mfsc.Start();
-            //
-            pictureBox_main.Parent = panel1;
-            //ictureBox_temp.Parent = pictureBox_main;
 
-            m_canvas = new Bitmap(pictureBox_main.Width, pictureBox_main.Height);
-            pictureBox_main.Image = m_canvas;
-            m_g = Graphics.FromImage(m_canvas);
+            //BG用
+            m_bgcanvas                = new Bitmap(WIDTH, HEIGHT);
+            pictureBox_BG.Parent      = panel1;
+            pictureBox_BG.Image       = m_bgcanvas;
+            pictureBox_BG.Size        = new Size(WIDTH,HEIGHT);
+            pictureBox_BG.Location    = new Point(0,0);
+            m_gBg                     = Graphics.FromImage(m_bgcanvas);
 
+            //メイン
+            m_maincanvas              = new Bitmap(pictureBox_main.Width, pictureBox_main.Height);
+            pictureBox_main.Parent    = pictureBox_BG;
+            pictureBox_main.Image     = m_maincanvas;
+            pictureBox_main.BackColor = Color.Transparent;
+            m_gMain                   = Graphics.FromImage(m_maincanvas);
+
+            //セレクト
             pictureBox_select.Parent = pictureBox_main;
             pictureBox_select.Hide();
-            //m_pictureBox_select_show = false;
 
-            //using (var g = Graphics.FromImage(canvas))
-            //{
-            //    g.DrawRectangle(Pens.Black, 10, 20, 100, 80);
-            //}
+            //入力コールバック設定
+            InputCallBacks.SetCallbacks();
             
+            //ポインタの当たり用
+            //pictureBox_collider.Parent = pictureBox_main;
+            //pictureBox_collider.Location = new Point(0,0);
+            //pictureBox_collider.Size     = pictureBox_main.Size;
+            //pictureBox_collider.BackColor = Color.Transparent;
+
             //Control
             /*0200*/ Heighlight_init();
 
@@ -66,11 +84,6 @@ namespace chart
 
         private void pictureBox_output_Paint(object sender, PaintEventArgs e)
         {
-            //using (Font myFont = new Font("Arial", 14))
-            //{
-            //    e.Graphics.DrawString("Hello .NET Guide!", myFont, Brushes.Green, new Point(2, 2));
-            //}
-            //DrawUtil.Arrow(e.Graphics,new PointF(0,100),new PointF(100,100)  );
 
             m_chartman.Draw();
             
@@ -195,6 +208,11 @@ namespace chart
         private void pictureBox_highlite_MouseDown(object sender,MouseEventArgs e)
         {
             DBG.LogWrite("heighlight Mouse Down\n");
+        }
+
+        private void pictureBox_collider_MouseDown(object sender,MouseEventArgs e)
+        {
+            DBG.LogWrite(" colider Mouse Down\n");
         }
     }
 }
