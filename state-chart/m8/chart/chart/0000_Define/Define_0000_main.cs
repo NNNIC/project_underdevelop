@@ -16,5 +16,6 @@ using D=Define;
 
 public partial class Define
 {
-
+    public const int BITMAP_WIDTH = 5000;
+    public const int BITMAP_HEIGHT= 4000;
 }

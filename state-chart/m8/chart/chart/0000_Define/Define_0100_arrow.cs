@@ -16,7 +16,7 @@ using D=Define;
 public partial class Define
 {
     public static int   DUINT = 20;
-    public static float ARROWHEAD_WIDTH  = 2.2f;
+    public static float ARROWHEAD_WIDTH  = 3f;
     public static float ARROWHEAD_HEIGHT = 3;
 
 }

@@ -17,8 +17,8 @@ namespace chart
 {
     public partial class ChartViewer : Form
     {
-        const int WIDTH = 4000;
-        const int HEIGHT= 1000;
+        const int WIDTH = Define.BITMAP_WIDTH;
+        const int HEIGHT= Define.BITMAP_HEIGHT;
 
         public static ChartViewer V;
 
@@ -57,8 +57,10 @@ namespace chart
             m_gBg                     = Graphics.FromImage(m_bgcanvas);
 
             //メイン
-            m_maincanvas              = new Bitmap(pictureBox_main.Width, pictureBox_main.Height);
+            m_maincanvas              = new Bitmap(pictureBox_BG.Width, pictureBox_BG.Height);
             pictureBox_main.Parent    = pictureBox_BG;
+            pictureBox_main.Location  = new Point(0,0);
+            pictureBox_main.Size      = pictureBox_BG.Size;
             pictureBox_main.Image     = m_maincanvas;
             pictureBox_main.BackColor = Color.Transparent;
             m_gMain                   = Graphics.FromImage(m_maincanvas);

@@ -41,6 +41,11 @@ public partial class ChartManager
                 st.m_layout.offset = point;
             }
             point=PointUtil.Add_X(point,st.m_layout.Frame.Width + (int)LEN_BETWEEN_STATES);
+            if (point.X > m_canvas.Size.Width)
+            {
+                point.X = 0;
+                point.Y += (int)LEN_BETWEEN_STATES;
+            }
         }
 
         //レイアウトデータがある場合
