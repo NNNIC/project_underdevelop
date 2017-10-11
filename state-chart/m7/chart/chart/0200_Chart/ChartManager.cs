@@ -102,15 +102,6 @@ public partial class ChartManager
             }
         }
 
-        // Offset
-        //var point = Point.Truncate( POINT_START);
-        //foreach(var st in m_stateData)
-        //{
-        //    if (st.m_layout == null) return;
-        //    st.m_layout.offset = point;
-        //    point=PointUtil.Add_X(point,st.m_layout.Frame.Width + (int)LEN_BETWEEN_STATES);
-        //}
-
         //Arrow
         foreach(var st in m_stateData)
         {

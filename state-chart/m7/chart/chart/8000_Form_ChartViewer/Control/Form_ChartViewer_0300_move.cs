@@ -13,13 +13,21 @@ using LineType=DrawUtil.LineType;
 using D=Define;
 //>>>
 
-public partial class MoveFlowStateControl  {
-
-    StateData GetStateAtCursor()
+namespace chart
+{
+    public partial class ChartViewer 
     {
-        return StateTool.GetStateAtCursor();
-    }  
+        MoveFlowStateControl m_moveFlowStateControl;
 
+        void Move_init()
+        {
+            m_moveFlowStateControl = new MoveFlowStateControl();
+            m_moveFlowStateControl.Init();
+        }
 
+        void Move_update()
+        {
+            m_moveFlowStateControl.Update();
+        }
+    }
 }
-

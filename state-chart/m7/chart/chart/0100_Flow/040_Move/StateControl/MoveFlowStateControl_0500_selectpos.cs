@@ -15,10 +15,11 @@ using D=Define;
 
 public partial class MoveFlowStateControl  {
 
-    StateData GetStateAtCursor()
+    void selectpos_update()
     {
-        return StateTool.GetStateAtCursor();
-    }  
+        var pos = m_pbmain.PointToClient(Cursor.Position);
+        m_pbsl.Location = PointUtil.Sub_Point(pos,m_saveCuirsorPos_inSelect);
+    }
 
 
 }

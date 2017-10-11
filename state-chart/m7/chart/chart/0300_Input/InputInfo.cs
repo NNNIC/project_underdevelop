@@ -18,15 +18,17 @@ public class InputInfo
     public static INPUTMOUSEEVANT m_inputMouseEvent
     {
         set {
-            if (__inputMouseEvent != value)
+            var curval = __inputMouseEventValue.Peek();
+            if (curval != value)
             {
-                __inputMouseEvent = value;
+                __inputMouseEventValue.Set(value);
                 DBG.LogEvent(value.ToString());
             }
         }
         get { 
-            return __inputMouseEvent;
+            return __inputMouseEventValue.Get();
         }       
     }
-    static INPUTMOUSEEVANT __inputMouseEvent = INPUTMOUSEEVANT.NONE;
+    //static INPUTMOUSEEVANT __inputMouseEvent = INPUTMOUSEEVANT.NONE;
+    static ReadOnceValue<INPUTMOUSEEVANT> __inputMouseEventValue = new ReadOnceValue<INPUTMOUSEEVANT>(INPUTMOUSEEVANT.NONE);
 }

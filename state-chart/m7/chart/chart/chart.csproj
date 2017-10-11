@@ -59,6 +59,7 @@
     <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_5000_tool.cs" />
     <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_0000_main.cs" />
     <Compile Include="0100_Flow\040_Move\created\MoveFlowStateControl_created.cs" />
+    <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_0500_selectpos.cs" />
     <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_6000_branch.cs" />
     <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_9000_tool.cs" />
     <Compile Include="0100_Flow\040_Move\StateControl\MoveFlowStateControl_4000_statepos.cs" />
@@ -80,11 +81,13 @@
     <Compile Include="0300_Input\InputCallBacks.cs" />
     <Compile Include="0300_Input\InputInfo.cs" />
     <Compile Include="0300_Input\InputMouseEvent.cs" />
+    <Compile Include="0500_State\StateTool.cs" />
     <Compile Include="0500_State\StateData_Distination.cs" />
     <Compile Include="0500_State\StateData_ArrowLine.cs" />
     <Compile Include="0500_State\StateData_Layout.cs" />
     <Compile Include="0500_State\StateInfo.cs" />
     <Compile Include="0500_State\StateData.cs" />
+    <Compile Include="1000_Draw\DrawStateBox_DrawStateBox.cs" />
     <Compile Include="1000_Draw\DrawUtil_LineType.cs" />
     <Compile Include="1000_Draw\DrawStateBox_Layout.cs" />
     <Compile Include="1000_Draw\DrawUtil.cs" />
@@ -93,6 +96,9 @@
     <Compile Include="1010_Point\PointUtil.cs" />
     <Compile Include="5000_Lib\ReadOnceValue.cs" />
     <Compile Include="8000_Form_ChartViewer\Control\Form_ChartViewer_0200_heighlite.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="8000_Form_ChartViewer\Control\Form_ChartViewer_0300_move.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="9000_Debug\DBG.cs" />

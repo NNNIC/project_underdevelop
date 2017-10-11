@@ -17,20 +17,21 @@ public partial class HeighlightFlowStateControl  {
 
     StateData GetStateAtCursor()
     {
-        if (m_stateData==null) return null;
+        //if (m_stateData==null) return null;
 
-        var pos = m_pbmain.PointToClient(Cursor.Position);
-        foreach(var st in m_stateData)
-        {
-            if (st==null || st.m_layout==null) continue;
-            var rect = st.m_layout.offset_Frame;
-            if (rect.IsEmpty) continue;
+        //var pos = m_pbmain.PointToClient(Cursor.Position);
+        //foreach(var st in m_stateData)
+        //{
+        //    if (st==null || st.m_layout==null) continue;
+        //    var rect = st.m_layout.offset_Frame;
+        //    if (rect.IsEmpty) continue;
 
-            if (rect.Contains(pos))
-            {
-                return st;
-            }
-        }
-        return null;
+        //    if (rect.Contains(pos))
+        //    {
+        //        return st;
+        //    }
+        //}
+        //return null;
+        return StateTool.GetStateAtCursor();
     }  
 }

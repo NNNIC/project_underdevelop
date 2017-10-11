@@ -25,9 +25,6 @@ public partial class MoveFlowStateControl {
         }
         if (phase == 1) {
             if (bFirst) {
-                /*
-                    無指定
-                */
                 if (HasNextState())
                 {
                     GoNextState();
@@ -45,12 +42,12 @@ public partial class MoveFlowStateControl {
             if (bFirst) {
                 SetNextState();
             }
-                /*
-                    マウスダウン待ち
-                */
-                if (!Mouse_isDown()) {
-                    return;
-                }
+            /*
+                マウスダウン待ち
+            */
+            if (!Mouse_isDown()) {
+                return;
+            }
             NextPhase();
             return;
         }
@@ -60,9 +57,6 @@ public partial class MoveFlowStateControl {
                     ステート内か確認
                 */
                 check_on_state();
-                /*
-                    マウスダウン待ち
-                */
                 /*
                     ステート内時
                     キャンセル時
@@ -97,8 +91,8 @@ public partial class MoveFlowStateControl {
                 */
                 select_create();
                 /*
-                    セレクト作成
                 */
+                br_create_fail(S_WAIT_MOUSEDOWN);;
                 if (HasNextState())
                 {
                     GoNextState();
@@ -116,26 +110,21 @@ public partial class MoveFlowStateControl {
             if (bFirst) {
                 SetNextState();
             }
-                /*
-                    キャンセルを考慮して他のイベントも含め
-                */
-                if (!Mouse_isAny()) {
-                    return;
-                }
+            /*
+                セレクト位置更新
+            */
+            selectpos_update();
+            /*
+                キャンセルを考慮して他のイベントも含め
+            */
+            if (!Mouse_isAny()) {
+                return;
+            }
             NextPhase();
             return;
         }
         if (phase == 1) {
             if (bFirst) {
-                /*
-                    マウスアップイベント確認
-                    キャンセルイベント確認
-                */
-                check_mouseup();
-                check_cancel();
-                /*
-                    マウスアップ待ち
-                */
                 /*
                     マウスアップ時
                     キャンセル時
@@ -170,8 +159,9 @@ public partial class MoveFlowStateControl {
                 */
                 select_clear();
                 /*
-                    移動完了
+                    ステート位置更新
                 */
+                statepos_update();
                 if (HasNextState())
                 {
                     GoNextState();
@@ -198,9 +188,6 @@ public partial class MoveFlowStateControl {
                     セレクトクリア
                 */
                 select_clear();
-                /*
-                    移動キャンセル
-                */
                 if (HasNextState())
                 {
                     GoNextState();

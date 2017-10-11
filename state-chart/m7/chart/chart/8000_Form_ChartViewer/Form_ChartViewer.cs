@@ -79,6 +79,7 @@ namespace chart
 
             //Control
             /*0200*/ Heighlight_init();
+            /*0300*/ Move_init();
 
         }
 
@@ -102,6 +103,7 @@ namespace chart
 
             //Control
             /*0200*/ Heighlight_update();
+            /*0300*/ Move_update();
         }
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
