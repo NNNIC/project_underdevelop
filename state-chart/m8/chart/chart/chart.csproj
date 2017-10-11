@@ -111,13 +111,6 @@
     <Compile Include="9000_Debug\Form\Form_Debug.Designer.cs">
       <DependentUpon>Form_Debug.cs</DependentUpon>
     </Compile>
-    <Compile Include="_obs\Chart_obs\ChartManager_obs.cs" />
-    <Compile Include="_obs\Chart_obs\ChartManager_node.cs" />
-    <Compile Include="_obs\Chart_obs\ChartManager_tool_obs.cs" />
-    <Compile Include="_obs\Draw_obs\DrawUtil_obs.cs" />
-    <Compile Include="_obs\Draw_obs\LineUtil_obs.cs" />
-    <Compile Include="_obs\Draw_obs\PointUtil_obs.cs" />
-    <Compile Include="_obs\Draw_obs\RectUtil_obs.cs" />
     <Compile Include="3000_Excel\ExcelLoadValue.cs" />
     <Compile Include="3000_Excel\ExcelProgram.cs" />
     <Compile Include="3000_Excel\ExcelUtil.cs" />
@@ -129,15 +122,6 @@
     <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0200_chart.cs" />
     <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0300_command.cs" />
     <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0400_branch.cs" />
-    <Compile Include="_obs\100_Arrow_obs\ArrowFlowUtil_obs.cs" />
-    <Compile Include="_obs\100_Arrow_obs\created\ArrowFlowStateControl_created.cs" />
-    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0000_main.cs" />
-    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0100_set.cs" />
-    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0200_temp.cs" />
-    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0300_check.cs" />
-    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0400_draw.cs" />
-    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_0500_branch.cs" />
-    <Compile Include="_obs\100_Arrow_obs\StateControl\ArrowFlowStateControl_9000_tool.cs" />
     <Compile Include="8000_Form_ChartViewer\Form_ChartViewer.cs">
       <SubType>Form</SubType>
     </Compile>

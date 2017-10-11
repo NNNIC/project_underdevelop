@@ -128,7 +128,7 @@ public partial class ExcelUtil
 
     public class BookCtr : IDisposable
     {
-               bool           m_bAttached;
+               //bool           m_bAttached;
                AppCtr         m_appCtr;
                _Application   m_app { get { return m_appCtr.m_application; } }
                Workbooks      m_wbs { get { return m_appCtr.m_workbooks;   } }
@@ -139,7 +139,7 @@ public partial class ExcelUtil
         public BookCtr() { }
         public BookCtr(_Application app, Workbooks wbs, Workbook wb, string path, bool bAttached=false)
         {
-            m_bAttached = true;
+            //m_bAttached = true;
             m_appCtr    = new AppCtr(app, wbs);
             m_wb        = wb;
             m_path      = path;
