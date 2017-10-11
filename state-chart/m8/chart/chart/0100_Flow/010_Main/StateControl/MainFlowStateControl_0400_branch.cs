@@ -15,6 +15,14 @@ public partial class MainFlowStateControl {
         
     }
 
+    void br_savelayout(Action<int,bool> state)
+    {
+        if (m_cmd == COMMAND.SAVELAYOUT)
+        {
+            SetNextState(state);
+        }
+    }
+
     void br_error(Action<int,bool> state)
     {
         if (!string.IsNullOrEmpty(m_error))

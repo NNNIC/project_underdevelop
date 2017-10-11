@@ -15,6 +15,7 @@ public partial class MainFlowStateControl {
         m_excelpgm = new ExcelProgram();
         try {
             m_excelpgm.Load(m_filename);
+            LoadSave.LoadLayout(LoadSave.GetLayoutFilename(m_filename)); //レイアウトファイルロード
         } catch (SystemException e)
         {
             m_error = e.Message;

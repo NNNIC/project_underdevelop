@@ -51,6 +51,8 @@
     <Compile Include="0000_Define\Define_0200_chart.cs" />
     <Compile Include="0000_Define\Define_0100_arrow.cs" />
     <Compile Include="0000_Define\Define_0000_main.cs" />
+    <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0070_check.cs" />
+    <Compile Include="0100_Flow\010_Main\StateControl\MainFlowStateControl_0150_save.cs" />
     <Compile Include="0100_Flow\030_Heighlight\created\HeighlightFlowStateControl_created.cs" />
     <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_3000_heighlight.cs" />
     <Compile Include="0100_Flow\030_Heighlight\StateControl\HeighlightFlowStateControl_2000_setcur.cs" />
@@ -94,6 +96,7 @@
     <Compile Include="1000_Draw\DrawStateBox_Detail.cs" />
     <Compile Include="1000_Draw\DrawStateBox.cs" />
     <Compile Include="1010_Point\PointUtil.cs" />
+    <Compile Include="2000_LoadSave\LoadSave.cs" />
     <Compile Include="5000_Lib\ReadOnceValue.cs" />
     <Compile Include="8000_Form_ChartViewer\Control\Form_ChartViewer_0200_heighlite.cs">
       <SubType>Form</SubType>
@@ -191,9 +194,7 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="2000_LoadSave\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

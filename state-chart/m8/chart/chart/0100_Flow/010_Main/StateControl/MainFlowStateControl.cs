@@ -1,5 +1,17 @@
+//<<<include=using_text.txt
 using System;
+using System.IO;
 using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Windows.Forms;
+using ChartViewer = chart.ChartViewer;
+using Detail=DrawStateBox.Detail;
+using LineType=DrawUtil.LineType;
+using D=Define;
+//>>>
 
 public partial class MainFlowStateControl : StateControlBase {
     
@@ -7,6 +19,7 @@ public partial class MainFlowStateControl : StateControlBase {
     {
         NONE,
         LOAD,
+        SAVELAYOUT
     }
 
 
@@ -20,9 +33,6 @@ public partial class MainFlowStateControl : StateControlBase {
 
     public void Start()
     {
-        //m_sm = new StateManagerWithPhase();
-        //m_sm.SetNext(S_START);
-        //m_sm.GoNext();
         sc_start(S_START);
     }
 
@@ -30,26 +40,16 @@ public partial class MainFlowStateControl : StateControlBase {
     {
         m_sm.Update();
     }
-
-    //void SetNextState(Action<int,bool> state=null)
-    //{
-    //    m_sm.SetNext(state);
-    //}
-
-    //bool HasNextState()
-    //{
-    //    return m_sm.HasNextState();
-    //}
-
-    //void GoNextState()
-    //{
-    //    m_sm.GoNext();
-    //}
     
     string m_filename = string.Empty;
     public void Load(string file)
     {
         m_filename = file;
         m_cmd = COMMAND.LOAD;
+    }
+
+    public void SaveLayout()
+    {
+        m_cmd = COMMAND.SAVELAYOUT;
     }
 }

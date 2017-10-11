@@ -38,7 +38,6 @@ namespace chart
             InitializeComponent();
         }
 
-        //bool m_pictureBox_select_show;
 
         private void Form_ChartViewer_Load(object sender, EventArgs e)
         {
@@ -75,13 +74,12 @@ namespace chart
             /*0200*/ Heighlight_init();
             /*0300*/ Move_init();
 
+            //LoadSave.TRY_LoadData_byArgs();
         }
 
         private void pictureBox_output_Paint(object sender, PaintEventArgs e)
         {
-
-            //m_chartman.Draw();
-            
+            //Refresh();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -96,13 +94,7 @@ namespace chart
 
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            var ofd = new OpenFileDialog();
-            ofd.InitialDirectory = @"C:\Users\gea01\Documents\project_underdevelop\state-chart\m8\chart\chart\0100_Flow\010_Main\doc";
-            var result = ofd.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                m_mfsc.Load(ofd.FileName);
-            }
+            LoadSave.DO_LoadData();
         }
 
         private void pictureBox_main_VisibleChanged(object sender, EventArgs e)
@@ -110,100 +102,9 @@ namespace chart
             Refresh();
         }
 
-        //private void pictureBox_main_Click(object sender,EventArgs e)
-        //{
-        //    //if (m_pictureBox_select_show)
-        //    //{
-
-        //    //    m_pictureBox_select_show = false;
-        //    //    pictureBox_select.Hide();
-        //    //}
-        //    //else
-        //    //{
-        //    //    m_pictureBox_select_show = true;
-        //    //    pictureBox_select.Show();
-        //    //}
-        //}
-
-        //private void ChartViewer_MouseDown(object sender,MouseEventArgs e)
-        //{
-        //    DBG.LogWrite("cv Mouse Down\n");
-        //}
-
-        //private void ChartViewer_DragDrop(object sender,DragEventArgs e)
-        //{
-        //    DBG.LogWrite("DragDrop\n");
-        //}
-
-        //private void ChartViewer_DragEnter(object sender,DragEventArgs e)
-        //{
-        //    DBG.LogWrite("DragEnter\n");
-        //}
-
-        //private void ChartViewer_DragLeave(object sender,EventArgs e)
-        //{
-        //    DBG.LogWrite("DragLeave\n");
-        //}
-
-        //private void ChartViewer_DragOver(object sender,DragEventArgs e)
-        //{
-        //    DBG.LogWrite("DragOver\n");
-        //}
-
-        //private void pictureBox_main_DragDrop(object sender,DragEventArgs e)
-        //{
-
-        //}
-
-        //private void pictureBox_main_DragEnter(object sender,DragEventArgs e)
-        //{
-
-        //}
-
-        //private void pictureBox_main_DragLeave(object sender,EventArgs e)
-        //{
-
-        //}
-
-        //private void pictureBox_main_DragOver(object sender,DragEventArgs e)
-        //{
-
-        //}
-
-        //private void pictureBox_main_GiveFeedback(object sender,GiveFeedbackEventArgs e)
-        //{
-
-        //}
-
-        //private void pictureBox_main_MouseDown(object sender,MouseEventArgs e)
-        //{
-        //    DBG.LogWrite("main Mouse Down\n");
-        //}
-
-        //private void pictureBox_select_Click(object sender,EventArgs e)
-        //{
-        //    DBG.LogWrite("select Mouse Click\n");
-
-        //}
-
-        //private void pictureBox_select_MouseDown(object sender,MouseEventArgs e)
-        //{
-        //    DBG.LogWrite("select Mouse Down\n");
-        //}
-
-        //private void pictureBox_highlite_Click(object sender,EventArgs e)
-        //{
-
-        //}
-
-        //private void pictureBox_highlite_MouseDown(object sender,MouseEventArgs e)
-        //{
-        //    DBG.LogWrite("heighlight Mouse Down\n");
-        //}
-
-        //private void pictureBox_collider_MouseDown(object sender,MouseEventArgs e)
-        //{
-        //    DBG.LogWrite(" colider Mouse Down\n");
-        //}
+        private void saveLayoutToolStripMenuItem_Click(object sender,EventArgs e)
+        {
+            LoadSave.DO_SaveLayout();
+        }
     }
 }

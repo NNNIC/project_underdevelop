@@ -1,4 +1,4 @@
-﻿//This source is created by ExcelStateChartConverter.exe. Source : C:\Users\gea01\Documents\project_underdevelop\state-chart\m2\chart\chart\Flow\010_Main\doc\MainFlow.xlsx
+﻿//This source is created by ExcelStateChartConverter.exe. Source : C:\Users\gea01\Documents\project_underdevelop\state-chart\m7\chart\chart\0100_Flow\010_Main\doc\MainFlow.xlsx
 public enum MainFlowState
 {
     S_NONE

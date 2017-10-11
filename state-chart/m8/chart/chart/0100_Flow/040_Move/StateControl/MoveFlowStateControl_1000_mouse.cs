@@ -15,15 +15,12 @@ using D=Define;
 
 public partial class MoveFlowStateControl  {
 
-    //bool m_mouse_isDown;
     bool m_mouse_isUp;
     bool m_mouse_isLeave;
 
     bool Mouse_isDown() {
-        //m_mouse_isDown = false;
         if (InputInfo.m_inputMouseEvent == INPUTMOUSEEVANT.DOWN)
         {
-            //m_mouse_isDown = true;
             return true;
         }
         return false;

@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox_select = new System.Windows.Forms.PictureBox();
             this.pictureBox_highlite = new System.Windows.Forms.PictureBox();
@@ -39,6 +38,7 @@
             this.menuStrip2 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveLayoutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_select)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_highlite)).BeginInit();
@@ -46,14 +46,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_BG)).BeginInit();
             this.menuStrip2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // menuStrip1
-            // 
-            this.menuStrip1.Location = new System.Drawing.Point(0, 24);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
             // 
             // panel1
             // 
@@ -63,9 +55,9 @@
             this.panel1.Controls.Add(this.pictureBox_main);
             this.panel1.Controls.Add(this.pictureBox_BG);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 48);
+            this.panel1.Location = new System.Drawing.Point(0, 24);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1184, 713);
+            this.panel1.Size = new System.Drawing.Size(1184, 737);
             this.panel1.TabIndex = 2;
             // 
             // pictureBox_select
@@ -136,7 +128,8 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.loadToolStripMenuItem});
+            this.loadToolStripMenuItem,
+            this.saveLayoutToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -144,9 +137,16 @@
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
+            // 
+            // saveLayoutToolStripMenuItem
+            // 
+            this.saveLayoutToolStripMenuItem.Name = "saveLayoutToolStripMenuItem";
+            this.saveLayoutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveLayoutToolStripMenuItem.Text = "Save Layout";
+            this.saveLayoutToolStripMenuItem.Click += new System.EventHandler(this.saveLayoutToolStripMenuItem_Click);
             // 
             // ChartViewer
             // 
@@ -155,9 +155,7 @@
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1184, 761);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.menuStrip2);
-            this.MainMenuStrip = this.menuStrip1;
             this.Name = "ChartViewer";
             this.Text = "Chart Viewer";
             this.Load += new System.EventHandler(this.Form_ChartViewer_Load);
@@ -179,8 +177,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.MenuStrip menuStrip2;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
@@ -190,6 +186,7 @@
         public System.Windows.Forms.Panel panel1;
         public System.Windows.Forms.PictureBox pictureBox_select;
         public System.Windows.Forms.PictureBox pictureBox_BG;
+        private System.Windows.Forms.ToolStripMenuItem saveLayoutToolStripMenuItem;
     }
 }
 

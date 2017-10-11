@@ -42,6 +42,24 @@ public partial class ChartManager
             }
             point=PointUtil.Add_X(point,st.m_layout.Frame.Width + (int)LEN_BETWEEN_STATES);
         }
+
+        //レイアウトデータがある場合
+        if (LoadSave.m_savedata!=null)
+        {
+            var savelo = LoadSave.m_savedata.list;
+            if (savelo!=null)
+            {
+                for(var i = 0; i<statelist.Count; i++)
+                {
+                    var st = m_stateData[i];
+                    var find = savelo.Find(j=>j.state == statelist[i]);
+                    if (find!=null && st!=null && st.m_layout!=null)
+                    {
+                        st.m_layout.offset =find.offset;
+                    }
+                }
+            }
+        }
     }
 
     public void CreateArrowLine()
@@ -88,8 +106,11 @@ public partial class ChartManager
     {
         if (m_stateData == null) return;
 
-        // BG
+        //クリア
         m_gBg.Clear(Color.FromArgb(65,65,65));
+        m_g.Clear(Color.Transparent);
+
+        // BG
         using (var pen = new Pen(Color.FromArgb(112, 112, 112), 1))
         {
             for (var y = 0; y < m_canvas.Height; y += 20)
@@ -101,6 +122,8 @@ public partial class ChartManager
                 m_gBg.DrawLine(pen,x,0,x,m_canvas.Height);
             }
         }
+
+        // Main
 
         //Arrow
         foreach(var st in m_stateData)
