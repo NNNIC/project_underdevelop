@@ -101,6 +101,9 @@
     <Compile Include="8000_Form_ChartViewer\Control\Form_ChartViewer_0300_move.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="8000_Form_ChartViewer\notuse\Form_ChartViewer_notuse.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="9000_Debug\DBG.cs" />
     <Compile Include="9000_Debug\Form\Form_Debug.cs">
       <SubType>Form</SubType>
@@ -204,7 +207,9 @@
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="2000_LoadSave\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

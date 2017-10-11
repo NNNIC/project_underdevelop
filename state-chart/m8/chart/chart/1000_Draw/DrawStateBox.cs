@@ -63,13 +63,13 @@ public partial class DrawStateBox
         //ステート枠
         gh = GAP;
         {
-            var text =     data.State;
+            var text =     data.State + Environment.NewLine + data.StateCmt;
 
             var box_x     = (OUT_WIDTH - IN_WIDTH) / 2;
-            var box_size  = DrawUtil.GetTextBoxSize(g,data.State,FONTNAME,FONTSIZE,IN_WIDTH);
+            var box_size  = DrawUtil.GetTextBoxSize(g,text,FONTNAME,FONTSIZE,IN_WIDTH);
 
             lo.State      = new Rectangle((int)box_x,(int)gh,(int)box_size.Width,(int)box_size.Height);
-            lo.text_state = data.State;
+            lo.text_state = text;
 
             gh  = lo.State.Y + lo.State.Height;
             gh += GAP;

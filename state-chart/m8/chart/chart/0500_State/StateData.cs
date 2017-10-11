@@ -16,6 +16,7 @@ using D=Define;
 public partial class StateData
 {
     readonly string STR_STATE     = "state";
+    readonly string STR_STATECMT  = "state-cmt";
     readonly string STR_NEXTSTATE = "nextstate";
     readonly string STR_BRANCH    = "branch";
 
@@ -28,7 +29,8 @@ public partial class StateData
 
     public List<Item> m_items;
 
-    public string    State       { get { if (__state==null) __state = GetValue(STR_STATE); return __state;                     } } string __state = null;
+    public string    State       { get { if (__state==null) __state = GetValue(STR_STATE); return __state;                     } } string __state     = null;
+    public string    StateCmt    { get { if (__stateCmt==null) __stateCmt = GetValue(STR_STATECMT); return __stateCmt;         } } string __stateCmt  = null;
     public string    NextState   { get { if (__nextstate==null) __nextstate = GetValue(STR_NEXTSTATE); return __nextstate;     } } string __nextstate = null;
     public int       NumBranches { get { if (__numBranches==null) __numBranches = GetBranchCount(); return (int)__numBranches; } } int? __numBranches = null;
 
