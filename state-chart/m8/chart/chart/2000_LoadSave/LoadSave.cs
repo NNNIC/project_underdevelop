@@ -26,13 +26,20 @@ public class LoadSave
     public static void DO_LoadData()
     {
         var ofd = new OpenFileDialog();
-        ofd.InitialDirectory = @"C:\Users\gea01\Documents\project_underdevelop\state-chart\m8\chart\chart\0100_Flow\010_Main\doc";
+        ofd.InitialDirectory = _get_sample_folder();//@"C:\Users\gea01\Documents\project_underdevelop\state-chart\m8\chart\chart\0100_Flow\010_Main\doc";
         var result = ofd.ShowDialog();
         if (result == DialogResult.OK)
         {
             m_mfsc.Load(ofd.FileName);
         }
     }
+    private static string _get_sample_folder()
+    {
+        var path = Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]);
+        path = Path.GetFullPath(Path.Combine(path, @"..\..\0100_Flow\010_Main\doc"));
+        return path;
+    }
+
     //public static void TRY_LoadData_byArgs()
     //{
     //    System.Diagnostics.Debugger.Break();
