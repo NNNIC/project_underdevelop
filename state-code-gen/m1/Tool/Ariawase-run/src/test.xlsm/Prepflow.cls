@@ -26,8 +26,9 @@ Public m_filename As String
 Public m_lang     As String
 Public m_tplsrc2  As String
 
-Public m_statelist  As Variant 'ステートリスト
-
+Public m_contents1_col As Integer 'tplsrc内の $contents1$のカラム位置 ・・・文字整形に利用
+Public m_contents2_col As Integer 'tplsrc内の $contents2$のカラム位置 ・・・文字整形に利用
+Public m_contents3_col As Integer 'tplsrc内の $contents3$のカラム位置 ・・・文字整形に利用
 
 Public m_wb As Workbook
 
@@ -87,12 +88,24 @@ End Sub
 Sub props_get()
     Dim mark_output As String
     Dim mark_lang   As String
+
+    Dim mark_cts_1  As String
+    Dim mark_cts_2  As String
+    Dim mark_cts_3  As String
+
     Dim lines       As Variant
     Dim line_size   As Integer
     Dim i           As Integer
 
     mark_output = ":output="
-    mark_lang = ":lang="
+    mark_lang   = ":lang="
+
+    mark_cts_1  = "$contents1$"
+    mark_cts_2  = "$contents2$"
+    mark_cts_3  = "$contents3$"
+    m_contents1_col = -1
+    m_contents2_col = -1
+    m_contents3_col = -1
 
     m_filename = ""
     m_lang = ""
@@ -107,19 +120,28 @@ Sub props_get()
         l = lines(i)
         l = Trim(l)
         Debug.Print (l)
-        
-        
+                
         If InStr(l, mark_output) = 1 Then
             m_filename = Mid(l, Len(mark_output) + 1)
         ElseIf InStr(l, mark_lang) = 1 Then
             m_lang = Mid(l, Len(mark_lang) + 1)
         ElseIf InStr(l, "::") = 1 Then
-            'skip
+            ' スキップ
         Else
             If m_tplsrc2 <> "" Then
-                m_tplsrc2 = m_tplsrc2 & vbCrLf
+                m_tplsrc2 = m_tplsrc2 & vbLf
             End If
             m_tplsrc2 = m_tplsrc2 & l
+
+            ' $contents1$～$contents3$のカラム位置
+            If InStr(l, mark_cts_1) > 0 Then
+                m_contents1_col = InStr(l, mark_cts_1)
+            ElseIf InStr(l, mark_cts_2) > 0 Then
+                m_contents2_col = InStr(l, mark_cts_2)
+            ElseIf InStr(l, mark_cts_3) > 0 Then
+                m_contents3_col = InStr(l, mark_cts_3)
+            End If
+
         End If
     Next
     

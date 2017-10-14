@@ -17,8 +17,12 @@ copy 0230_prepflow.txt ..\Tool\Ariawase-run\src\test.xlsm\Prepflow.cls
 
 :: --- 
 
-:: --- MODULE
-copy 9010_Module1.bas ..\Tool\Ariawase-run\src\test.xlsm\Module1.bas
+:: --- 9010Å`
+copy 9010_Module1.bas    ..\Tool\Ariawase-run\src\test.xlsm\Module1.bas
+copy 9100_ReadChart.cls  ..\Tool\Ariawase-run\src\test.xlsm\ReadChart.cls
+copy 9500_StringUtil.cls ..\Tool\Ariawase-run\src\test.xlsm\StringUtil.cls
+copy 9600_SaveUtil.cls   ..\Tool\Ariawase-run\src\test.xlsm\SaveUtil.cls
+
 ::pause
 
 :: #

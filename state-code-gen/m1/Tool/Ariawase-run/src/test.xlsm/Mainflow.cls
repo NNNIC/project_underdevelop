@@ -12,7 +12,15 @@ Option Explicit
 
 Dim m_curFunc As String
 Dim m_nextFunc As String
+
 Public m_pf As PrepFlow
+Public m_rc As ReadChart
+Public m_su As StringUtil
+Public m_sv As SaveUtil
+
+Public m_enumstr As String
+
+Public m_outsrc As String 
 
 Sub RunState()
     
@@ -54,12 +62,20 @@ Sub preprocess()
     Call m_pf.RunState
 End Sub
 
-Sub statelist_create()
-
+Sub chartread_prepare()
+    Call m_rc.Init
 End Sub
 
 Sub enum_create()
+    Dim i As Integer
 
+    m_enumstr = ""
+    For i = 0 To m_rc.m_statecount - 1
+        If m_enumstr <> "" Then
+            m_enumstr = m_enumstr & "," & vbLf
+        End If
+        m_enumstr = m_enumstr & m_rc.m_statelist(i)
+    Next
 End Sub
 
 Sub select_create()
@@ -71,8 +87,40 @@ Sub funcs_create()
 End Sub
 
 Sub out_create()
+    Dim lines       As Variant
+    Dim line_size   As Integer
+    Dim outsrc      As String
+    Dim i           As Integer
+    
+    outsrc    = ""
+    lines     = Split(m_pf.m_tplsrc2, vbLf)
+    line_size = UBound(lines, 1)
+    
+    For i=0 To line_size
+        Dim l As String
+        l = lines(i)
+        If outsrc <> "" Then
+            outsrc = outsrc & vbCrLf
+        End If
+        If InStr(l,"$contents1$") > 0 Then
+            outsrc = outsrc & m_su.Indent(m_enumstr, m_pf.m_contents1_col)
+            outsrc = outsrc & vbCrLf
+        Else
+            outsrc = outsrc & l
+        End If
+    Next
+
+    Call m_sv.SaveShiftJis(ThisWorkbook.Path & "\" & m_pf.m_filename, outsrc)
+
+    m_outsrc = outsrc
 
 End Sub
+
+'-------------------------------------------------------------------------------
+'-------------------------------------------------------------------------------
+'-------------------------------------------------------------------------------
+'-------------------------------------------------------------------------------
+
 ' This source is created by ExcelStateChartConverter.exe. Source : C:\Users\gea01\Documents\project_underdevelop\state-code-gen\m1\Flow\0100_Main.xlsx
 '
 Sub MainFlow_Select(func As String, bFirst As Boolean)
@@ -107,8 +155,8 @@ Sub S_PREPARE(bFirst As Boolean)
             SetNextState("S_CREATE_ENUM")
             ' 事前処理
             call preprocess
-            ' ステートリスト作成
-            call statelist_create
+            ' チャートリード準備
+            call chartread_prepare
     End If
 End Sub
 ' ENUM文生成

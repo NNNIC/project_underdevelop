@@ -32,8 +32,8 @@ Sub S_PREPARE(bFirst As Boolean)
             SetNextState("S_CREATE_ENUM")
             ' 事前処理
             call preprocess
-            ' ステートリスト作成
-            call statelist_create
+            ' チャートリード準備
+            call chartread_prepare
     End If
 End Sub
 ' ENUM文生成
