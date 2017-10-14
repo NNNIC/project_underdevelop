@@ -157,8 +157,6 @@ Sub PrepFlow_Select(func As String, bFirst As Boolean)
         	S_GETTPL(bFirst)
         Case "S_GETPROP"
         	S_GETPROP(bFirst)
-        Case "S_STATELIST"
-        	S_STATELIST(bFirst)
         Case "S_END"
         	S_END(bFirst)
         
@@ -182,14 +180,8 @@ End Sub
 ' プロパティの取得
 Sub S_GETPROP(bFirst As Boolean)
     If bFirst = True Then
-            SetNextState("S_STATELIST")
-            call props_get
-    End If
-End Sub
-' ステートリスト作成
-Sub S_STATELIST(bFirst As Boolean)
-    If bFirst = True Then
             SetNextState("S_END")
+            call props_get
     End If
 End Sub
 ' 終了

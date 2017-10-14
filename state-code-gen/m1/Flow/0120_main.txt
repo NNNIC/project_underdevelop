@@ -14,12 +14,14 @@ Dim m_curFunc As String
 Dim m_nextFunc As String
 
 Public m_pf As PrepFlow
+Public m_ff As FuncFlow
 Public m_rc As ReadChart
 Public m_su As StringUtil
 Public m_sv As SaveUtil
 
 Public m_enumstr   As String
 Public m_selectstr As String
+Public m_funcstr   As String
 
 Public m_outsrc As String 
 
@@ -99,7 +101,17 @@ Sub select_create()
 End Sub
 
 Sub funcs_create()
+    Dim i  As Integer
+    Dim st As String
 
+    For i = 0 To m_rc.m_statecount
+        st = m_rc.m_statelist(i)
+        If st <> "" Then 
+            m_ff.m_state = st
+            call m_ff.RunState
+            m_funcstr = m_funcstr + m_ff.m_outsrc
+        End If
+    Next
 End Sub
 
 Sub out_create()
@@ -118,10 +130,13 @@ Sub out_create()
         If outsrc <> "" Then
             outsrc = outsrc & vbCrLf
         End If
-        If InStr(l,"$contents1$") > 0 Then
+        If InStr(l,"$contents1$") > 0 And m_enumstr <> "" Then
             outsrc = outsrc & m_su.Indent(m_enumstr, m_pf.m_contents1_col)
             outsrc = outsrc & vbCrLf
-        ElseIf InStr(l,"$contents3$") > 0 Then
+        ElseIf InStr(l,"$contents2$") > 0 And m_funcstr <> "" Then
+            outsrc = outsrc & m_su.Indent(m_funcstr, m_pf.m_contents2_col)
+            outsrc = outsrc & vbCrLf
+        ElseIf InStr(l,"$contents3$") > 0 And m_selectstr <> "" Then
             outsrc = outsrc & m_su.Indent(m_selectstr, m_pf.m_contents3_col)
             outsrc = outsrc & vbCrLf
         Else

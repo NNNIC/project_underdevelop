@@ -15,6 +15,11 @@ copy 0130_mainflow.txt ..\Tool\Ariawase-run\src\test.xlsm\Mainflow.cls
 copy /A 0220_prep.txt + 0210_PrepFlow_created.bas.txt  0230_prepflow.txt
 copy 0230_prepflow.txt ..\Tool\Ariawase-run\src\test.xlsm\Prepflow.cls
 
+:: --- FUNC
+
+copy /A 0320_func.txt + 0310_FuncFlow_created.bas.txt  0330_funcflow.txt
+copy 0330_funcflow.txt ..\Tool\Ariawase-run\src\test.xlsm\Funcflow.cls
+
 :: --- 
 
 :: --- 9010Å`
