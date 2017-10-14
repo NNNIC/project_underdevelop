@@ -1,0 +1,43 @@
+' This source is created by ExcelStateChartConverter.exe. Source : C:\Users\gea01\Documents\project_underdevelop\state-code-gen\m1\Flow\0200_Preprocess.xlsx
+'
+Sub PrepFlow_Select(func As String, bFirst As Boolean)
+    Select Case func
+        Case "S_START"
+        	S_START(bFirst)
+        Case "S_GETTPL"
+        	S_GETTPL(bFirst)
+        Case "S_GETPROP"
+        	S_GETPROP(bFirst)
+        Case "S_END"
+        	S_END(bFirst)
+        
+    End Select
+End Sub
+'
+' 開始
+Sub S_START(bFirst As Boolean)
+    If bFirst = True Then
+            SetNextState("S_GETTPL")
+    End If
+End Sub
+' テンプレート取得
+Sub S_GETTPL(bFirst As Boolean)
+    If bFirst = True Then
+            SetNextState("S_GETPROP")
+            call tplsrc_get
+            call tplfunc_get
+    End If
+End Sub
+' プロパティの取得
+Sub S_GETPROP(bFirst As Boolean)
+    If bFirst = True Then
+            SetNextState("S_END")
+            call props_get
+    End If
+End Sub
+' 終了
+Sub S_END(bFirst As Boolean)
+    If bFirst = True Then
+            SetNextState("S_END")
+    End If
+End Sub

@@ -37,6 +37,7 @@ namespace ExcelStateChartConverter
                 });
             }
 
+            // func_str作成
             var func_str = string.Empty;
             foreach(var st in state_list)
             {
@@ -47,10 +48,22 @@ namespace ExcelStateChartConverter
                 func_str +=  EditUtil.TrimLines(tmpstr);
             }
 
-            string filename;
-            var src = m_ld.GetInitalSource(out filename);
-            src = EditUtil.Insert(src,"$contents1$",state_str);            
+            
+
+            string filename,lang;
+            var src = m_ld.GetInitalSource(out filename, out lang);
+            src = EditUtil.Insert(src,"$contents1$",state_str);         
             src = EditUtil.Insert(src,"$contents2$",func_str);
+
+            if (lang.ToLower()=="vba")
+            {
+                var select_str = string.Empty;
+                foreach(var st in state_list)
+                {
+                    select_str += "Case \"" +st + "\"\n\t" + st + "(bFirst)\n";
+                } 
+                src = EditUtil.Insert(src, "$contents3$",select_str);
+            }
 
             //
             src = "//This source is created by ExcelStateChartConverter.exe. Source : " + args[0] + "\n" + src;

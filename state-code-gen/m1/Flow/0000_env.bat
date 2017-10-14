@@ -1,0 +1,2 @@
+set VW=C:\Users\gea01\Documents\project_underdevelop\state-chart\m8\chart\chart\bin\Debug\chart.exe
+set GN=C:\Users\gea01\Documents\project_underdevelop\state-code-gen\m1\Tool\ExcelStateChartConverter\ExcelStateChartConverter\bin\Debug\ExcelStateChartConverter.exe

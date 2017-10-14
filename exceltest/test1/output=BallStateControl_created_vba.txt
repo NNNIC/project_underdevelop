@@ -1,0 +1,13 @@
+:output=BallStateControl_created.vba
+:lang=vba
+::
+
+'
+Sub BallStateSelect(func As String, bFirst As Boolean)
+    Select Case func
+        $contents3$
+    EndSelect
+EndSub
+ 
+'
+$contents2$
