@@ -11,17 +11,19 @@ Sub Test()
 
     Dim bTest As Boolean
  
-    If Dir("C:\Users\gea01\Documents\project_underdevelop\state-code-gen\m1\test-flow.xlsx") <> "" Then
-        Set m_wb = Workbooks.Open("C:\Users\gea01\Documents\project_underdevelop\state-code-gen\m1\test-flow.xlsx", True)
+    If Dir(ThisWorkbook.Path & "\test-flow.xlsx") <> "" Then
+        Set m_wb = Workbooks.Open(ThisWorkbook.Path & "\test-flow.xlsx", True)
         bTest = True
     Else
         Set m_wb = ThisWorkbook
         bTest = False
     End If
     
-    Set  m_mf = New MainFlow
-    Set  m_pf = New PrepFlow
-
+    Set m_mf = New MainFlow
+    Set m_pf = New PrepFlow
+    
+    Set m_mf.m_pf = m_pf
+    Set m_pf.m_wb = m_wb
 
     Call m_mf.RunState
     
@@ -29,6 +31,7 @@ Sub Test()
         m_wb.Close
     End If
     
-    MsgBox "èIóπ"
+    MsgBox "èIóπ" & vbCrLf & m_pf.m_filename & vbCrLf & m_pf.m_lang
 
 End Sub
+

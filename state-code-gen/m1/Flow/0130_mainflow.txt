@@ -12,6 +12,7 @@ Option Explicit
 
 Dim m_curFunc As String
 Dim m_nextFunc As String
+Public m_pf As PrepFlow
 
 Sub RunState()
     
@@ -47,10 +48,10 @@ Sub SetNextState(func As String)
 End Sub
 
 
-'スタブ
+'サブルーチン
 
 Sub preprocess()
-
+    Call m_pf.RunState
 End Sub
 
 Sub statelist_create()
@@ -104,6 +105,8 @@ End Sub
 Sub S_PREPARE(bFirst As Boolean)
     If bFirst = True Then
             SetNextState("S_CREATE_ENUM")
+            ' 事前処理
+            call preprocess
             ' ステートリスト作成
             call statelist_create
     End If

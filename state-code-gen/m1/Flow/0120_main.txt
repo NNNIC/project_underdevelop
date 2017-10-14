@@ -12,6 +12,7 @@ Option Explicit
 
 Dim m_curFunc As String
 Dim m_nextFunc As String
+Public m_pf As PrepFlow
 
 Sub RunState()
     

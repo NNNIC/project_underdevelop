@@ -8,10 +8,28 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 
+
+
+
+
+
+
 Option Explicit
 
 Dim m_curFunc As String
 Dim m_nextFunc As String
+
+Public m_tplsrc   As String
+Public m_tplfunc  As String
+
+Public m_filename As String
+Public m_lang     As String
+Public m_tplsrc2  As String
+
+Public m_statelist  As Variant 'ステートリスト
+
+
+Public m_wb As Workbook
 
 Sub RunState()
     
@@ -31,7 +49,7 @@ Sub RunState()
             bFirst = False
         End If
         
-        Call MainFlow_Select(m_curFunc, bFirst)
+        Call PrepFlow_Select(m_curFunc, bFirst)
         
         If m_curFunc = "S_END" Then
             Exit For
@@ -49,29 +67,62 @@ End Sub
 
 'サブルーチン
 
-public m_tplsrc   As String
-public m_tplfunc  As String
-public m_filename As String
-public m_lang     As String
 
 Sub tplsrc_get()
     Dim ws As Worksheet
     Dim value As String
     Set ws = m_wb.Worksheets("template-source")
-    Set value = wsHoge.Cells(1, 1).value
-    Set m_tplsrc = value
+    value = ws.Cells(1, 1).value
+    m_tplsrc = value
 End Sub
 
 Sub tplfunc_get()
     Dim ws As Worksheet
     Dim value As String
     Set ws = m_wb.Worksheets("template-statefunc")
-    Set value = wsHoge.Cells(1, 1).value
-    Set m_tplfunc = value
+    value = ws.Cells(1, 1).value
+    m_tplfunc = value
 End Sub
 
 Sub props_get()
+    Dim mark_output As String
+    Dim mark_lang   As String
+    Dim lines       As Variant
+    Dim line_size   As Integer
+    Dim i           As Integer
 
+    mark_output = ":output="
+    mark_lang = ":lang="
+
+    m_filename = ""
+    m_lang = ""
+    m_tplsrc2 = ""
+
+    lines = Split(m_tplsrc, vbLf)
+    line_size = UBound(lines, 1)
+    
+    For i = 0 To line_size - 1
+        Dim l As String
+        
+        l = lines(i)
+        l = Trim(l)
+        Debug.Print (l)
+        
+        
+        If InStr(l, mark_output) = 1 Then
+            m_filename = Mid(l, Len(mark_output) + 1)
+        ElseIf InStr(l, mark_lang) = 1 Then
+            m_lang = Mid(l, Len(mark_lang) + 1)
+        ElseIf InStr(l, "::") = 1 Then
+            'skip
+        Else
+            If m_tplsrc2 <> "" Then
+                m_tplsrc2 = m_tplsrc2 & vbCrLf
+            End If
+            m_tplsrc2 = m_tplsrc2 & l
+        End If
+    Next
+    
 End Sub
 ' This source is created by ExcelStateChartConverter.exe. Source : C:\Users\gea01\Documents\project_underdevelop\state-code-gen\m1\Flow\0200_Preprocess.xlsx
 '
@@ -83,6 +134,8 @@ Sub PrepFlow_Select(func As String, bFirst As Boolean)
         	S_GETTPL(bFirst)
         Case "S_GETPROP"
         	S_GETPROP(bFirst)
+        Case "S_STATELIST"
+        	S_STATELIST(bFirst)
         Case "S_END"
         	S_END(bFirst)
         
@@ -106,8 +159,14 @@ End Sub
 ' プロパティの取得
 Sub S_GETPROP(bFirst As Boolean)
     If bFirst = True Then
-            SetNextState("S_END")
+            SetNextState("S_STATELIST")
             call props_get
+    End If
+End Sub
+' ステートリスト作成
+Sub S_STATELIST(bFirst As Boolean)
+    If bFirst = True Then
+            SetNextState("S_END")
     End If
 End Sub
 ' 終了
