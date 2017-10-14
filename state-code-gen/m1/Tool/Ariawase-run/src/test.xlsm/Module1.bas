@@ -34,6 +34,7 @@ Sub Generate()
     Set m_mf.m_sv = m_sv
 
     Set m_pf.m_wb = m_wb
+    Set m_pf.m_su = m_su
 
     Set m_rc.m_wb = m_wb
 

@@ -56,7 +56,7 @@ Sub statelist_create()
     m_staterow  = get_row("state")
     m_statelist = Array()
     
-    For i = 3 To m_maxrow
+    For i = 3 To m_maxcol
        Dim v   As String  '値
        Dim c   As String  '先頭文字
        Dim ac  As Integer '先頭文字アスキーコード

@@ -28,7 +28,7 @@ public Function Indent(str As String, ind As Integer) As String ' Šes‚Ìæ“ª‚ÉŽw
     line_size = UBound(lines, 1)
     
     outsrc = ""
-    For i=0 To line_size -1
+    For i=0 To line_size
         Dim l As String
         l = lines(i)
         l = String(ind, 32) + l
@@ -85,4 +85,35 @@ public Function Insert(str As String, mark As String, instr As String) As String
     outsrc = outsrc + Mid(str,mark_next)
     
     Insert = outsrc
+End Function
+
+public Function TrimEnd(str As String) As String
+    Dim leng  As Integer
+    Dim str2 As String
+    Dim i    As Integer
+    Dim bDone As Boolean
+
+    leng = Len(str)
+    str2 = ""
+
+    bDone = False
+    For i = leng To 1 Step -1
+        Dim c As String
+        Dim a As Integer
+        
+        c = Mid(str,i,1)
+
+        If bDone = False Then
+            a = Asc(c)
+            If a > 32 Then
+                str2 = c
+                bDone = True
+            End If
+        Else
+            str2 = c + str2
+        End If
+    Next
+
+    TrimEnd = str2
+
 End Function

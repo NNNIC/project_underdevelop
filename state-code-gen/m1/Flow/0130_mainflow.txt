@@ -18,7 +18,8 @@ Public m_rc As ReadChart
 Public m_su As StringUtil
 Public m_sv As SaveUtil
 
-Public m_enumstr As String
+Public m_enumstr   As String
+Public m_selectstr As String
 
 Public m_outsrc As String 
 
@@ -70,7 +71,7 @@ Sub enum_create()
     Dim i As Integer
 
     m_enumstr = ""
-    For i = 0 To m_rc.m_statecount - 1
+    For i = 0 To m_rc.m_statecount
         If m_enumstr <> "" Then
             m_enumstr = m_enumstr & "," & vbLf
         End If
@@ -79,6 +80,21 @@ Sub enum_create()
 End Sub
 
 Sub select_create()
+    Dim i As Integer
+
+    m_selectstr = ""
+    For i = 0 To m_rc.m_statecount
+        Dim st As String
+
+        st = m_rc.m_statelist(i)
+        If st <> "" Then
+            If m_selectstr <> "" Then
+                m_selectstr = m_selectstr & vbLf
+            End If
+            m_selectstr = m_selectstr & "Case " & Chr(34) & st & Chr(34) & vbLf & String(4,32) & st & "(bFirst)"
+        End If
+
+    Next
 
 End Sub
 
@@ -104,6 +120,9 @@ Sub out_create()
         End If
         If InStr(l,"$contents1$") > 0 Then
             outsrc = outsrc & m_su.Indent(m_enumstr, m_pf.m_contents1_col)
+            outsrc = outsrc & vbCrLf
+        ElseIf InStr(l,"$contents3$") > 0 Then
+            outsrc = outsrc & m_su.Indent(m_selectstr, m_pf.m_contents3_col)
             outsrc = outsrc & vbCrLf
         Else
             outsrc = outsrc & l

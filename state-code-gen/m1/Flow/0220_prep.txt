@@ -31,6 +31,7 @@ Public m_contents2_col As Integer 'tplsrc内の $contents2$のカラム位置 ・・・文字
 Public m_contents3_col As Integer 'tplsrc内の $contents3$のカラム位置 ・・・文字整形に利用
 
 Public m_wb As Workbook
+Public m_su As StringUtil
 
 Sub RunState()
     
@@ -114,11 +115,11 @@ Sub props_get()
     lines = Split(m_tplsrc, vbLf)
     line_size = UBound(lines, 1)
     
-    For i = 0 To line_size - 1
+    For i = 0 To line_size
         Dim l As String
         
         l = lines(i)
-        l = Trim(l)
+        l = m_su.TrimEnd(l)
         Debug.Print (l)
                 
         If InStr(l, mark_output) = 1 Then
