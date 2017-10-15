@@ -93,8 +93,10 @@ Function get_row(arg As String)
     Dim i As Integer
     Dim v As String
     
+    get_row = -1
     For i = 1 To m_maxrow
-        v = m_ws.Cells(2, i).value
+        v = m_ws.Cells(i, 2).value
+        v = Trim(v)
         If v = arg Then
             get_row = i
             Exit For
@@ -110,7 +112,7 @@ Function get_statecol(arg As String)
     get_statecol = -1
     For i = 3 To m_maxcol
         v = m_ws.Cells(m_staterow, i)
-        If (v == arg) Then
+        If v = arg Then
             get_statecol = i
             Exit For
         End If

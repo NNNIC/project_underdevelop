@@ -109,6 +109,9 @@ Sub funcs_create()
         If st <> "" Then 
             m_ff.m_state = st
             call m_ff.RunState
+            If m_funcstr <> "" Then
+                m_funcstr = m_funcstr & vbLf
+            End If
             m_funcstr = m_funcstr + m_ff.m_outsrc
         End If
     Next
@@ -128,21 +131,23 @@ Sub out_create()
         Dim l As String
         l = lines(i)
         If outsrc <> "" Then
-            outsrc = outsrc & vbCrLf
+            outsrc = outsrc & vbLf
         End If
         If InStr(l,"$contents1$") > 0 And m_enumstr <> "" Then
             outsrc = outsrc & m_su.Indent(m_enumstr, m_pf.m_contents1_col)
-            outsrc = outsrc & vbCrLf
+            outsrc = outsrc & vbLf
         ElseIf InStr(l,"$contents2$") > 0 And m_funcstr <> "" Then
             outsrc = outsrc & m_su.Indent(m_funcstr, m_pf.m_contents2_col)
-            outsrc = outsrc & vbCrLf
+            outsrc = outsrc & vbLf
         ElseIf InStr(l,"$contents3$") > 0 And m_selectstr <> "" Then
             outsrc = outsrc & m_su.Indent(m_selectstr, m_pf.m_contents3_col)
-            outsrc = outsrc & vbCrLf
+            outsrc = outsrc & vbLf
         Else
             outsrc = outsrc & l
         End If
     Next
+
+    outsrc = m_su.LineEnd_CrLf(outsrc)
 
     Call m_sv.SaveShiftJis(ThisWorkbook.Path & "\" & m_pf.m_filename, outsrc)
 

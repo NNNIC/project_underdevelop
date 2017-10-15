@@ -1,5 +1,6 @@
 
 buildall.batにて コンバート>結合>テストエクセルオープン   --- リビルド用！！
+              ※ Shift + F11でVBモード F5でRun
 
 NN00_XXXX.xlsx --- ステート表
 NN01_conv.bat  --- ステート表から VBAにコンバート
