@@ -1,0 +1,42 @@
+' This source is created by ExcelStateChartConverter.exe. Source : C:\Users\gea01\Documents\project_underdevelop\state-code-gen\m2\Flow\0300_Func.xlsx
+'
+Sub FuncFlow_Select(func As String, bFirst As Boolean)
+    Select Case func
+        Case "S_START"
+        	S_START(bFirst)
+        Case "S_PRETPL"
+        	S_PRETPL(bFirst)
+        Case "S_INSERT"
+        	S_INSERT(bFirst)
+        Case "S_END"
+        	S_END(bFirst)
+        
+    End Select
+End Sub
+'
+' 開始
+Sub S_START(bFirst As Boolean)
+    If bFirst = True Then
+            SetNextState("S_PRETPL")
+    End If
+End Sub
+' テンプレート展開
+Sub S_PRETPL(bFirst As Boolean)
+    If bFirst = True Then
+            SetNextState("S_INSERT")
+            call tpl_expand
+    End If
+End Sub
+' 値を挿入
+Sub S_INSERT(bFirst As Boolean)
+    If bFirst = True Then
+            SetNextState("S_END")
+            call value_insert
+    End If
+End Sub
+' 終了
+Sub S_END(bFirst As Boolean)
+    If bFirst = True Then
+            SetNextState("S_END")
+    End If
+End Sub
