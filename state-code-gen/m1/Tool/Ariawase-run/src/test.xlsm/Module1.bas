@@ -10,14 +10,23 @@ Dim m_ff As FuncFlow
 Dim m_rc As ReadChart
 Dim m_su As StringUtil
 Dim m_sv As SaveUtil
-    
+
+Dim m_target As String
+
+Sub SetTarget(tgt As String)
+    m_target = tgt
+End Sub
 
 Sub Generate()
 
     Dim bTest As Boolean
  
-    If Dir(ThisWorkbook.Path & "\test-flow.xlsx") <> "" Then
-        Set m_wb = Workbooks.Open(ThisWorkbook.Path & "\test-flow.xlsx", True)
+    If m_target = "" Then
+        m_target = ThisWorkbook.Path & "\test-flow.xlsx"
+    End If
+
+    If Dir(m_target) <> "" Then
+        Set m_wb = Workbooks.Open(m_target, True)
         bTest = True
     Else
         Set m_wb = ThisWorkbook
